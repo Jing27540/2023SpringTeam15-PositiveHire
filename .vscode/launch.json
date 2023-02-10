@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-PhtalentApplication<phtalent>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.positivehire.phtalent.PhtalentApplication",
+            "projectName": "phtalent",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
