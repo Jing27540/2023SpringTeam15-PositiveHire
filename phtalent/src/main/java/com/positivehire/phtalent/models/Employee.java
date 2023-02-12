@@ -303,4 +303,33 @@ public class Employee {
     public void setPtoHours ( double ptoHours ) {
         this.ptoHours = ptoHours;
     }
+
+    public void updateEmployee(final Employee e) {
+        this.setEmployeeNum(employeeNum);
+        this.setEmployeeName(employeeName);
+        this.setEmploymentStatusId(employmentStatusId);
+        this.setDepartmentId(departmentId);
+        this.setPerformanceScoreId(performanceScoreId);
+        this.setPayRate(payRate);
+        this.setState(state);
+        this.setZip(zip);
+        this.setDateOfHire(dateOfHire);
+        this.setDaysEmployeed(daysEmployeed);
+        this.setDateOfTermination(dateOfTermination);
+        this.setReasonForTermination(reasonForTermination);
+        this.setEmployementStatus(employementStatus);
+        this.setDepartment(department);
+        this.setPosition(position);
+        this.setManagerName(managerName);
+        this.setEmployeeSource(employeeSource);
+        this.setAccessRole(accessRole);
+        this.setPerformanceScore(performanceScore);
+        this.setTechnicalSkills(technicalSkills);
+        this.setPeopleSkills(peopleSkills);
+        this.setWorkEthic(workEthic);
+        this.setCertifications(certifications);
+        this.setEmployeeDemographics(employeeDemographics);
+        this.setAnnualBonus(annualBonus);
+        this.setPtoHours(ptoHours);
+    }
 }
