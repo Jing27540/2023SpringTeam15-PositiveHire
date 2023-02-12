@@ -1,13 +1,18 @@
 package com.positivehire.phtalent.models;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 
 /**
  * Creates an Certification object for use in arbitrary Certifications.
  */
+@Entity
 public class Certification {
-
+    /** The id of this created Certification object */
+    @Id
+    @GeneratedValue
+    private Long id;
     /** The name of this created Certification object */
     private String name;
     /** The institution of this created Certification object */
@@ -69,7 +74,7 @@ public class Certification {
     public void setSkils(String skils) {
         this.skils = skils;
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -78,7 +83,10 @@ public class Certification {
             return false;
         }
         Certification certification = (Certification) o;
-        return Objects.equals(name, certification.name) && Objects.equals(institution, certification.institution) && Objects.equals(issuedDate, certification.issuedDate) && Objects.equals(credentialID, certification.credentialID) && Objects.equals(skils, certification.skils);
+        return Objects.equals(name, certification.name) && Objects.equals(institution, certification.institution)
+                && Objects.equals(issuedDate, certification.issuedDate)
+                && Objects.equals(credentialID, certification.credentialID)
+                && Objects.equals(skils, certification.skils);
     }
 
     @Override
@@ -89,11 +97,11 @@ public class Certification {
     @Override
     public String toString() {
         return "{" +
-            " name='" + getName() + "'" +
-            ", institution='" + getInstitution() + "'" +
-            ", issuedDate='" + getIssuedDate() + "'" +
-            ", credentialID='" + getCredentialID() + "'" +
-            ", skils='" + getSkils() + "'" +
-            "}";
+                " name='" + getName() + "'" +
+                ", institution='" + getInstitution() + "'" +
+                ", issuedDate='" + getIssuedDate() + "'" +
+                ", credentialID='" + getCredentialID() + "'" +
+                ", skils='" + getSkils() + "'" +
+                "}";
     }
 }
