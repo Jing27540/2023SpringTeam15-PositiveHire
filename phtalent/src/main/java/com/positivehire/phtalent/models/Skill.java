@@ -3,7 +3,7 @@ package com.positivehire.phtalent.models;
 import java.util.Objects;
 
 import javax.persistence.*;
-//TODO: import javax.validation.constraints.Min;
+import javax.validation.constraints.Min;
 
 /**
  * Creates an Skill object for use in arbitrary Skills.
@@ -21,7 +21,7 @@ public class Skill {
     /** The level of this created Skill object */
     private String level;
     /** The score of this created Skill object */
-    //@Min(0) 
+    @Min(0) 
     private Integer score;
 
     /**
