@@ -13,11 +13,11 @@ import com.positivehire.phtalent.repositories.EmployeeRepository;
  */
 @Service
 public class EmployeeService {
-    /* EmployeeRepository Instance */
-    @Autowired
-    private EmployeeRepository<Employee> repo;
+	/* EmployeeRepository Instance */
+	@Autowired
+	private EmployeeRepository<Employee> repo;
 
-    /**
+	/**
 	 * Returns all the employees currently
 	 * in the repo
 	 * 
@@ -36,7 +36,7 @@ public class EmployeeService {
 	public Employee saveEmployee(Employee e) {
 		return (Employee) repo.save(e);
 	}
-	
+
 	/**
 	 * Deletes a given employee
 	 * 
@@ -56,5 +56,5 @@ public class EmployeeService {
 	public Employee findByEmployeeNum(final Long employeeNum) {
 		return repo.findById(employeeNum).get();
 	}
-	
+
 }

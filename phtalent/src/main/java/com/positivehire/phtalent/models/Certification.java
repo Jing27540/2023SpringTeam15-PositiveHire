@@ -1,6 +1,8 @@
 package com.positivehire.phtalent.models;
 
-import javax.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
 import java.util.Date;
 import java.util.Objects;
 

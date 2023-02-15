@@ -53,10 +53,16 @@
     		<artifactId>validation-api</artifactId>
     		<version>1.0.0.GA</version>
  	 	</dependency>
+		<!--Dependencies added to get the applciation to run 2/13/23 by Isaac.-->
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>6.1.5.Final</version><!--$NO-MVN-MAN-VER$ -->
+    		<groupId>mysql</groupId>
+    		<artifactId>mysql-connector-java</artifactId>
+    		<version>8.0.32</version>
+		</dependency>
+		<dependency>
+    		<groupId>mysql</groupId>
+    		<artifactId>mysql-connector-java</artifactId>
+    		<scope>runtime</scope>
 		</dependency>
 
 	</dependencies>

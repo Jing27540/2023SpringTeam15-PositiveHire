@@ -11,12 +11,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.positivehire.phtalent.services.EmployeeService;
 import com.positivehire.phtalent.models.Employee;
+
 /**
  * API Employee class
  */
+@RestController
 public class APIEmployeeController extends APIController {
 
     @Autowired
@@ -32,18 +35,21 @@ public class APIEmployeeController extends APIController {
         return employeeServ.findAll();
 
     }
+
     /**
      * Get the employee with the given id
+     * 
      * @param id the id of the employee to return
      * @return the employee with the given id
      */
     @GetMapping("/employees/{id}")
     public Employee getEmployeeByNumber(@PathVariable Long id) {
 
-        Employee emp =  employeeServ.findByEmployeeNum(id);
+        Employee emp = employeeServ.findByEmployeeNum(id);
 
         // return null == emp
-        // ? new ResponseEntity( errorResponse( "No employee with the id found" ), HttpStatus.NOT_FOUND )
+        // ? new ResponseEntity( errorResponse( "No employee with the id found" ),
+        // HttpStatus.NOT_FOUND )
         // : new ResponseEntity<Employee>( emp, HttpStatus.OK );
         return emp;
     }
@@ -57,12 +63,13 @@ public class APIEmployeeController extends APIController {
     @PostMapping("/employees")
     public ResponseEntity<String> createEmployee(@RequestBody Employee e) {
         if (employeeServ.findByEmployeeNum(e.getEmployeeNum()) != null) {
-            return new ResponseEntity<String> (
+            return new ResponseEntity<String>(
                     successResponse("Recipe with the name " + e.getEmployeeName() + " already exists"),
                     HttpStatus.CONFLICT);
         } else {
             employeeServ.saveEmployee(e);
-            return new ResponseEntity<String> (successResponse(e.getEmployeeName() + "successfully created"), HttpStatus.OK);
+            return new ResponseEntity<String>(successResponse(e.getEmployeeName() + "successfully created"),
+                    HttpStatus.OK);
         }
 
     }
@@ -79,14 +86,16 @@ public class APIEmployeeController extends APIController {
         Employee employee = employeeServ.findByEmployeeNum(id);
 
         if (employee == null) {
-            return new ResponseEntity<String> (errorResponse("No employee with the given number"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<String>(errorResponse("No employee with the given number"), HttpStatus.NOT_FOUND);
         }
 
         employeeServ.deleteEmployee(id);
-        return new ResponseEntity<String> (successResponse("Employee was deleted successfully"), HttpStatus.OK);
+        return new ResponseEntity<String>(successResponse("Employee was deleted successfully"), HttpStatus.OK);
     }
+
     /**
      * Updates the employee with a given id with the given employee
+     * 
      * @param e the employee to update by
      * @return status
      */
@@ -94,14 +103,15 @@ public class APIEmployeeController extends APIController {
     public ResponseEntity<String> updateEmployee(@RequestBody Employee e) {
         final Employee toEdit = employeeServ.findByEmployeeNum(e.getEmployeeNum());
 
-        if ( null == toEdit ) {
-            return new ResponseEntity<String> ( errorResponse( "No employee found for name " + e.getEmployeeName() ),
-                    HttpStatus.NOT_FOUND );
+        if (null == toEdit) {
+            return new ResponseEntity<String>(errorResponse("No employee found for name " + e.getEmployeeName()),
+                    HttpStatus.NOT_FOUND);
         }
         toEdit.updateEmployee(e);
         employeeServ.saveEmployee(toEdit);
 
-        return new ResponseEntity<String> ( successResponse( toEdit.getEmployeeName() + " was updated successfully" ), HttpStatus.OK );
+        return new ResponseEntity<String>(successResponse(toEdit.getEmployeeName() + " was updated successfully"),
+                HttpStatus.OK);
     }
 
 }
