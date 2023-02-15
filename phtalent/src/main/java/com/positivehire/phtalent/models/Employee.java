@@ -60,6 +60,11 @@ public class Employee {
 
     private double ptoHours;
 
+    public Employee (Long i, String employeeName) {
+        setEmployeeNum(i);
+        setEmployeeName(employeeName);
+    }
+
     public Employee ( Long employeeNum, String employeeName, int employmentStatusId, int departmentId,
         int performanceScoreId, double payRate, String state, int zip, String dateOfHire, int daysEmployeed,
             String dateOfTermination, String reasonForTermination, String employementStatus, String department,

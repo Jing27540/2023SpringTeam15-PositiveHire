@@ -29,7 +29,8 @@ public class Account {
      * Username associated with an account for authenticaiton purposes.
      */
     // @Length(max = 1024)
-    private byte[] hashedUsername;
+    private String username;
+    // private byte[] hashedUsername;
 
     /**
      * Password associated with an account for authentication purposes.
@@ -43,40 +44,47 @@ public class Account {
     // @Length(max = 1024)
     private static byte[] salt;
 
-    // private static Employee;
+    // /**
+    // * The employee associated with this account
+    // */
+    // private Employee employee;
 
     /**
      * Constructor for an Account object. Generates a salt and uses it to hash the
      * username and password. The hashed results are stored.
      * 
-     * @param username Used to set the username for the account
-     * @param password Used to set the password for the account
+     * @param username       Used to set the username for the account
+     * @param password       Used to set the password for the account
+     * @param repeatPassword Used to ensure the user inputted the correct password
      * @throws NoSuchAlgorithmException If there is an error using the SHA-512
      *                                  hashing algorithm
      */
-    public Account(String username, String password) throws NoSuchAlgorithmException {
+    public Account(String username, String password, String repeatPassword, int employeeID)
+            throws NoSuchAlgorithmException {
+        // Check if username and password is valid
+        // TODO
+
+        // Check for matching password
+        if (!password.equals(repeatPassword)) {
+            // Might need to change/create a new exception for this error
+            throw new IllegalArgumentException(
+                    "Password values do not match. Please retype password and repeat password.");
+        }
+
         // random object to generate salts
         SecureRandom random = new SecureRandom();
         byte[] ransalt = new byte[16];
         random.nextBytes(ransalt);
         salt = ransalt;
 
-        try {
-            // Hash the password
-            MessageDigest md = MessageDigest.getInstance("SHA-512");
-            md.update(salt);
-            byte[] hashedPasswordResult = md.digest(password.getBytes(StandardCharsets.UTF_8));
-            hashedPassword = hashedPasswordResult;
+        // Hash the password
+        hashedPassword = generateSHA512Hash(password);
+        // Hash the username
+        // hashedUsername = generateSHA512Hash(username);
+        this.username = username;
 
-            md = MessageDigest.getInstance("SHA-512");
-            md.update(salt);
-            byte[] hashedUsernameResult = md.digest(username.getBytes(StandardCharsets.UTF_8));
-            hashedUsername = hashedUsernameResult;
-        } catch (NoSuchAlgorithmException excep) {
-            throw new NoSuchAlgorithmException(
-                    "ERROR: hashing algorithm is not available for use. No new account has been created.");
-        }
-
+        // Set the Employee Id
+        this.employeeID = employeeID;
     }
 
     /**
@@ -90,34 +98,26 @@ public class Account {
      * @throws NoSuchAlgorithmException If there is an error using the SHA-512
      *                                  hashing algorithm
      */
-    public void login(String usernameAttempt, String passwordAttempt) throws NoSuchAlgorithmException {
-        // Check if username and password is valid
-        // TODO
+    public int login(String usernameAttempt, String passwordAttempt) throws NoSuchAlgorithmException {
 
-        try {
-            // Hash the usernameAttempt and compare to username
-            MessageDigest md = MessageDigest.getInstance("SHA-512");
-            md.update(getSalt());
-            byte[] hashedUsernameResult = md.digest(usernameAttempt.getBytes(StandardCharsets.UTF_8));
+        // Hash the usernameAttempt and compare to username
+        // byte[] hashedUsernameResult = generateSHA512Hash(usernameAttempt);
 
-            if (!hashedUsernameResult.equals(this.getUsername())) {
-                // return null;
-            }
+        // if (!hashedUsernameResult.equals(this.getUsername())) {
+        // return 0;
+        // }
+        if (!usernameAttempt.equals(getUsername())) {
+            return -1;
+        }
 
-            md = MessageDigest.getInstance("SHA-512");
-            md.update(getSalt());
-            byte[] hashedPasswordResult = md.digest(passwordAttempt.getBytes(StandardCharsets.UTF_8));
+        byte[] hashedPasswordResult = generateSHA512Hash(passwordAttempt);
 
-            if (!hashedPasswordResult.equals(this.getPassword())) {
-                // return null;
-            }
-
-        } catch (NoSuchAlgorithmException excep) {
-            throw new NoSuchAlgorithmException(
-                    "ERROR: hashing algorithm is not available for use. Unable to process login attempt");
+        if (!hashedPasswordResult.equals(getPassword())) {
+            return -1;
         }
 
         // return the Employee object or something equivalent
+        return getEmployeeID();
     }
 
     /**
@@ -127,24 +127,22 @@ public class Account {
      * @param currentUsername current, valid username of the account
      * @param currentPassword current, valid password of the account
      * @param newUsername     new username to assign the account
+     * @return true if the username was changed; false otherwise.
      */
-    public void updateUsername(String currentUsername, String currentPassword, String newUsername) {
+    public boolean updateUsername(String currentUsername, String currentPassword, String newUsername)
+            throws NoSuchAlgorithmException {
         // Check if username is valid
         // TODO
 
-        try {
-            login(currentUsername, currentPassword);
-
-            // Update username
-            MessageDigest md = MessageDigest.getInstance("SHA-512");
-            md.update(getSalt());
-            byte[] hashedUsernameResult = md.digest(newUsername.getBytes(StandardCharsets.UTF_8));
-            hashedUsername = hashedUsernameResult;
-
-            // Confirm change
-        } catch (Exception e) {
-            System.out.println("Unable to authenticate user. Cannot change employee ID");
+        if (login(currentUsername, currentPassword) == -1) {
+            return false;
         }
+
+        // Update username
+        this.username = newUsername;
+
+        // Confirm change
+        return true;
     }
 
     /**
@@ -154,59 +152,59 @@ public class Account {
      * @param currentUsername current, valid username of the account
      * @param currentPassword current, valid password of the account
      * @param newPassword     new password to assign the account
+     * @return true if the password was changed; false otherwise.
      */
-    public void updatePassword(String currentUsername, String currentPassword, String newPassword) {
+    public boolean updatePassword(String currentUsername, String currentPassword, String newPassword)
+            throws NoSuchAlgorithmException {
         // Check if password is valid
         // TODO
 
         // attempt to authenticate user for changing their password
-        try {
-            login(currentUsername, currentPassword);
-
-            // Update password
-            MessageDigest md = MessageDigest.getInstance("SHA-512");
-            md.update(getSalt());
-            byte[] hashedPasswordResult = md.digest(newPassword.getBytes(StandardCharsets.UTF_8));
-            hashedPassword = hashedPasswordResult;
-
-            // Confirm change
-        } catch (Exception e) {
-            System.out.println("Unable to authenticate user. Cannot change employee ID");
+        if (login(currentUsername, currentPassword) == -1) {
+            return false;
         }
+
+        // Update password
+        hashedPassword = generateSHA512Hash(newPassword);
+
+        // Confirm change
+        return true;
     }
 
-    /**
-     * Updates the EmployeeID of the account, provided that the current username and
-     * password can be provided.
-     * 
-     * @param currentUsername current, valid username of the account
-     * @param currentPassword current, valid password of the account
-     * @param newEmployeeID   new employeeID to assign the account
-     */
-    public void updateEmployeeID(String currentUsername, String currentPassword, int newEmployeeID) {
-        // Check if new EmployeeID is a valid ID
-        // TODO
+    // /**
+    // * Updates the EmployeeID of the account, provided that the current username
+    // and
+    // * password can be provided.
+    // *
+    // * @param currentUsername current, valid username of the account
+    // * @param currentPassword current, valid password of the account
+    // * @param newEmployeeID new employeeID to assign the account
+    // */
+    // public void updateEmployeeID(String currentUsername, String currentPassword,
+    // int newEmployeeID) {
+    // // Check if new EmployeeID is a valid ID
+    // // TODO
 
-        // attempt to authenticate user for changing their ID?
-        try {
-            login(currentUsername, currentPassword);
+    // // attempt to authenticate user for changing their ID?
+    // try {
+    // login(currentUsername, currentPassword);
 
-            // Update EmployeeID
-            employeeID = newEmployeeID;
+    // // Update EmployeeID
+    // employeeID = newEmployeeID;
 
-            // Return new employee ID?
-        } catch (Exception e) {
-            System.out.println("Unable to authenticate user. Cannot change employee ID");
-        }
-    }
+    // // Return new employee ID?
+    // } catch (Exception e) {
+    // System.out.println("Unable to authenticate user. Cannot change employee ID");
+    // }
+    // }
 
     /**
      * Returns the stored hash of the Account's associated username
      * 
-     * @return byte array containing the hash of the username
+     * @return String containing the username
      */
-    public byte[] getUsername() {
-        return hashedUsername;
+    public String getUsername() {
+        return username;
     }
 
     /**
@@ -220,7 +218,7 @@ public class Account {
 
     /**
      * Returns the stored Employee ID number of the Account
-     * 
+     *
      * @return an integer representing the EmployeeID of the user associated with
      *         this account object
      */
@@ -236,6 +234,27 @@ public class Account {
      */
     public byte[] getSalt() {
         return salt;
+    }
+
+    /**
+     * Helper function for generating a SHA512 hash from the given value
+     * 
+     * @param value the value to hash
+     * @return the value hashed with the Account's salt
+     * @throws NoSuchAlgorithmException if there is an error trying to use the
+     *                                  SHA512 hash algorithm
+     */
+    private byte[] generateSHA512Hash(String value) throws NoSuchAlgorithmException {
+        try {
+            // Hash the given String with the Account's salt
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
+            md.update(getSalt());
+            byte[] hashedResult = md.digest(value.getBytes(StandardCharsets.UTF_8));
+            return hashedResult;
+        } catch (NoSuchAlgorithmException e) {
+            throw new NoSuchAlgorithmException(
+                    "ERROR: hashing algorithm is not available for use. Could not perform the action that required hashing.");
+        }
     }
 
 }
