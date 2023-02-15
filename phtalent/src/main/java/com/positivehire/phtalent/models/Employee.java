@@ -70,6 +70,10 @@ public class Employee extends DomainObject {
 
     private double ptoHours;
 
+    public Employee() {
+
+    }
+
     public Employee(Long employeeNum, String employeeName, int employmentStatusId, int departmentId,
             int performanceScoreId, double payRate, String state, int zip, String dateOfHire, int daysEmployeed,
             String dateOfTermination, String reasonForTermination, String employementStatus, String department,
@@ -104,6 +108,11 @@ public class Employee extends DomainObject {
         setAnnualBonus(annualBonus);
         setPtoHours(ptoHours);
 
+    }
+
+    public Employee(long employeeNum, String employeeName) {
+        setEmployeeNum(employeeNum);
+        setEmployeeName(employeeName);
     }
 
     public Long getEmployeeNum() {
