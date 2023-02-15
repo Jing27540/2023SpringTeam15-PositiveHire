@@ -1,13 +1,22 @@
 package com.positivehire.phtalent.models;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+
+// import javax.persistence.Entity;
+// import javax.persistence.Id;
+
+import java.io.Serializable;
 import java.util.List;
-import javax.persistence.OneToMany;
-import javax.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+
+import jakarta.persistence.CascadeType;
 
 @Entity
-public class Employee {
+public class Employee extends DomainObject {
     @Id
+    @GeneratedValue
     private Long employeeNum;
 
     private String employeeName;
@@ -45,28 +54,33 @@ public class Employee {
     private String accessRole;
 
     private String performanceScore;
-    @OneToMany ( cascade = CascadeType.ALL )
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Skill> technicalSkills;
-    @OneToMany ( cascade = CascadeType.ALL )
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Skill> peopleSkills;
-    @OneToMany ( cascade = CascadeType.ALL )
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Skill> workEthic;
-    @OneToMany ( cascade = CascadeType.ALL )
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Certification> certifications;
 
+    @OneToOne
     private Demographic employeeDemographics;
 
     private double annualBonus;
 
     private double ptoHours;
 
-    public Employee ( Long employeeNum, String employeeName, int employmentStatusId, int departmentId,
-        int performanceScoreId, double payRate, String state, int zip, String dateOfHire, int daysEmployeed,
+    public Employee() {
+
+    }
+
+    public Employee(Long employeeNum, String employeeName, int employmentStatusId, int departmentId,
+            int performanceScoreId, double payRate, String state, int zip, String dateOfHire, int daysEmployeed,
             String dateOfTermination, String reasonForTermination, String employementStatus, String department,
-                String position, String managerName, String employeeSource, String accessRole, String performanceScore,
-                    List<Skill> technicalSkills, List<Skill> peopleSkills, List<Skill> workEthic,
-                        List<Certification> certifications, Demographic employeeDemographics, double annualBonus,
-                            double ptoHours ) {
+            String position, String managerName, String employeeSource, String accessRole, String performanceScore,
+            List<Skill> technicalSkills, List<Skill> peopleSkills, List<Skill> workEthic,
+            List<Certification> certifications, Demographic employeeDemographics, double annualBonus,
+            double ptoHours) {
         setEmployeeNum(employeeNum);
         setEmployeeName(employeeName);
         setEmploymentStatusId(employmentStatusId);
@@ -93,214 +107,219 @@ public class Employee {
         setEmployeeDemographics(employeeDemographics);
         setAnnualBonus(annualBonus);
         setPtoHours(ptoHours);
-       
+
     }
 
-    public Long getEmployeeNum () {
+    public Employee(long employeeNum, String employeeName) {
+        setEmployeeNum(employeeNum);
+        setEmployeeName(employeeName);
+    }
+
+    public Long getEmployeeNum() {
         return employeeNum;
     }
 
-    public void setEmployeeNum ( Long employeeNum ) {
+    public void setEmployeeNum(Long employeeNum) {
         this.employeeNum = employeeNum;
     }
 
-    public String getEmployeeName () {
+    public String getEmployeeName() {
         return employeeName;
     }
 
-    public void setEmployeeName ( String employeeName ) {
+    public void setEmployeeName(String employeeName) {
         this.employeeName = employeeName;
     }
 
-    public int getEmploymentStatusId () {
+    public int getEmploymentStatusId() {
         return employmentStatusId;
     }
 
-    public void setEmploymentStatusId ( int employmentStatusId ) {
+    public void setEmploymentStatusId(int employmentStatusId) {
         this.employmentStatusId = employmentStatusId;
     }
 
-    public int getDepartmentId () {
+    public int getDepartmentId() {
         return departmentId;
     }
 
-    public void setDepartmentId ( int departmentId ) {
+    public void setDepartmentId(int departmentId) {
         this.departmentId = departmentId;
     }
 
-    public int getPerformanceScoreId () {
+    public int getPerformanceScoreId() {
         return performanceScoreId;
     }
 
-    public void setPerformanceScoreId ( int performanceScoreId ) {
+    public void setPerformanceScoreId(int performanceScoreId) {
         this.performanceScoreId = performanceScoreId;
     }
 
-    public double getPayRate () {
+    public double getPayRate() {
         return payRate;
     }
 
-    public void setPayRate ( double payRate ) {
+    public void setPayRate(double payRate) {
         this.payRate = payRate;
     }
 
-    public String getState () {
+    public String getState() {
         return state;
     }
 
-    public void setState ( String state ) {
+    public void setState(String state) {
         this.state = state;
     }
 
-    public int getZip () {
+    public int getZip() {
         return zip;
     }
 
-    public void setZip ( int zip ) {
+    public void setZip(int zip) {
         this.zip = zip;
     }
 
-    public String getDateOfHire () {
+    public String getDateOfHire() {
         return dateOfHire;
     }
 
-    public void setDateOfHire ( String dateOfHire ) {
+    public void setDateOfHire(String dateOfHire) {
         this.dateOfHire = dateOfHire;
     }
 
-    public int getDaysEmployeed () {
+    public int getDaysEmployeed() {
         return daysEmployeed;
     }
 
-    public void setDaysEmployeed ( int daysEmployeed ) {
+    public void setDaysEmployeed(int daysEmployeed) {
         this.daysEmployeed = daysEmployeed;
     }
 
-    public String getDateOfTermination () {
+    public String getDateOfTermination() {
         return dateOfTermination;
     }
 
-    public void setDateOfTermination ( String dateOfTermination ) {
+    public void setDateOfTermination(String dateOfTermination) {
         this.dateOfTermination = dateOfTermination;
     }
 
-    public String getReasonForTermination () {
+    public String getReasonForTermination() {
         return reasonForTermination;
     }
 
-    public void setReasonForTermination ( String reasonForTermination ) {
+    public void setReasonForTermination(String reasonForTermination) {
         this.reasonForTermination = reasonForTermination;
     }
 
-    public String getEmployementStatus () {
+    public String getEmployementStatus() {
         return employementStatus;
     }
 
-    public void setEmployementStatus ( String employementStatus ) {
+    public void setEmployementStatus(String employementStatus) {
         this.employementStatus = employementStatus;
     }
 
-    public String getDepartment () {
+    public String getDepartment() {
         return department;
     }
 
-    public void setDepartment ( String department ) {
+    public void setDepartment(String department) {
         this.department = department;
     }
 
-    public String getPosition () {
+    public String getPosition() {
         return position;
     }
 
-    public void setPosition ( String position ) {
+    public void setPosition(String position) {
         this.position = position;
     }
 
-    public String getManagerName () {
+    public String getManagerName() {
         return managerName;
     }
 
-    public void setManagerName ( String managerName ) {
+    public void setManagerName(String managerName) {
         this.managerName = managerName;
     }
 
-    public String getEmployeeSource () {
+    public String getEmployeeSource() {
         return employeeSource;
     }
 
-    public void setEmployeeSource ( String employeeSource ) {
+    public void setEmployeeSource(String employeeSource) {
         this.employeeSource = employeeSource;
     }
 
-    public String getAccessRole () {
+    public String getAccessRole() {
         return accessRole;
     }
 
-    public void setAccessRole ( String accessRole ) {
+    public void setAccessRole(String accessRole) {
         this.accessRole = accessRole;
     }
 
-    public String getPerformanceScore () {
+    public String getPerformanceScore() {
         return performanceScore;
     }
 
-    public void setPerformanceScore ( String performanceScore ) {
+    public void setPerformanceScore(String performanceScore) {
         this.performanceScore = performanceScore;
     }
 
-    public List<Skill> getTechnicalSkills () {
+    public List<Skill> getTechnicalSkills() {
         return technicalSkills;
     }
 
-    public void setTechnicalSkills ( List<Skill> technicalSkills ) {
+    public void setTechnicalSkills(List<Skill> technicalSkills) {
         this.technicalSkills = technicalSkills;
     }
 
-    public List<Skill> getPeopleSkills () {
+    public List<Skill> getPeopleSkills() {
         return peopleSkills;
     }
 
-    public void setPeopleSkills ( List<Skill> peopleSkills ) {
+    public void setPeopleSkills(List<Skill> peopleSkills) {
         this.peopleSkills = peopleSkills;
     }
 
-    public List<Skill> getWorkEthic () {
+    public List<Skill> getWorkEthic() {
         return workEthic;
     }
 
-    public void setWorkEthic ( List<Skill> workEthic ) {
+    public void setWorkEthic(List<Skill> workEthic) {
         this.workEthic = workEthic;
     }
 
-    public List<Certification> getCertifications () {
+    public List<Certification> getCertifications() {
         return certifications;
     }
 
-    public void setCertifications ( List<Certification> certifications ) {
+    public void setCertifications(List<Certification> certifications) {
         this.certifications = certifications;
     }
 
-    public Demographic getEmployeeDemographics () {
+    public Demographic getEmployeeDemographics() {
         return employeeDemographics;
     }
 
-    public void setEmployeeDemographics ( Demographic employeeDemographics ) {
+    public void setEmployeeDemographics(Demographic employeeDemographics) {
         this.employeeDemographics = employeeDemographics;
     }
 
-    public double getAnnualBonus () {
+    public double getAnnualBonus() {
         return annualBonus;
     }
 
-    public void setAnnualBonus ( double annualBonus ) {
+    public void setAnnualBonus(double annualBonus) {
         this.annualBonus = annualBonus;
     }
 
-    public double getPtoHours () {
+    public double getPtoHours() {
         return ptoHours;
     }
 
-    public void setPtoHours ( double ptoHours ) {
+    public void setPtoHours(double ptoHours) {
         this.ptoHours = ptoHours;
     }
 
@@ -331,5 +350,10 @@ public class Employee {
         this.setEmployeeDemographics(employeeDemographics);
         this.setAnnualBonus(annualBonus);
         this.setPtoHours(ptoHours);
+    }
+
+    @Override
+    public Serializable getId() {
+        return employeeNum;
     }
 }
