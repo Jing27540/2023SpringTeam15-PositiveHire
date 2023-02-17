@@ -1,6 +1,5 @@
 package com.positivehire.phtalent.models;
 
-import java.security.PrivateKey;
 import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.persistence.Id;
