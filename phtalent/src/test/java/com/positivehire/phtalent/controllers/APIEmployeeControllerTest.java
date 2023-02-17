@@ -113,7 +113,7 @@ class APIEmployeeControllerTest {
 		mvc = MockMvcBuilders.webAppContextSetup(context).build();
 		List<Employee> employees = employeeServ.findAll();
 		// if(employees.size() != 0 ) {
-		employeeServ.deleteAllEmployees();
+		employeeServ.deleteAll();
 		// }
 
 		// Create fake employees to test with
@@ -142,9 +142,9 @@ class APIEmployeeControllerTest {
 		employee3.setAccessRole("Engineer");
 		employee3.setPeopleSkills(skills);
 		// Save employees to service
-		employeeServ.saveEmployee(employee1);
-		employeeServ.saveEmployee(employee2);
-		employeeServ.saveEmployee(employee3);
+		employeeServ.save(employee1);
+		employeeServ.save(employee2);
+		employeeServ.save(employee3);
 		// Get employees
 		mvc.perform(get("/employees")).andExpect(status().isOk());
 		System.out.println(employee1.getId());
@@ -154,7 +154,7 @@ class APIEmployeeControllerTest {
 		Assert.assertEquals(3, employees.size());
 		Assert.assertEquals(employee1, employeeServ.findById((long) employee1.getId()));
 		Assert.assertEquals(employee2, employeeServ.findById((long) employee2.getId()));
-		Assert.assertEquals(employee3, employees.get(2));
+		Assert.assertEquals(employee3, employeeServ.findById((long) employee3.getId()));
 
 		// employeeServ.deleteEmployee((long) employee2.getId());
 
@@ -182,18 +182,22 @@ class APIEmployeeControllerTest {
 		employee4.setEmployeeName("Fourth Employee");
 		employee4.setManagerName("Fourth employees Manager");
 		mvc.perform(post("/employees").contentType(MediaType.APPLICATION_JSON)
-				.content(TestUtils.asJsonString(employee4)));
+				.content(TestUtils.asJsonString(employee4))).andExpect(status().isOk());
 
 		employees = employeeServ.findAll();
 		Assert.assertEquals(4, employees.size());
 
-		mvc.perform(delete("/employees/2").contentType(MediaType.APPLICATION_JSON));
+		mvc.perform(delete("/employees/" + employees.get(3).getId()).contentType(MediaType.APPLICATION_JSON));
 				
 
 		employees = employeeServ.findAll();
 		Assert.assertEquals(3, employees.size());
+		
+		//mvc.perform(get("/employees/" + employees.get(2).getId()).contentType(MediaType.APPLICATION_JSON)).andExpect( status().isOk() );
 
-		mvc.perform(get("/employees/3").contentType(MediaType.APPLICATION_JSON)).andExpect( status().isOk() );
+		employees.get(2).setEmployeeNum("54645354");
+
+		mvc.perform(get("/employees/" + employees.get(2).getEmployeeNum()).contentType(MediaType.APPLICATION_JSON)).andExpect( status().isOk());
 	}
 
 }
