@@ -43,15 +43,15 @@ public class APIEmployeeController extends APIController {
      * @return the employee with the given id
      */
     @GetMapping("/employees/{id}")
-    public Employee getEmployeeByNumber(@PathVariable Long id) {
+    public ResponseEntity<Employee> getEmployeeByNumber(@PathVariable Long id) {
 
-        Employee emp = employeeServ.findByEmployeeNum(id);
+        Employee emp = employeeServ.findById(id);
 
-        // return null == emp
-        // ? new ResponseEntity( errorResponse( "No employee with the id found" ),
-        // HttpStatus.NOT_FOUND )
-        // : new ResponseEntity<Employee>( emp, HttpStatus.OK );
-        return emp;
+        return null == emp
+        ? new ResponseEntity( errorResponse( "No employee with the id found" ),
+        HttpStatus.NOT_FOUND )
+        : new ResponseEntity<Employee>( emp, HttpStatus.OK );
+       
     }
 
     /**
@@ -62,9 +62,9 @@ public class APIEmployeeController extends APIController {
      */
     @PostMapping("/employees")
     public ResponseEntity<String> createEmployee(@RequestBody Employee e) {
-        if (employeeServ.findByEmployeeNum(e.getEmployeeNum()) != null) {
+        if (e.getId() != null) {
             return new ResponseEntity<String>(
-                    successResponse("Recipe with the name " + e.getEmployeeName() + " already exists"),
+                    successResponse("Employee with the name " + e.getEmployeeName() + " already exists"),
                     HttpStatus.CONFLICT);
         } else {
             employeeServ.saveEmployee(e);
@@ -83,7 +83,8 @@ public class APIEmployeeController extends APIController {
     @DeleteMapping("/employees/{id}")
     public ResponseEntity<String> deleteEmployee(@PathVariable("id") final Long id) {
 
-        Employee employee = employeeServ.findByEmployeeNum(id);
+        Employee employee = employeeServ.findById(id);
+     
 
         if (employee == null) {
             return new ResponseEntity<String>(errorResponse("No employee with the given number"), HttpStatus.NOT_FOUND);
@@ -101,7 +102,7 @@ public class APIEmployeeController extends APIController {
      */
     @PutMapping("/employees")
     public ResponseEntity<String> updateEmployee(@RequestBody Employee e) {
-        final Employee toEdit = employeeServ.findByEmployeeNum(e.getEmployeeNum());
+        final Employee toEdit = employeeServ.findById((long) e.getId());
 
         if (null == toEdit) {
             return new ResponseEntity<String>(errorResponse("No employee found for name " + e.getEmployeeName()),

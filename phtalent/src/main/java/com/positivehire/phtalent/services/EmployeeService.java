@@ -42,8 +42,9 @@ public class EmployeeService {
 	 * 
 	 * @param e employee being deleted
 	 */
-	public void deleteEmployee(final Long employeeNum) {
-		Employee e = findByEmployeeNum(employeeNum);
+	public void deleteEmployee(final Long id) {
+		Employee e = findById(id);
+		
 		repo.delete(e);
 	}
 
@@ -53,8 +54,12 @@ public class EmployeeService {
 	 * @param id of employee needed
 	 * @return employee from repo with given id
 	 */
-	public Employee findByEmployeeNum(final Long employeeNum) {
-		return repo.findById(employeeNum).get();
+	public Employee findById(final Long id) {
+		return repo.findById(id).get();
+	}
+
+	public void deleteAllEmployees() {
+		repo.deleteAll();
 	}
 
 }
