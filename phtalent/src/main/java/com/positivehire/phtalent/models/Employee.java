@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
@@ -17,9 +18,11 @@ import jakarta.persistence.CascadeType;
 public class Employee extends DomainObject {
     @Id
     @GeneratedValue
-    private Long employeeNum;
+    private Long id;
 
     private String employeeName;
+
+    private String employeeNum;
 
     private int employmentStatusId;
 
@@ -74,15 +77,16 @@ public class Employee extends DomainObject {
 
     }
 
-    public Employee(Long employeeNum, String employeeName, int employmentStatusId, int departmentId,
+    public Employee(Long id, String employeeName, String employeeNum, int employmentStatusId, int departmentId,
             int performanceScoreId, double payRate, String state, int zip, String dateOfHire, int daysEmployeed,
             String dateOfTermination, String reasonForTermination, String employementStatus, String department,
             String position, String managerName, String employeeSource, String accessRole, String performanceScore,
             List<Skill> technicalSkills, List<Skill> peopleSkills, List<Skill> workEthic,
             List<Certification> certifications, Demographic employeeDemographics, double annualBonus,
             double ptoHours) {
-        setEmployeeNum(employeeNum);
+        setId(id);
         setEmployeeName(employeeName);
+        setEmployeeNum(employeeNum);
         setEmploymentStatusId(employmentStatusId);
         setDepartmentId(departmentId);
         setPerformanceScoreId(performanceScoreId);
@@ -110,17 +114,26 @@ public class Employee extends DomainObject {
 
     }
 
-    public Employee(long employeeNum, String employeeName) {
-        setEmployeeNum(employeeNum);
+    public Employee(long id, String employeeName) {
+        setId(id);
         setEmployeeName(employeeName);
     }
 
-    public Long getEmployeeNum() {
-        return employeeNum;
+    public String getEmployeeNum() {
+        return this.employeeNum;
     }
 
-    public void setEmployeeNum(Long employeeNum) {
+    public void setEmployeeNum(String employeeNum) {
         this.employeeNum = employeeNum;
+    }
+
+    @Override
+    public Serializable getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEmployeeName() {
@@ -324,7 +337,7 @@ public class Employee extends DomainObject {
     }
 
     public void updateEmployee(final Employee e) {
-        this.setEmployeeNum(employeeNum);
+        this.setId(id);
         this.setEmployeeName(employeeName);
         this.setEmploymentStatusId(employmentStatusId);
         this.setDepartmentId(departmentId);
@@ -353,7 +366,36 @@ public class Employee extends DomainObject {
     }
 
     @Override
-    public Serializable getId() {
-        return employeeNum;
+    public String toString() {
+        return "{" +
+            " id='" + getId() + "'" +
+            ", employeeName='" + getEmployeeName() + "'" +
+            ", employeeNum='" + getEmployeeNum() + "'" +
+            ", employmentStatusId='" + getEmploymentStatusId() + "'" +
+            ", departmentId='" + getDepartmentId() + "'" +
+            ", performanceScoreId='" + getPerformanceScoreId() + "'" +
+            ", payRate='" + getPayRate() + "'" +
+            ", state='" + getState() + "'" +
+            ", zip='" + getZip() + "'" +
+            ", dateOfHire='" + getDateOfHire() + "'" +
+            ", daysEmployeed='" + getDaysEmployeed() + "'" +
+            ", dateOfTermination='" + getDateOfTermination() + "'" +
+            ", reasonForTermination='" + getReasonForTermination() + "'" +
+            ", employementStatus='" + getEmployementStatus() + "'" +
+            ", department='" + getDepartment() + "'" +
+            ", position='" + getPosition() + "'" +
+            ", managerName='" + getManagerName() + "'" +
+            ", employeeSource='" + getEmployeeSource() + "'" +
+            ", accessRole='" + getAccessRole() + "'" +
+            ", performanceScore='" + getPerformanceScore() + "'" +
+            ", technicalSkills='" + getTechnicalSkills() + "'" +
+            ", peopleSkills='" + getPeopleSkills() + "'" +
+            ", workEthic='" + getWorkEthic() + "'" +
+            ", certifications='" + getCertifications() + "'" +
+            ", employeeDemographics='" + getEmployeeDemographics() + "'" +
+            ", annualBonus='" + getAnnualBonus() + "'" +
+            ", ptoHours='" + getPtoHours() + "'" +
+            "}";
     }
+
 }

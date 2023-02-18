@@ -10,5 +10,5 @@ import com.positivehire.phtalent.models.Employee;
  */
 @Repository
 public interface EmployeeRepository<T extends Employee> extends JpaRepository<Employee, Long> {
-
+    Employee findByEmployeeNum(String employeeNum);
 }
