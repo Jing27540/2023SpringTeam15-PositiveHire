@@ -64,11 +64,11 @@ public class APIEmployeeController extends APIController {
     public ResponseEntity<String> createEmployee(@RequestBody Employee e) {
         if (e.getId() != null) {
             return new ResponseEntity<String>(
-                    successResponse("Employee with the name " + e.getEmployeeName() + " already exists"),
+                    successResponse("Employee with the number " + e.getEmployeeNum() + " already exists"),
                     HttpStatus.CONFLICT);
         } else {
             employeeServ.save(e);
-            return new ResponseEntity<String>(successResponse(e.getEmployeeName() + "successfully created"),
+            return new ResponseEntity<String>(successResponse(e.getEmployeeNum()+ "successfully created"),
                     HttpStatus.OK);
         }
 
