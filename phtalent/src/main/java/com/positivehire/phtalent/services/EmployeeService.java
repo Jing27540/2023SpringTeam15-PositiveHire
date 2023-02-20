@@ -60,11 +60,11 @@ public class EmployeeService extends Service<Employee, Long> {
 	 * 
 	 * @param e employee being deleted
 	 */
-	public void deleteEmployee(final Long id) {
-		Employee e = findById(id);
+	// public void deleteEmployee(final Long id) {
+	// 	Employee e = findByEmploye(id);
 		
-		repo.delete(e);
-	}
+	// 	repo.delete(e);
+	// }
 
 	/**
 	 * Find singluar employee by id
