@@ -55,24 +55,16 @@
     		<artifactId>validation-api</artifactId>
     		<version>1.0.0.GA</version>
  	 	</dependency>
-
+		<!--Dependencies added to get the applciation to run 2/13/23 by Isaacz.-->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
+    		<groupId>mysql</groupId>
+    		<artifactId>mysql-connector-java</artifactId>
+    		<version>8.0.32</version>
 		</dependency>
-
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>6.1.5.Final</version><!--$NO-MVN-MAN-VER$ -->
+    		<groupId>mysql</groupId>
+    		<artifactId>mysql-connector-java</artifactId>
+    		<scope>runtime</scope>
 		</dependency>
 
 		<dependency>

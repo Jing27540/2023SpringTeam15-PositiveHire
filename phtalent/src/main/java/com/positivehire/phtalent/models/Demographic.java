@@ -1,13 +1,17 @@
 package com.positivehire.phtalent.models;
 
 import java.util.Objects;
-import javax.persistence.*;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
 
 /**
  * Creates an Demographic object for use in arbitrary Demographics.
  * 
  * @author Jing Huang
  */
+@Entity
 public class Demographic {
     /** The id of this created Demographic object */
     @Id

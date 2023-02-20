@@ -1,10 +1,15 @@
 package com.positivehire.phtalent.models;
 
 import java.security.SecureRandom;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
-import javax.persistence.*;
 
 /**
  * This class represents a "user" account. An account stores username and
@@ -13,41 +18,44 @@ import javax.persistence.*;
  * login will return the Employee object stored in it.
  */
 @Entity
-public class Account {
+public class Account extends DomainObject {
 
     /**
      * ID of account object stored in a database
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private long id;
 
-    // @Length(max = 64)
     private int employeeID;
 
     /**
      * Username associated with an account for authenticaiton purposes.
      */
-    // @Length(max = 1024)
     private String username;
     // private byte[] hashedUsername;
 
     /**
      * Password associated with an account for authentication purposes.
      */
-    // @Length(max = 1024)
     private byte[] hashedPassword;
 
     /**
      * Salt used to hash usernmae and password
      */
-    // @Length(max = 1024)
     private static byte[] salt;
 
     // /**
     // * The employee associated with this account
     // */
     // private Employee employee;
+
+    /**
+     * Empty constructor for hibernate
+     */
+    public Account() {
+
+    }
 
     /**
      * Constructor for an Account object. Generates a salt and uses it to hash the
@@ -58,11 +66,15 @@ public class Account {
      * @param repeatPassword Used to ensure the user inputted the correct password
      * @throws NoSuchAlgorithmException If there is an error using the SHA-512
      *                                  hashing algorithm
+     * @throws IllegalArgumentException If the username or password is less than 8
+     *                                  characters long
      */
     public Account(String username, String password, String repeatPassword, int employeeID)
             throws NoSuchAlgorithmException {
         // Check if username and password is valid
-        // TODO
+        if (username.length() < 8 && password.length() < 8) {
+            throw new IllegalArgumentException("Username and passwords must be at least 8 characters long.");
+        }
 
         // Check for matching password
         if (!password.equals(repeatPassword)) {
@@ -100,12 +112,6 @@ public class Account {
      */
     public int login(String usernameAttempt, String passwordAttempt) throws NoSuchAlgorithmException {
 
-        // Hash the usernameAttempt and compare to username
-        // byte[] hashedUsernameResult = generateSHA512Hash(usernameAttempt);
-
-        // if (!hashedUsernameResult.equals(this.getUsername())) {
-        // return 0;
-        // }
         if (!usernameAttempt.equals(getUsername())) {
             return -1;
         }
@@ -129,11 +135,19 @@ public class Account {
      * @param newUsername     new username to assign the account
      * @return true if the username was changed; false otherwise.
      */
-    public boolean updateUsername(String currentUsername, String currentPassword, String newUsername)
+    public boolean setUsername(String currentUsername, String currentPassword, String newUsername)
             throws NoSuchAlgorithmException {
         // Check if username is valid
-        // TODO
+        if (newUsername.length() < 8) {
+            throw new IllegalArgumentException("Username must be at least 8 characters long.");
+        }
 
+        // Check if the Account has a current username
+        if (getUsername() == null) {
+            return false;
+        }
+
+        // Verify login credentials
         if (login(currentUsername, currentPassword) == -1) {
             return false;
         }
@@ -157,7 +171,14 @@ public class Account {
     public boolean updatePassword(String currentUsername, String currentPassword, String newPassword)
             throws NoSuchAlgorithmException {
         // Check if password is valid
-        // TODO
+        if (newPassword.length() < 8) {
+            throw new IllegalArgumentException("Passwords must be at least 8 characters long.");
+        }
+
+        // Check if the Account has a current password
+        if (getPassword() == null) {
+            return false;
+        }
 
         // attempt to authenticate user for changing their password
         if (login(currentUsername, currentPassword) == -1) {
@@ -170,33 +191,6 @@ public class Account {
         // Confirm change
         return true;
     }
-
-    // /**
-    // * Updates the EmployeeID of the account, provided that the current username
-    // and
-    // * password can be provided.
-    // *
-    // * @param currentUsername current, valid username of the account
-    // * @param currentPassword current, valid password of the account
-    // * @param newEmployeeID new employeeID to assign the account
-    // */
-    // public void updateEmployeeID(String currentUsername, String currentPassword,
-    // int newEmployeeID) {
-    // // Check if new EmployeeID is a valid ID
-    // // TODO
-
-    // // attempt to authenticate user for changing their ID?
-    // try {
-    // login(currentUsername, currentPassword);
-
-    // // Update EmployeeID
-    // employeeID = newEmployeeID;
-
-    // // Return new employee ID?
-    // } catch (Exception e) {
-    // System.out.println("Unable to authenticate user. Cannot change employee ID");
-    // }
-    // }
 
     /**
      * Returns the stored hash of the Account's associated username
@@ -222,7 +216,7 @@ public class Account {
      * @return an integer representing the EmployeeID of the user associated with
      *         this account object
      */
-    public int getEmployeeID() {
+    private int getEmployeeID() {
         return employeeID;
     }
 
@@ -255,6 +249,11 @@ public class Account {
             throw new NoSuchAlgorithmException(
                     "ERROR: hashing algorithm is not available for use. Could not perform the action that required hashing.");
         }
+    }
+
+    @Override
+    public Serializable getId() {
+        return id;
     }
 
 }
