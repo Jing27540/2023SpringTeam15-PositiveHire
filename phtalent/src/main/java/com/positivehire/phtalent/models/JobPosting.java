@@ -23,6 +23,9 @@ public class JobPosting {
     /** Salary of the job position */
     private String salary;
 
+    /** Department of the job position */
+    private String department;
+
     /** Metric-tracked Skill (object) job position requirements */
     private ArrayList<Skill> skillRequirements;
 
@@ -102,6 +105,22 @@ public class JobPosting {
      */
     public void setSalary(String salary) {
         this.salary = salary;
+    }
+
+    /**
+     * Returns the department name
+     * @return department name
+     */
+    public String getDepartment() {
+        return department;
+    }
+
+    /**
+     * Sets the department name
+     * @param department name
+     */
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     /**
@@ -230,6 +249,17 @@ public class JobPosting {
      */
     public void setProcess(ArrayList<String> process) {
         this.process = process;
+    }
+
+    /**
+     * Returns the Job Posting as a String
+     *
+     * @return a Job Posting represented as a String
+     */
+    @Override
+    public String toString () {
+        return "JobPosting [jobNumber=" + jobNumber + ", jobTitle=" + jobTitle + ", salary=" + salary
+                + ", department=" + department + ", skillRequirements=" + skillRequirements + "]";
     }
 
 }
