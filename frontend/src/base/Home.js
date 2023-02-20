@@ -1,12 +1,13 @@
 import React from 'react';
 import NavBar from '../components/NavBar';
-import EditProfile from '../subViews/EditProfile';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import EmployeeProfile from '../views/EmployeeProfile';
 
 function Home() {
     return (
         <>
             <NavBar />
-            
+            <EmployeeProfile />
         </>
     );
 }
