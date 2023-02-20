@@ -111,7 +111,7 @@ class APIEmployeeControllerTest {
 	@Transactional
 	public void testEmployeeController() throws Exception {
 		mvc = MockMvcBuilders.webAppContextSetup(context).build();
-		List<Employee> employees = employeeServ.findAll();
+		List<Employee> employees = new ArrayList();
 		// if(employees.size() != 0 ) {
 		employeeServ.deleteAll();
 		// }
@@ -128,17 +128,19 @@ class APIEmployeeControllerTest {
 		// Create fake employees to test with
 		employee1 = new Employee();
 		employee1.setEmployeeName("Jing");
-
+		employee1.setEmployeeNum("54645394");
 		employee1.setTechnicalSkills(skills);
 		employee1.setAccessRole("HR");
+
 		employee2 = new Employee();
 		employee2.setEmployeeName("Biniyam");
-
+		employee2.setEmployeeNum("54645294");
 		employee2.setAccessRole("Manager");
 		employee2.setWorkEthic(skills);
+
 		employee3 = new Employee();
 		employee3.setEmployeeName("Isaac");
-
+		employee3.setEmployeeNum("54645494");
 		employee3.setAccessRole("Engineer");
 		employee3.setPeopleSkills(skills);
 		// Save employees to service
@@ -181,13 +183,14 @@ class APIEmployeeControllerTest {
 
 		employee4.setEmployeeName("Fourth Employee");
 		employee4.setManagerName("Fourth employees Manager");
+		employee4.setEmployeeNum("54645354");
 		mvc.perform(post("/employees").contentType(MediaType.APPLICATION_JSON)
 				.content(TestUtils.asJsonString(employee4))).andExpect(status().isOk());
 
 		employees = employeeServ.findAll();
 		Assert.assertEquals(4, employees.size());
 
-		mvc.perform(delete("/employees/" + employees.get(3).getId()).contentType(MediaType.APPLICATION_JSON));
+		mvc.perform(delete("/employees/" + employees.get(3).getEmployeeNum()).contentType(MediaType.APPLICATION_JSON));
 				
 
 		employees = employeeServ.findAll();
@@ -195,7 +198,7 @@ class APIEmployeeControllerTest {
 		
 		//mvc.perform(get("/employees/" + employees.get(2).getId()).contentType(MediaType.APPLICATION_JSON)).andExpect( status().isOk() );
 
-		employees.get(2).setEmployeeNum("54645354");
+		//employees.get(2).setEmployeeNum("54645354");
 
 		mvc.perform(get("/employees/" + employees.get(2).getEmployeeNum()).contentType(MediaType.APPLICATION_JSON)).andExpect( status().isOk());
 	}

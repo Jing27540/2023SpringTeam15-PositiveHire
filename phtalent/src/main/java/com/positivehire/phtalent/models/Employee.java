@@ -6,8 +6,6 @@ package com.positivehire.phtalent.models;
 import java.io.Serializable;
 import java.util.List;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
@@ -24,17 +22,37 @@ public class Employee extends DomainObject {
 
     private String employeeNum;
 
+    private int marriedId;
+
+    private int maritalStatusId;
+
+    private int genderId;
+
     private int employmentStatusId;
 
     private int departmentId;
 
     private int performanceScoreId;
 
+    private int age;
+
     private double payRate;
 
     private String state;
 
     private int zip;
+
+    private String DOB;
+
+    private String sex;
+
+    private String maritalDesc;
+
+    private String citizenDesc;
+
+    private String hispanicLation;
+
+    private String raceDesc;
 
     private String dateOfHire;
 
@@ -57,6 +75,11 @@ public class Employee extends DomainObject {
     private String accessRole;
 
     private String performanceScore;
+
+    private double annualBonus;
+
+    private double ptoHours;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<Skill> technicalSkills;
     @OneToMany(cascade = CascadeType.ALL)
@@ -65,13 +88,6 @@ public class Employee extends DomainObject {
     private List<Skill> workEthic;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Certification> certifications;
-
-    @OneToOne
-    private Demographic employeeDemographics;
-
-    private double annualBonus;
-
-    private double ptoHours;
 
     public Employee() {
 
@@ -108,7 +124,6 @@ public class Employee extends DomainObject {
         setPeopleSkills(peopleSkills);
         setWorkEthic(workEthic);
         setCertifications(certifications);
-        setEmployeeDemographics(employeeDemographics);
         setAnnualBonus(annualBonus);
         setPtoHours(ptoHours);
 
@@ -312,13 +327,13 @@ public class Employee extends DomainObject {
         this.certifications = certifications;
     }
 
-    public Demographic getEmployeeDemographics() {
-        return employeeDemographics;
-    }
+    // public Demographic getEmployeeDemographics() {
+    //     return employeeDemographics;
+    // }
 
-    public void setEmployeeDemographics(Demographic employeeDemographics) {
-        this.employeeDemographics = employeeDemographics;
-    }
+    // public void setEmployeeDemographics(Demographic employeeDemographics) {
+    //     this.employeeDemographics = employeeDemographics;
+    // }
 
     public double getAnnualBonus() {
         return annualBonus;
@@ -334,6 +349,86 @@ public class Employee extends DomainObject {
 
     public void setPtoHours(double ptoHours) {
         this.ptoHours = ptoHours;
+    }
+
+    public Integer getMarriedId() {
+        return this.marriedId;
+    }
+
+    public void setMarriedId(Integer marriedId) {
+        this.marriedId = marriedId;
+    }
+
+    public Integer getMaritalStatusId() {
+        return this.maritalStatusId;
+    }
+
+    public void setMaritalStatusId(Integer maritalStatusId) {
+        this.maritalStatusId = maritalStatusId;
+    }
+
+    public Integer getGenderId() {
+        return this.genderId;
+    }
+
+    public void setGenderId(Integer genderId) {
+        this.genderId = genderId;
+    }
+
+    public Integer getAge() {
+        return this.age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getDOB() {
+        return this.DOB;
+    }
+
+    public void setDOB(String DOB) {
+        this.DOB = DOB;
+    }
+
+    public String getSex() {
+        return this.sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getMaritalDesc() {
+        return this.maritalDesc;
+    }
+
+    public void setMaritalDesc(String maritalDesc) {
+        this.maritalDesc = maritalDesc;
+    }
+
+    public String getCitizenDesc() {
+        return this.citizenDesc;
+    }
+
+    public void setCitizenDesc(String citizenDesc) {
+        this.citizenDesc = citizenDesc;
+    }
+
+    public String getHispanicLation() {
+        return this.hispanicLation;
+    }
+
+    public void setHispanicLation(String hispanicLation) {
+        this.hispanicLation = hispanicLation;
+    }
+
+    public String getRaceDesc() {
+        return this.raceDesc;
+    }
+
+    public void setRaceDesc(String raceDesc) {
+        this.raceDesc = raceDesc;
     }
 
     public void updateEmployee(final Employee e) {
@@ -360,7 +455,7 @@ public class Employee extends DomainObject {
         this.setPeopleSkills(peopleSkills);
         this.setWorkEthic(workEthic);
         this.setCertifications(certifications);
-        this.setEmployeeDemographics(employeeDemographics);
+       
         this.setAnnualBonus(annualBonus);
         this.setPtoHours(ptoHours);
     }
@@ -392,7 +487,6 @@ public class Employee extends DomainObject {
             ", peopleSkills='" + getPeopleSkills() + "'" +
             ", workEthic='" + getWorkEthic() + "'" +
             ", certifications='" + getCertifications() + "'" +
-            ", employeeDemographics='" + getEmployeeDemographics() + "'" +
             ", annualBonus='" + getAnnualBonus() + "'" +
             ", ptoHours='" + getPtoHours() + "'" +
             "}";

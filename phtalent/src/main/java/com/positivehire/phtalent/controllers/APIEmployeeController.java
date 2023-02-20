@@ -80,17 +80,17 @@ public class APIEmployeeController extends APIController {
      * @param id the id of the employee to be deleted
      * @return resonse entity status
      */
-    @DeleteMapping("/employees/{id}")
-    public ResponseEntity<String> deleteEmployee(@PathVariable("id") final Long id) {
+    @DeleteMapping("/employees/{employeeNum}")
+    public ResponseEntity<String> deleteEmployee(@PathVariable("employeeNum") final String employeeNum) {
 
-        Employee employee = employeeServ.findById(id);
+        Employee employee = employeeServ.findByEmployeeNum(employeeNum);
      
 
         if (employee == null) {
             return new ResponseEntity<String>(errorResponse("No employee with the given number"), HttpStatus.NOT_FOUND);
         }
 
-        employeeServ.deleteEmployee(id);
+        employeeServ.delete(employee);
         return new ResponseEntity<String>(successResponse("Employee was deleted successfully"), HttpStatus.OK);
     }
 
