@@ -180,7 +180,7 @@ class APIEmployeeControllerTest {
 		// java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()"
 		// because the return value of
 		// "com.positivehire.phtalent.models.Employee.getId()" is null
-
+		
 		employee4.setEmployeeName("Fourth Employee");
 		employee4.setManagerName("Fourth employees Manager");
 		employee4.setEmployeeNum("54645354");
@@ -190,7 +190,7 @@ class APIEmployeeControllerTest {
 		employees = employeeServ.findAll();
 		Assert.assertEquals(4, employees.size());
 
-		mvc.perform(delete("/employees/" + employees.get(3).getEmployeeNum()).contentType(MediaType.APPLICATION_JSON));
+		mvc.perform(delete("/employees/" + "54645494").contentType(MediaType.APPLICATION_JSON)).andExpect( status().isOk());
 				
 
 		employees = employeeServ.findAll();
