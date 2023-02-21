@@ -42,7 +42,7 @@ public class APIJobPostingController extends APIController {
  @GetMapping("/jobpostings/{id}")
  public JobPosting getJobPostingByNumber(@PathVariable Long id) { 
 
-  JobPosting jp = jobPostingService.findbyJobNum(id);
+  JobPosting jp = jobPostingService.findByJobNum(id);
   return jp;
  }
 
@@ -53,19 +53,26 @@ public class APIJobPostingController extends APIController {
   */
   @PostMapping("/jobpostings")
   public ResponseEntity<String> createJobPosting(@RequestBody JobPosting e) {
-    if (jobPostingService.findbyJobNum(e.getJobNumber()) != null) {
+    if (jobPostingService.findByJobNum(e.getJobNumber()) != null) {
       return new ResponseEntity<String>(successResponse("Job Posting with the job number + " + e.getJobNumber() + "already exists."), HttpStatus.CONFLICT);
     }
     else {
-      jobPostingService.saveJobpoPosting(e);
+      jobPostingService.save(e);
       return new ResponseEntity<>(successResponse(e.getJobNumber() + "successfully created"), HttpStatus.OK);
     }
   }
 
 
   @DeleteMapping("jobpostings/{jobPostingNum}")
-  public ResponseEntity<String> deleteJobPosting(@PathVariable("jobPostingNum") final String jobPostingNum) {
-    JobPosting jp = jobPostingService.findbyJobNum(jobPostingNum);
+  public ResponseEntity<String> deleteJobPosting(@PathVariable("jobPostingNum") final Long jobPostingNum) {
+    JobPosting jp = jobPostingService.findByJobNum(jobPostingNum);
+
+    if (jp == null) {
+      return new ResponseEntity<String>(errorResponse("No job posting with given number"), HttpStatus.NOT_FOUND);
+    }
+    jobPostingService.delete(jp);
+
+    return new ResponseEntity<String>(successResponse("Job POsting was deleted successfully"), HttpStatus.OK);
   }
 
   
