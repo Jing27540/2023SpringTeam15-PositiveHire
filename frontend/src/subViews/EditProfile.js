@@ -43,15 +43,46 @@ const ButtonDiv = styled.div`
 function EditProfile() {
 
     console.log('Testing')
+    let response = [];
 
     let loadData = () => {
-        const response = axios.get("http://localhost:3000/employees");
-        return response.data;
+        
+        axios.get(`http://localhost:8080/employees`).then(result => {
+             result.data.forEach(element => {
+                 response.push(element);
+             })
+            
+        }
+
+        );
+       // console.log(response);
+
+      //  return response.data;
     };
 
-    console.log(loadData());
-
+    loadData();
+    console.log(response);
     // TODO: hard code 
+    let responseT;
+    let getData = () => {
+        
+        axios.get(`http://localhost:8080/employees/54645354`).then( result => {
+     //       response.push(result.data);
+        });
+            
+        
+        //(responseT);
+        
+       // console.log(response);
+
+      //  return response.data;
+    };
+    getData();
+    //console.log(responseT);
+   
+    
+    console.log(response);
+
     const generalFields = ['EmployName', 'Role', 'EmployeeNumber', 'GenderID'];
     const skillFields = ['Name', 'Level', 'Score'];
     const certificationFields = ['Name', 'Institution', 'IssuedDate', 'CredentialID', 'Skils'];
