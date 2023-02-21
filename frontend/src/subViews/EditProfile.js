@@ -4,6 +4,7 @@ import FloatingLabel from 'react-bootstrap-floating-label';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
+import { getAllEmployees, getEmployeeById, deleteEmployeeById, saveEmployee } from '../clients/employee';
 
 /**
  * Create EditProfile Form for user to update their profile
@@ -41,47 +42,37 @@ const ButtonDiv = styled.div`
 `;
 
 function EditProfile() {
-    
+
     console.log('Testing')
-    let response = [];
+    let employees = [];
+    getAllEmployees(employees);
+    console.log('checking get all employees', employees);
 
-    let loadData = () => {
-        
-        axios.get(`http://localhost:8080/employees`).then(result => {
-             result.data.forEach(element => {
-                 response.push(element);
-             })
-            
-        }
+    let employee = [];
+    getEmployeeById(employee, 54645294);
+    console.log(employee);
 
-        );
-       // console.log(response);
+    // TODO: it works
+    // deleteEmployeeById(54645294);
 
-      //  return response.data;
-    };
+    employees = [];
+    getAllEmployees(employees);
+    console.log('checking delete employee by id', employees);
 
-    loadData();
-    console.log(response);
-    // TODO: hard code 
-    let responseT;
-    let getData = () => {
-        
-        axios.get(`http://localhost:8080/employees/54645354`).then( result => {
-     //       response.push(result.data);
-        });
-            
-        
-        //(responseT);
-        
-       // console.log(response);
+    if (employee) {
 
-      //  return response.data;
-    };
-    getData();
-    //console.log(responseT);
-   
-    
-    console.log(response);
+        // employee[0].employeeName = "Jing Huang";
+        employee[0].genderId = 100;
+        employee[0].position = 'Raleigh';
+        console.log(employee[0]);
+
+        let array = [];
+        saveEmployee(employee[0], array);
+        console.log('checking save employee', array);
+
+    }
+
+
 
     const generalFields = ['EmployName', 'Role', 'EmployeeNumber', 'GenderID'];
     const skillFields = ['Name', 'Level', 'Score'];
@@ -94,15 +85,15 @@ function EditProfile() {
 
     return (
         <div>
-            <TextField><h4 class="editProfileForm">Profile Editing Form</h4></TextField>
+            <TextField><h4 className="editProfileForm">Profile Editing Form</h4></TextField>
             <Box>
                 <SubBox>
-                    <TextField><h5 class="generalForm">General Profile</h5></TextField>
+                    <TextField><h5 className="generalForm">General Profile</h5></TextField>
                     <Content>
                         {
                             generalFields.map(item => {
                                 return (
-                                    <TextField>
+                                    <TextField key={item}>
                                         <FloatingLabel key={item} label={item}>
                                             <Form.Control placeholder={item} />
                                         </FloatingLabel>
@@ -113,12 +104,12 @@ function EditProfile() {
                     </Content>
                 </SubBox>
                 <SubBox>
-                    <TextField><h5 class="otherForm">Skills and Certification</h5></TextField>
+                    <TextField><h5 className="otherForm">Skills and Certification</h5></TextField>
                     <Content>
                         {mode ?
                             certificationFields.map(item => {
                                 return (
-                                    <TextField>
+                                    <TextField key={item}>
                                         <FloatingLabel key={item} label={item}>
                                             <Form.Control placeholder={item} />
                                         </FloatingLabel>
@@ -128,7 +119,7 @@ function EditProfile() {
                             :
                             skillFields.map(item => {
                                 return (
-                                    <TextField>
+                                    <TextField key={item}>
                                         <FloatingLabel key={item} label={item}>
                                             <Form.Control placeholder={item} />
                                         </FloatingLabel>
