@@ -1,34 +1,69 @@
-import React, { Component } from 'react'
+import React from 'react'
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import { NavLink } from "react-router-dom";
+import EmployeeProfile from '../views/EmployeeProfile'
 
 /**
  * NavBar class for the header of the application
+ * @author Juan
+ * @author Jing
  */
-export default class NavBar extends Component {
-  render() {
-    return (
-      <Navbar class="navbar" variant="dark">
-        <Container fluid>
-          <Navbar.Brand href="/dashboard">
+export default function NavBar() {
+
+  const [key, setKey] = React.useState('home');
+
+  return (
+    <>
+      <Navbar className="navbar" variant="dark">
+        <Container fluid style={{position: "absolute", bottom: "5px"}}>
+          <Navbar.Brand href="/home">
             <img
               src="/PHBalancedLogo.png"
-              width="132"
-              height="45"
-              hspace="3.5"
+              width="110"
+              height="40"
+              hspace="10"
               className="d-inline-block align-top"
               alt="logo"
             />
           </Navbar.Brand>
-          <Nav className="me-auto">
-            <NavLink className='text-link' exact activeClassName="active" to="/dashboard">Dashboard</NavLink>
-            <NavLink className='text-link' exact activeClassName="active" to="/createchart">Create Chart</NavLink>
-            <NavLink className='text-link' exact activeClassName="active" to="/importdata">Data</NavLink>
+          <Nav
+            defaultActiveKey="home"
+            className="me-auto"
+            onSelect={(selectedKey) => { setKey(selectedKey) }}
+            style={{gap: '10px', fontWeight: 'bold', fontSize: '15px'}}
+          >
+            <Nav.Item>
+              <Nav.Link eventKey="home">Home</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="profile">Profile</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="link2">Team</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="link3">Employee Experience</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="link4">Import Data</Nav.Link>
+            </Nav.Item>
+            {/* <Nav.Item>
+                <Nav.Link eventKey="disabled" disabled>
+                  ViewEmmployees
+                </Nav.Link>
+              </Nav.Item> */}
           </Nav>
         </Container>
       </Navbar>
-    )
-  }
+      {
+        key === 'profile' ?
+          <EmployeeProfile />
+          :
+          undefined
+      }
+    </>
+
+  );
+
 }

@@ -41,7 +41,7 @@ const ButtonDiv = styled.div`
 `;
 
 function EditProfile() {
-    
+
     console.log('Testing')
 
     let loadData = () => {
