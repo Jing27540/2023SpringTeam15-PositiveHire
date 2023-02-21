@@ -9,14 +9,20 @@ const Box = styled.div`
     display: flex;
     margin: 5px;
     height: 50%;
-    border: 1px solid black;
+    width: 100%;
     overflow: auto;
 `
 
 const SideBox = styled.div`
+    width: 40%;
+    float: left;
+`;
+
+const MiddleBox = styled.div`
     width: 30%;
     border: 1px solid black;
-    justify-content: space-btween;
+    height: 400px;
+    justify-content: space-between;
 `;
 
 function EmployeeProfile() {
@@ -29,13 +35,13 @@ function EmployeeProfile() {
     return (
         <>
             <Box>
-                <SideBox>Hahaha</SideBox>
-                <SideBox>Employee Profile Card</SideBox>
+                <SideBox></SideBox>
+                <MiddleBox>Employee Profile Card</MiddleBox>
                 <SideBox>
-                    <Button variant="primary" onClick={handleShow}>
-                        Edit Profile
+                    <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%", float: 'right', width: '100px' }} onClick={handleShow}>
+                        Edit
                     </Button>
-                    <Modal  size="lg" show={show} onHide={handleClose}>
+                    <Modal size="lg" show={show} onHide={handleClose}>
                         <EditProfile />
                         <Modal.Footer>
                             <Button variant="secondary" onClick={handleClose}>
@@ -48,10 +54,7 @@ function EmployeeProfile() {
                     </Modal>
                 </SideBox>
             </Box>
-            <Box>
-                <TabsBar />
-            </Box>
-
+            <TabsBar />
         </>
     );
 
