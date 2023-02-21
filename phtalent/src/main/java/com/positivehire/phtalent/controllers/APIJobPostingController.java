@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.positivehire.phtalent.models.JobPosting;
@@ -42,30 +41,35 @@ public class APIJobPostingController extends APIController {
  @GetMapping("/jobpostings/{id}")
  public JobPosting getJobPostingByNumber(@PathVariable Long id) { 
 
-  JobPosting jp = jobPostingService.findByJobNum(id);
+  JobPosting jp = jobPostingService.findById(id);
   return jp;
  }
 
 
- /**
-  * Creates a job postings and adds it to the database 
-  * 
-  */
+/**
+ * Creates the job posting and adds it to the database
+ * 
+ * @param e
+ * @return
+ */
   @PostMapping("/jobpostings")
   public ResponseEntity<String> createJobPosting(@RequestBody JobPosting e) {
-    if (jobPostingService.findByJobNum(e.getJobNumber()) != null) {
-      return new ResponseEntity<String>(successResponse("Job Posting with the job number + " + e.getJobNumber() + "already exists."), HttpStatus.CONFLICT);
+
+    final JobPosting jp = jobPostingService.findById(e.getId());
+    
+    if (jp != null) {
+      return new ResponseEntity<String>(successResponse("Job Posting with the job number + " + e.getId() + "already exists."), HttpStatus.CONFLICT);
     }
     else {
       jobPostingService.save(e);
-      return new ResponseEntity<>(successResponse(e.getJobNumber() + "successfully created"), HttpStatus.OK);
+      return new ResponseEntity<>(successResponse(e.getId() + "successfully created"), HttpStatus.OK);
     }
   }
 
 
-  @DeleteMapping("jobpostings/{jobPostingNum}")
-  public ResponseEntity<String> deleteJobPosting(@PathVariable("jobPostingNum") final Long jobPostingNum) {
-    JobPosting jp = jobPostingService.findByJobNum(jobPostingNum);
+  @DeleteMapping("jobpostings/{id}")
+  public ResponseEntity<String> deleteJobPosting(@PathVariable("id") final Long id) {
+    JobPosting jp = jobPostingService.findById(id);
 
     if (jp == null) {
       return new ResponseEntity<String>(errorResponse("No job posting with given number"), HttpStatus.NOT_FOUND);

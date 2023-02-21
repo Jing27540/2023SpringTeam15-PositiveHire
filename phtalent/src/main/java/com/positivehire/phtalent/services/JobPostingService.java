@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
-import com.positivehire.phtalent.models.Employee;
 import com.positivehire.phtalent.models.JobPosting;
-import com.positivehire.phtalent.repositories.EmployeeRepository;
 import com.positivehire.phtalent.repositories.JobPostingRepository;
 
 import jakarta.transaction.Transactional;
@@ -28,11 +26,6 @@ public class JobPostingService extends Service<JobPosting, Long> {
     protected JpaRepository<JobPosting, Long> getRepository () {
         return repo;
     }
-
-    public JobPosting findByJobNum(final Long jobPostingNum) {
-      return repo.findByJobNum(jobPostingNum);
-    }
-
     
 
 }

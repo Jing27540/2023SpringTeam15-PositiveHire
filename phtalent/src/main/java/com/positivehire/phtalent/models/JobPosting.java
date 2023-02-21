@@ -1,6 +1,5 @@
 package com.positivehire.phtalent.models;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -17,8 +16,6 @@ public class JobPosting extends DomainObject{
     /** Serializable Id associated with a specific Job Posting */
     @Id
     private Long id;
-
-    private Long jobNumber;
 
     /** Title of the job position */
     private String jobTitle;
@@ -60,32 +57,25 @@ public class JobPosting extends DomainObject{
         
     }
 
+    /**
+     * Sets the serializable id for the model 
+     * @return the id
+     */
     @Override
-    public Serializable getId() {
+    public Long getId() {
         return id;
     }
 
+    /**
+     * Sets the id for the model
+     * 
+     * @param id The id that is set
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
     /** GETTERS & SETTERS */
-
-    /**
-     * Get the job ID
-     * @return jobID
-     */
-    public Long getJobNumber() {
-        return jobNumber;
-    }
-
-    /**
-     * Sets the job ID
-     * @param jobNumber
-     */
-    public void setJobNumber(Long jobNumber) {
-        this.jobNumber = jobNumber;
-    }
 
     /**
      * Get the job title
@@ -270,7 +260,7 @@ public class JobPosting extends DomainObject{
      */
     @Override
     public String toString () {
-        return "JobPosting [jobNumber=" + jobNumber + ", jobTitle=" + jobTitle + ", salary=" + salary
+        return "JobPosting [jobNumber=" + id + ", jobTitle=" + jobTitle + ", salary=" + salary
                 + ", department=" + department + ", skillRequirements=" + skillRequirements + "]";
     }
 
