@@ -1,8 +1,7 @@
 package com.positivehire.phtalent.models;
 
 import java.util.ArrayList;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import jakarta.persistence.*;
 
 /**
  * Represents a job post in the context of creating a feature to see a list of job postings
@@ -15,6 +14,7 @@ public class JobPosting extends DomainObject{
 
     /** Serializable Id associated with a specific Job Posting */
     @Id
+    @GeneratedValue
     private Long id;
 
     /** Title of the job position */

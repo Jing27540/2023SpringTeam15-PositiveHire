@@ -67,7 +67,7 @@ public class APIJobPostingController extends APIController {
   }
 
 
-  @DeleteMapping("jobpostings/{id}")
+  @DeleteMapping("/jobpostings/{id}")
   public ResponseEntity<String> deleteJobPosting(@PathVariable("id") final Long id) {
     JobPosting jp = jobPostingService.findById(id);
 
