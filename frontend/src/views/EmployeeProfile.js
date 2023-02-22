@@ -97,8 +97,16 @@ function EmployeeProfile() {
                 <ContentBox>
                     <TabsBar titles={title} setMode={setTool} />
                     <InnerContentBox>
-                        {/* <General /> */}
-                        <Skill />
+                        {
+                            mode === 'General' ?
+                                <General />
+                                :
+                                (mode === 'Skills & Certifications' ?
+                                    <Skill />
+                                    :
+                                    undefined
+                                )
+                        }
                     </InnerContentBox>
                 </ContentBox>
             </Box>
