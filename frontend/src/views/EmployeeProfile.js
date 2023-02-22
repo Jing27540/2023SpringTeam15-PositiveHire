@@ -4,15 +4,22 @@ import EditProfile from '../subViews/EditProfile';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import TabsBar from '../components/TabsBar';
+import General from "../subViews/General";
+import Skill from "../subViews/Skill";
 
+/**
+ * EmployeeProfile component is used to manage profile information.
+ * 
+ * @author Jing Huang
+ */
 const Box = styled.div`
     display: flex;
-    margin: 5px;
-    height: 50%;
+    margin: 10px;
+    height: ${({ height = '50%' }) => height};
     width: 100%;
+    justify-content: center;
     overflow: auto;
 `
-
 const SideBox = styled.div`
     width: 40%;
     float: left;
@@ -25,12 +32,43 @@ const MiddleBox = styled.div`
     justify-content: space-between;
 `;
 
+const ContentBox = styled.div`
+    margin: 20px;
+    width: 90%;
+    overflow: auto;
+    justify-content: center;
+    border: 1px solid #808080;
+`;
+
+const InnerContentBox = styled.div`
+    display: flex;
+    margin: 20px;
+    width: 90%;
+    height: 700px;
+    overflow: auto;
+`;
+
+const GTITLE = ['General', 'Skills & Certifications', 'Performance Review', 'Career Development Plans', 'Open Positions'];
+const SKTITLE = ['Skills', 'Certifications'];
+const PRTITLE = ['Reviews', 'Goals', 'Training Resources', 'Schedule'];
+const CDPTITLE = ['Goals', 'Training Resources', 'Statistics'];
+
 function EmployeeProfile() {
 
     // TODO: it use to testing edit editprofile.
     const [show, setShow] = React.useState(false);
+    const [mode, setMode] = React.useState('General');
+    const [title, setTitle] = React.useState(SKTITLE);
+    const [tool, setTool] = React.useState();
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    React.useEffect(() => {
+        if (mode === GTITLE[1]) { setTitle(SKTITLE); }
+        else if (mode === GTITLE[2]) { setTitle(PRTITLE); }
+        else if (mode === GTITLE[3]) { setTitle(CDPTITLE); }
+        else { setTitle(undefined) }
+    }, [mode]);
 
     return (
         <>
@@ -54,7 +92,24 @@ function EmployeeProfile() {
                     </Modal>
                 </SideBox>
             </Box>
-            <TabsBar />
+            <TabsBar titles={GTITLE} setMode={setMode} />
+            <Box>
+                <ContentBox>
+                    <TabsBar titles={title} setMode={setTool} />
+                    <InnerContentBox>
+                        {
+                            mode === 'General' ?
+                                <General />
+                                :
+                                (mode === 'Skills & Certifications' ?
+                                    <Skill />
+                                    :
+                                    undefined
+                                )
+                        }
+                    </InnerContentBox>
+                </ContentBox>
+            </Box>
         </>
     );
 
