@@ -1,6 +1,8 @@
 package com.positivehire.phtalent.models;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 
 /**
@@ -27,9 +29,11 @@ public class JobPosting extends DomainObject{
     private String department;
 
     /** Metric-tracked Skill (object) job position requirements */
+    @OneToMany(cascade = CascadeType.ALL)
     private ArrayList<Skill> skillRequirements;
 
     /** Metric-tracked Certification (object) job position requirements */
+    @OneToMany(cascade = CascadeType.ALL)
     private ArrayList<Certification> certificationRequirements;
 
     /** Non-metric job position requirements */
@@ -241,7 +245,7 @@ public class JobPosting extends DomainObject{
      * Get the list of processes for the hiring processes
      * @return processes
      */
-    public ArrayList<String> getProcess() {
+    public List<String> getProcess() {
         return process;
     }
 
