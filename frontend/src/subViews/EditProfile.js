@@ -59,18 +59,18 @@ function EditProfile() {
     getAllEmployees(employees);
     console.log('checking delete employee by id', employees);
 
-    if (employee) {
+    // if (employee) {
 
-        // employee[0].employeeName = "Jing Huang";
-        employee[0].genderId = 100;
-        employee[0].position = 'Raleigh';
-        console.log(employee[0]);
+    //     // employee[0].employeeName = "Jing Huang";
+    //     employee[0].genderId = 100;
+    //     employee[0].position = 'Raleigh';
+    //     console.log(employee[0]);
 
-        let array = [];
-        saveEmployee(employee[0], array);
-        console.log('checking save employee', array);
+    //     let array = [];
+    //     saveEmployee(employee[0], array);
+    //     console.log('checking save employee', array);
 
-    }
+    // }
 
 
 
@@ -134,11 +134,8 @@ function EditProfile() {
                     <ButtonDiv>
                         <Button variant="outline-primary" onClick={() => { setMode(true) }}>Add Certification</Button>
                     </ButtonDiv>
-
                 </SubBox>
-
             </Box>
-
         </div>
     );
 }

@@ -1,6 +1,7 @@
 import axios from 'axios';
+
 /**
- * employee client to send HTTP request
+ * employee client to send HTTPs request
  * @author Jing Huang
  * @author Biniyam 
  */

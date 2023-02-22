@@ -6,8 +6,8 @@ import EmployeeProfile from '../views/EmployeeProfile'
 
 /**
  * NavBar class for the header of the application
- * @author Juan
- * @author Jing
+ * @author Juan Franco Pinilla
+ * @author Jing Huang
  */
 export default function NavBar() {
 
