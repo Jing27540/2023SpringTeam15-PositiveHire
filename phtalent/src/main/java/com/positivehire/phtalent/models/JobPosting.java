@@ -54,6 +54,13 @@ public class JobPosting extends DomainObject{
     /** List of hiring processes */
     private ArrayList<String> process;
 
+    /** Link to Company-side job description and application */
+    private String applyLink;
+
+    /** List of Employees who applied for the position */
+    @OneToMany(cascade = CascadeType.ALL)
+    private ArrayList<Employee> listofApplicants;
+
     /**
      * For Hibernate to use (Must be an empty constructor)
      */
@@ -255,6 +262,38 @@ public class JobPosting extends DomainObject{
      */
     public void setProcess(ArrayList<String> process) {
         this.process = process;
+    }
+
+    /** 
+     * Get the application link
+     * @return application link
+     */
+    public String getApplyLink() {
+        return applyLink;
+    }
+
+    /**
+     * Set the application link
+     * @param applyLink
+     */
+    public void setApplyLink(String applyLink) {
+        this.applyLink = applyLink;
+    }
+
+    /**
+     * Get the list of applicants
+     * @return list of applicants
+     */
+    public ArrayList<Employee> getListofApplicants() {
+        return listofApplicants;
+    }
+
+    /**
+     * Set the list of applicants
+     * @param listofApplicants
+     */
+    public void setListofApplicants(ArrayList<Employee> listofApplicants) {
+        this.listofApplicants = listofApplicants;
     }
 
     /**
