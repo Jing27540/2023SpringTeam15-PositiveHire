@@ -23,15 +23,15 @@ function TabsBar({ titles, setMode, ...props }) {
                             <Nav.Item key={item} variant="drak" >
                                 <Nav.Link eventKey={item} onClick={() => { setMode(item); setShow(true); }} style={{ color: "black", fontWeight: 'bold' }}>{item}</Nav.Link>
                                 <Dropdown.Menu show={show}>
-                                    <Dropdown.Item onClick={() => { setShow(false); }}>Action</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => { setShow(false); }}>Another action</Dropdown.Item>
+                                    <Dropdown.Item key={"Create"} onClick={() => { setShow(false); }}>Create/Edit a Job Description</Dropdown.Item>
+                                    <Dropdown.Item key={"View"} onClick={() => { setShow(false); }}>See Open Positions</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Nav.Item>
                         );
                     } else {
                         return (
                             <Nav.Item key={item} variant="drak" >
-                                <Nav.Link eventKey={item} onClick={() => { setMode(item) }} style={{ color: "black", fontWeight: 'bold' }}>{item}</Nav.Link>
+                                <Nav.Link eventKey={item} onClick={() => { setMode(item); setShow(false); }} style={{ color: "black", fontWeight: 'bold' }}>{item}</Nav.Link>
                             </Nav.Item>
                         );
                     }

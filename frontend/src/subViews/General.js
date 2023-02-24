@@ -52,8 +52,8 @@ function General() {
                     {
                         TITLES.map((item) => {
                             return (
-                                <Children>
-                                    <h7>{item}</h7>
+                                <Children key={item}>
+                                    <h6>{item}</h6>
                                 </Children>
                             );
                         })
@@ -63,8 +63,8 @@ function General() {
                     {
                         DummyData.map((item) => {
                             return (
-                                <Children>
-                                    <h7>{item}</h7>
+                                <Children key={item}>
+                                    <h6>{item}</h6>
                                 </Children>
                             );
                         })
