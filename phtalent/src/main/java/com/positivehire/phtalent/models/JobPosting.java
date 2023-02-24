@@ -19,6 +19,10 @@ public class JobPosting extends DomainObject{
     @GeneratedValue
     private Long id;
 
+    /** Job number associated with the job position (I set this as a String in case its not only 1-9 digits) */
+
+    private String jobNumber;
+
     /** Title of the job position */
     private String jobTitle;
 
@@ -36,8 +40,8 @@ public class JobPosting extends DomainObject{
     @OneToMany(cascade = CascadeType.ALL)
     private ArrayList<Certification> certificationRequirements;
 
-    /** Non-metric job position requirements */
-    private ArrayList<String> otherRequirements;
+    /** Main job description */
+    private String jobDescription;
 
     /** Number of available positions for this specific Job Posting */
     private Integer availablePositions;
@@ -68,6 +72,8 @@ public class JobPosting extends DomainObject{
         
     }
 
+    /************************************ GETTERS & SETTERS ************************************/
+
     /**
      * Sets the serializable id for the model 
      * @return the id
@@ -86,7 +92,21 @@ public class JobPosting extends DomainObject{
         this.id = id;
     }
 
-    /** GETTERS & SETTERS */
+    /**
+     * Get the job number
+     * @return job number
+     */
+    public String getJobNumber() {
+        return jobNumber;
+    }
+
+    /**
+     * Set the job number
+     * @param jobNumber
+     */
+    public void setJobNumber(String jobNumber) {
+        this.jobNumber = jobNumber;
+    }
 
     /**
      * Get the job title
@@ -169,19 +189,19 @@ public class JobPosting extends DomainObject{
     }
 
     /**
-     * Get other requirements for the job Position
+     * Get the job description for the job Position
      * @return
      */
-    public ArrayList<String> getOtherRequirements() {
-        return otherRequirements;
+    public String getJobDescription() {
+        return jobDescription;
     }
 
     /**
-     * Sets other requirements for the Job Position
-     * @param otherRequirements
+     * Sets job description for the Job Position
+     * @param jobDescription
      */
-    public void setOtherRequirements(ArrayList<String> otherRequirements) {
-        this.otherRequirements = otherRequirements;
+    public void setJobDescription(String jobDescription) {
+        this.jobDescription = jobDescription;
     }
 
     /**
@@ -302,9 +322,13 @@ public class JobPosting extends DomainObject{
      * @return a Job Posting represented as a String
      */
     @Override
-    public String toString () {
-        return "JobPosting [jobNumber=" + id + ", jobTitle=" + jobTitle + ", salary=" + salary
-                + ", department=" + department + ", skillRequirements=" + skillRequirements + "]";
+    public String toString() {
+        return "JobPosting [id=" + id + ", jobNumber=" + jobNumber + ", jobTitle=" + jobTitle + ", salary=" + salary
+                + ", department=" + department + ", skillRequirements=" + skillRequirements
+                + ", certificationRequirements=" + certificationRequirements + ", jobDescription=" + jobDescription
+                + ", availablePositions=" + availablePositions + ", location=" + location + ", meetingType="
+                + meetingType + ", meetingNotes=" + meetingNotes + ", process=" + process + ", applyLink=" + applyLink
+                + ", listofApplicants=" + listofApplicants + "]";
     }
 
 }
