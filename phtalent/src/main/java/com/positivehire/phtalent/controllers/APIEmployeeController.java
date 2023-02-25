@@ -83,7 +83,7 @@ public class APIEmployeeController extends APIController {
      * @return resonse entity status
      */
     @DeleteMapping("/employees/{employeeNum}")
-    public ResponseEntity<String> deleteEmployee(@PathVariable("employeeNum") final String employeeNum) {
+    public ResponseEntity<String> deleteEmployee(@PathVariable("employeeNum") final int employeeNum) {
 
         Employee employee = employeeServ.findByEmployeeNum(employeeNum);
      
@@ -123,7 +123,7 @@ public class APIEmployeeController extends APIController {
      * @return response entity with employee
      */
     @GetMapping("/employees/{employeeNum}")
-    public ResponseEntity<Employee> findByEmployeeNum(@PathVariable("employeeNum") final String employeeNum) {
+    public ResponseEntity<Employee> findByEmployeeNum(@PathVariable("employeeNum") final int employeeNum) {
         final Employee emp = employeeServ.findByEmployeeNum(employeeNum);
 
         return null == emp

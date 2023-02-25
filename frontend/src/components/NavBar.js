@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import EmployeeProfile from '../views/EmployeeProfile'
+import ImportData from './ImportData';
 
 /**
  * NavBar class for the header of the application
@@ -46,7 +47,7 @@ export default function NavBar() {
               <Nav.Link eventKey="link3">Employee Experience</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="link4">Import Data</Nav.Link>
+              <Nav.Link eventKey="importData">Import Data</Nav.Link>
             </Nav.Item>
             {/* <Nav.Item>
                 <Nav.Link eventKey="disabled" disabled>
@@ -60,6 +61,9 @@ export default function NavBar() {
         key === 'profile' ?
           <EmployeeProfile />
           :
+          key === 'importData' ?
+          <ImportData />
+          : 
           undefined
       }
     </>

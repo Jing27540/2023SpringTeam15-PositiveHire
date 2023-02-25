@@ -32,7 +32,7 @@ public class EmployeeService extends Service<Employee, Long> {
 	 * @param employeeNum the employee number to use
 	 * @return the employee found
 	 */
-	public Employee findByEmployeeNum(final String employeeNum) {
+	public Employee findByEmployeeNum(final int employeeNum) {
 		return repo.findByEmployeeNum(employeeNum);
 	}
 	/**
