@@ -7,8 +7,8 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 
 /**
  * NavBar class for the header of the application
- * @author Juan
- * @author Jing
+ * @author Juan Franco Pinilla
+ * @author Jing Huang
  * @author Previous Team // Used some code from previous team, like the logo and navigation bar
  */
 export default function NavBar() {

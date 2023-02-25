@@ -30,20 +30,20 @@ public class JobPosting extends DomainObject{
 
     /** Metric-tracked Skill (object) job position requirements */
     @OneToMany(cascade = CascadeType.ALL)
-    private ArrayList<Skill> skillRequirements;
+    private List<Skill> skillRequirements;
 
     /** Metric-tracked Certification (object) job position requirements */
     @OneToMany(cascade = CascadeType.ALL)
-    private ArrayList<Certification> certificationRequirements;
+    private List<Certification> certificationRequirements;
 
     /** Non-metric job position requirements */
-    private ArrayList<String> otherRequirements;
+    private List<String> otherRequirements;
 
     /** Number of available positions for this specific Job Posting */
     private Integer availablePositions;
 
     /** List of locations where the job position will be stationed */
-    private ArrayList<String> location;
+    private List<String> location;
 
     /** Desired meeting type for this Job Posting */
     private String meetingType;
@@ -52,7 +52,7 @@ public class JobPosting extends DomainObject{
     private String meetingNotes;
 
     /** List of hiring processes */
-    private ArrayList<String> process;
+    private List<String> process;
 
     /**
      * For Hibernate to use (Must be an empty constructor)
@@ -133,7 +133,7 @@ public class JobPosting extends DomainObject{
      * Get the metric-skill requirements
      * @return metric-skill requirements
      */
-    public ArrayList<Skill> getSkillRequirements() {
+    public List<Skill> getSkillRequirements() {
         return skillRequirements;
     }
 
@@ -141,7 +141,7 @@ public class JobPosting extends DomainObject{
      * Sets the metric-skill requirements
      * @param skillRequirements
      */
-    public void setSkillRequirements(ArrayList<Skill> skillRequirements) {
+    public void setSkillRequirements(List<Skill> skillRequirements) {
         this.skillRequirements = skillRequirements;
     }
 
@@ -149,7 +149,7 @@ public class JobPosting extends DomainObject{
      * Get metric-tracked certification requirements
      * @return metric-tracked certification requirements
      */
-    public ArrayList<Certification> getCertificationRequirements() {
+    public List<Certification> getCertificationRequirements() {
         return certificationRequirements;
     }
 
@@ -157,7 +157,7 @@ public class JobPosting extends DomainObject{
      * Set metric-tracked certification requirements
      * @param certificationRequirements
      */
-    public void setCertificationRequirements(ArrayList<Certification> certificationRequirements) {
+    public void setCertificationRequirements(List<Certification> certificationRequirements) {
         this.certificationRequirements = certificationRequirements;
     }
 
@@ -165,7 +165,7 @@ public class JobPosting extends DomainObject{
      * Get other requirements for the job Position
      * @return
      */
-    public ArrayList<String> getOtherRequirements() {
+    public List<String> getOtherRequirements() {
         return otherRequirements;
     }
 
@@ -173,7 +173,7 @@ public class JobPosting extends DomainObject{
      * Sets other requirements for the Job Position
      * @param otherRequirements
      */
-    public void setOtherRequirements(ArrayList<String> otherRequirements) {
+    public void setOtherRequirements(List<String> otherRequirements) {
         this.otherRequirements = otherRequirements;
     }
 
@@ -197,7 +197,7 @@ public class JobPosting extends DomainObject{
      * Get the location(s)
      * @return location
      */
-    public ArrayList<String> getLocation() {
+    public List<String> getLocation() {
         return location;
     }
 
@@ -205,7 +205,7 @@ public class JobPosting extends DomainObject{
      * Set the location(s)
      * @param location
      */
-    public void setLocation(ArrayList<String> location) {
+    public void setLocation(List<String> location) {
         this.location = location;
     }
 
