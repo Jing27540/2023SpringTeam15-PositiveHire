@@ -62,7 +62,7 @@ const rejectStyle = {
 /**
  * Import Data fuction that handles taking in a CSV file and uploading the contained information to mySQL
  */
-export default function ImportData() {
+function ImportData() {
   // holds file object
   const [file, setFile] = useState(null)
 
@@ -326,36 +326,36 @@ export default function ImportData() {
     for (const employee of employeeData) {
       // initialze the final employee object
       let finalEmployee = {
-        employeeName: "",
-        employeeNum : "",
-        marriedId: 1,
+        employeeName: null,
+        employeeNum : 0,
+        marriedId: 0,
         maritalStatusId: 0,
-        genderId: 1,
-        employmentStatusId: 1,
-        departmentId: 1,
-        performanceScoreId: 3,
-        age: 31,    
-        payRate: 28.5,
-        state: "",
-        zip: 1450,
-        DOB: "",
-        sex: "",
-        maritalDesc: "",
-        citizenDesc: "",
-        hispanicLatino: "",
-        raceDesc: "",
-        dateOfHire: "",
-        daysEmployed: 3317,
-        dateOfTermination: "",
-        reasonForTermination: "",
-        employmentStatus: "",
-        department: "",
-        position: "",
-        managerName: "",
-        employeeSource: "",
-        accessRole: "",
-        performanceScore: "",
-        annualBonus: 0.0,
+        genderId: 0,
+        employmentStatusId: 0,
+        departmentId: 0,
+        performanceScoreId: 0,
+        age: 0,    
+        payRate: 0.0,
+        state: null,
+        zip: 0,
+        DOB: null,
+        sex: null,
+        maritalDesc: null,
+        citizenDesc: null,
+        hispanicLatino: null,
+        raceDesc: null,
+        dateOfHire: null,
+        daysEmployed: 0,
+        dateOfTermination: null,
+        reasonForTermination: null,
+        employmentStatus: null,
+        department: null,
+        position: null,
+        managerName: null,
+        employeeSource: null,
+        accessRole: null,
+        performanceScore: null,
+        annualBonus: null,
         ptoHours: 0.0,
         technicalSkills: null,
         peopleSkills: null,
@@ -596,3 +596,5 @@ export default function ImportData() {
     </Container>
   )
 }
+
+export default ImportData;
