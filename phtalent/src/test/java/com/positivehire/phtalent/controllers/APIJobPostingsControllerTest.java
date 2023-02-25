@@ -94,17 +94,19 @@ class APIJobPostingsControllerTest {
 		System.out.println(jobPosting1.getId());
 
 		jobPostings = jobPostingServ.findAll();
-		
+		jobPosting2 = new JobPosting();
 		jobPosting2.setJobTitle("Second Software Developer");
 		jobPosting2.setDepartment("logistics division");
 		jobPosting2.setLocation(locs);
 		jobPosting2.setSalary("60000");
 		jobPosting2.setMeetingNotes("Testing meeting notes");
+
+		jobPostingServ.save(jobPosting2);
 		mvc.perform(put("/jobpostings").contentType(MediaType.APPLICATION_JSON)
 				.content(TestUtils.asJsonString(jobPosting2)));
 
 		jobPostings = jobPostingServ.findAll();
-		Assert.assertEquals(3, jobPostings.size());
+		Assert.assertEquals(2, jobPostings.size());
 
 		Assert.assertEquals(jobPosting2.getJobTitle(),
 				jobPostingServ.findById((long) jobPosting2.getId()).getJobTitle());

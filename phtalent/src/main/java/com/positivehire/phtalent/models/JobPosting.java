@@ -10,7 +10,7 @@ import jakarta.persistence.*;
  * @author Zayda Cummings
  */
 @Entity
-public class JobPosting extends DomainObject{
+public class JobPosting extends DomainObject {
 
     /** PRIVATE JOB POSTING ATTRIBUTES */
 
@@ -18,6 +18,10 @@ public class JobPosting extends DomainObject{
     @Id
     @GeneratedValue
     private Long id;
+
+    /** Job number associated with the job position (I set this as a String in case its not only 1-9 digits) */
+
+    private String jobNumber;
 
     /** Title of the job position */
     private String jobTitle;
@@ -39,6 +43,9 @@ public class JobPosting extends DomainObject{
     /** Non-metric job position requirements */
     private List<String> otherRequirements;
 
+    /** Main job description */
+    private String jobDescription;
+
     /** Number of available positions for this specific Job Posting */
     private Integer availablePositions;
 
@@ -54,12 +61,21 @@ public class JobPosting extends DomainObject{
     /** List of hiring processes */
     private List<String> process;
 
+    /** Link to Company-side job description and application */
+    private String applyLink;
+
+    /** List of Employees who applied for the position */
+    @OneToMany(cascade = CascadeType.ALL)
+    private ArrayList<Employee> listofApplicants;
+
     /**
      * For Hibernate to use (Must be an empty constructor)
      */
     public JobPosting() {
         
     }
+
+    /************************************ GETTERS & SETTERS ************************************/
 
     /**
      * Sets the serializable id for the model 
@@ -79,7 +95,21 @@ public class JobPosting extends DomainObject{
         this.id = id;
     }
 
-    /** GETTERS & SETTERS */
+    /**
+     * Get the job number
+     * @return job number
+     */
+    public String getJobNumber() {
+        return jobNumber;
+    }
+
+    /**
+     * Set the job number
+     * @param jobNumber
+     */
+    public void setJobNumber(String jobNumber) {
+        this.jobNumber = jobNumber;
+    }
 
     /**
      * Get the job title
@@ -162,19 +192,27 @@ public class JobPosting extends DomainObject{
     }
 
     /**
-     * Get other requirements for the job Position
+     * Get the job description for the job Position
      * @return
      */
     public List<String> getOtherRequirements() {
         return otherRequirements;
     }
 
+    public String getJobDescription() {
+        return jobDescription;
+    }
+
     /**
-     * Sets other requirements for the Job Position
-     * @param otherRequirements
+     * Sets job description for the Job Position
+     * @param jobDescription
      */
     public void setOtherRequirements(List<String> otherRequirements) {
-        this.otherRequirements = otherRequirements;
+        this.otherRequirements = otherRequirements;   
+    }
+
+    public void setJobDescription(String jobDescription) {
+        this.jobDescription = jobDescription;
     }
 
     /**
@@ -257,15 +295,51 @@ public class JobPosting extends DomainObject{
         this.process = process;
     }
 
+    /** 
+     * Get the application link
+     * @return application link
+     */
+    public String getApplyLink() {
+        return applyLink;
+    }
+
+    /**
+     * Set the application link
+     * @param applyLink
+     */
+    public void setApplyLink(String applyLink) {
+        this.applyLink = applyLink;
+    }
+
+    /**
+     * Get the list of applicants
+     * @return list of applicants
+     */
+    public ArrayList<Employee> getListofApplicants() {
+        return listofApplicants;
+    }
+
+    /**
+     * Set the list of applicants
+     * @param listofApplicants
+     */
+    public void setListofApplicants(ArrayList<Employee> listofApplicants) {
+        this.listofApplicants = listofApplicants;
+    }
+
     /**
      * Returns the Job Posting as a String
      *
      * @return a Job Posting represented as a String
      */
     @Override
-    public String toString () {
-        return "JobPosting [jobNumber=" + id + ", jobTitle=" + jobTitle + ", salary=" + salary
-                + ", department=" + department + ", skillRequirements=" + skillRequirements + "]";
+    public String toString() {
+        return "JobPosting [id=" + id + ", jobNumber=" + jobNumber + ", jobTitle=" + jobTitle + ", salary=" + salary
+                + ", department=" + department + ", skillRequirements=" + skillRequirements
+                + ", certificationRequirements=" + certificationRequirements + ", jobDescription=" + jobDescription
+                + ", availablePositions=" + availablePositions + ", location=" + location + ", meetingType="
+                + meetingType + ", meetingNotes=" + meetingNotes + ", process=" + process + ", applyLink=" + applyLink
+                + ", listofApplicants=" + listofApplicants + "]";
     }
 
 }
