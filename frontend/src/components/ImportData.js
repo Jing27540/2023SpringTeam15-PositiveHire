@@ -89,7 +89,7 @@ function ImportData() {
   const [csvColumns, setCsvColumns] = useState([])
 
   // all columns in database
-  const [databaseColumns] = useState(["NA", "employeeName","John Owens","employeeNum","marriedId",
+  const [databaseColumns] = useState(["NA", "employeeName","employeeNum","marriedId",
                                       "maritalStatusId","genderId","employmentStatusId","departmentId",
                                       "performanceScoreId","age","payRate", "state", "zip", "DOB", "sex",
                                       "maritalDesc", "citizenDesc", "hispanicLatino", "raceDesc", "dateOfHire", 
@@ -370,9 +370,10 @@ function ImportData() {
           finalEmployee[matchingArray[i]] = employee[csvColumns[i]]
         }
       }
-
+          
       // add the employee to the database
       await axios.post("http://localhost:8080/employees", finalEmployee).then(response => {
+        console.log(finalEmployee);
         console.log("done")
       }).catch(error => {
         console.log(finalEmployee)
