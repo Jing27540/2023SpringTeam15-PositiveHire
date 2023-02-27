@@ -10,5 +10,5 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     // public Account findByUsername(String username);
 
-    // public Account findByEmployeeID(int id);
+    Account findByEmployeeID(String employeeId);
 }

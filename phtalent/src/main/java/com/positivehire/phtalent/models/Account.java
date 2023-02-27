@@ -1,6 +1,7 @@
 package com.positivehire.phtalent.models;
 
 import java.security.SecureRandom;
+import java.util.Arrays;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,13 +28,10 @@ public class Account extends DomainObject {
     @GeneratedValue
     private long id;
 
-    private int employeeID;
-
     /**
-     * Username associated with an account for authenticaiton purposes.
+     * ID for the associated employee
      */
-    private String username;
-    // private byte[] hashedUsername;
+    private String employeeID;
 
     /**
      * Password associated with an account for authentication purposes.
@@ -69,11 +67,13 @@ public class Account extends DomainObject {
      * @throws IllegalArgumentException If the username or password is less than 8
      *                                  characters long
      */
-    public Account(String username, String password, String repeatPassword, int employeeID)
+    public Account(String employeeID, String password, String repeatPassword)
             throws NoSuchAlgorithmException {
         // Check if username and password is valid
-        if (username.length() < 8 && password.length() < 8) {
-            throw new IllegalArgumentException("Username and passwords must be at least 8 characters long.");
+
+        // Check for long enough password
+        if (password.length() < 8) {
+            throw new IllegalArgumentException("Passwords must be 8 or more characters.");
         }
 
         // Check for matching password
@@ -83,105 +83,111 @@ public class Account extends DomainObject {
                     "Password values do not match. Please retype password and repeat password.");
         }
 
-        // random object to generate salts
-        SecureRandom random = new SecureRandom();
-        byte[] ransalt = new byte[16];
-        random.nextBytes(ransalt);
-        salt = ransalt;
+        // // random object to generate salts
+        // SecureRandom random = new SecureRandom();
+        // byte[] ransalt = new byte[16];
+        // random.nextBytes(ransalt);
+        // salt = ransalt;
 
         // Hash the password
         hashedPassword = generateSHA512Hash(password);
-        // Hash the username
-        // hashedUsername = generateSHA512Hash(username);
-        this.username = username;
 
         // Set the Employee Id
         this.employeeID = employeeID;
     }
 
     /**
-     * The login method processes login attempts. It takes a username and password
+     * The login method processes login attempts. It takes a password
      * provided to it, hashes them with the stored salt, and then compares the
      * result to the stored hash. The method returns null on failed login; returns
      * an Employee object on successful login
      * 
-     * @param usernameAttempt username submitted for comparison
      * @param passwordAttempt password submitted for comparison
      * @throws NoSuchAlgorithmException If there is an error using the SHA-512
      *                                  hashing algorithm
      */
-    public int login(String usernameAttempt, String passwordAttempt) throws NoSuchAlgorithmException {
+    public String login(String passwordAttempt) throws NoSuchAlgorithmException {
 
-        if (!usernameAttempt.equals(getUsername())) {
-            return -1;
-        }
+        // if (!usernameAttempt.equals(getUsername())) {
+        // return -1;
+        // }
 
         byte[] hashedPasswordResult = generateSHA512Hash(passwordAttempt);
 
-        if (!hashedPasswordResult.equals(getPassword())) {
-            return -1;
+        if (Arrays.equals(hashedPasswordResult, getPassword()) == false) {
+            return null;
         }
 
         // return the Employee object or something equivalent
+
+        // TODO change return value to some kind of token
         return getEmployeeID();
     }
 
+    // /**
+    // * Updates the username of the account, provided that the current username and
+    // * password can be provided.
+    // *
+    // * @param currentUsername current, valid username of the account
+    // * @param currentPassword current, valid password of the account
+    // * @param newUsername new username to assign the account
+    // * @return true if the username was changed; false otherwise.
+    // */
+    // public boolean setUsername(String currentUsername, String currentPassword,
+    // String newUsername)
+    // throws NoSuchAlgorithmException {
+    // // Check if username is valid
+    // if (newUsername.length() < 8) {
+    // throw new IllegalArgumentException("Username must be at least 8 characters
+    // long.");
+    // }
+
+    // // Check if the Account has a current username
+    // if (getUsername() == null) {
+    // return false;
+    // }
+
+    // // Verify login credentials
+    // if (login(currentUsername, currentPassword) == -1) {
+    // return false;
+    // }
+
+    // // Update username
+    // this.username = newUsername;
+
+    // // Confirm change
+    // return true;
+    // }
+
     /**
-     * Updates the username of the account, provided that the current username and
-     * password can be provided.
+     * Updates the password of the account, provided that the current password can
+     * be provided.
      * 
-     * @param currentUsername current, valid username of the account
-     * @param currentPassword current, valid password of the account
-     * @param newUsername     new username to assign the account
-     * @return true if the username was changed; false otherwise.
-     */
-    public boolean setUsername(String currentUsername, String currentPassword, String newUsername)
-            throws NoSuchAlgorithmException {
-        // Check if username is valid
-        if (newUsername.length() < 8) {
-            throw new IllegalArgumentException("Username must be at least 8 characters long.");
-        }
-
-        // Check if the Account has a current username
-        if (getUsername() == null) {
-            return false;
-        }
-
-        // Verify login credentials
-        if (login(currentUsername, currentPassword) == -1) {
-            return false;
-        }
-
-        // Update username
-        this.username = newUsername;
-
-        // Confirm change
-        return true;
-    }
-
-    /**
-     * Updates the password of the account, provided that the current username and
-     * password can be provided.
-     * 
-     * @param currentUsername current, valid username of the account
      * @param currentPassword current, valid password of the account
      * @param newPassword     new password to assign the account
      * @return true if the password was changed; false otherwise.
      */
-    public boolean updatePassword(String currentUsername, String currentPassword, String newPassword)
+    public boolean updatePassword(String currentPassword, String newPassword, String repeatNewPassword)
             throws NoSuchAlgorithmException {
         // Check if password is valid
         if (newPassword.length() < 8) {
             throw new IllegalArgumentException("Passwords must be at least 8 characters long.");
         }
 
-        // Check if the Account has a current password
-        if (getPassword() == null) {
-            return false;
+        // Check for matching password
+        if (!newPassword.equals(repeatNewPassword)) {
+            // Might need to change/create a new exception for this error
+            throw new IllegalArgumentException(
+                    "Password values do not match. Please retype password and repeat password.");
         }
 
+        // // Check if the Account has a current password
+        // if (getPassword() == null) {
+        // return false;
+        // }
+
         // attempt to authenticate user for changing their password
-        if (login(currentUsername, currentPassword) == -1) {
+        if (login(currentPassword) == null) {
             return false;
         }
 
@@ -192,14 +198,14 @@ public class Account extends DomainObject {
         return true;
     }
 
-    /**
-     * Returns the stored hash of the Account's associated username
-     * 
-     * @return String containing the username
-     */
-    public String getUsername() {
-        return username;
-    }
+    // /**
+    // * Returns the stored hash of the Account's associated username
+    // *
+    // * @return String containing the username
+    // */
+    // public String getUsername() {
+    // return username;
+    // }
 
     /**
      * Returns the stored hash of the Account's associated password
@@ -216,7 +222,7 @@ public class Account extends DomainObject {
      * @return an integer representing the EmployeeID of the user associated with
      *         this account object
      */
-    private int getEmployeeID() {
+    private String getEmployeeID() {
         return employeeID;
     }
 
@@ -242,13 +248,17 @@ public class Account extends DomainObject {
         try {
             // Hash the given String with the Account's salt
             MessageDigest md = MessageDigest.getInstance("SHA-512");
-            md.update(getSalt());
+            // md.update(getSalt());
             byte[] hashedResult = md.digest(value.getBytes(StandardCharsets.UTF_8));
             return hashedResult;
         } catch (NoSuchAlgorithmException e) {
             throw new NoSuchAlgorithmException(
                     "ERROR: hashing algorithm is not available for use. Could not perform the action that required hashing.");
         }
+    }
+
+    public String getEmployeeId() {
+        return employeeID;
     }
 
     @Override
