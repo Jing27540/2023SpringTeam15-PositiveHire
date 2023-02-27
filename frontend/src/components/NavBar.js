@@ -4,7 +4,8 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import EmployeeProfile from '../views/EmployeeProfile'
 import ImportData from './ImportData';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import TabsBar from './TabsBar';
+import JobPosting from '../views/JobPosting';
 
 /**
  * NavBar class for the header of the application
@@ -12,14 +13,17 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
  * @author Jing Huang
  * @author Previous Team // Used some code from previous team, like the logo and navigation bar
  */
+
+const TITLE = ['Positions', 'Talent Pipeline', 'Performance Reviews', 'Development Plans', 'Resources', 'Reports'];
 export default function NavBar() {
 
   const [key, setKey] = React.useState('home');
+  const [mode, setMode] = React.useState('');
 
   return (
     <>
       <Navbar className="navbar" variant="dark">
-        <Container fluid style={{position: "absolute", bottom: "5px"}}>
+        <Container fluid style={{ position: "absolute", bottom: "5px" }}>
           <Navbar.Brand href="/home">
             <img
               src="/PHBalancedLogo.png"
@@ -33,15 +37,9 @@ export default function NavBar() {
           <Nav
             defaultActiveKey="home"
             className="me-auto"
-            onSelect={(selectedKey) => { setKey(selectedKey) }}
-            style={{gap: '10px', fontWeight: 'bold', fontSize: '15px'}}
+            onSelect={(selectedKey) => { setKey(selectedKey); setMode(selectedKey); }}
+            style={{ gap: '10px', fontWeight: 'bold', fontSize: '15px' }}
           >
-          {/* <NavDropdown
-              id="nav-dropdown-dark-example"
-              title="Dropdown"
-              menuVariant="dark"
-            ></NavDropdown> */}
-
             <Nav.Item>
               <Nav.Link eventKey="home">Home</Nav.Link>
             </Nav.Item>
@@ -57,21 +55,6 @@ export default function NavBar() {
             <Nav.Item>
               <Nav.Link eventKey="importData">Import Data</Nav.Link>
             </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="link5">Positions</Nav.Link>
-            </Nav.Item>
-  
-            {/* <DropdownButton id="link5" title="Dropdown button">
-              <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-            </DropdownButton> */}
-
-            {/* <Nav.Item>
-                <Nav.Link eventKey="disabled" disabled>
-                  ViewEmmployees
-                </Nav.Link>
-              </Nav.Item> */}
           </Nav>
         </Container>
       </Navbar>
@@ -80,12 +63,20 @@ export default function NavBar() {
           <EmployeeProfile />
           :
           key === 'importData' ?
-          <ImportData />
-          : 
+            <ImportData />
+            :
+            key === 'home' ?
+              <TabsBar titles={TITLE} setMode={setMode} />
+              :
+              undefined
+      }
+      {
+        mode === 'Positions' ?
+          <JobPosting />
+          :
           undefined
       }
     </>
-
   );
 
 }

@@ -27,7 +27,6 @@ const RightBox = styled.div`
 function JobPosting() {
 
     return (
-
         <Box>
             <LeftBox><VerticalBar /></LeftBox>
             <RightBox>Content</RightBox>
