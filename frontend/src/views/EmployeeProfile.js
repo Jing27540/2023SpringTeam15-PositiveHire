@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import TabsBar from '../components/TabsBar';
 import General from "../subViews/General";
 import Skill from "../subViews/Skill";
+import ProfileCard from "../components/ProfileCard";
 
 /**
  * EmployeeProfile component is used to manage profile information.
@@ -74,7 +75,7 @@ function EmployeeProfile() {
         <>
             <Box>
                 <SideBox></SideBox>
-                <MiddleBox>Employee Profile Card</MiddleBox>
+                <MiddleBox><ProfileCard /></MiddleBox>
                 <SideBox>
                     <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%", float: 'right', width: '100px' }} onClick={handleShow}>
                         Edit

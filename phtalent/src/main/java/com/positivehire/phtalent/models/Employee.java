@@ -20,7 +20,7 @@ public class Employee extends DomainObject {
 
     private String employeeName;
 
-    private String employeeNum;
+    private int employeeNum;
 
     private int marriedId;
 
@@ -50,7 +50,7 @@ public class Employee extends DomainObject {
 
     private String citizenDesc;
 
-    private String hispanicLation;
+    private String hispanicLatino;
 
     private String raceDesc;
 
@@ -76,7 +76,7 @@ public class Employee extends DomainObject {
 
     private String performanceScore;
 
-    private double annualBonus;
+    private String annualBonus;
 
     private double ptoHours;
 
@@ -93,22 +93,31 @@ public class Employee extends DomainObject {
 
     }
 
-    public Employee(Long id, String employeeName, String employeeNum, int employmentStatusId, int departmentId,
-            int performanceScoreId, double payRate, String state, int zip, String dateOfHire, int daysEmployeed,
+    public Employee(Long id, String employeeName, int employeeNum, int marriedId, int maritalStatusId, int genderId, int employmentStatusId, int departmentId,
+            int performanceScoreId, int age, double payRate, String state, int zip, String DOB, String sex, String maritalDesc, String citizenDesc, String hispanicLatino, String raceDesc, String dateOfHire, int daysEmployeed,
             String dateOfTermination, String reasonForTermination, String employementStatus, String department,
-            String position, String managerName, String employeeSource, String accessRole, String performanceScore,
+            String position, String managerName, String employeeSource, String accessRole, String performanceScore, String annualBonus, double ptoHours,
             List<Skill> technicalSkills, List<Skill> peopleSkills, List<Skill> workEthic,
-            List<Certification> certifications, Demographic employeeDemographics, double annualBonus,
-            double ptoHours) {
+            List<Certification> certifications) {
         setId(id);
         setEmployeeName(employeeName);
         setEmployeeNum(employeeNum);
+        setMarriedId(marriedId);
+        setMaritalStatusId(maritalStatusId);
+        setGenderId(genderId);
         setEmploymentStatusId(employmentStatusId);
         setDepartmentId(departmentId);
         setPerformanceScoreId(performanceScoreId);
+        setAge(age);
         setPayRate(payRate);
         setState(state);
         setZip(zip);
+        setDOB(DOB);
+        setSex(sex);
+        setMaritalDesc(maritalDesc);
+        setCitizenDesc(citizenDesc);
+        setHispanicLatino(hispanicLatino);
+        setRaceDesc(raceDesc);
         setDateOfHire(dateOfHire);
         setDaysEmployeed(daysEmployeed);
         setDateOfTermination(dateOfTermination);
@@ -120,12 +129,12 @@ public class Employee extends DomainObject {
         setEmployeeSource(employeeSource);
         setAccessRole(accessRole);
         setPerformanceScore(performanceScore);
+        setAnnualBonus(annualBonus);
+        setPtoHours(ptoHours);
         setTechnicalSkills(technicalSkills);
         setPeopleSkills(peopleSkills);
         setWorkEthic(workEthic);
         setCertifications(certifications);
-        setAnnualBonus(annualBonus);
-        setPtoHours(ptoHours);
 
     }
 
@@ -134,11 +143,11 @@ public class Employee extends DomainObject {
         setEmployeeName(employeeName);
     }
 
-    public String getEmployeeNum() {
+    public int getEmployeeNum() {
         return this.employeeNum;
     }
 
-    public void setEmployeeNum(String employeeNum) {
+    public void setEmployeeNum(int employeeNum) {
         this.employeeNum = employeeNum;
     }
 
@@ -335,11 +344,11 @@ public class Employee extends DomainObject {
     //     this.employeeDemographics = employeeDemographics;
     // }
 
-    public double getAnnualBonus() {
+    public String getAnnualBonus() {
         return annualBonus;
     }
 
-    public void setAnnualBonus(double annualBonus) {
+    public void setAnnualBonus(String annualBonus) {
         this.annualBonus = annualBonus;
     }
 
@@ -415,12 +424,12 @@ public class Employee extends DomainObject {
         this.citizenDesc = citizenDesc;
     }
 
-    public String getHispanicLation() {
-        return this.hispanicLation;
+    public String getHispanicLatino() {
+        return this.hispanicLatino;
     }
 
-    public void setHispanicLation(String hispanicLation) {
-        this.hispanicLation = hispanicLation;
+    public void setHispanicLatino(String hispanicLatino) {
+        this.hispanicLatino = hispanicLatino;
     }
 
     public String getRaceDesc() {

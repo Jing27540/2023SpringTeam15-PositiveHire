@@ -3,11 +3,14 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import EmployeeProfile from '../views/EmployeeProfile'
+import ImportData from './ImportData';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 
 /**
  * NavBar class for the header of the application
  * @author Juan Franco Pinilla
  * @author Jing Huang
+ * @author Previous Team // Used some code from previous team, like the logo and navigation bar
  */
 export default function NavBar() {
 
@@ -33,6 +36,12 @@ export default function NavBar() {
             onSelect={(selectedKey) => { setKey(selectedKey) }}
             style={{gap: '10px', fontWeight: 'bold', fontSize: '15px'}}
           >
+          {/* <NavDropdown
+              id="nav-dropdown-dark-example"
+              title="Dropdown"
+              menuVariant="dark"
+            ></NavDropdown> */}
+
             <Nav.Item>
               <Nav.Link eventKey="home">Home</Nav.Link>
             </Nav.Item>
@@ -46,8 +55,18 @@ export default function NavBar() {
               <Nav.Link eventKey="link3">Employee Experience</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="link4">Import Data</Nav.Link>
+              <Nav.Link eventKey="importData">Import Data</Nav.Link>
             </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="link5">Positions</Nav.Link>
+            </Nav.Item>
+  
+            {/* <DropdownButton id="link5" title="Dropdown button">
+              <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+              <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+              <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+            </DropdownButton> */}
+
             {/* <Nav.Item>
                 <Nav.Link eventKey="disabled" disabled>
                   ViewEmmployees
@@ -60,6 +79,9 @@ export default function NavBar() {
         key === 'profile' ?
           <EmployeeProfile />
           :
+          key === 'importData' ?
+          <ImportData />
+          : 
           undefined
       }
     </>
