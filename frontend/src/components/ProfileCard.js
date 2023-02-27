@@ -5,38 +5,29 @@ import styled from "styled-components";
 const Box = styled.div`
     display: flex;
     margin: 10px;
-    height: 200px;
-    width: 410px;
     border: none;
     overflow: auto;
 `
 const Stack = styled.div`
-    
-    width: 400px;
     padding: 5px;
     border: none;
-    
-    
 `
 const SideBox = styled.div`
-    width: 40%;
     float: left;
 `;
 
 function ProfileCard() {
   return (
-    <Card style={{ width: '30rem', height: '25rem' }} className="col-md-5 mx-auto">
-      <Card.Img variant="top" src="/PHBalancedLogo.png" />
+    <Card style={{ width: '100%', height: '100%' }} className="col-md-5 mx-auto">
+      <Card.Img variant="top" src="../../public/PHBalancedLogo.png" />
       <Card.Body>
 
         <h3>Sharon Owens</h3>
             <Box>
                 <Stack style={{justifyContent: 'center', alignItems: 'center'}}>
                 <Stack gap={2}>
-
                     <h5>Java Software Engineer</h5>
                     <div>Employed for 2 years, 1 month</div>
-               
                 </Stack>
                 <Stack style={{justifyContent: 'right', alignItems: 'right'}}>
                 <Stack direction="horizontal" gap={2}>
@@ -50,7 +41,6 @@ function ProfileCard() {
                         <div>Office Location</div>
                     </SideBox>
                         <div>Bay Area</div>
-                   
                 </Stack>
                 <Stack direction="horizontal" gap={2}>
                     <SideBox>
