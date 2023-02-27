@@ -21,7 +21,6 @@ function ProfileCard() {
     <Card style={{ width: '100%', height: '100%' }} className="col-md-5 mx-auto">
       <Card.Img variant="top" src="../../public/PHBalancedLogo.png" />
       <Card.Body>
-
         <h3>Sharon Owens</h3>
             <Box>
                 <Stack style={{justifyContent: 'center', alignItems: 'center'}}>
@@ -29,7 +28,7 @@ function ProfileCard() {
                     <h5>Java Software Engineer</h5>
                     <div>Employed for 2 years, 1 month</div>
                 </Stack>
-                <Stack style={{justifyContent: 'right', alignItems: 'right'}}>
+                <Stack style={{justifyContent: 'ceneter', alignItems: 'ceneter'}}>
                 <Stack direction="horizontal" gap={2}>
                     <SideBox>
                         <div>Department</div>

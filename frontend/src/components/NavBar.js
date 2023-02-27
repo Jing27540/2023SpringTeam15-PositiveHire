@@ -37,7 +37,7 @@ export default function NavBar() {
           <Nav
             defaultActiveKey="home"
             className="me-auto"
-            onSelect={(selectedKey) => { setKey(selectedKey); setMode={setMode} }}
+            onSelect={(selectedKey) => { setKey(selectedKey); setMode(selectedKey); }}
             style={{ gap: '10px', fontWeight: 'bold', fontSize: '15px' }}
           >
             <Nav.Item>
