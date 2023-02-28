@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import TabsBar from '../components/TabsBar';
 import General from "../subViews/General";
 import Skill from "../subViews/Skill";
+import Certification from "../subViews/Certification"
 import ProfileCard from "../components/ProfileCard";
 
 /**
@@ -63,7 +64,7 @@ function EmployeeProfile(props) {
     const [show, setShow] = React.useState(false);
     const [mode, setMode] = React.useState('General');
     const [title, setTitle] = React.useState(SKTITLE);
-    const [tool, setTool] = React.useState();
+    const [tool, setTool] = React.useState('Skills');
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -71,8 +72,24 @@ function EmployeeProfile(props) {
         if (mode === GTITLE[1]) { setTitle(SKTITLE); }
         else if (mode === GTITLE[2]) { setTitle(PRTITLE); }
         else if (mode === GTITLE[3]) { setTitle(CDPTITLE); }
-        else { setTitle(undefined) }
+        else { setTitle([]) }
     }, [mode]);
+
+    function changeTool(mode) {
+        if (mode === 'General') {
+            return <General employee={employee} />
+        }
+        else if (mode === 'Skills & Certifications') {
+            if (tool === Certification) {
+                return (<Certification />);
+            } else {
+                return (<Skill />);
+            }
+        } else {
+            return undefined;
+        }
+
+    }
 
     return (
         <>
@@ -101,16 +118,7 @@ function EmployeeProfile(props) {
                 <ContentBox>
                     <TabsBar titles={title} setMode={setTool} />
                     <InnerContentBox>
-                        {
-                            mode === 'General' ?
-                                <General employee={employee}/>
-                                :
-                                (mode === 'Skills & Certifications' ?
-                                    <Skill />
-                                    :
-                                    undefined
-                                )
-                        }
+                        {changeTool(mode)}
                     </InnerContentBox>
                 </ContentBox>
             </Box>

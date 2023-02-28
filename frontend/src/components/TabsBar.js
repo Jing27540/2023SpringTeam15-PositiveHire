@@ -14,8 +14,10 @@ function TabsBar({ titles, setMode, ...props }) {
 
     const [show, setShow] = React.useState(false);
 
+    console.log(titles);
+
     return (
-        <Nav className="justify-content-center" fill variant="tabs" defaultActiveKey="/home/profile">
+        <Nav className="justify-content-center" fill variant="tabs">
             {titles ?
                 titles.map((item) => {
                     if (item === 'Positions') {

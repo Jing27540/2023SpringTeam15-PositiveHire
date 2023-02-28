@@ -24,13 +24,9 @@ export default function NavBar() {
   const [mode, setMode] = React.useState('');
   const [employee, setEmployee] = React.useState('');
 
-  function changeEmployee(data) {
-    setEmployee(data);
-  }
-
   // Get Employee Data
   React.useEffect(()=>{
-    axios.get(`http://localhost:8080/employees/${EMPLOYEENUM}`).then(res => {changeEmployee(res.data);})
+    axios.get(`http://localhost:8080/employees/${EMPLOYEENUM}`).then(res => {setEmployee(res.data);})
     .catch(err => console.log(err));  
   }, []);
 

@@ -31,11 +31,11 @@ function General(props) {
                     Object.keys(employee).map((item) => {
                         if (item !== 'id') {
                             return (
-                                <Row style={{ textAlign: 'left', justifyContent: "space-between" }}>
-                                    <Col key={item}>
+                                <Row key={item} style={{ textAlign: 'left', justifyContent: "space-between" }}>
+                                    <Col>
                                         <h6>{item[0].toUpperCase() + item.substring(1)}</h6>
                                     </Col>
-                                    <Col key={item}>
+                                    <Col>
                                         <h6>{employee[item]}</h6>
                                     </Col>
                                 </Row>

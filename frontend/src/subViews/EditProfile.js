@@ -61,21 +61,6 @@ function EditProfile() {
     getAllEmployees(employees);
     console.log('checking delete employee by id', employees);
 
-    // if (employee) {
-
-    //     // employee[0].employeeName = "Jing Huang";
-    //     employee[0].genderId = 100;
-    //     employee[0].position = 'Raleigh';
-    //     console.log(employee[0]);
-
-    //     let array = [];
-    //     saveEmployee(employee[0], array);
-    //     console.log('checking save employee', array);
-
-    // }
-
-
-
     const generalFields = ['EmployName', 'Role', 'EmployeeNumber', 'GenderID'];
     const skillFields = ['Name', 'Level', 'Score'];
     const certificationFields = ['Name', 'Institution', 'IssuedDate', 'CredentialID', 'Skils'];
