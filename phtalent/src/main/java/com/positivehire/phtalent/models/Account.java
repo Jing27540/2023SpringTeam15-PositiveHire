@@ -41,7 +41,7 @@ public class Account extends DomainObject {
     /**
      * Salt used to hash usernmae and password
      */
-    private static byte[] salt;
+    // private static byte[] salt;
 
     // /**
     // * The employee associated with this account
@@ -121,7 +121,7 @@ public class Account extends DomainObject {
         // return the Employee object or something equivalent
 
         // TODO change return value to some kind of token
-        return getEmployeeID();
+        return getEmployeeId();
     }
 
     // /**
@@ -167,7 +167,7 @@ public class Account extends DomainObject {
      * @param newPassword     new password to assign the account
      * @return true if the password was changed; false otherwise.
      */
-    public boolean updatePassword(String currentPassword, String newPassword, String repeatNewPassword)
+    public void updatePassword(String currentPassword, String newPassword, String repeatNewPassword)
             throws NoSuchAlgorithmException {
         // Check if password is valid
         if (newPassword.length() < 8) {
@@ -181,31 +181,12 @@ public class Account extends DomainObject {
                     "Password values do not match. Please retype password and repeat password.");
         }
 
-        // // Check if the Account has a current password
-        // if (getPassword() == null) {
-        // return false;
-        // }
-
         // attempt to authenticate user for changing their password
-        if (login(currentPassword) == null) {
-            return false;
+        if (login(currentPassword) != null) {
+            // Update password
+            hashedPassword = generateSHA512Hash(newPassword);
         }
-
-        // Update password
-        hashedPassword = generateSHA512Hash(newPassword);
-
-        // Confirm change
-        return true;
     }
-
-    // /**
-    // * Returns the stored hash of the Account's associated username
-    // *
-    // * @return String containing the username
-    // */
-    // public String getUsername() {
-    // return username;
-    // }
 
     /**
      * Returns the stored hash of the Account's associated password
@@ -217,24 +198,14 @@ public class Account extends DomainObject {
     }
 
     /**
-     * Returns the stored Employee ID number of the Account
-     *
-     * @return an integer representing the EmployeeID of the user associated with
-     *         this account object
-     */
-    private String getEmployeeID() {
-        return employeeID;
-    }
-
-    /**
      * Returns the salt used to hash the password and username of the account
      * 
      * @return The salt as a byte array. Used in a Message Digest object for
      *         hashing.
      */
-    public byte[] getSalt() {
-        return salt;
-    }
+    // public byte[] getSalt() {
+    // return salt;
+    // }
 
     /**
      * Helper function for generating a SHA512 hash from the given value
@@ -261,9 +232,22 @@ public class Account extends DomainObject {
         return employeeID;
     }
 
+    public Account updateAccount(Account a) {
+        this.hashedPassword = a.hashedPassword;
+        return this;
+    }
+
     @Override
     public Serializable getId() {
         return id;
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                " id='" + getId() + "'" +
+                ", employeeID='" + getEmployeeId() + "'" +
+                ", hashedPassword='" + getPassword() + "'" +
+                "}";
+    }
 }

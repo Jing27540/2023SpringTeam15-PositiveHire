@@ -91,9 +91,9 @@ public class AccountTest {
 
         // Test updating the password with invalid login
         try {
-            assertFalse(acc1.updatePassword("bad pass", "newpassword", "newpassword"));
-            assertFalse(acc2.updatePassword("bad pass", "newpassword", "newpassword"));
-            assertFalse(acc3.updatePassword("bad pass", "newpassword", "newpassword"));
+            acc1.updatePassword("bad pass", "newpassword", "newpassword");
+            acc2.updatePassword("bad pass", "newpassword", "newpassword");
+            acc3.updatePassword("bad pass", "newpassword", "newpassword");
         } catch (Exception e) {
             fail();
         }
@@ -111,9 +111,9 @@ public class AccountTest {
         // Test updating the password with valid login
 
         try {
-            assertTrue(acc1.updatePassword(pass1, "newpassword", "newpassword"));
-            assertTrue(acc2.updatePassword(pass2, "newpassword", "newpassword"));
-            assertTrue(acc3.updatePassword(pass3, "newpassword", "newpassword"));
+            acc1.updatePassword(pass1, "newpassword", "newpassword");
+            acc2.updatePassword(pass2, "newpassword", "newpassword");
+            acc3.updatePassword(pass3, "newpassword", "newpassword");
         } catch (Exception e) {
             fail();
         }
