@@ -3,7 +3,6 @@ import styled from "styled-components";
 import FloatingLabel from 'react-bootstrap-floating-label';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import axios from 'axios';
 import { getAllEmployees, getEmployeeById, deleteEmployeeById, saveEmployee } from '../clients/employee';
 
 /**
@@ -40,6 +39,9 @@ const ButtonDiv = styled.div`
     margin: 10px;
     justify-content: space-btween;
 `;
+
+ // TODO: hard code
+ const EMPLOYEENUM = 1103024456;
 
 function EditProfile() {
 

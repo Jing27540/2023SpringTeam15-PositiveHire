@@ -54,7 +54,10 @@ const SKTITLE = ['Skills', 'Certifications'];
 const PRTITLE = ['Reviews', 'Goals', 'Training Resources', 'Schedule'];
 const CDPTITLE = ['Goals', 'Training Resources', 'Statistics'];
 
-function EmployeeProfile() {
+function EmployeeProfile(props) {
+
+    const [employee, setEmployee] = React.useState(props.employee);
+    console.log(employee);
 
     // TODO: it use to testing edit editprofile.
     const [show, setShow] = React.useState(false);
@@ -100,7 +103,7 @@ function EmployeeProfile() {
                     <InnerContentBox>
                         {
                             mode === 'General' ?
-                                <General />
+                                <General employee={employee}/>
                                 :
                                 (mode === 'Skills & Certifications' ?
                                     <Skill />

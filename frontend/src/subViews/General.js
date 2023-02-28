@@ -1,36 +1,12 @@
 import React from "react";
-import styled from "styled-components";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 /**
  * General component to hold General Profile information
  * @author Jing Huang
  */
-
-const Box = styled.div`
-    display: flex-block;
-    margin: 2%;
-    width: 95%;
-    align-items:left;
-    overflow: auto;
-`
-
-const Title = styled.label`
-    float: left;
-    margin-bottom: 15px;
-    margin-left: 10px;
-`;
-
-const Children = styled.div`
-    display: flex;
-    margin-bottom: 35px;
-    gap: 300px;
-    align-items:left;
-    justify-content: flex-start;
-`
-
-const Block = styled.div`
-    float: left;
-    width: ${({ width = '100px' }) => width};
-`;
 
 const TITLES = ['First Name', 'Last Name', 'Employee #',
     'Access Role', 'User Status', 'Employee Type',
@@ -42,36 +18,35 @@ const DummyData = ['Sharon', 'Owens', '90782846',
     'Engineering Department', 'Java Software Engineer, Engineering Department, 02/01/2022 - Present', 'Software Engineer, Engineering Department, 01/10//2021 - 02/01/2022',
     '09/16/2019', 'Engineering'];
 
-function General() {
+// TODO: hard code
+function General(props) {
+
+    const [employee, setEmployee] = React.useState(props.employee);
 
     return (
-        <div>
-            <Title><h5>General Employee Information</h5></Title>
-            <Box>
-                <Block width={'35%'}>
-                    {
-                        TITLES.map((item) => {
+        <Container fluid style={{ alignItems: 'left' }}>
+            <Row style={{ marginBottom: "15px", fontSize: '25px' }}>General Employee Information</Row>
+            {
+                (employee !== undefined) ?
+                    Object.keys(employee).map((item) => {
+                        if (item !== 'id') {
                             return (
-                                <Children key={item}>
-                                    <h6>{item}</h6>
-                                </Children>
+                                <Row style={{ textAlign: 'left', justifyContent: "space-between" }}>
+                                    <Col key={item}>
+                                        <h6>{item[0].toUpperCase() + item.substring(1)}</h6>
+                                    </Col>
+                                    <Col key={item}>
+                                        <h6>{employee[item]}</h6>
+                                    </Col>
+                                </Row>
                             );
-                        })
-                    }
-                </Block>
-                <Block width={'65%'}>
-                    {
-                        DummyData.map((item) => {
-                            return (
-                                <Children key={item}>
-                                    <h6>{item}</h6>
-                                </Children>
-                            );
-                        })
-                    }
-                </Block>
-            </Box>
-        </div>
+                        }
+                        return;
+                    })
+                    :
+                    undefined
+            }
+        </Container>
     );
 
 }
