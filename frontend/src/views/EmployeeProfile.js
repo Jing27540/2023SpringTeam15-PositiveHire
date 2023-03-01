@@ -80,7 +80,7 @@ function EmployeeProfile(props) {
             return <General employee={employee} />
         }
         else if (mode === 'Skills & Certifications') {
-            if (tool === Certification) {
+            if (tool === 'Certifications') {
                 return (<Certification />);
             } else {
                 return (<Skill />);

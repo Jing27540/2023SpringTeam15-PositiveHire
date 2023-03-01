@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import EditSkillCertification from './EditSkillCertification';
+import EditForm from './EditForm';
 
 /**
  * Skill component to show Employee skill information.
@@ -65,16 +65,16 @@ function Skill() {
     return (
         <div>
             <Box>
-                <Container style={{ width: "60%", justifyContent: "space-between", alignItems: 'left' }}>
+                <Container style={{ width: "60%", justifyContent: "space-between" }}>
                     <Row style={{ textAlign: 'left' }}>
                         {/* <Col style={{ fontSize: '15px', float: 'left' }}>Updated: Dec 30, 2022</Col> */}
                         <Col>
-                            <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'right', width: '100px' }} onClick={()=>{handleShow(); setMode(true)}}>
+                            <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'left', width: '100px' }} onClick={() => { handleShow(); setMode(true) }}>
                                 Add
                             </Button>
                         </Col>
                         <Col>
-                            <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'right', width: '100px' }} onClick={()=>{handleShow(); setMode(false)}}>
+                            <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'right', width: '100px' }} onClick={() => { handleShow(); setMode(false) }}>
                                 Edit
                             </Button>
                         </Col>
@@ -86,7 +86,7 @@ function Skill() {
                     </Row>
                     <Row style={{ fontWeight: 'bold', fontSize: '18px', margin: "10px" }}>Technique Skills</Row>
                     <HorizontalLine></HorizontalLine>
-                    {TS.map((item,index) => {
+                    {TS.map((item, index) => {
                         return (
                             <Row key={index} style={{ textAlign: 'left', margin: '2%' }}>
                                 <Col>{item.skill}</Col>
@@ -108,7 +108,7 @@ function Skill() {
                     })}
                     <Row style={{ fontWeight: 'bold', fontSize: '18px', margin: "10px" }}>Work Ethics</Row>
                     <HorizontalLine></HorizontalLine>
-                    {WE.map((item,index) => {
+                    {WE.map((item, index) => {
                         return (
                             <Row key={index} style={{ textAlign: 'left', margin: '2%' }}>
                                 <Col>{item.skill}</Col>
@@ -123,10 +123,10 @@ function Skill() {
                 </Container>
                 <Modal show={show} onHide={handleClose} animation={false}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Add / Edit Skill & Certification</Modal.Title>
+                        <Modal.Title>Skill & Certification</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <EditSkillCertification addMode={mode}/>
+                        <EditForm addMode={mode} />
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary" onClick={handleClose}>
