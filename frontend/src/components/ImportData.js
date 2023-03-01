@@ -357,10 +357,10 @@ function ImportData() {
         performanceScore: null,
         annualBonus: null,
         ptoHours: 0.0,
-        technicalSkills: null,
-        peopleSkills: null,
-        workEthic: null,
-        certifications: null
+        technicalSkills: [],
+        peopleSkills: [],
+        workEthic: [],
+        certifications: []
       }
 
       // for every column in the matching array, get the matching field in the csv array from the employee
