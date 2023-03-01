@@ -21,7 +21,7 @@ function TabsBar({ titles, setMode, ...props }) {
                     if (item === 'Positions') {
                         return (
                             <Nav.Item key={item} variant="drak" >
-                                <Nav.Link eventKey={item} onClick={() => { setMode(item); setShow(true); }} style={{ color: "black", fontWeight: 'bold' }}>{item}</Nav.Link>
+                                <Nav.Link eventKey={item} onClick={() => { setMode(item); setShow(!show); }} style={{ color: "black", fontWeight: 'bold' }}>{item}</Nav.Link>
                                 <Dropdown.Menu show={show}>
                                     <Dropdown.Item key={"Create"} onClick={() => { setShow(false); }}>Create/Edit a Job Description</Dropdown.Item>
                                     <Dropdown.Item key={"View"} onClick={() => { setShow(false); }}>See Open Positions</Dropdown.Item>
