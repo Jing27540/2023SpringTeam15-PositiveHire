@@ -439,14 +439,6 @@ function ImportData() {
               </div>
             </h3>
             <hr />
-            <BootstrapTable
-              bootstrap4
-              keyField="id"
-              data={employees}
-              columns={columns}
-              pagination={paginationFactory(options)}
-              noDataIndication="There aren't any employees in the system"
-            />
           </div>
         ) : (
           <>
