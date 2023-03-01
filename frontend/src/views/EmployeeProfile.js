@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import TabsBar from '../components/TabsBar';
 import General from "../subViews/General";
 import Skill from "../subViews/Skill";
+import Certification from "../subViews/Certification"
 import ProfileCard from "../components/ProfileCard";
 
 /**
@@ -54,13 +55,16 @@ const SKTITLE = ['Skills', 'Certifications'];
 const PRTITLE = ['Reviews', 'Goals', 'Training Resources', 'Schedule'];
 const CDPTITLE = ['Goals', 'Training Resources', 'Statistics'];
 
-function EmployeeProfile() {
+function EmployeeProfile(props) {
+
+    const [employee, setEmployee] = React.useState(props.employee);
+    console.log(employee);
 
     // TODO: it use to testing edit editprofile.
     const [show, setShow] = React.useState(false);
     const [mode, setMode] = React.useState('General');
     const [title, setTitle] = React.useState(SKTITLE);
-    const [tool, setTool] = React.useState();
+    const [tool, setTool] = React.useState('Skills');
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -68,8 +72,24 @@ function EmployeeProfile() {
         if (mode === GTITLE[1]) { setTitle(SKTITLE); }
         else if (mode === GTITLE[2]) { setTitle(PRTITLE); }
         else if (mode === GTITLE[3]) { setTitle(CDPTITLE); }
-        else { setTitle(undefined) }
+        else { setTitle([]) }
     }, [mode]);
+
+    function changeTool(mode) {
+        if (mode === 'General') {
+            return <General employee={employee} />
+        }
+        else if (mode === 'Skills & Certifications') {
+            if (tool === 'Certifications') {
+                return (<Certification />);
+            } else {
+                return (<Skill />);
+            }
+        } else {
+            return undefined;
+        }
+
+    }
 
     return (
         <>
@@ -98,16 +118,7 @@ function EmployeeProfile() {
                 <ContentBox>
                     <TabsBar titles={title} setMode={setTool} />
                     <InnerContentBox>
-                        {
-                            mode === 'General' ?
-                                <General />
-                                :
-                                (mode === 'Skills & Certifications' ?
-                                    <Skill />
-                                    :
-                                    undefined
-                                )
-                        }
+                        {changeTool(mode)}
                     </InnerContentBox>
                 </ContentBox>
             </Box>
