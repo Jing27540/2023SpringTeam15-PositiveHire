@@ -47,15 +47,6 @@ const VerticleLine = styled.div`
     margin: 2%;
     border-left: 0.5px solid #808080;
 `;
-
-const data = [
-    { text: "One", value: 1 },
-    { text: "Two", value: 2 },
-    { text: "Three", value: 3 },
-    { text: "Four", value: 4 },
-    { text: "New", value: 5 },
-];
-
 function Skill() {
     const [mode, setMode] = React.useState();
     const [show, setShow] = React.useState(false);
