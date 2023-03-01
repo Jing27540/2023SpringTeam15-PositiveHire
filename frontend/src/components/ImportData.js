@@ -357,10 +357,10 @@ function ImportData() {
         performanceScore: null,
         annualBonus: null,
         ptoHours: 0.0,
-        technicalSkills: null,
-        peopleSkills: null,
-        workEthic: null,
-        certifications: null
+        technicalSkills: [],
+        peopleSkills: [],
+        workEthic: [],
+        certifications: []
       }
 
       // for every column in the matching array, get the matching field in the csv array from the employee
@@ -439,14 +439,6 @@ function ImportData() {
               </div>
             </h3>
             <hr />
-            <BootstrapTable
-              bootstrap4
-              keyField="id"
-              data={employees}
-              columns={columns}
-              pagination={paginationFactory(options)}
-              noDataIndication="There aren't any employees in the system"
-            />
           </div>
         ) : (
           <>

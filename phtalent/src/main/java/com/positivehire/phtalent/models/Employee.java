@@ -56,7 +56,7 @@ public class Employee extends DomainObject {
 
     private String dateOfHire;
 
-    private int daysEmployeed;
+    private int daysEmployed;
 
     private String dateOfTermination;
 
@@ -119,7 +119,7 @@ public class Employee extends DomainObject {
         setHispanicLatino(hispanicLatino);
         setRaceDesc(raceDesc);
         setDateOfHire(dateOfHire);
-        setDaysEmployeed(daysEmployeed);
+        setDaysEmployed(daysEmployeed);
         setDateOfTermination(dateOfTermination);
         setReasonForTermination(reasonForTermination);
         setEmployementStatus(employementStatus);
@@ -224,12 +224,12 @@ public class Employee extends DomainObject {
         this.dateOfHire = dateOfHire;
     }
 
-    public int getDaysEmployeed() {
-        return daysEmployeed;
+    public int getDaysEmployed() {
+        return daysEmployed;
     }
 
-    public void setDaysEmployeed(int daysEmployeed) {
-        this.daysEmployeed = daysEmployeed;
+    public void setDaysEmployed(int daysEmployeed) {
+        this.daysEmployed = daysEmployeed;
     }
 
     public String getDateOfTermination() {
@@ -450,7 +450,7 @@ public class Employee extends DomainObject {
         this.setState(state);
         this.setZip(zip);
         this.setDateOfHire(dateOfHire);
-        this.setDaysEmployeed(daysEmployeed);
+        this.setDaysEmployed(daysEmployed);
         this.setDateOfTermination(dateOfTermination);
         this.setReasonForTermination(reasonForTermination);
         this.setEmployementStatus(employementStatus);
@@ -482,7 +482,7 @@ public class Employee extends DomainObject {
             ", state='" + getState() + "'" +
             ", zip='" + getZip() + "'" +
             ", dateOfHire='" + getDateOfHire() + "'" +
-            ", daysEmployeed='" + getDaysEmployeed() + "'" +
+            ", daysEmployeed='" + getDaysEmployed() + "'" +
             ", dateOfTermination='" + getDateOfTermination() + "'" +
             ", reasonForTermination='" + getReasonForTermination() + "'" +
             ", employementStatus='" + getEmployementStatus() + "'" +
