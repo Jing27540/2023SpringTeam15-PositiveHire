@@ -184,8 +184,12 @@ public class Account extends DomainObject {
         // attempt to authenticate user for changing their password
         if (login(currentPassword) != null) {
             // Update password
-            hashedPassword = generateSHA512Hash(newPassword);
+            setHashPassword(newPassword);
         }
+    }
+
+    public void setHashPassword(String newPass) throws NoSuchAlgorithmException {
+        this.hashedPassword = generateSHA512Hash(newPass);
     }
 
     /**

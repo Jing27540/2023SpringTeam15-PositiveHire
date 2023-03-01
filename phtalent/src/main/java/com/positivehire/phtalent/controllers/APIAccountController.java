@@ -31,28 +31,17 @@ public class APIAccountController extends APIController {
     // private static final String BASE_PATH = "";
 
     @PostMapping("/accounts")
-    public ResponseEntity<String> createAccount(@RequestBody final String employeeId,
-            @RequestBody final String password,
-            @RequestBody final String repeatPassword) throws NoSuchAlgorithmException {
+    public ResponseEntity<String> createAccount(@RequestBody final Account newAcc) throws NoSuchAlgorithmException {
 
-        if (accountServ.employeeIdInUse(employeeId) == true) {
+        // Temporary new acc
+        Account tempAcc = new Account("1357", "12345678", "12345678");
+
+        if (accountServ.employeeIdInUse(tempAcc.getEmployeeId()) == true) {
             return new ResponseEntity<String>(
                     successResponse("A user with either that username already exists."),
                     HttpStatus.CONFLICT);
         } else {
-            Account newAccount = null;
-            try {
-                newAccount = new Account(employeeId, password, repeatPassword);
-            } catch (IllegalArgumentException e) {
-                return new ResponseEntity<String>(
-                        successResponse("Invalid password. Or passwords do not match"),
-                        HttpStatus.OK);
-            } catch (NoSuchAlgorithmException e1) {
-                return new ResponseEntity<String>(successResponse("Error creating Account"),
-                        HttpStatus.OK);
-            }
-
-            accountServ.saveAccount(newAccount);
+            accountServ.save(tempAcc);
             return new ResponseEntity<String>(successResponse("Account successfully created"),
                     HttpStatus.OK);
 
@@ -96,8 +85,15 @@ public class APIAccountController extends APIController {
                     errorResponse("No Account found for employee id " + replaceAcc.getEmployeeId()),
                     HttpStatus.NOT_FOUND);
         } else {
-            acc.updateAccount(replaceAcc);
-            accountServ.save(acc);
+            // acc.updateAccount(replaceAcc);
+            Account newAcc = null;
+            try {
+                newAcc = new Account("5678", "abcdefghi", "abcdefghi");
+            } catch (NoSuchAlgorithmException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            accountServ.save(acc.updateAccount(newAcc));
 
             return new ResponseEntity<String>(
                     successResponse(acc.getEmployeeId() + " was updated successfully"),

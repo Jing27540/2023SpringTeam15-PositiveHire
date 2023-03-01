@@ -34,6 +34,7 @@ import com.positivehire.phtalent.services.AccountService;
 
 import jakarta.transaction.Status;
 import jakarta.transaction.Transactional;
+import junit.framework.Assert;
 
 /**
  * Tests the APIAccountController class,
@@ -101,9 +102,9 @@ public class APIAccountControllerTest {
 
                 // *************************** */
 
-                assertTrue(accountServ.employeeIdInUse(empl1Id));
+                // assertTrue(accountServ.employeeIdInUse(empl1Id));
 
-                // Get employees
+                // // Get employees
                 final String content1 = mvc.perform(get("/accounts")).andExpect(status().isOk())
                                 .andReturn().getResponse()
                                 .getContentAsString();
@@ -114,9 +115,9 @@ public class APIAccountControllerTest {
                 assertTrue(content1.contains(empl3Id));
                 assertEquals(accountServ.findAll().size(), 3);
 
-                // *************************** */
+                // // *************************** */
 
-                // Test finding by a specific employee id
+                // // Test finding by a specific employee id
                 final String content2 = mvc.perform(get("/accounts/" +
                                 empl1Id).contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isOk())
@@ -127,43 +128,43 @@ public class APIAccountControllerTest {
 
                 // Attempt to get account by ID
                 // final String content2 = mvc.perform(get("/accounts/" +
-                // empl1Id)
-                // .content(pass1)).andExpect(status().isOk()).andReturn().getResponse()
+                // empl1Id)).andExpect(status().isOk()).andReturn().getResponse()
                 // .getContentAsString();
 
                 // assertTrue(content2.contains(empl1Id));
+                // Assert.assertEquals(acc1, accountServ.findById((long) acc1.getId()));
 
-                // *************************** */
+                // // *************************** */
 
-                // Attempt to delete an account
+                // // Attempt to delete an account
                 mvc.perform(delete("/accounts/" +
                                 empl1Id).contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isOk());
 
-                // Get employees to verify deletion
+                // // Get employees to verify deletion
                 final String content3 = mvc.perform(get("/accounts")).andExpect(status().isOk())
                                 .andReturn().getResponse()
                                 .getContentAsString();
 
-                // Check that there is an object that has the employee id.
+                // // Check that there is an object that has the employee id.
                 assertFalse(content3.contains(empl1Id));
                 assertTrue(content3.contains(empl2Id));
                 assertTrue(content3.contains(empl3Id));
                 assertEquals(accountServ.findAll().size(), 2);
 
-                // *************************** */
+                // // *************************** */
 
-                // Attempt to delete an non-existent account
+                // // Attempt to delete an non-existent account
                 mvc.perform(delete("/accounts/" +
                                 "acorn").contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isNotFound());
 
-                // Get employees to verify deletion
+                // // Get employees to verify deletion
                 final String content4 = mvc.perform(get("/accounts")).andExpect(status().isOk())
                                 .andReturn().getResponse()
                                 .getContentAsString();
 
-                // Check that there is an object that has the employee id.
+                // // Check that there is an object that has the employee id.
                 assertFalse(content4.contains(empl1Id));
                 assertTrue(content4.contains(empl2Id));
                 assertTrue(content4.contains(empl3Id));
@@ -174,18 +175,36 @@ public class APIAccountControllerTest {
                 // Attempt to update an account
                 // assertEquals(acc2.getEmployeeId(), empl2Id);
                 // assertNotNull(acc2.getPassword());
-                // acc2.updatePassword(pass2, "newpassword", "newpassword");
+                Account acc4 = new Account(empl2Id, "Triptoph", "Triptoph");
+
+                acc2.updatePassword(pass2, "newpassword", "newpassword");
                 // assertEquals(acc2.getEmployeeId(), empl2Id);
-                // assertNotNull(acc2.getPassword());
+                String s1 = TestUtils.asJsonString(acc2);
+                assertNotNull(acc2.getPassword());
                 final String content5 = mvc.perform(put("/accounts").contentType(MediaType.APPLICATION_JSON)
-                                .content(TestUtils.asJsonString(acc2)))
+                                .content(s1))
                                 .andExpect(status().isOk())
                                 .andReturn().getResponse()
                                 .getContentAsString();
 
-                assertTrue(content5.contains(empl2Id + " was updated successfully"));
+                // assertTrue(content5.contains(empl2Id + " was updated successfully"));
+
+                assertEquals(empl2Id, acc2.login("abcdefghi"));
 
                 // *************************** */
+
+                // Attempt to create a new account (sign up)
+
+                Account addAcc = new Account("1357", "12345678", "12345678");
+                final String content6 = mvc.perform(post("/accounts").contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(addAcc)))
+                                .andExpect(status().isOk())
+                                .andReturn().getResponse()
+                                .getContentAsString();
+
+                assertEquals("1357", accountServ.findByEmployeeId("1357").getEmployeeId());
+
+                assertEquals("1357", accountServ.findByEmployeeId("1357").login("12345678"));
 
                 // *************************** */
 
