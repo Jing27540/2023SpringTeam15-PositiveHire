@@ -1,6 +1,7 @@
 package com.positivehire.phtalent.controllers;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -173,12 +174,7 @@ public class APIAccountControllerTest {
                 // *************************** */
 
                 // Attempt to update an account
-                // assertEquals(acc2.getEmployeeID(), empl2Id);
-                // assertNotNull(acc2.getHashedPassword());
-                Account acc4 = new Account(empl2Id, "Triptoph", "Triptoph");
-
                 acc2.updatePassword(pass2, "newpassword", "newpassword");
-                // assertEquals(acc2.getEmployeeID(), empl2Id);
                 String s1 = TestUtils.asJsonString(acc2);
                 assertNotNull(acc2.getHashedPassword());
                 final String content5 = mvc.perform(put("/accounts").contentType(MediaType.APPLICATION_JSON)
@@ -187,9 +183,9 @@ public class APIAccountControllerTest {
                                 .andReturn().getResponse()
                                 .getContentAsString();
 
-                // assertTrue(content5.contains(empl2Id + " was updated successfully"));
+                assertTrue(content5.contains(empl2Id + " was updated successfully"));
 
-                assertEquals(empl2Id, acc2.login("abcdefghi"));
+                assertEquals(empl2Id, accountServ.findByEmployeeId(acc2.getEmployeeID()).login("newpassword"));
 
                 // *************************** */
 
@@ -202,11 +198,28 @@ public class APIAccountControllerTest {
                                 .andReturn().getResponse()
                                 .getContentAsString();
 
+                assertTrue(content6.contains("Account successfully created"));
+
                 assertEquals("1357", accountServ.findByEmployeeId("1357").getEmployeeID());
 
                 assertEquals("1357", accountServ.findByEmployeeId("1357").login("12345678"));
 
                 // *************************** */
+
+                // Attempt to create a new account with a conflicting employe id
+
+                Account addDupAcc = new Account("0000", "12345678", "12345678");
+                final String content7 = mvc.perform(post("/accounts").contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(addDupAcc)))
+                                .andExpect(status().isConflict())
+                                .andReturn().getResponse()
+                                .getContentAsString();
+
+                assertTrue(content7.contains("A user with that username already exists."));
+
+                assertEquals("0000", accountServ.findByEmployeeId("0000").getEmployeeID());
+
+                assertNotSame("1357", accountServ.findByEmployeeId("1357").login("12345678"));
 
                 // *************************** */
 

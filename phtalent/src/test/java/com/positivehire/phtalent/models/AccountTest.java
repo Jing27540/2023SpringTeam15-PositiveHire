@@ -45,9 +45,9 @@ public class AccountTest {
         // assertEquals(acc2.getId(), empl2Id);
         // assertEquals(acc2.getId(), empl3Id);
 
-        assertNotSame(acc1.getPassword(), "password".getBytes());
-        assertNotSame(acc2.getPassword(), "amsterdam".getBytes());
-        assertNotSame(acc3.getPassword(), "observer".getBytes());
+        assertNotSame(acc1.getHashedPassword(), "password".getBytes());
+        assertNotSame(acc2.getHashedPassword(), "amsterdam".getBytes());
+        assertNotSame(acc3.getHashedPassword(), "observer".getBytes());
 
         // Create an account with password less than 8 characters
 
