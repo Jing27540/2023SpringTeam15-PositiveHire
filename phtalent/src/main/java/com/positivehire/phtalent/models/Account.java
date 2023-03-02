@@ -114,14 +114,14 @@ public class Account extends DomainObject {
 
         byte[] hashedPasswordResult = generateSHA512Hash(passwordAttempt);
 
-        if (Arrays.equals(hashedPasswordResult, getPassword()) == false) {
+        if (Arrays.equals(hashedPasswordResult, getHashedPassword()) == false) {
             return null;
         }
 
         // return the Employee object or something equivalent
 
         // TODO change return value to some kind of token
-        return getEmployeeId();
+        return getEmployeeID();
     }
 
     // /**
@@ -197,7 +197,7 @@ public class Account extends DomainObject {
      * 
      * @return byte array containing the hash of the password
      */
-    public byte[] getPassword() {
+    public byte[] getHashedPassword() {
         return hashedPassword;
     }
 
@@ -232,7 +232,7 @@ public class Account extends DomainObject {
         }
     }
 
-    public String getEmployeeId() {
+    public String getEmployeeID() {
         return employeeID;
     }
 
@@ -250,8 +250,8 @@ public class Account extends DomainObject {
     public String toString() {
         return "{" +
                 " id='" + getId() + "'" +
-                ", employeeID='" + getEmployeeId() + "'" +
-                ", hashedPassword='" + getPassword() + "'" +
+                ", employeeID='" + getEmployeeID() + "'" +
+                ", hashedPassword='" + getHashedPassword() + "'" +
                 "}";
     }
 }

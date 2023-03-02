@@ -36,7 +36,7 @@ public class APIAccountController extends APIController {
         // Temporary new acc
         Account tempAcc = new Account("1357", "12345678", "12345678");
 
-        if (accountServ.employeeIdInUse(tempAcc.getEmployeeId()) == true) {
+        if (accountServ.employeeIdInUse(tempAcc.getEmployeeID()) == true) {
             return new ResponseEntity<String>(
                     successResponse("A user with either that username already exists."),
                     HttpStatus.CONFLICT);
@@ -77,12 +77,12 @@ public class APIAccountController extends APIController {
     // Update password
     @PutMapping("/accounts")
     public ResponseEntity<String> updateEmployeePassword(@RequestBody Account replaceAcc) {
-        // Account acc = accountServ.findByEmployeeId(replaceAcc.getEmployeeId());
+        // Account acc = accountServ.findByEmployeeId(replaceAcc.getEmployeeID());
         Account acc = accountServ.findById((long) replaceAcc.getId());
 
         if (acc == null) {
             return new ResponseEntity<String>(
-                    errorResponse("No Account found for employee id " + replaceAcc.getEmployeeId()),
+                    errorResponse("No Account found for employee id " + replaceAcc.getEmployeeID()),
                     HttpStatus.NOT_FOUND);
         } else {
             // acc.updateAccount(replaceAcc);
@@ -96,14 +96,14 @@ public class APIAccountController extends APIController {
             accountServ.save(acc.updateAccount(newAcc));
 
             return new ResponseEntity<String>(
-                    successResponse(acc.getEmployeeId() + " was updated successfully"),
+                    successResponse(acc.getEmployeeID() + " was updated successfully"),
                     HttpStatus.OK);
         }
         // try {
         // if (acc.updatePassword(currentPassword, newPassword, repeateNewPassword)) {
         // accountServ.save(acc);
         // return new ResponseEntity<String>(
-        // successResponse(acc.getEmployeeId() + " password was updated successfully"),
+        // successResponse(acc.getEmployeeID() + " password was updated successfully"),
         // HttpStatus.OK);
         // } else {
         // return new ResponseEntity<String>(

@@ -44,7 +44,7 @@ public class AccountService extends Service<Account, Long> {
     public Account findByEmployeeId(String employeeId) {
         List<Account> allAccounts = repository.findAll();
         for (Account account : allAccounts) {
-            if (account.getEmployeeId().equals(employeeId)) {
+            if (account.getEmployeeID().equals(employeeId)) {
                 return account;
             }
         }

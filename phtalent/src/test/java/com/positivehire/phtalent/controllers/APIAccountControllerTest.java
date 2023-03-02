@@ -173,14 +173,14 @@ public class APIAccountControllerTest {
                 // *************************** */
 
                 // Attempt to update an account
-                // assertEquals(acc2.getEmployeeId(), empl2Id);
-                // assertNotNull(acc2.getPassword());
+                // assertEquals(acc2.getEmployeeID(), empl2Id);
+                // assertNotNull(acc2.getHashedPassword());
                 Account acc4 = new Account(empl2Id, "Triptoph", "Triptoph");
 
                 acc2.updatePassword(pass2, "newpassword", "newpassword");
-                // assertEquals(acc2.getEmployeeId(), empl2Id);
+                // assertEquals(acc2.getEmployeeID(), empl2Id);
                 String s1 = TestUtils.asJsonString(acc2);
-                assertNotNull(acc2.getPassword());
+                assertNotNull(acc2.getHashedPassword());
                 final String content5 = mvc.perform(put("/accounts").contentType(MediaType.APPLICATION_JSON)
                                 .content(s1))
                                 .andExpect(status().isOk())
@@ -202,7 +202,7 @@ public class APIAccountControllerTest {
                                 .andReturn().getResponse()
                                 .getContentAsString();
 
-                assertEquals("1357", accountServ.findByEmployeeId("1357").getEmployeeId());
+                assertEquals("1357", accountServ.findByEmployeeId("1357").getEmployeeID());
 
                 assertEquals("1357", accountServ.findByEmployeeId("1357").login("12345678"));
 
