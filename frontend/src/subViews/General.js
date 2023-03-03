@@ -28,10 +28,11 @@ function General(props) {
             <Row style={{ marginBottom: "15px", fontSize: '25px' }}>General Employee Information</Row>
             {
                 (employee !== undefined) ?
-                    Object.keys(employee).map((item) => {
-                        if (item !== 'id') {
+                    Object.keys(employee).map((item, index) => {
+                        if (item !== 'id' && item !== 'technicalSkills' && item !== 'peopleSkills'
+                            && item !== 'workEthic' && item !== 'certifications') {
                             return (
-                                <Row key={item} style={{ textAlign: 'left', justifyContent: "space-between" }}>
+                                <Row key={index} style={{ textAlign: 'left', justifyContent: "space-between" }}>
                                     <Col>
                                         <h6>{item[0].toUpperCase() + item.substring(1)}</h6>
                                     </Col>
@@ -40,8 +41,9 @@ function General(props) {
                                     </Col>
                                 </Row>
                             );
+                        } else {
+                            return;
                         }
-                        return;
                     })
                     :
                     undefined

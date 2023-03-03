@@ -63,9 +63,9 @@ function Skill(props) {
     const [level, setLevel] = React.useState();
     const [score, setScore] = React.useState();
 
-    const technicalSkills = props.employee.technicalSkills ? props.employee.technicalSkills : [];
-    const peopleSkills = props.employee.peopleSkills ? props.employee.peopleSkills : [];
-    const workEthic = props.employee.workEthic ? props.employee.workEthic : [];
+    let technicalSkills = props.employee.technicalSkills ? props.employee.technicalSkills : [];
+    let peopleSkills = props.employee.peopleSkills ? props.employee.peopleSkills : [];
+    let workEthic = props.employee.workEthic ? props.employee.workEthic : [];
 
     function clear() {
         setType(undefined);
@@ -86,26 +86,26 @@ function Skill(props) {
 
             // TODO: check duplicate case
             if (s.type === 'technicalSkills') {
-                technicalSkills.push(newSkill);
-                employee.technicalSkills = technicalSkills;
+                employee.technicalSkills.push(newSkill);
 
             } else if (s.type === 'peopleSkills') {
-                peopleSkills.push(newSkill);
-                employee.peopleSkills = peopleSkills;
+                employee.peopleSkills.push(newSkill);
 
             } else { //workEthic
-                workEthic.push(newSkill);
-                employee.workEthic = workEthic;
+                employee.workEthic.push(newSkill);
             }
 
             console.log(employee);
 
-            // axios.put("http://localhost:8080/employees", employee).then(response => {
-            //     console.log(employee);
-            //     console.log("update the employee");
-            // }).catch(error => {
-            //     console.log('can save employee')
-            // });
+            axios.put("http://localhost:8080/employees", employee).then(response => {
+                axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
+                    setEmployee(res.data);
+                    console.log(typeof employee);
+                    console.log("update the employee", employee);
+                }).catch(err => console.log(err));
+            }).catch(error => {
+                console.log('unable save employee')
+            });
         }
     }
 
