@@ -481,31 +481,47 @@ public class Employee extends DomainObject {
     }
 
     public void updateEmployee(final Employee e) {
-        this.setId(id);
-        this.setEmployeeName(employeeName);
-        this.setEmploymentStatusId(employmentStatusId);
-        this.setDepartmentId(departmentId);
-        this.setPerformanceScoreId(performanceScoreId);
-        this.setPayRate(payRate);
-        this.setState(state);
-        this.setZip(zip);
-        this.setDateOfHire(dateOfHire);
-        this.setDaysEmployed(daysEmployed);
-        this.setDateOfTermination(dateOfTermination);
-        this.setReasonForTermination(reasonForTermination);
-        this.setEmployementStatus(employementStatus);
-        this.setDepartment(department);
-        this.setPosition(position);
-        this.setManagerName(managerName);
-        this.setEmployeeSource(employeeSource);
-        this.setAccessRole(accessRole);
-        this.setPerformanceScore(performanceScore);
-        this.addTechSkills(e.getTechnicalSkills());
-        this.addPeopleSkills(e.getPeopleSkills());
-        this.addWorkEthic(e.getWorkEthic());
-        this.addCertifications(e.getCertifications());
+        this.setId(e.id);
+        this.setEmployeeName(e.employeeName);
+        this.setEmploymentStatusId(e.employmentStatusId);
+        this.setDepartmentId(e.departmentId);
+        this.setPerformanceScoreId(e.performanceScoreId);
+        this.setPayRate(e.payRate);
+        this.setState(e.state);
+        this.setZip(e.zip);
+        this.setDateOfHire(e.dateOfHire);
+        this.setDaysEmployed(e.daysEmployed);
+        this.setDateOfTermination(e.dateOfTermination);
+        this.setReasonForTermination(e.reasonForTermination);
+        this.setEmployementStatus(e.employementStatus);
+        this.setDepartment(e.department);
+        this.setPosition(e.position);
+        this.setManagerName(e.managerName);
+        this.setEmployeeSource(e.employeeSource);
+        this.setAccessRole(e.accessRole);
+        this.setPerformanceScore(e.performanceScore);
+
+        if(e.getTechnicalSkills().size() < this.getTechnicalSkills().size() || e.getPeopleSkills().size() < this.getPeopleSkills().size() 
+        || e.getWorkEthic().size() < this.getWorkEthic().size() || e.getCertifications().size() < this.getCertifications().size()) {
+            this.setTechnicalSkills(e.getTechnicalSkills());
+            this.setPeopleSkills(e.getPeopleSkills());
+            this.setWorkEthic(e.getWorkEthic());
+            this.setCertifications(e.getCertifications());
+        }
+        if(e.getTechnicalSkills().size() > this.getTechnicalSkills().size()) {
+            this.addTechSkills(e.getTechnicalSkills());
+        } 
+        
+        if(e.getPeopleSkills().size() > this.getPeopleSkills().size())
+            this.addPeopleSkills(e.getPeopleSkills());
+        
+        if(e.getWorkEthic().size() > this.getWorkEthic().size())
+            this.addWorkEthic(e.getWorkEthic());
+        
+        if(e.getCertifications().size() > this.getCertifications().size())
+            this.addCertifications(e.getCertifications());
        
-        this.setAnnualBonus(annualBonus);
+        this.setAnnualBonus(annualBonus );
         this.setPtoHours(ptoHours);
     }
 
