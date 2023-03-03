@@ -5,7 +5,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import EditForm from './EditForm';
+import FloatingLabel from 'react-bootstrap-floating-label';
+import Form from 'react-bootstrap/Form';
+import axios from 'axios';
 
 /**
  * Skill component to show Employee skill information.
@@ -47,11 +49,89 @@ const VerticleLine = styled.div`
     margin: 2%;
     border-left: 0.5px solid #808080;
 `;
-function Skill() {
+function Skill(props) {
+
+    const [employee, setEmployee] = React.useState(props.employee);
+
     const [mode, setMode] = React.useState();
     const [show, setShow] = React.useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const [type, setType] = React.useState();
+    const [sname, setSName] = React.useState();
+    const [level, setLevel] = React.useState();
+    const [score, setScore] = React.useState();
+
+    const technicalSkills = props.employee.technicalSkills ? props.employee.technicalSkills : [];
+    const peopleSkills = props.employee.peopleSkills ? props.employee.peopleSkills : [];
+    const workEthic = props.employee.workEthic ? props.employee.workEthic : [];
+
+    function clear() {
+        setType(undefined);
+        setSName(undefined);
+        setLevel(undefined);
+        setScore(undefined);
+    }
+
+    function saveSkill(s) {
+
+        if (type !== undefined && sname !== undefined && level !== undefined && score !== undefined) {
+            let newSkill = {
+                name: s.name,
+                level: s.level,
+                score: s.score
+            };
+            console.log(newSkill);
+
+            // TODO: check duplicate case
+            if (s.type === 'technicalSkills') {
+                technicalSkills.push(newSkill);
+                employee.technicalSkills = technicalSkills;
+
+            } else if (s.type === 'peopleSkills') {
+                peopleSkills.push(newSkill);
+                employee.peopleSkills = peopleSkills;
+
+            } else { //workEthic
+                workEthic.push(newSkill);
+                employee.workEthic = workEthic;
+            }
+
+            console.log(employee);
+
+            // axios.put("http://localhost:8080/employees", employee).then(response => {
+            //     console.log(employee);
+            //     console.log("update the employee");
+            // }).catch(error => {
+            //     console.log('can save employee')
+            // });
+        }
+    }
+
+    function deleteSkill(t, sn) {
+        if (t === 'technicalSkills') {
+            // technicalSkills.push(newSkill);
+            technicalSkills = technicalSkills.filter(skill => skill.name !== sn);
+            employee.technicalSkills = technicalSkills;
+        } else if (t === 'peopleSkills') {
+            // peopleSkills.push(newSkill);
+            employee.peopleSkills = peopleSkills;
+            peopleSkills = peopleSkills.filter(skill => skill.name !== sn);
+        } else { //workEthic
+            workEthic = workEthic.filter(skill => skill.name !== sn)
+            // workEthic.push(newSkill);
+            employee.workEthic = workEthic;
+        }
+
+        // axios.put("http://localhost:8080/employees", employee).then(response => {
+        //     console.log(employee);
+        //     console.log("update the employee");
+        // }).catch(error => {
+        //     console.log('can save employee')
+        // });
+
+    }
 
     return (
         <div>
@@ -117,18 +197,41 @@ function Skill() {
                         <Modal.Title>Skill & Certification</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <EditForm addMode={mode} />
+                        {/* <EditForm addMode={mode} employee={props.employee} mode={true} /> */}
+                        <Form.Select aria-label="Default select example" id="type" onChange={e => setType(e.target.value)} style={{ margin: '2%', width: '95%' }}>
+                            <option>Skill Type</option>
+                            <option value="technicalSkills">TechnicalSkills</option>
+                            <option value="peopleSkills">PeopleSkills</option>
+                            <option value="workEthic">WorkEthic</option>
+                        </Form.Select>
+                        {(mode) ?
+                            <FloatingLabel label="Name" id="sname" onChange={e => setSName(e.target.value)} style={{ margin: '2%' }} />
+                            :
+                            <Form.Select aria-label="Default select example" id="sname" onChange={e => setSName(e.target.value)} style={{ margin: '2%', width: '95%' }}>
+                                <option>Skill Name</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </Form.Select>
+                        }
+                        <FloatingLabel label="Level" id="level" onChange={e => setLevel(e.target.value)} style={{ margin: '2%' }} />
+                        <FloatingLabel label="Score" id="score" onChange={e => setScore(e.target.value)} style={{ margin: '2%' }} />
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary" onClick={handleClose}>
                             Close
                         </Button>
-                        <Button variant="success" onClick={handleClose}>
+                        <Button variant="success" onClick={() => { handleClose(); saveSkill({ type: type, name: sname, level: level, score: score }); clear(); }}>
                             Save
                         </Button>
-                        <Button variant="secondary" onClick={handleClose}>
-                            Remove
-                        </Button>
+                        {
+                            !mode ?
+                                <Button variant="secondary" onClick={handleClose}>
+                                    Remove
+                                </Button>
+                                :
+                                undefined
+                        }
                     </Modal.Footer>
                 </Modal>
 
