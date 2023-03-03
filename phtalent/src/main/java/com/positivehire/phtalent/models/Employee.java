@@ -4,6 +4,7 @@ package com.positivehire.phtalent.models;
 // import javax.persistence.Id;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Entity;
@@ -131,6 +132,12 @@ public class Employee extends DomainObject {
         setPerformanceScore(performanceScore);
         setAnnualBonus(annualBonus);
         setPtoHours(ptoHours);
+
+        this.technicalSkills = new ArrayList<Skill>();
+        this.peopleSkills = new ArrayList<Skill>();
+        this.workEthic = new ArrayList<Skill>();
+        this.certifications = new ArrayList<Certification>();
+
         setTechnicalSkills(technicalSkills);
         setPeopleSkills(peopleSkills);
         setWorkEthic(workEthic);
@@ -440,6 +447,39 @@ public class Employee extends DomainObject {
         this.raceDesc = raceDesc;
     }
 
+
+    public void addTechSkills(List<Skill> techSkills) {
+        
+        for(int i = 0; i < techSkills.size(); i++) {
+            if(!this.technicalSkills.contains(techSkills.get(i))) {
+                this.technicalSkills.add(techSkills.get(i));
+            }
+        }
+    }
+
+    public void addPeopleSkills(List<Skill> peopSkills) {
+        for(int i = 0; i < peopSkills.size(); i++) {
+            if(!this.peopleSkills.contains(peopSkills.get(i))) {
+                this.peopleSkills.add(peopSkills.get(i));
+            }
+        }
+    }
+
+    public void addWorkEthic(List<Skill> workEthticSkill) {
+        for(int i = 0; i < workEthticSkill.size(); i++) {
+            if(!this.workEthic.contains(workEthticSkill.get(i)))
+                this.workEthic.add(workEthticSkill.get(i));
+        }
+    }
+
+    public void addCertifications(List<Certification> certs) {
+        
+        for(int i = 0; i < certs.size(); i++) {
+            if(!this.certifications.contains(certs.get(i)))
+                this.certifications.add(certs.get(i));
+        }
+    }
+
     public void updateEmployee(final Employee e) {
         this.setId(id);
         this.setEmployeeName(employeeName);
@@ -460,10 +500,10 @@ public class Employee extends DomainObject {
         this.setEmployeeSource(employeeSource);
         this.setAccessRole(accessRole);
         this.setPerformanceScore(performanceScore);
-        this.setTechnicalSkills(technicalSkills);
-        this.setPeopleSkills(peopleSkills);
-        this.setWorkEthic(workEthic);
-        this.setCertifications(certifications);
+        this.addTechSkills(e.getTechnicalSkills());
+        this.addPeopleSkills(e.getPeopleSkills());
+        this.addWorkEthic(e.getWorkEthic());
+        this.addCertifications(e.getCertifications());
        
         this.setAnnualBonus(annualBonus);
         this.setPtoHours(ptoHours);
