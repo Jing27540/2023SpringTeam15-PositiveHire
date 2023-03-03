@@ -22,7 +22,7 @@ export default function NavBar() {
 
   const [key, setKey] = React.useState('home');
   const [mode, setMode] = React.useState('');
-  const [employee, setEmployee] = React.useState('');
+  const [employee, setEmployee] = React.useState({});
 
   // Get Employee Data
   React.useEffect(() => {

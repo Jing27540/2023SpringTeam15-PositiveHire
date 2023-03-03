@@ -3,6 +3,8 @@ import styled from "styled-components";
 import FloatingLabel from 'react-bootstrap-floating-label';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import axios from 'axios';
 
 /**
  * Create EditProfile Form for user to update their profile
@@ -16,7 +18,6 @@ const Box = styled.div`
     margin: 5px;
     overflow: auto;
 `
-
 
 const Content = styled.div`
     align-items: center;
@@ -35,95 +36,106 @@ const ButtonDiv = styled.div`
     justify-content: space-btween;
 `;
 
+const skillFields = ['Name', 'Level', 'Score'];
+const data = [{ name: "c#", level: "Expert", score: "5", }, { name: "Communication", level: "Advanced", score: "3", }];
+const certificationFields = ['Name', 'Institution', 'IssuedDate', 'CredentialID', 'Skils'];
 function EditForm(props) {
 
-    const skillFields = ['Name', 'Level', 'Score'];
-    const certificationFields = ['Name', 'Institution', 'IssuedDate', 'CredentialID', 'Skils'];
+    const [employee, setEmployee] = React.useState(props.employee);
+    const [mode, setMode] = React.useState(props.mode); // To switch between certification or skill mode
+    const [type, setType] = React.useState();
+    const [sname, setSName] = React.useState();
+    const [level, setLevel] = React.useState();
+    const [score, setScore] = React.useState();
+    
+    const [cname, setCName] = React.useState();
+    const [institution, setInstitution] = React.useState();
+    const [issuedDate, setIssuedDate] = React.useState();
+    const [credentialID, setCredentialID] = React.useState();
+    const [skils, setSkils] = React.useState();
 
-    // TODO: hard code 
-    const data = [{ name: "c#", level: "Expert", score: "5", }, { name: "Communication", level: "Advanced", score: "3", }];
-    const [skill, setSkill] = React.useState('Name');
-    const [certification, setCertification] = React.useState('Name');
-    // To switch between certification or skill mode
-    const [mode, setMode] = React.useState(false);
+    function addNewSkill() {
+        if (type !== undefined && sname !== undefined && level !== undefined && score !== undefined) {
+            let newSkill = {
+                name: sname,
+                level: level,
+                score: score
+            }
+
+            console.log(newSkill);
+        }
+    }
+
+    // React.useEffect(() => {
+    //     console.log(skill);
+    // }, [skill]);
+
+    // TODO: Testing
+
+    // const [employee, setEmployee] = React.useState({});
+
+    // Get Employee Data
+
+    // axios.get(`http://localhost:8080/employees/${1103024456}`).then(res => { setEmployee(res.data); })
+    //     .catch(err => console.log(err));
+
+    // console.log(employee);
+    // employee.technicalSkills = [];
+
+    // axios.put("http://localhost:8080/employees", employee).then(response => {
+    //     console.log(employee);
+    //     console.log("done")
+    // }).catch(error => {
+    //     console.log(employee)
+    // });
 
     return (
         <div>
             <Box>
                 <Content>
                     {
-                        mode ? // skill mode
-                            (
-                                skillFields.map((item, index) => {
-                                    if (item === 'Name' && !props.addMode) {
-                                        return (
-                                            <Form.Control
-                                                key={index}
-                                                as="select"
-                                                value={skill}
-                                                style={{ width: "390px", margin: '10px', height: '50px' }}
-                                                onChange={e => { setSkill(e.target.value); }}
-                                            >
-                                                <option value="Skill1">Skill1</option>
-                                                <option value="Skill2">Skill2</option>
-                                                <option value="Skill3">Skill3</option>
-                                            </Form.Control>
-                                        );
-                                    } else {
-                                        return (
-
-                                            <TextField key={index}>
-                                                <FloatingLabel label={item}>
-                                                    <Form.Control placeholder={item} />
-                                                </FloatingLabel>
-                                            </TextField>
-
-                                        );
-                                    }
-                                })
-                            )
-                            :
-                            (   // certification mode
-                                certificationFields.map((item, index) => {
-                                    if (item === 'Name' && !props.addMode) {
-                                        return (
-                                            <Form.Control
-                                                as="select"
-                                                key={index}
-                                                value={certification}
-                                                style={{ width: "390px", margin: '10px', height: '50px' }}
-                                                onChange={e => { setCertification(e.target.value); }}
-                                            >
-                                                <option value="Certificiation1">Certificiation1</option>
-                                                <option value="Certificiation2">Certificiation2</option>
-                                                <option value="Certificiation3">Certificiation3</option>
-                                            </Form.Control>
-                                        );
-                                    } else {
-                                        return (
-                                            <TextField key={index}>
-                                                <FloatingLabel label={item}>
-                                                    <Form.Control placeholder={item} />
-                                                </FloatingLabel>
-                                            </TextField>
-                                        );
-                                    }
-                                })
-                            )
-                    }
-                    {
                         (mode) ?
-                            <ButtonDiv>
-                                <Button variant="outline-primary" onClick={() => { setMode(false) }}>Skill Mode</Button>
-                            </ButtonDiv>
+                            <>
+                                <Form.Select aria-label="Default select example" id="type" onChange={e => setType(e.target.value)} style={{ margin: '2%', width: '95%' }}>
+                                    <option>Skill Type</option>
+                                    <option value="technicalSkills">TechnicalSkills</option>
+                                    <option value="peopleSkills">PeopleSkills</option>
+                                    <option value="workEthic">WorkEthic</option>
+                                </Form.Select>
+                                {(props.addMode) ?
+                                    <FloatingLabel label="Name" id="sname" onChange={e => setSName(e.target.value)} style={{ margin: '2%' }} />
+                                    :
+                                    <Form.Select aria-label="Default select example" id="sname" onChange={e => setSName(e.target.value)} style={{ margin: '2%', width: '95%' }}>
+                                        <option>Skill Name</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </Form.Select>
+                                }
+                                <FloatingLabel label="Level" id="level" onChange={e => setLevel(e.target.value)} style={{ margin: '2%' }} />
+                                <FloatingLabel label="Score" id="score" onChange={e => setScore(e.target.value)} style={{ margin: '2%' }} />
+                            </>
                             :
-                            <ButtonDiv>
-                                <Button variant="outline-primary" onClick={() => { setMode(true) }}>Certification Mode</Button>
-                            </ButtonDiv>
-
+                            //'Name', 'Institution', 'IssuedDate', 'CredentialID', 'Skils'
+                            <>
+                                {(props.addMode) ?
+                                    <FloatingLabel label="Name" id="cname" onChange={e => setCName(e.target.value)} style={{ margin: '2%' }} />
+                                    :
+                                    <Form.Select aria-label="Default select example" id="cname" onChange={e => setCName(e.target.value)} style={{ margin: '2%', width: '95%' }}>
+                                        <option>Certification Name</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </Form.Select>
+                                }
+                                <FloatingLabel label="Institution" id="institution" onChange={e => setInstitution(e.target.value)} style={{ margin: '2%' }} />
+                                <FloatingLabel label="IssuedDate" id="issuedDate" onChange={e => setIssuedDate(e.target.value)} style={{ margin: '2%' }} />
+                                <FloatingLabel label="CredentialID" id="credentialID" onChange={e => setCredentialID(e.target.value)} style={{ margin: '2%' }} />
+                                <FloatingLabel label="Skils" id="skils" onChange={e => setSkils(e.target.value)} style={{ margin: '2%' }} />
+                            </>
                     }
                 </Content>
-            </Box>
+            </Box >
         </div >
     );
 }
