@@ -63,9 +63,36 @@ function Skill(props) {
     const [level, setLevel] = React.useState();
     const [score, setScore] = React.useState();
 
+    const [options, setOptions] = React.useState();
+
     let technicalSkills = props.employee.technicalSkills ? props.employee.technicalSkills : [];
     let peopleSkills = props.employee.peopleSkills ? props.employee.peopleSkills : [];
     let workEthic = props.employee.workEthic ? props.employee.workEthic : [];
+
+    React.useEffect(() => {
+        if (mode === false) {
+            axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(result => {
+                setEmployee(result.data);
+            });
+            technicalSkills = employee.technicalSkills;
+            peopleSkills = employee.peopleSkills;
+            workEthic = employee.workEthic;
+        }
+    }, [mode, options, employee]);
+
+    React.useEffect(() => {
+        if (type === 'technicalSkills' && !mode) {
+            setOptions(technicalSkills);
+        }
+
+        if (type === 'peopleSkills' && !mode) {
+            setOptions(peopleSkills);
+        }
+
+        if (type === 'workEthic' && !mode) { //workEthic
+            setOptions(workEthic);
+        }
+    }, [type, employee]);
 
     function clear() {
         setType(undefined);
@@ -73,6 +100,7 @@ function Skill(props) {
         setLevel(undefined);
         setScore(undefined);
     }
+
 
     function saveSkill(s) {
 
@@ -86,51 +114,89 @@ function Skill(props) {
 
             // TODO: check duplicate case
             if (s.type === 'technicalSkills') {
-                employee.technicalSkills.push(newSkill);
-
+                if (mode) {
+                    employee.technicalSkills.push(newSkill);
+                } else {
+                    // employee.technicalSkills = [];
+                    employee.technicalSkills = technicalSkills.map(obj => {
+                        if (obj.name === newSkill.name) {
+                            obj = newSkill;
+                        }
+                        return obj;
+                    });
+                    console.log(employee.technicalSkills);
+                }
             } else if (s.type === 'peopleSkills') {
-                employee.peopleSkills.push(newSkill);
-
+                if (mode) {
+                    employee.peopleSkills.push(newSkill);
+                } else {
+                    // employee.peopleSkills = [];
+                    employee.peopleSkills = peopleSkills.map(obj => {
+                        if (obj.name === newSkill.name) {
+                            obj = newSkill;
+                        }
+                        return obj;
+                    });
+                }
             } else { //workEthic
-                employee.workEthic.push(newSkill);
+                if (mode) {
+                    employee.workEthic.push(newSkill);
+                } else {
+                    // employee.workEthic = [];
+                    employee.workEthic = workEthic.map(obj => {
+                        if (obj.name === newSkill.name) {
+                            obj = newSkill;
+                        }
+                        return obj;
+                    });
+                }
             }
-
-            console.log(employee);
-
             axios.put("http://localhost:8080/employees", employee).then(response => {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                     setEmployee(res.data);
-                    console.log(typeof employee);
-                    console.log("update the employee", employee);
+                    technicalSkills = employee.technicalSkills;
+                    peopleSkills = employee.peopleSkills;
+                    workEthic = employee.workEthic;
+                    console.log("add new skill");
                 }).catch(err => console.log(err));
             }).catch(error => {
-                console.log('unable save employee')
+                console.log('unable to add skill')
             });
         }
     }
 
     function deleteSkill(t, sn) {
-        if (t === 'technicalSkills') {
-            // technicalSkills.push(newSkill);
-            technicalSkills = technicalSkills.filter(skill => skill.name !== sn);
-            employee.technicalSkills = technicalSkills;
-        } else if (t === 'peopleSkills') {
-            // peopleSkills.push(newSkill);
-            employee.peopleSkills = peopleSkills;
-            peopleSkills = peopleSkills.filter(skill => skill.name !== sn);
-        } else { //workEthic
-            workEthic = workEthic.filter(skill => skill.name !== sn)
-            // workEthic.push(newSkill);
-            employee.workEthic = workEthic;
+
+        technicalSkills = employee.technicalSkills;
+        peopleSkills = employee.peopleSkills;
+        workEthic = employee.workEthic;
+
+        if (t !== undefined && sn !== undefined) {
+            if (t === 'technicalSkills') {
+                technicalSkills = technicalSkills.filter(skill => skill.name !== sn);
+                employee.technicalSkills = technicalSkills;
+                setOptions(technicalSkills);
+            } else if (t === 'peopleSkills') {
+                peopleSkills = peopleSkills.filter(skill => skill.name !== sn);
+                employee.peopleSkills = peopleSkills;
+                setOptions(peopleSkills);
+            } else { //workEthic
+                workEthic = workEthic.filter(skill => skill.name !== sn);
+                employee.workEthic = workEthic;
+                setOptions(workEthic);
+            }
+            axios.put("http://localhost:8080/employees", employee).then(response => {
+                axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
+                    setEmployee(res.data);
+                    technicalSkills = employee.technicalSkills;
+                    peopleSkills = employee.peopleSkills;
+                    workEthic = employee.workEthic;
+                    console.log("remove the skill");
+                }).catch(err => console.log(err));
+            }).catch(error => {
+                console.log('unable to remove skill')
+            });
         }
-
-        // axios.put("http://localhost:8080/employees", employee).then(response => {
-        //     console.log(employee);
-        //     console.log("update the employee");
-        // }).catch(error => {
-        //     console.log('can save employee')
-        // });
-
     }
 
     return (
@@ -157,10 +223,10 @@ function Skill(props) {
                     </Row>
                     <Row style={{ fontWeight: 'bold', fontSize: '18px', margin: "10px" }}>Technique Skills</Row>
                     <HorizontalLine></HorizontalLine>
-                    {TS.map((item, index) => {
+                    {employee.technicalSkills.map((item, index) => {
                         return (
                             <Row key={index} style={{ textAlign: 'left', margin: '2%' }}>
-                                <Col>{item.skill}</Col>
+                                <Col>{item.name}</Col>
                                 <Col>{item.level}</Col>
                                 <Col>{item.score}</Col>
                             </Row>
@@ -168,10 +234,10 @@ function Skill(props) {
                     })}
                     <Row style={{ fontWeight: 'bold', fontSize: '18px', margin: "10px" }}>People Skills</Row>
                     <HorizontalLine></HorizontalLine>
-                    {PS.map((item, index) => {
+                    {employee.peopleSkills.map((item, index) => {
                         return (
                             <Row key={index} style={{ textAlign: 'left', margin: '2%' }}>
-                                <Col>{item.skill}</Col>
+                                <Col>{item.name}</Col>
                                 <Col>{item.level}</Col>
                                 <Col>{item.score}</Col>
                             </Row>
@@ -179,10 +245,10 @@ function Skill(props) {
                     })}
                     <Row style={{ fontWeight: 'bold', fontSize: '18px', margin: "10px" }}>Work Ethics</Row>
                     <HorizontalLine></HorizontalLine>
-                    {WE.map((item, index) => {
+                    {employee.workEthic.map((item, index) => {
                         return (
                             <Row key={index} style={{ textAlign: 'left', margin: '2%' }}>
-                                <Col>{item.skill}</Col>
+                                <Col>{item.name}</Col>
                                 <Col>{item.level}</Col>
                                 <Col>{item.score}</Col>
                             </Row>
@@ -207,11 +273,18 @@ function Skill(props) {
                         {(mode) ?
                             <FloatingLabel label="Name" id="sname" onChange={e => setSName(e.target.value)} style={{ margin: '2%' }} />
                             :
-                            <Form.Select aria-label="Default select example" id="sname" onChange={e => setSName(e.target.value)} style={{ margin: '2%', width: '95%' }}>
+                            <Form.Select aria-label="Default select example" id="sname" onChange={e => { setSName(e.target.value); }} style={{ margin: '2%', width: '95%' }}>
                                 <option>Skill Name</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                                {
+                                    options ?
+                                        options.map((item, index) => {
+                                            return (
+                                                <option key={index} value={item.name}>{item.name}</option>
+                                            );
+                                        })
+                                        :
+                                        undefined
+                                }
                             </Form.Select>
                         }
                         <FloatingLabel label="Level" id="level" onChange={e => setLevel(e.target.value)} style={{ margin: '2%' }} />
@@ -226,7 +299,7 @@ function Skill(props) {
                         </Button>
                         {
                             !mode ?
-                                <Button variant="secondary" onClick={handleClose}>
+                                <Button variant="secondary" onClick={() => { handleClose(); deleteSkill(type, sname); clear(); }} >
                                     Remove
                                 </Button>
                                 :

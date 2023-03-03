@@ -501,8 +501,8 @@ public class Employee extends DomainObject {
         this.setAccessRole(e.accessRole);
         this.setPerformanceScore(e.performanceScore);
 
-        if(e.getTechnicalSkills().size() < this.getTechnicalSkills().size() || e.getPeopleSkills().size() < this.getPeopleSkills().size() 
-        || e.getWorkEthic().size() < this.getWorkEthic().size() || e.getCertifications().size() < this.getCertifications().size()) {
+        if(e.getTechnicalSkills().size() <= this.getTechnicalSkills().size() || e.getPeopleSkills().size() <= this.getPeopleSkills().size() 
+        || e.getWorkEthic().size() <= this.getWorkEthic().size() || e.getCertifications().size() <= this.getCertifications().size()) {
             this.setTechnicalSkills(e.getTechnicalSkills());
             this.setPeopleSkills(e.getPeopleSkills());
             this.setWorkEthic(e.getWorkEthic());
