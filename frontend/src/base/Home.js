@@ -6,11 +6,31 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from './Login';
 import ProfileCard from '../components/ProfileCard';
 import Skill from '../subViews/Skill';
+import { useState } from 'react';
 
-import { Routes, Route } from 'react-router-dom';
-
+import { Routes, Route, useNavigate } from 'react-router-dom';
 
 function Home() {
+
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const navigate = useNavigate();
+
+    // console.log(isLoggedIn);
+
+    React.useEffect(()=>{
+        if (isLoggedIn) {
+            navigate("/login");
+        } else {
+            navigate("/");
+        }
+    }, [isLoggedIn]);
+
+    function checking(flag) {
+        setIsLoggedIn(flag);
+        console.log("button press " + isLoggedIn);
+    }
+
     return (
         <>
             {/* <NavBar /> */}
@@ -18,7 +38,8 @@ function Home() {
 
             <div className="wrapper">
                 <Routes>
-                    <Route path="/login" element={<Login />}></Route>
+                    <Route path="/" element={<ProfileCard />}></Route>
+                    <Route path="/login" element={< Login handleChange={checking} />}></Route>
                     <Route path="/profile" element={<ProfileCard />}></Route>
                 </Routes>
             </div>

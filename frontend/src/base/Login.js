@@ -24,9 +24,7 @@ const SideBox = styled.div`
     float: left;
 `;
 
-function BasicLoginPage() {
-
-const [isLoggedIn, setIsLoggedIn] = useState(false);
+function BasicLoginPage(props) {
 
   return (
     <>
@@ -37,11 +35,11 @@ const [isLoggedIn, setIsLoggedIn] = useState(false);
     <Box>
       <SideBox></SideBox>
 
-      <LoginCard title="Employee"/>
+      <LoginCard title="Employee" handleChange={props.handleChange}/>
 
       <SideBox></SideBox>
 
-      <LoginCard title = "HR/DEI"/>
+      <LoginCard title = "HR/DEI" handleChange={props.handleChange}/>
     </Box>
 
     </>
