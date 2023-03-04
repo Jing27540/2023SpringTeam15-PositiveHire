@@ -157,10 +157,10 @@ function Skill(props) {
                     technicalSkills = employee.technicalSkills;
                     peopleSkills = employee.peopleSkills;
                     workEthic = employee.workEthic;
-                    console.log("add new skill");
+                    console.log("add / edit skill");
                 }).catch(err => console.log(err));
             }).catch(error => {
-                console.log('unable to add skill')
+                console.log('unable to add / edit skill');
             });
         }
     }
