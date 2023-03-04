@@ -76,20 +76,29 @@ public class APIAccountController extends APIController {
 
     // Update password
     @PutMapping("/accounts")
-    public ResponseEntity<String> updateEmployeePassword(@RequestBody Account replaceAcc) {
-        Account acc = accountServ.findByEmployeeId(replaceAcc.getEmployeeID());
+    public ResponseEntity<String> updateEmployeePassword(@RequestBody String employeeId,
+            @RequestBody String oldPassword,
+            @RequestBody String newPassword) {
+        Account acc = accountServ.findByEmployeeId(employeeId);
         // Account acc = accountServ.findById((long) replaceAcc.getId());
 
         if (acc == null) {
             return new ResponseEntity<String>(
-                    errorResponse("No Account found for employee id " + replaceAcc.getEmployeeID()),
+                    errorResponse("No Account found for employee id " + employeeId),
                     HttpStatus.NOT_FOUND);
         } else {
-            accountServ.save(acc.updateAccount(acc));
+            try {
+                acc.updatePassword(oldPassword, newPassword, newPassword);
+                accountServ.save(acc);
 
-            return new ResponseEntity<String>(
-                    successResponse(acc.getEmployeeID() + " was updated successfully"),
-                    HttpStatus.OK);
+                return new ResponseEntity<String>(
+                        successResponse(acc.getEmployeeID() + " was updated successfully"),
+                        HttpStatus.OK);
+            } catch (NoSuchAlgorithmException e) {
+                return new ResponseEntity<String>(
+                        errorResponse("No Account found for employee id " + employeeId),
+                        HttpStatus.NOT_FOUND);
+            }
         }
         // try {
         // if (acc.updatePassword(currentPassword, newPassword, repeateNewPassword)) {

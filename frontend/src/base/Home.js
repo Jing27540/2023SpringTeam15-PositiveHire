@@ -17,7 +17,6 @@ function Home() {
             {/* <Login/> */}
 
             <div className="wrapper">
-                <h1>Ayo</h1>
                 <Routes>
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="/profile" element={<ProfileCard />}></Route>

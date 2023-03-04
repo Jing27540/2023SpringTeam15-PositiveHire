@@ -38,14 +38,4 @@ let loginToAccount = (accountData, array) => {
     });
 }
 
-// let getEmployeeById = (employee, employeeNum) => {
-//     axios.get(`http://localhost:8080/employees/${employeeNum}`).then(result => {
-//         employee.push(result.data);
-//     });
-// };
-
-// let deleteEmployeeById = (employeeNum) => {
-//     axios.delete(`http://localhost:8080/employees/${employeeNum}`);
-// };
-
-// export { getAllEmployees, getEmployeeById, deleteEmployeeById, saveEmployee }
+export default {getAllAccounts, createAccount, deleteAccount, loginToAccount}
