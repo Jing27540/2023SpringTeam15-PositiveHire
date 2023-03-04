@@ -53,6 +53,9 @@ function Skill(props) {
 
     const [employee, setEmployee] = React.useState(props.employee);
 
+    // TODO:
+    const [message, setMessage] = React.useState('Hello testing');
+
     const [mode, setMode] = React.useState();
     const [show, setShow] = React.useState(false);
     const handleClose = () => setShow(false);
@@ -104,6 +107,8 @@ function Skill(props) {
 
     function saveSkill(s) {
 
+        // TODO: not allow duplicate name of skill to edit/add
+
         if (type !== undefined && sname !== undefined && level !== undefined && score !== undefined) {
             let newSkill = {
                 name: s.name,
@@ -150,7 +155,11 @@ function Skill(props) {
                         return obj;
                     });
                 }
+
+
             }
+
+            // TODO:  handle to message of show
             axios.put("http://localhost:8080/employees", employee).then(response => {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                     setEmployee(res.data);
@@ -291,15 +300,16 @@ function Skill(props) {
                         <FloatingLabel label="Score" id="score" onChange={e => setScore(e.target.value)} style={{ margin: '2%' }} />
                     </Modal.Body>
                     <Modal.Footer>
+                        {message}
                         <Button variant="primary" onClick={handleClose}>
                             Close
                         </Button>
-                        <Button variant="success" onClick={() => { handleClose(); saveSkill({ type: type, name: sname, level: level, score: score }); clear(); }}>
+                        <Button variant="success" onClick={() => { saveSkill({ type: type, name: sname, level: level, score: score }); clear(); }}>
                             Save
                         </Button>
                         {
                             !mode ?
-                                <Button variant="secondary" onClick={() => { handleClose(); deleteSkill(type, sname); clear(); }} >
+                                <Button variant="secondary" onClick={() => { deleteSkill(type, sname); clear(); }} >
                                     Remove
                                 </Button>
                                 :
@@ -307,7 +317,6 @@ function Skill(props) {
                         }
                     </Modal.Footer>
                 </Modal>
-
             </Box>
         </div>
 
