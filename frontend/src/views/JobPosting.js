@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import VerticalBar from "../components/VerticalBar";
 import CreateJobPosting from "../subViews/CreateJobPosting";
@@ -27,12 +28,20 @@ const RightBox = styled.div`
 
 function JobPosting() {
 
+    const [mode, setMode] = React.useState();
+
+    console.log(mode);
+
     return (
 
         <Box>
-            <LeftBox><VerticalBar /></LeftBox>
+            <LeftBox><VerticalBar setMode={setMode} /></LeftBox>
             <RightBox>
-                <CreateJobPosting />
+                {mode === 'Create' ?
+                    <CreateJobPosting />
+                    :
+                    undefined
+                }
             </RightBox>
         </Box>
     );

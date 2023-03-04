@@ -12,7 +12,7 @@ import Form from 'react-bootstrap/Form';
 function CreateJobPosting() {
 
     const titles = ['JobTitle', 'Requirements', 'Availabliltiy', 'Process']
-    const [color, setColor] = React.useState("secondary");
+    const [colors, setColors] = React.useState(["warning", "secondary", "secondary", "secondary"]);
     const [mode, setMode] = React.useState('JobTitle');
 
     // Job Title
@@ -36,13 +36,13 @@ function CreateJobPosting() {
 
     console.log(process);
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
 
         let temp = process;
 
         for (let i = 0; i < processData.length; i++) {
             let item = processData[i];
-            if(item)  {
+            if (item) {
                 temp[i] = item;
             }
         }
@@ -52,12 +52,28 @@ function CreateJobPosting() {
     function handleContinueClick() {
         if (mode === titles[0]) {
             setMode(titles[1]);
+            //setColors(["secondary", "warning", "secondary", "secondary"]);
         } else if (mode === titles[1]) {
             setMode(titles[2]);
+            // setColors(["secondary", "secondary", "warning", "secondary"]);
         } else if (mode === titles[2]) {
             setMode(titles[3]);
+            // setColors(["secondary", "secondary", "secondary", "warning"]);
         }
     }
+
+    React.useEffect(() => {
+        if (mode === titles[0]) {
+            setColors(["warning", "secondary", "secondary", "secondary"]);
+        } else if (mode === titles[1]) {
+            setColors(["secondary", "warning", "secondary", "secondary"]);
+        } else if (mode === titles[2]) {
+            setColors(["secondary", "secondary", "warning", "secondary"]);
+        } else if (mode === titles[3]) {
+            setColors(["secondary", "secondary", "secondary", "warning"]);
+        }
+    }, [mode]);
+
 
     function handleSaveClick() {
         // update value
@@ -73,9 +89,9 @@ function CreateJobPosting() {
                         return (
                             <Col key={index}>
                                 <Button
-                                    variant={color}
+                                    variant={colors[index]}
                                     style={{ width: '200px' }}
-                                    onClick={() => { setMode(item) }}>
+                                    onClick={() => { setMode(item); }}>
                                     {item}
                                 </Button>
                             </Col>
