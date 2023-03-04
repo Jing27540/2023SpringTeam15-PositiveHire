@@ -1,5 +1,6 @@
 import Card from 'react-bootstrap/Card';
 import styled from "styled-components";
+import { getEmployeeById } from '../clients/employee';
 //import Stack from 'react-bootstrap/Stack';
 
 const Box = styled.div`
@@ -15,37 +16,60 @@ const Stack = styled.div`
 const SideBox = styled.div`
     float: left;
 `;
+let currEmployee = [];
+
+getEmployeeById(currEmployee, 1103024456);
+console.log(currEmployee);
+
+
+//let hist = "Employed for" + (currEmployee[0].daysEmployed / 365) + "years, " + (currEmployee[0].daysEmployed / 30) + "months";
+
+
 
 function ProfileCard() {
+    let hist = "Employed for ";
+    if(Math.round(currEmployee[0].daysEmployed / 365) >= 2) {
+        hist += Math.round(currEmployee[0].daysEmployed / 365) + " years ";
+    } else {
+        hist += Math.round(currEmployee[0].daysEmployed / 365) + " year "
+    }
+    if(Math.round((currEmployee[0].daysEmployed % 365) / 30) >= 2) {
+        hist += Math.round((currEmployee[0].daysEmployed % 365) / 30) + " months"
+    } else {
+        hist += Math.round((currEmployee[0].daysEmployed % 365) / 30) + " month";
+    }
+
+    let dept = " " + currEmployee[0].department;
+
   return (
     <Card style={{ width: '100%', height: '100%' }} className="col-md-5 mx-auto">
       <Card.Img variant="top" src="../../public/PHBalancedLogo.png" />
-      <Card.Body>
-        <h3>Sharon Owens</h3>
+      <Card.Body style={{float: 'right'}}>
+        <h3>{currEmployee[0]['employeeName']}</h3>
             <Box>
                 <Stack style={{justifyContent: 'center', alignItems: 'center'}}>
                 <Stack gap={2}>
-                    <h5>Java Software Engineer</h5>
-                    <div>Employed for 2 years, 1 month</div>
+                    <h5>{currEmployee[0].position}</h5>
+                    <div>{hist}</div>
                 </Stack>
                 <Stack style={{justifyContent: 'ceneter', alignItems: 'ceneter'}}>
                 <Stack direction="horizontal" gap={2}>
                     <SideBox>
                         <div>Department</div>
                     </SideBox>
-                    <div>Engineering</div>
+                    <div>{dept}</div>
                 </Stack>
                 <Stack direction="horizontal" gap={2}>
                     <SideBox>
                         <div>Office Location</div>
                     </SideBox>
-                        <div>Bay Area</div>
+                        <div>{currEmployee[0].state}</div>
                 </Stack>
                 <Stack direction="horizontal" gap={2}>
                     <SideBox>
                         <div>Reports to</div>
                     </SideBox>
-                    <div>Mickey Shao</div>
+                    <div>{currEmployee[0].managerName}</div>
                 </Stack>
                 </Stack>
                 </Stack>

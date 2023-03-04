@@ -37,21 +37,21 @@ const EducationFields = ['Institution', 'Address', 'StartDate', 'EndDate'];
 
 function EditProfile() {
 
-    console.log('Testing')
-    let employees = [];
-    getAllEmployees(employees);
-    console.log('checking get all employees', employees);
+    // console.log('Testing')
+    // let employees = [];
+    // getAllEmployees(employees);
+    // console.log('checking get all employees', employees);
 
-    let employee = [];
-    getEmployeeById(employee, 54645294);
-    console.log(employee);
+    // let employee = [];
+    // getEmployeeById(employee, 54645294);
+    // console.log(employee);
 
     // TODO: it works
     // deleteEmployeeById(54645294);
 
-    employees = [];
-    getAllEmployees(employees);
-    console.log('checking delete employee by id', employees);
+    // employees = [];
+    // getAllEmployees(employees);
+    // console.log('checking delete employee by id', employees);
 
 
     // TODO: hard code 
@@ -129,12 +129,12 @@ function EditProfile() {
                 </Content>
                 <Content>
                     <TextField><h6>Upload Resume</h6></TextField>
-                    <div style={{marginLeft: '10%' }}>
+                    <div style={{ marginLeft: '10%' }}>
                         <Row className="justify-content-md-center">
                             <Col>
                                 <div >
                                     <h1><GrDocumentCsv /></h1>
-                                    <p class="text-black">Drag and drop a CSV file here, or click here to select files</p>
+                                    <p className="text-black">Drag and drop a CSV file here, or click here to select files</p>
                                 </div>
                             </Col>
                         </Row>

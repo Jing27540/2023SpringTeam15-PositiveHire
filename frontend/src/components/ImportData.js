@@ -357,10 +357,10 @@ function ImportData() {
         performanceScore: null,
         annualBonus: null,
         ptoHours: 0.0,
-        technicalSkills: null,
-        peopleSkills: null,
-        workEthic: null,
-        certifications: null
+        technicalSkills: [],
+        peopleSkills: [],
+        workEthic: [],
+        certifications: []
       }
 
       // for every column in the matching array, get the matching field in the csv array from the employee
@@ -394,7 +394,7 @@ function ImportData() {
             {
               loadingDeleteAll ? (
                 <div className="spinner-wrapper d-flex flex-column align-items-center justify-content-center">
-                  <div class="row">
+                  <div className="row">
                     <Spinner className="spinner-border-big" animation="border" role="status">
                       <span className="visually-hidden">Loading...</span>
                     </Spinner>
@@ -402,20 +402,20 @@ function ImportData() {
                 <br />
                 {showConfirmation &&
                   <> 
-                    <div class="row">
+                    <div className="row">
                       <font color="#FFFFFF">Finished Deleting</font>
                     </div>
-                    <div class="row">
+                    <div className="row">
                       <font color="#FFFFFF">Redirecting to the dashboard</font>
                     </div>
                   </>
                 }
                 {!showConfirmation &&
                   <> 
-                    <div class="row">
+                    <div className="row">
                       <font color="#FFFFFF">Deleting Data</font>
                     </div>
-                    <div class="row">
+                    <div className="row">
                       <font color="#FFFFFF">Please wait</font>
                     </div>
                   </>
@@ -424,29 +424,21 @@ function ImportData() {
               ):(null)
             }
             <h3>
-              <div class="d-flex align-items-center">
+              <div className="d-flex align-items-center">
                 <span>
                   <font>Data</font>
                 </span>
-              <span class="ms-auto"></span>
+              <span className="ms-auto"></span>
               {
                 employees.length > 0 ? (
                   <>
-                    <Button class="btn btn-space" variant="danger" size="sm" onClick={() => setShowDeleteAll(true)}>Delete All</Button>
+                    <Button className="btn btn-space" variant="danger" size="sm" onClick={() => setShowDeleteAll(true)}>Delete All</Button>
                   </>
                 ):(null)
               }
               </div>
             </h3>
             <hr />
-            <BootstrapTable
-              bootstrap4
-              keyField="id"
-              data={employees}
-              columns={columns}
-              pagination={paginationFactory(options)}
-              noDataIndication="There aren't any employees in the system"
-            />
           </div>
         ) : (
           <>
@@ -455,15 +447,15 @@ function ImportData() {
                 <>
                 <div style={{paddingTop: "1em"}}>
                   <h3>
-                    <div class="d-flex align-items-center">
+                    <div className="d-flex align-items-center">
                       <span>
                         <font color="#EE786C">Welocme to PH Balanced</font>
                       </span>
-                      <span class="ms-auto"></span>
+                      <span className="ms-auto"></span>
                         {
                           employees.length > 0 ? (
                             <>
-                              <Button class="btn btn-space" variant="danger" size="sm" onClick={() => setShowDeleteAll(true)}>Delete All</Button>
+                              <Button className="btn btn-space" variant="danger" size="sm" onClick={() => setShowDeleteAll(true)}>Delete All</Button>
                             </>
                           ):(null)
                         }
@@ -477,7 +469,7 @@ function ImportData() {
                     <div {...getRootProps({style})}>
                       <input {...getInputProps()} />
                       <h1><GrDocumentCsv /></h1>
-                      <p class="text-black">Drag and drop a CSV file here, or click here to select files</p>
+                      <p className="text-black">Drag and drop a CSV file here, or click here to select files</p>
                     </div>
                   </Col>
                 </Row>
@@ -491,12 +483,12 @@ function ImportData() {
                     <h5>
                       <Card>
                         <Card.Body>
-                        <div class="d-flex align-items-center">
+                        <div className="d-flex align-items-center">
                           <span>
                             <font>{file.name}</font>
                           </span>
-                          <span class="ms-auto"></span>
-                          <Button class="btn btn-space" variant="danger" size="sm" onClick={() => window.location.reload(false)}>Delete</Button>
+                          <span className="ms-auto"></span>
+                          <Button className="btn btn-space" variant="danger" size="sm" onClick={() => window.location.reload(false)}>Delete</Button>
                         </div>
                         </Card.Body>
                       </Card>
@@ -520,13 +512,13 @@ function ImportData() {
                                 <tbody>
                                   {
                                     csvColumns.map((header, idx) => {
-                                      return  <tr>
+                                      return  <tr key={idx}>
                                                 <td>{header}</td>
                                                 <td>
                                                   <Form.Select onChange={(e) => handleColumnSelect(e, idx)}>
                                                     {
-                                                      databaseColumns.map(col => {
-                                                        return <option value={col}>{col}</option>
+                                                      databaseColumns.map((col, index) => {
+                                                        return <option value={col} key={index}>{col}</option>
                                                       })
                                                     }
                                                   </Form.Select>
@@ -542,7 +534,7 @@ function ImportData() {
                           {
                             loadingUpload ? (
                               <div className="spinner-wrapper d-flex flex-column align-items-center justify-content-center">
-                                <div class="row">
+                                <div className="row">
                                   <Spinner className="spinner-border-big" animation="border" role="status">
                                     <span className="visually-hidden">Loading...</span>
                                   </Spinner>
@@ -550,20 +542,20 @@ function ImportData() {
                                 <br />
                                 {showUploadConfirmation &&
                                   <> 
-                                    <div class="row">
+                                    <div className="row">
                                       <font color="#FFFFFF">Finished Uploading</font>
                                     </div>
-                                    <div class="row">
+                                    <div className="row">
                                       <font color="#FFFFFF">Redirecting to the dashboard</font>
                                     </div>
                                   </>
                                 }
                                 {!showUploadConfirmation &&
                                   <> 
-                                    <div class="row">
+                                    <div className="row">
                                       <font color="#FFFFFF">Uploading Data</font>
                                     </div>
-                                    <div class="row">
+                                    <div className="row">
                                       <font color="#FFFFFF">Please wait</font>
                                     </div>
                                   </>

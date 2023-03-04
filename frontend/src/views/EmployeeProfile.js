@@ -58,7 +58,6 @@ const CDPTITLE = ['Goals', 'Training Resources', 'Statistics'];
 function EmployeeProfile(props) {
 
     const [employee, setEmployee] = React.useState(props.employee);
-    console.log(employee);
 
     // TODO: it use to testing edit editprofile.
     const [show, setShow] = React.useState(false);
@@ -81,14 +80,13 @@ function EmployeeProfile(props) {
         }
         else if (mode === 'Skills & Certifications') {
             if (tool === 'Certifications') {
-                return (<Certification />);
+                return (<Certification employee={employee} />);
             } else {
-                return (<Skill />);
+                return (<Skill employee={employee} />);
             }
         } else {
             return undefined;
         }
-
     }
 
     return (
