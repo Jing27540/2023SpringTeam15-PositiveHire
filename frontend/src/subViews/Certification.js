@@ -74,14 +74,17 @@ function Certification(props) {
         setSkils(undefined);
     }
 
-    function saveCertification(certification) {
+    function saveCertification(c) {
         if (cname !== undefined && institution !== undefined && issuedDate !== undefined && credentialID !== undefined && skils !== undefined) {
+            
+            // TODO: format the issuedDate before save it to the newCertificaiton.issuedDate
+
             let newCertification = {
-                name: cname,
-                institution: institution,
-                issuedDate: issuedDate,
-                credentialID: credentialID,
-                skils: skils,
+                name: c.name,
+                institution: c.institution,
+                issuedDate: c.issuedDate,
+                credentialID: c.credentialID,
+                skils: c.skils,
             };
 
             if (mode) {
@@ -147,20 +150,20 @@ function Certification(props) {
                         <Col>Certifications</Col>
                     </Row>
 
-                    {CF.map((item, index) => {
+                    {certifications.map((item, index) => {
                         return (
                             <div key={index}>
                                 <Row key={item.name + index} style={{ textAlign: 'left', margin: '4%' }}>
                                     {item.name}
                                 </Row>
                                 <Row key={item.Institution + index} style={{ textAlign: 'left', margin: '4%' }}>
-                                    {item.Institution}
+                                    {item.institution}
                                 </Row>
                                 <Row key={item.IssuedDate + index} style={{ textAlign: 'left', margin: '4%' }}>
-                                    {item.IssuedDate}
+                                    {item.issuedDate}
                                 </Row>
                                 <Row key={item.id + index} style={{ textAlign: 'left', margin: '4%' }}>
-                                    {item.id}
+                                    {item.credentialID}
                                 </Row>
                                 <HorizontalLine></HorizontalLine>
                             </div>
