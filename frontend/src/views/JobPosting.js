@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import VerticalBar from "../components/VerticalBar";
+import CreateJobPosting from "../subViews/CreateJobPosting";
 /**
  * 
  * @author Jing Huang
@@ -30,7 +31,9 @@ function JobPosting() {
 
         <Box>
             <LeftBox><VerticalBar /></LeftBox>
-            <RightBox>Content</RightBox>
+            <RightBox>
+                <CreateJobPosting />
+            </RightBox>
         </Box>
     );
 
