@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import axios from 'axios';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -15,10 +16,19 @@ import JobPosting from '../views/JobPosting';
  */
 
 const TITLE = ['Positions', 'Talent Pipeline', 'Performance Reviews', 'Development Plans', 'Resources', 'Reports'];
+// TODO: hard code
+const EMPLOYEENUM = 1103024456;
 export default function NavBar() {
 
   const [key, setKey] = React.useState('home');
   const [mode, setMode] = React.useState('');
+  const [employee, setEmployee] = React.useState({});
+
+  // Get Employee Data
+  React.useEffect(() => {
+    axios.get(`http://localhost:8080/employees/${EMPLOYEENUM}`).then(res => { setEmployee(res.data); })
+      .catch(err => console.log(err));
+  }, []);
 
   return (
     <>
@@ -60,7 +70,7 @@ export default function NavBar() {
       </Navbar>
       {
         key === 'profile' ?
-          <EmployeeProfile />
+          <EmployeeProfile employee={employee} />
           :
           key === 'importData' ?
             <ImportData />

@@ -170,7 +170,7 @@ class APIEmployeeControllerTest {
         employees = employeeServ.findAll();
         Assert.assertEquals( 3, employees.size() );
 
-        Assert.assertEquals( employee2.getManagerName(),
+        Assert.assertEquals( "Johnny Dep",
                 employeeServ.findById( (long) employee2.getId() ).getManagerName() );
         // System.out.println(employees.toString());
 
