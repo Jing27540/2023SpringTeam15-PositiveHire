@@ -5,6 +5,8 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import axios from "axios";
+import FloatingLabel from 'react-bootstrap-floating-label';
+
 
 /**
  * This view will show the form allow user to create a job posting
@@ -12,7 +14,7 @@ import axios from "axios";
  */
 function CreateJobPosting() {
 
-    const [jobPosting, setJobPosting] = React.useState(); 
+    const [jobPosting, setJobPosting] = React.useState();
     const titles = ['JobTitle', 'Requirements', 'Availabliltiy', 'Process']
     const [colors, setColors] = React.useState(["warning", "secondary", "secondary", "secondary"]);
     const [mode, setMode] = React.useState('JobTitle');
@@ -30,7 +32,9 @@ function CreateJobPosting() {
     const [otherRequirements, setOtherRequirements] = React.useState();
     // Availability
     const [availablePositions, setAvailablePositions] = React.useState();
-    const [location, setLocation] = React.useState();
+    const [location, setLocation] = React.useState({ state: '', city: '', country: '' });
+    const [locationsList, setLocationsList] = React.useState([]);
+
     const [meetingType, setMeetingType] = React.useState();
     const [meetingNotes, setMeetingNotes] = React.useState();
     // Process
@@ -40,9 +44,9 @@ function CreateJobPosting() {
     // console.log(jobTitle);
     // console.log(jobDescription);
     axios.get(`http://localhost:8080/jobpostings`)
-    .then(result => {
-        setJobPosting(result.data);
-    });
+        .then(result => {
+            setJobPosting(result.data);
+        });
 
     console.log(jobPosting);
 
@@ -84,28 +88,32 @@ function CreateJobPosting() {
         }
     }, [mode]);
 
+    function addNewLocation() {
+        locationsList.push(location);
+    }
 
     function handleSaveClick() {
         // update value as user input
         // input validation checking
-        let tmpLocation = [];
-        tmpLocation.push(location);
+        //let tmpLocation = [];
+        //tmpLocation.push(location);
         let newJobPosting = {
-        // "jobNumber": jobNumber,
-        "jobTitle":jobTitle,
-        "salary":salary,
-        "department":department,
-        "skillRequirements":[],
-        "certificationRequirements":[],
-        "otherRequirements":null,
-        "jobDescription":jobDescription,
-        "availablePositions":availablePositions,
-        "location":tmpLocation,
-        "meetingType":meetingType,
-        "meetingNotes":meetingNotes,
-        "process":null,
-        "applyLink":applyLink,
-        "listofApplicants":[]};
+            // "jobNumber": jobNumber,
+            "jobTitle": jobTitle,
+            "salary": salary,
+            "department": department,
+            "skillRequirements": [],
+            "certificationRequirements": [],
+            "otherRequirements": null,
+            "jobDescription": jobDescription,
+            "availablePositions": availablePositions,
+            "location": locationsList,
+            "meetingType": meetingType,
+            "meetingNotes": meetingNotes,
+            "process": null,
+            "applyLink": applyLink,
+            "listofApplicants": []
+        };
         console.log(newJobPosting);
         // call api
         axios.post("http://localhost:8080/jobpostings", newJobPosting).then(response => {
@@ -138,10 +146,11 @@ function CreateJobPosting() {
                     mode === titles[0] ?
                         <JobTitle
                             setjobTitle={setjobTitle}
-                            setDepartment={setDepartment}
+                            addLocation setDepartment={setDepartment}
                             setJobDescription={setJobDescription}
                             setSalary={setSalary}
                             setApplyLink={setApplyLink}
+
                         />
                         :
                         mode === titles[1] ?
@@ -155,6 +164,7 @@ function CreateJobPosting() {
                                 <Availability
                                     setAvailablePositions={setAvailablePositions}
                                     setLocation={setLocation}
+                                    addNewLocation={addNewLocation}
                                     setMeetingType={setMeetingType}
                                     setMeetingNotes={setMeetingNotes}
                                 />
@@ -236,10 +246,27 @@ const Availability = (props) => {
                 <Form.Label column sm={2}> # of Positions Available </Form.Label>
                 <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setAvailablePositions(e.target.value)} /> </Col>
             </Form.Group>
+
+
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Location </Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setLocation(e.target.value)} /> </Col>
+                <Col sm={2}>
+                    <FloatingLabel label="State" id="state" onChange={() => { }} style={{  marginRight: '10px' }} />
+                </Col>
+                <Col sm={2}>
+                    <FloatingLabel label="Country" id="country" onChange={() => { }} style={{  marginRight: '10px'  }} />
+                </Col>
+                <Col sm={2}>
+                    <FloatingLabel label="City" id="city" onChange={() => { }} style={{  marginRight: '10px'  }} />
+                </Col>
             </Form.Group>
+
+
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}> Locations </Form.Label>
+                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." /> </Col>
+            </Form.Group>
+            
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Meeting Type</Form.Label>
                 <Col sm={7}>
