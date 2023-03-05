@@ -12,6 +12,7 @@ import axios from 'axios';
 /**
  * Skill component to show Employee skill information.
  * @author Jing Huang
+ * @author Biniyam
  */
 
 // TODO: Dummy Data
@@ -53,13 +54,12 @@ function Skill(props) {
 
     const [employee, setEmployee] = React.useState(props.employee);
 
-    // TODO:
     const [message, setMessage] = React.useState('');
 
     const [mode, setMode] = React.useState();
     const [show, setShow] = React.useState(false);
-    const handleClose = () => {setShow(false); setMessage('')};
-   
+    const handleClose = () => { setShow(false); setMessage('') };
+
     const handleShow = () => setShow(true);
 
     const [type, setType] = React.useState();
@@ -108,7 +108,6 @@ function Skill(props) {
 
     function saveSkill(s) {
 
-        // TODO: not allow duplicate name of skill to edit/add
         let exists = false;
         if (type !== undefined && sname !== undefined && level !== undefined && score !== undefined) {
             let newSkill = {
@@ -118,16 +117,15 @@ function Skill(props) {
             };
             console.log(newSkill);
 
-            // TODO: check duplicate case
             if (s.type === 'technicalSkills') {
                 if (mode) {
-                    
+
                     employee.technicalSkills.forEach(element => {
-                        if(element.name === newSkill.name) {
+                        if (element.name === newSkill.name) {
                             exists = true;
-                        }    
-                });
-                    if(exists) {
+                        }
+                    });
+                    if (exists) {
                         setMessage("Skill Already Exists");
                     } else {
                         employee.technicalSkills.push(newSkill);
@@ -140,18 +138,17 @@ function Skill(props) {
                         }
                         return obj;
                     });
-                    console.log(employee.technicalSkills);
                 }
             } else if (s.type === 'peopleSkills') {
                 if (mode) {
                     let exists = false;
 
                     employee.peopleSkills.forEach(element => {
-                        if(element.name === newSkill.name) {
+                        if (element.name === newSkill.name) {
                             exists = true;
-                        }    
+                        }
                     });
-                    if(exists) {
+                    if (exists) {
                         setMessage("Skill Already Exists");
                     } else {
                         employee.peopleSkills.push(newSkill);
@@ -170,11 +167,11 @@ function Skill(props) {
                     let exists = false;
 
                     employee.workEthic.forEach(element => {
-                        if(element.name === newSkill.name) {
+                        if (element.name === newSkill.name) {
                             exists = true;
-                        }    
+                        }
                     });
-                    if(exists) {
+                    if (exists) {
                         setMessage("Skill Already Exists");
                     } else {
                         employee.workEthic.push(newSkill);
@@ -191,9 +188,8 @@ function Skill(props) {
 
 
             }
-            
-            // TODO:  handle to message of show
-            if(!exists) {
+
+            if (!exists) {
                 axios.put("http://localhost:8080/employees", employee).then(response => {
                     axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                         setEmployee(res.data);
@@ -205,11 +201,11 @@ function Skill(props) {
                     }).catch(err => console.log(err));
                 }).catch(error => {
                     setMessage("Error saving");
-                    console.log('unable to add / edit skill');
+                    console.log('unable to add / edit skill', employee);
                 });
             }
         }
-    
+
     }
 
     function deleteSkill(t, sn) {
@@ -247,9 +243,9 @@ function Skill(props) {
     }
 
     return (
-        <div>
-            <Box>
-                <Container style={{ width: "60%", justifyContent: "space-between" }}>
+        <Container>
+            <Col sm={8}>
+                <Container style={{ marginTop: '2%', justifyContent: "space-between" }}>
                     <Row style={{ textAlign: 'left' }}>
                         {/* <Col style={{ fontSize: '15px', float: 'left' }}>Updated: Dec 30, 2022</Col> */}
                         <Col>
@@ -302,64 +298,61 @@ function Skill(props) {
                         );
                     })}
                 </Container>
+            </Col>
+            <Col>
                 <VerticleLine></VerticleLine>
-                <Container>
-                </Container>
-                <Modal show={show} onHide={handleClose} animation={false}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Skill & Certification</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        {/* <EditForm addMode={mode} employee={props.employee} mode={true} /> */}
-                        <Form.Select aria-label="Default select example" id="type" onChange={e => setType(e.target.value)} style={{ margin: '2%', width: '95%' }}>
-                            <option>Skill Type</option>
-                            <option value="technicalSkills">TechnicalSkills</option>
-                            <option value="peopleSkills">PeopleSkills</option>
-                            <option value="workEthic">WorkEthic</option>
+            </Col>
+            <Modal show={show} onHide={handleClose} animation={false}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Skill & Certification</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {/* <EditForm addMode={mode} employee={props.employee} mode={true} /> */}
+                    <Form.Select aria-label="Default select example" id="type" onChange={e => setType(e.target.value)} style={{ margin: '2%', width: '95%' }}>
+                        <option>Skill Type</option>
+                        <option value="technicalSkills">TechnicalSkills</option>
+                        <option value="peopleSkills">PeopleSkills</option>
+                        <option value="workEthic">WorkEthic</option>
+                    </Form.Select>
+                    {(mode) ?
+                        <FloatingLabel label="Name" id="sname" onChange={e => setSName(e.target.value)} style={{ margin: '2%' }} />
+                        :
+                        <Form.Select aria-label="Default select example" id="sname" onChange={e => { setSName(e.target.value); }} style={{ margin: '2%', width: '95%' }}>
+                            <option>Skill Name</option>
+                            {
+                                options ?
+                                    options.map((item, index) => {
+                                        return (
+                                            <option key={index} value={item.name}>{item.name}</option>
+                                        );
+                                    })
+                                    :
+                                    undefined
+                            }
                         </Form.Select>
-                        {(mode) ?
-                            <FloatingLabel label="Name" id="sname" onChange={e => setSName(e.target.value)} style={{ margin: '2%' }} />
+                    }
+                    <FloatingLabel label="Level" id="level" onChange={e => setLevel(e.target.value)} style={{ margin: '2%' }} />
+                    <FloatingLabel label="Score" id="score" onChange={e => setScore(e.target.value)} style={{ margin: '2%' }} />
+                    <div style={{ justifyContent: 'left', alignItems: 'left', fontSize: '15px', margin: "10px", color: 'red' }}>{message}</div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="success" onClick={() => { saveSkill({ type: type, name: sname, level: level, score: score }); clear(); }}>
+                        Save
+                    </Button>
+                    {
+                        !mode ?
+                            <Button variant="secondary" onClick={() => { deleteSkill(type, sname); clear(); }} >
+                                Remove
+                            </Button>
                             :
-                            <Form.Select aria-label="Default select example" id="sname" onChange={e => { setSName(e.target.value); }} style={{ margin: '2%', width: '95%' }}>
-                                <option>Skill Name</option>
-                                {
-                                    options ?
-                                        options.map((item, index) => {
-                                            return (
-                                                <option key={index} value={item.name}>{item.name}</option>
-                                            );
-                                        })
-                                        :
-                                        undefined
-                                }
-                            </Form.Select>
-                        }
-                        <FloatingLabel label="Level" id="level" onChange={e => setLevel(e.target.value)} style={{ margin: '2%' }} />
-                        <FloatingLabel label="Score" id="score" onChange={e => setScore(e.target.value)} style={{ margin: '2%' }} />
-                        <div style={{justifyContent: 'left', alignItems: 'left'}}>{message}</div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        
-                        
-                        <Button variant="primary" onClick={handleClose}>
-                            Close
-                        </Button>
-                        <Button variant="success" onClick={() => { saveSkill({ type: type, name: sname, level: level, score: score }); clear(); }}>
-                            Save
-                        </Button>
-                        {
-                            !mode ?
-                                <Button variant="secondary" onClick={() => { deleteSkill(type, sname); clear(); }} >
-                                    Remove
-                                </Button>
-                                :
-                                undefined
-                        }
-                    </Modal.Footer>
-                </Modal>
-            </Box>
-        </div>
-
+                            undefined
+                    }
+                </Modal.Footer>
+            </Modal>
+        </Container>
     );
 }
 

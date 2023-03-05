@@ -10,8 +10,9 @@ import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 
 /**
- * 
+ * Certification component to show Employee Certification information.
  * @author Jing Huang
+ * @author Biniyam
  */
 // TODO: Dummy Data
 const CF = [{ name: 'Certification Name', Institution: 'Institution', IssuedDate: 'IssuedDate', id: 'Cerdential ID abcde' },
@@ -47,7 +48,7 @@ function Certification(props) {
 
     const [mode, setMode] = React.useState();
     const [show, setShow] = React.useState(false);
-    const handleClose = () => {setShow(false); setMessage('')}
+    const handleClose = () => { setShow(false); setMessage('') }
     const handleShow = () => setShow(true);
 
     const [cname, setCName] = React.useState();
@@ -78,8 +79,6 @@ function Certification(props) {
 
     function saveCertification(c) {
         if (cname !== undefined && institution !== undefined && issuedDate !== undefined && credentialID !== undefined && skills !== undefined) {
-            
-            // TODO: format the issuedDate before save it to the newCertificaiton.issuedDate
 
             let newCertification = {
                 name: c.name,
@@ -93,11 +92,11 @@ function Certification(props) {
             if (mode) {
 
                 employee.certifications.forEach(element => {
-                    if(element.name === newCertification.name) {
+                    if (element.name === newCertification.name) {
                         exists = true;
-                    } 
+                    }
                 });
-                if(exists) {
+                if (exists) {
                     setMessage("Certificate Already Exists");
                 } else {
                     employee.certifications.push(newCertification);
@@ -110,8 +109,8 @@ function Certification(props) {
                     return obj;
                 });
             }
-            
-            if(!exists) {
+
+            if (!exists) {
                 axios.put("http://localhost:8080/employees", employee).then(response => {
                     axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                         setEmployee(res.data);
@@ -147,48 +146,50 @@ function Certification(props) {
 
     return (
         <div>
-            <Box>
-                <Container style={{ width: "60%", justifyContent: "space-between" }}>
-                    <Row style={{ textAlign: 'left' }}>
-                        {/* <Col style={{ fontSize: '15px', float: 'left' }}>Updated: Dec 30, 2022</Col> */}
-                        <Col>
-                            <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'left', width: '100px' }} onClick={() => { handleShow(); setMode(true) }}>
-                                Add
-                            </Button>
-                        </Col>
-                        <Col>
-                            <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'right', width: '100px' }} onClick={() => { handleShow(); setMode(false) }}>
-                                Edit
-                            </Button>
-                        </Col>
-                    </Row>
-                    <Row style={{ textAlign: 'left', marginTop: '2%', backgroundColor: "#0F123F", color: "white", height: "50px", borderRadius: 10, fontWeight: 'bold', alignItems: 'center' }}>
-                        <Col>Certifications</Col>
-                    </Row>
+            <Container>
+                <Col sm={8}>
+                    <Container style={{ marginTop: '2%', justifyContent: "space-between" }}>
+                        <Row style={{ textAlign: 'left' }}>
+                            {/* <Col style={{ fontSize: '15px', float: 'left' }}>Updated: Dec 30, 2022</Col> */}
+                            <Col>
+                                <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'left', width: '100px' }} onClick={() => { handleShow(); setMode(true) }}>
+                                    Add
+                                </Button>
+                            </Col>
+                            <Col>
+                                <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'right', width: '100px' }} onClick={() => { handleShow(); setMode(false) }}>
+                                    Edit
+                                </Button>
+                            </Col>
+                        </Row>
+                        <Row style={{ textAlign: 'left', marginTop: '2%', backgroundColor: "#0F123F", color: "white", height: "50px", borderRadius: 10, fontWeight: 'bold', alignItems: 'center' }}>
+                            <Col>Certifications</Col>
+                        </Row>
 
-                    {certifications.map((item, index) => {
-                        return (
-                            <div key={index}>
-                                <Row key={item.name + index} style={{ textAlign: 'left', margin: '4%' }}>
-                                    {item.name}
-                                </Row>
-                                <Row key={item.Institution + index} style={{ textAlign: 'left', margin: '4%' }}>
-                                    {item.institution}
-                                </Row>
-                                <Row key={item.IssuedDate + index} style={{ textAlign: 'left', margin: '4%' }}>
-                                    {item.issuedDate}
-                                </Row>
-                                <Row key={item.id + index} style={{ textAlign: 'left', margin: '4%' }}>
-                                    {item.credentialID}
-                                </Row>
-                                <HorizontalLine></HorizontalLine>
-                            </div>
-                        );
-                    })}
-                </Container>
-                <VerticleLine></VerticleLine>
-                <Container>
-                </Container>
+                        {certifications.map((item, index) => {
+                            return (
+                                <div key={index}>
+                                    <Row style={{ textAlign: 'left', margin: '4%' }}>
+                                        {item.name}
+                                    </Row>
+                                    <Row style={{ textAlign: 'left', margin: '4%' }}>
+                                        {item.institution}
+                                    </Row>
+                                    <Row style={{ textAlign: 'left', margin: '4%' }}>
+                                        {item.issuedDate}
+                                    </Row>
+                                    <Row style={{ textAlign: 'left', margin: '4%' }}>
+                                        {item.credentialID}
+                                    </Row>
+                                    <HorizontalLine></HorizontalLine>
+                                </div>
+                            );
+                        })}
+                    </Container>
+                </Col>
+                <Col>
+                    <VerticleLine></VerticleLine>
+                </Col>
                 <Modal show={show} onHide={handleClose} animation={false}>
                     <Modal.Header closeButton>
                         <Modal.Title>Skill & Certification</Modal.Title>
@@ -222,13 +223,13 @@ function Certification(props) {
                         />
                         <FloatingLabel label="CredentialID" id="credentialID" onChange={e => setCredentialID(e.target.value)} style={{ margin: '2%' }} />
                         <FloatingLabel label="Skils" id="skils" onChange={e => setSkils(e.target.value)} style={{ margin: '2%' }} />
-                        <div style={{justifyContent: 'left', alignItems: 'left'}}>{message}</div>
+                        <div style={{ justifyContent: 'left', alignItems: 'left', fontSize: '15px', margin: "10px", color: 'red' }}>{message}</div>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary" onClick={handleClose}>
                             Close
                         </Button>
-                        <Button variant="success" onClick={() => {saveCertification({ name: cname, institution: institution, issuedDate: issuedDate, credentialID: credentialID, skills: skills }); clear(); }}>
+                        <Button variant="success" onClick={() => { saveCertification({ name: cname, institution: institution, issuedDate: issuedDate, credentialID: credentialID, skills: skills }); clear(); }}>
                             Save
                         </Button>
                         {
@@ -242,7 +243,7 @@ function Certification(props) {
                         }
                     </Modal.Footer>
                 </Modal>
-            </Box>
+            </Container>
         </div>
 
     );
