@@ -1,5 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 import EditProfile from '../subViews/EditProfile';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -14,40 +19,12 @@ import ProfileCard from "../components/ProfileCard";
  * 
  * @author Jing Huang
  */
-const Box = styled.div`
-    display: flex;
-    margin: 10px;
-    height: ${({ height = '50%' }) => height};
-    width: 100%;
-    justify-content: center;
-    overflow: auto;
-`
-const SideBox = styled.div`
-    width: 40%;
-    float: left;
-`;
-
-const MiddleBox = styled.div`
-    width: 30%;
-    border: 1px solid black;
-    height: 400px;
-    justify-content: space-between;
-`;
-
 const ContentBox = styled.div`
-    margin: 20px;
-    width: 90%;
+    margin-top: 3%;
+    width: 100%;
     overflow: auto;
     justify-content: center;
     border: 1px solid #808080;
-`;
-
-const InnerContentBox = styled.div`
-    display: flex;
-    margin: 20px;
-    width: 90%;
-    height: 700px;
-    overflow: auto;
 `;
 
 const GTITLE = ['General', 'Skills & Certifications', 'Performance Review', 'Career Development Plans', 'Open Positions'];
@@ -91,35 +68,37 @@ function EmployeeProfile(props) {
 
     return (
         <>
-            <Box>
-                <SideBox></SideBox>
-                <MiddleBox><ProfileCard /></MiddleBox>
-                <SideBox>
-                    <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%", float: 'right', width: '100px' }} onClick={handleShow}>
-                        Edit
-                    </Button>
-                    <Modal size="lg" show={show} onHide={handleClose}>
-                        <EditProfile />
-                        <Modal.Footer>
-                            <Button variant="secondary" onClick={handleClose}>
-                                Close
-                            </Button>
-                            <Button variant="primary" onClick={handleClose}>
-                                Save Changes
-                            </Button>
-                        </Modal.Footer>
-                    </Modal>
-                </SideBox>
-            </Box>
+            <Container>
+                <Row>
+                    <Col sm></Col>
+                    <Col sm><ProfileCard /></Col>
+                    <Col sm>
+                        <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%", float: 'right', width: '100px' }} onClick={handleShow}>
+                            Edit
+                        </Button>
+                    </Col>
+                </Row>
+                <Modal size="lg" show={show} onHide={handleClose}>
+                    <EditProfile />
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Close
+                        </Button>
+                        <Button variant="primary" onClick={handleClose}>
+                            Save Changes
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            </Container>
             <TabsBar titles={GTITLE} setMode={setMode} />
-            <Box>
+            <Container>
                 <ContentBox>
                     <TabsBar titles={title} setMode={setTool} />
-                    <InnerContentBox>
+                    <Container styled={{marginTop: "10px"}}>
                         {changeTool(mode)}
-                    </InnerContentBox>
+                    </Container>
                 </ContentBox>
-            </Box>
+            </Container>
         </>
     );
 
