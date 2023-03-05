@@ -1,104 +1,112 @@
-import {useState, useEffect} from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../base/auth';
+import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import React from 'react';
-import axios from 'axios';
-import account from '../clients/account';
 
+/**
+ * LoginCard component...
+ * 
+ * @author Isaac Handy
+ * @author Jing Huang
+ */
+
+// TODO: remove
+const EMPLOYEENUM = "1234";
+const PASSWORD = '1234';
 const LoginCard = (props) => {
 
-const [signup, setSignup] = useState(false);
+    const auth = useAuth();
+    const navigate = useNavigate();
 
-const [employeeNumber, setEmployeeNumber] = useState("1357");
+    // inputs
+    const [employeeNumber, setEmployeeNumber] = useState();
+    const [password, setPassword] = useState();
+    const [repeatedPassword, setRepeatedPassword] = useState();
+    const [error, setError] = useState('');
 
-const [password, setPassword] = useState();
+    // switch the login and signup state
+    const [signup, setSignup] = useState(false);
 
-console.log(employeeNumber, password);
+    // successful to login
+    const handleLogin = () => {
 
-const [accountData, setAccountData] = useState();
+        // TODO: Checking if the passward math the data
+        let flag = false;
 
-function changeView() {
-    signup ? setSignup(false) : setSignup(true);
-}
+        if (employeeNumber === EMPLOYEENUM && password === PASSWORD) {
+            flag = true;
+        }
 
-function getAccountData() {
-    axios.get(`http://localhost:8080/accounts/${employeeNumber}`).then(result => {
-                setAccountData(result.data);
-                console.log(accountData);
-            });
-}
+        auth.login(flag);
+        navigate('/home'); // Can use useEffect to check value of auth.isAuthenticated
+    }
 
-function autheticateUser() {
-    //Check if text field is empty or not
+    function changeView() {
+        signup ? setSignup(false) : setSignup(true);
+    }
 
-    //When text fields are not empty
-    getAccountData();
-    // if (accountData.password) {
+    // const [accountData, setAccountData] = useState();
 
+    // function getAccountData() {
+    //     axios.get(`http://localhost:8080/accounts/${employeeNumber}`).then(result => {
+    //         setAccountData(result.data);
+    //         console.log(accountData);
+    //     });
     // }
 
-    props.setIsLoggedIn(true);
-}
 
-console.log(props);
+    // console.log(props);
 
-// getAccountData();
+    // getAccountData();
 
-// useEffect(()=>{
-//     axios.get(`http://localhost:8080/accounts/${employeeNumber}`).then(result => {
-//                 setAccountData(result.data);
-//                 console.log(accountData);
-//             });
-// }, []);
+    // useEffect(()=>{
+    //     axios.get(`http://localhost:8080/accounts/${employeeNumber}`).then(result => {
+    //                 setAccountData(result.data);
+    //                 console.log(accountData);
+    //             });
+    // }, []);
 
     return (
         <Form>
-
             <h1>{props.title}</h1>
-
             <Form.Group className="mb-3" controlId="formEmployeeNumber">
-              <FloatingLabel controlId="floatingInput" label="Employee Number" className="mb-3" 
-              onChange={e => setEmployeeNumber(e.target.value)}>
-                <Form.Control type="employee number" placeholder="0123456789" />
-              </FloatingLabel>
+                <FloatingLabel controlId="floatingInput" label="Employee Number" className="mb-3" onChange={e => { setEmployeeNumber(e.target.value); }}>
+                    <Form.Control placeholder="Enter Employee Number" />
+                </FloatingLabel>
             </Form.Group>
-
             <Form.Group className="mb-3" controlId="formEmployeePassword">
-              <FloatingLabel controlId="floatingPassword" label="Employee Password" 
-              onChange={e => setPassword(e.target.value)}>
-                <Form.Control size="lg" type="employee password" placeholder="Password" />
-              </FloatingLabel>
+                <FloatingLabel controlId="floatingPassword" label="Employee Password" onChange={e => { setPassword(e.target.value); }}>
+                    <Form.Control size="lg" type="employee password" placeholder="Password" />
+                </FloatingLabel>
             </Form.Group>
-
             {
                 signup ?
-                (
-                    <>
-                        <Form.Group className="mb-3" controlId="formPassword">
-                            <FloatingLabel controlId="floatingPasswordRepeat" label="RepeatPassword">
-                                <Form.Control size="lg" type="password" placeholder="RepeatPassword" />
-                            </FloatingLabel>
-                        </Form.Group>
-
-                        <Button variant="primary" type="submit" onClick={changeView} style={{ width: '200px', height: '50px' }}>
-                        Submit
-                        </Button>
-
-                    </>
-                ) : (
-                    <>
-                        <Button variant="primary" type="submit" style={{ width: '200px', height: '50px' }} onClick={props.handleChange(true)}>
-                        Login
-                        </Button>
-                        <div style={{ display: 'flex', height: '10px' }}>
-
-                        </div>
-                        <Button variant="primary" onClick={changeView} style={{ width: '200px', height: '50px' }}>
-                        Sign Up
-                        </Button>
-                    </>
-                )
+                    (
+                        <>
+                            <Form.Group className="mb-3" controlId="formPassword">
+                                <FloatingLabel controlId="floatingPasswordRepeat" label="RepeatPassword">
+                                    <Form.Control size="lg" type="password" placeholder="RepeatPassword" onChange={e => { setRepeatedPassword(e.target.value); }} />
+                                </FloatingLabel>
+                            </Form.Group>
+                            <Button variant="primary" type="submit" onClick={changeView} style={{ width: '200px', height: '50px' }}>
+                                Submit
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button variant="primary" type="submit" style={{ width: '200px', height: '50px' }} onClick={handleLogin}>
+                                Login
+                            </Button>
+                            <div style={{ display: 'flex', height: '10px' }}>
+                            </div>
+                            <Button variant="primary" onClick={changeView} style={{ width: '200px', height: '50px' }}>
+                                Sign Up
+                            </Button>
+                        </>
+                    )
             }
         </Form>
     );

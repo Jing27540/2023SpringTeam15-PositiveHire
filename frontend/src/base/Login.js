@@ -1,5 +1,5 @@
 import React from "react";
-import {useState} from 'react';
+import { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import styled from "styled-components";
@@ -28,19 +28,18 @@ function BasicLoginPage(props) {
 
   return (
     <>
-    <div>
-      <img src="http://www.w3.org/2000/svg"></img>
-    </div>
+      <div>
+        <img src="http://www.w3.org/2000/svg"></img>
+      </div>
 
-    <Box>
-      <SideBox></SideBox>
-
-      <LoginCard title="Employee" handleChange={props.handleChange}/>
-
-      <SideBox></SideBox>
-
-      <LoginCard title = "HR/DEI" handleChange={props.handleChange}/>
-    </Box>
+      <Box>
+        <SideBox>
+        </SideBox>
+        <LoginCard title="Employee" />
+        <SideBox>
+        </SideBox>
+        <LoginCard title="HR/DEI" />
+      </Box>
 
     </>
   );
