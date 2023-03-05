@@ -3,7 +3,13 @@ package com.positivehire.phtalent.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.*;
+import java.io.Serializable;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 
 /**
  * Represents a job post in the context of creating a feature to see a list of job postings
@@ -43,6 +49,8 @@ public class JobPosting extends DomainObject {
     /** Non-metric job position requirements */
     private List<String> otherRequirements;
 
+    
+    @Column( length = 100000 )
     /** Main job description */
     private String jobDescription;
 
@@ -66,7 +74,7 @@ public class JobPosting extends DomainObject {
 
     /** List of Employees who applied for the position */
     @OneToMany(cascade = CascadeType.ALL)
-    private ArrayList<Employee> listofApplicants;
+    private List<Employee> listofApplicants;
 
     /**
      * For Hibernate to use (Must be an empty constructor)
@@ -82,7 +90,7 @@ public class JobPosting extends DomainObject {
      * @return the id
      */
     @Override
-    public Long getId() {
+    public Serializable getId() {
         return id;
     }
 
@@ -315,7 +323,7 @@ public class JobPosting extends DomainObject {
      * Get the list of applicants
      * @return list of applicants
      */
-    public ArrayList<Employee> getListofApplicants() {
+    public List<Employee> getListofApplicants() {
         return listofApplicants;
     }
 

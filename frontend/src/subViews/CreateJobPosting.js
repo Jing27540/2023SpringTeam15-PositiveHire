@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import axios from "axios";
 
 /**
  * This view will show the form allow user to create a job posting
@@ -11,12 +12,14 @@ import Form from 'react-bootstrap/Form';
  */
 function CreateJobPosting() {
 
+    const [jobPosting, setJobPosting] = React.useState(); 
     const titles = ['JobTitle', 'Requirements', 'Availabliltiy', 'Process']
     const [colors, setColors] = React.useState(["warning", "secondary", "secondary", "secondary"]);
     const [mode, setMode] = React.useState('JobTitle');
 
     // Job Title
     const [jobTitle, setjobTitle] = React.useState();
+    const [applyLink, setApplyLink] = React.useState();
     const [jobDescription, setJobDescription] = React.useState();
     const [department, setDepartment] = React.useState();
     const [salary, setSalary] = React.useState();
@@ -34,7 +37,14 @@ function CreateJobPosting() {
     const [process, setProcess] = React.useState([]);
     const [processData, setProcessData] = React.useState([]);
 
-    console.log(process);
+    // console.log(jobTitle);
+    // console.log(jobDescription);
+    axios.get(`http://localhost:8080/jobpostings`)
+    .then(result => {
+        setJobPosting(result.data);
+    });
+
+    console.log(jobPosting);
 
     React.useEffect(() => {
 
@@ -76,9 +86,33 @@ function CreateJobPosting() {
 
 
     function handleSaveClick() {
-        // update value
-
+        // update value as user input
+        // input validation checking
+        let tmpLocation = [];
+        tmpLocation.push(location);
+        let newJobPosting = {
+        // "jobNumber": jobNumber,
+        "jobTitle":jobTitle,
+        "salary":salary,
+        "department":department,
+        "skillRequirements":[],
+        "certificationRequirements":[],
+        "otherRequirements":null,
+        "jobDescription":jobDescription,
+        "availablePositions":availablePositions,
+        "location":tmpLocation,
+        "meetingType":meetingType,
+        "meetingNotes":meetingNotes,
+        "process":null,
+        "applyLink":applyLink,
+        "listofApplicants":[]};
+        console.log(newJobPosting);
         // call api
+        axios.post("http://localhost:8080/jobpostings", newJobPosting).then(response => {
+            console.log("Successful to create a job posting");
+        }).catch(error => {
+
+        });
     }
 
     return (
@@ -107,6 +141,7 @@ function CreateJobPosting() {
                             setDepartment={setDepartment}
                             setJobDescription={setJobDescription}
                             setSalary={setSalary}
+                            setApplyLink={setApplyLink}
                         />
                         :
                         mode === titles[1] ?
@@ -137,7 +172,7 @@ function CreateJobPosting() {
                     <Button variant={'warning'} style={{ width: '200px', marginRight: '5%' }} onClick={handleContinueClick}>Continue</Button>
                 </Col>
                 <Col>
-                    <Button style={{ width: '200px', marginRight: '5%' }}>Saved Jobs</Button>
+                    <Button style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Saved Jobs</Button>
                 </Col>
             </Row>
         </Container>
@@ -156,6 +191,10 @@ const JobTitle = (props) => {
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Job Description </Form.Label>
                 <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setJobDescription(e.target.value)} /> </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}> Apply Link </Form.Label>
+                <Col sm={7}> <Form.Control rows={3} placeholder="Type here..." onChange={e => props.setApplyLink(e.target.value)} /> </Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Department </Form.Label>

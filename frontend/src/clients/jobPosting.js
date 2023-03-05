@@ -11,9 +11,9 @@ let getAllJobPPostings = (jobPostings) => {
   axios.get(`http://localhost:8080/jobpostings`)
       .then(result => {
           result.data.forEach(element => {
-              employees.push(element);
+              jobPostings.push(element);
           })
 
       });
-  return employees;
+  return jobPostings;
 };
