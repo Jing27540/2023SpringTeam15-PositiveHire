@@ -54,11 +54,12 @@ function Skill(props) {
     const [employee, setEmployee] = React.useState(props.employee);
 
     // TODO:
-    const [message, setMessage] = React.useState('Hello testing');
+    const [message, setMessage] = React.useState('');
 
     const [mode, setMode] = React.useState();
     const [show, setShow] = React.useState(false);
-    const handleClose = () => setShow(false);
+    const handleClose = () => {setShow(false); setMessage('')};
+   
     const handleShow = () => setShow(true);
 
     const [type, setType] = React.useState();
@@ -108,7 +109,7 @@ function Skill(props) {
     function saveSkill(s) {
 
         // TODO: not allow duplicate name of skill to edit/add
-
+        let exists = false;
         if (type !== undefined && sname !== undefined && level !== undefined && score !== undefined) {
             let newSkill = {
                 name: s.name,
@@ -120,7 +121,17 @@ function Skill(props) {
             // TODO: check duplicate case
             if (s.type === 'technicalSkills') {
                 if (mode) {
-                    employee.technicalSkills.push(newSkill);
+                    
+                    employee.technicalSkills.forEach(element => {
+                        if(element.name === newSkill.name) {
+                            exists = true;
+                        }    
+                });
+                    if(exists) {
+                        setMessage("Skill Already Exists");
+                    } else {
+                        employee.technicalSkills.push(newSkill);
+                    }
                 } else {
                     // employee.technicalSkills = [];
                     employee.technicalSkills = technicalSkills.map(obj => {
@@ -133,7 +144,18 @@ function Skill(props) {
                 }
             } else if (s.type === 'peopleSkills') {
                 if (mode) {
-                    employee.peopleSkills.push(newSkill);
+                    let exists = false;
+
+                    employee.peopleSkills.forEach(element => {
+                        if(element.name === newSkill.name) {
+                            exists = true;
+                        }    
+                    });
+                    if(exists) {
+                        setMessage("Skill Already Exists");
+                    } else {
+                        employee.peopleSkills.push(newSkill);
+                    }
                 } else {
                     // employee.peopleSkills = [];
                     employee.peopleSkills = peopleSkills.map(obj => {
@@ -145,7 +167,18 @@ function Skill(props) {
                 }
             } else { //workEthic
                 if (mode) {
-                    employee.workEthic.push(newSkill);
+                    let exists = false;
+
+                    employee.workEthic.forEach(element => {
+                        if(element.name === newSkill.name) {
+                            exists = true;
+                        }    
+                    });
+                    if(exists) {
+                        setMessage("Skill Already Exists");
+                    } else {
+                        employee.workEthic.push(newSkill);
+                    }
                 } else {
                     // employee.workEthic = [];
                     employee.workEthic = workEthic.map(obj => {
@@ -158,20 +191,25 @@ function Skill(props) {
 
 
             }
-
+            
             // TODO:  handle to message of show
-            axios.put("http://localhost:8080/employees", employee).then(response => {
-                axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
-                    setEmployee(res.data);
-                    technicalSkills = employee.technicalSkills;
-                    peopleSkills = employee.peopleSkills;
-                    workEthic = employee.workEthic;
-                    console.log("add / edit skill");
-                }).catch(err => console.log(err));
-            }).catch(error => {
-                console.log('unable to add / edit skill');
-            });
+            if(!exists) {
+                axios.put("http://localhost:8080/employees", employee).then(response => {
+                    axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
+                        setEmployee(res.data);
+                        technicalSkills = employee.technicalSkills;
+                        peopleSkills = employee.peopleSkills;
+                        workEthic = employee.workEthic;
+                        console.log("add / edit skill");
+                        handleClose();
+                    }).catch(err => console.log(err));
+                }).catch(error => {
+                    setMessage("Error saving");
+                    console.log('unable to add / edit skill');
+                });
+            }
         }
+    
     }
 
     function deleteSkill(t, sn) {
@@ -298,9 +336,11 @@ function Skill(props) {
                         }
                         <FloatingLabel label="Level" id="level" onChange={e => setLevel(e.target.value)} style={{ margin: '2%' }} />
                         <FloatingLabel label="Score" id="score" onChange={e => setScore(e.target.value)} style={{ margin: '2%' }} />
+                        <div style={{justifyContent: 'left', alignItems: 'left'}}>{message}</div>
                     </Modal.Body>
                     <Modal.Footer>
-                        {message}
+                        
+                        
                         <Button variant="primary" onClick={handleClose}>
                             Close
                         </Button>

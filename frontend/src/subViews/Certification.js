@@ -43,9 +43,11 @@ function Certification(props) {
 
     const [employee, setEmployee] = React.useState(props.employee);
 
+    const [message, setMessage] = React.useState('');
+
     const [mode, setMode] = React.useState();
     const [show, setShow] = React.useState(false);
-    const handleClose = () => setShow(false);
+    const handleClose = () => {setShow(false); setMessage('')}
     const handleShow = () => setShow(true);
 
     const [cname, setCName] = React.useState();
@@ -53,7 +55,7 @@ function Certification(props) {
     const [issuedDate, setIssuedDate] = React.useState();
 
     const [credentialID, setCredentialID] = React.useState();
-    const [skils, setSkils] = React.useState();
+    const [skills, setSkils] = React.useState();
 
     const [certifications, setCertifications] = React.useState(props.employee.certifications ? props.employee.certifications : []);
 
@@ -75,7 +77,7 @@ function Certification(props) {
     }
 
     function saveCertification(c) {
-        if (cname !== undefined && institution !== undefined && issuedDate !== undefined && credentialID !== undefined && skils !== undefined) {
+        if (cname !== undefined && institution !== undefined && issuedDate !== undefined && credentialID !== undefined && skills !== undefined) {
             
             // TODO: format the issuedDate before save it to the newCertificaiton.issuedDate
 
@@ -84,11 +86,22 @@ function Certification(props) {
                 institution: c.institution,
                 issuedDate: c.issuedDate,
                 credentialID: c.credentialID,
-                skils: c.skils,
+                skills: c.skills,
             };
+            let exists = false;
 
             if (mode) {
-                employee.certifications.push(newCertification);
+
+                employee.certifications.forEach(element => {
+                    if(element.name === newCertification.name) {
+                        exists = true;
+                    } 
+                });
+                if(exists) {
+                    setMessage("Certificate Already Exists");
+                } else {
+                    employee.certifications.push(newCertification);
+                }
             } else {
                 employee.certifications = certifications.map(obj => {
                     if (obj.name === newCertification.name) {
@@ -97,16 +110,19 @@ function Certification(props) {
                     return obj;
                 });
             }
-
-            axios.put("http://localhost:8080/employees", employee).then(response => {
-                axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
-                    setEmployee(res.data);
-                    setCertifications(employee.certifications);
-                    console.log("add / edit certification");
-                }).catch(err => console.log(err));
-            }).catch(error => {
-                console.log('unable to add / edit certifications');
-            });
+            
+            if(!exists) {
+                axios.put("http://localhost:8080/employees", employee).then(response => {
+                    axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
+                        setEmployee(res.data);
+                        setCertifications(employee.certifications);
+                        console.log("add / edit certification");
+                        handleClose();
+                    }).catch(err => console.log(err));
+                }).catch(error => {
+                    console.log('unable to add / edit certifications');
+                });
+            }
         }
     }
 
@@ -206,12 +222,13 @@ function Certification(props) {
                         />
                         <FloatingLabel label="CredentialID" id="credentialID" onChange={e => setCredentialID(e.target.value)} style={{ margin: '2%' }} />
                         <FloatingLabel label="Skils" id="skils" onChange={e => setSkils(e.target.value)} style={{ margin: '2%' }} />
+                        <div style={{justifyContent: 'left', alignItems: 'left'}}>{message}</div>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary" onClick={handleClose}>
                             Close
                         </Button>
-                        <Button variant="success" onClick={() => { handleClose(); saveCertification({ name: cname, institution: institution, issuedDate: issuedDate, credentialID: credentialID, skils: skils }); clear(); }}>
+                        <Button variant="success" onClick={() => {saveCertification({ name: cname, institution: institution, issuedDate: issuedDate, credentialID: credentialID, skills: skills }); clear(); }}>
                             Save
                         </Button>
                         {
