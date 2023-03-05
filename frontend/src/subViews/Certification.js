@@ -7,6 +7,8 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import FloatingLabel from 'react-bootstrap-floating-label';
 import Form from 'react-bootstrap/Form';
+import axios from 'axios';
+
 /**
  * 
  * @author Jing Huang
@@ -41,18 +43,30 @@ function Certification(props) {
 
     const [employee, setEmployee] = React.useState(props.employee);
 
+    const [message, setMessage] = React.useState('');
+
     const [mode, setMode] = React.useState();
     const [show, setShow] = React.useState(false);
-    const handleClose = () => setShow(false);
+    const handleClose = () => {setShow(false); setMessage('')}
     const handleShow = () => setShow(true);
 
     const [cname, setCName] = React.useState();
-    const [institution, setInstitution] = React.useState();
+    const [institution, setInstitution] = React.useState('');
     const [issuedDate, setIssuedDate] = React.useState();
-    const [credentialID, setCredentialID] = React.useState();
-    const [skils, setSkils] = React.useState();
 
-    const certifications = props.employee.certifications ? props.employee.certifications : [];
+    const [credentialID, setCredentialID] = React.useState();
+    const [skills, setSkils] = React.useState();
+
+    const [certifications, setCertifications] = React.useState(props.employee.certifications ? props.employee.certifications : []);
+
+    React.useEffect(() => {
+        if (mode === false) {
+            axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(result => {
+                setEmployee(result.data);
+            });
+            setCertifications(employee.certifications);
+        }
+    }, [mode, employee]);
 
     function clear() {
         setCName(undefined);
@@ -62,42 +76,73 @@ function Certification(props) {
         setSkils(undefined);
     }
 
-    function saveCertification(certification) {
-        if (cname !== undefined && institution !== undefined && issuedDate !== undefined && credentialID !== undefined && skils !== undefined) {
+    function saveCertification(c) {
+        if (cname !== undefined && institution !== undefined && issuedDate !== undefined && credentialID !== undefined && skills !== undefined) {
+            
+            // TODO: format the issuedDate before save it to the newCertificaiton.issuedDate
+
             let newCertification = {
-                cname: cname,
-                institution: institution,
-                issuedDate: issuedDate,
-                credentialID: credentialID,
-                skils: skils,
+                name: c.name,
+                institution: c.institution,
+                issuedDate: c.issuedDate,
+                credentialID: c.credentialID,
+                skills: c.skills,
             };
+            let exists = false;
 
-            console.log(newCertification);
+            if (mode) {
 
-            // TODO: check duplicate case 
-            certifications.push(newCertification);
-            employee.certifications = certifications;
-
-            console.log(employee);
-            // axios.put("http://localhost:8080/employees", employee).then(response => {
-            //     console.log(employee);
-            //     console.log("update the employee");
-            // }).catch(error => {
-            //     console.log('can save employee')
-            // });
+                employee.certifications.forEach(element => {
+                    if(element.name === newCertification.name) {
+                        exists = true;
+                    } 
+                });
+                if(exists) {
+                    setMessage("Certificate Already Exists");
+                } else {
+                    employee.certifications.push(newCertification);
+                }
+            } else {
+                employee.certifications = certifications.map(obj => {
+                    if (obj.name === newCertification.name) {
+                        obj = newCertification;
+                    }
+                    return obj;
+                });
+            }
+            
+            if(!exists) {
+                axios.put("http://localhost:8080/employees", employee).then(response => {
+                    axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
+                        setEmployee(res.data);
+                        setCertifications(employee.certifications);
+                        console.log("add / edit certification");
+                        handleClose();
+                    }).catch(err => console.log(err));
+                }).catch(error => {
+                    console.log('unable to add / edit certifications');
+                });
+            }
         }
     }
 
     function deleteCertification(cn) {
-        certifications = certifications.filter(certification => certification.name !== cn);
-        employee.certifications = certifications;
 
-        // axios.put("http://localhost:8080/employees", employee).then(response => {
-        //     console.log(employee);
-        //     console.log("update the employee");
-        // }).catch(error => {
-        //     console.log('can save employee')
-        // });
+        setCertifications(employee.certifications);
+
+        let temp = certifications.filter(certification => certification.name !== cn);
+        setCertifications(temp);
+        employee.certifications = temp;
+
+        axios.put("http://localhost:8080/employees", employee).then(response => {
+            axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
+                setEmployee(res.data);
+                setCertifications(employee.certifications);
+                console.log("remove the certifciation");
+            }).catch(err => console.log(err));
+        }).catch(error => {
+            console.log('unable to remove certifciation')
+        });
     }
 
     return (
@@ -121,20 +166,20 @@ function Certification(props) {
                         <Col>Certifications</Col>
                     </Row>
 
-                    {CF.map((item, index) => {
+                    {certifications.map((item, index) => {
                         return (
                             <div key={index}>
                                 <Row key={item.name + index} style={{ textAlign: 'left', margin: '4%' }}>
                                     {item.name}
                                 </Row>
                                 <Row key={item.Institution + index} style={{ textAlign: 'left', margin: '4%' }}>
-                                    {item.Institution}
+                                    {item.institution}
                                 </Row>
                                 <Row key={item.IssuedDate + index} style={{ textAlign: 'left', margin: '4%' }}>
-                                    {item.IssuedDate}
+                                    {item.issuedDate}
                                 </Row>
                                 <Row key={item.id + index} style={{ textAlign: 'left', margin: '4%' }}>
-                                    {item.id}
+                                    {item.credentialID}
                                 </Row>
                                 <HorizontalLine></HorizontalLine>
                             </div>
@@ -155,26 +200,41 @@ function Certification(props) {
                             :
                             <Form.Select aria-label="Default select example" id="cname" onChange={e => setCName(e.target.value)} style={{ margin: '2%', width: '95%' }}>
                                 <option>Certification Name</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                                {
+                                    certifications ?
+                                        certifications.map((item, index) => {
+                                            return (
+                                                <option key={index} value={item.name}>{item.name}</option>
+                                            );
+                                        })
+                                        :
+                                        undefined
+                                }
                             </Form.Select>
                         }
                         <FloatingLabel label="Institution" id="institution" onChange={e => setInstitution(e.target.value)} style={{ margin: '2%' }} />
-                        <FloatingLabel label="IssuedDate" id="issuedDate" onChange={e => setIssuedDate(e.target.value)} style={{ margin: '2%' }} />
+                        <Form.Control
+                            type="date"
+                            name="issuedDate"
+                            placeholder="DateRange"
+                            style={{ margin: '2%', width: '95%' }}
+                            onChange={(e) => setIssuedDate(e.target.value)}
+                        />
                         <FloatingLabel label="CredentialID" id="credentialID" onChange={e => setCredentialID(e.target.value)} style={{ margin: '2%' }} />
                         <FloatingLabel label="Skils" id="skils" onChange={e => setSkils(e.target.value)} style={{ margin: '2%' }} />
+                        <div style={{justifyContent: 'left', alignItems: 'left'}}>{message}</div>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary" onClick={handleClose}>
                             Close
                         </Button>
-                        <Button variant="success" onClick={() => { handleClose(); saveCertification(); clear(); }}>
+                        <Button variant="success" onClick={() => {saveCertification({ name: cname, institution: institution, issuedDate: issuedDate, credentialID: credentialID, skills: skills }); clear(); }}>
                             Save
                         </Button>
                         {
                             !mode ?
-                                <Button variant="secondary" onClick={handleClose}>
+                                <Button variant="secondary"
+                                    onClick={() => { handleClose(); deleteCertification(cname); clear(); }}>
                                     Remove
                                 </Button>
                                 :
