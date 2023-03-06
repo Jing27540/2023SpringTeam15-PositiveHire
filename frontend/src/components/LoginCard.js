@@ -5,6 +5,8 @@ import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import {sha512} from 'crypto-hash';
+
 
 /**
  * LoginCard component...
@@ -26,6 +28,7 @@ const LoginCard = (props) => {
     const [password, setPassword] = useState();
     const [repeatedPassword, setRepeatedPassword] = useState();
     const [error, setError] = useState('');
+    const [accountData, setAccountData] = useState();
 
     // switch the login and signup state
     const [signup, setSignup] = useState(false);
@@ -36,19 +39,33 @@ const LoginCard = (props) => {
         // TODO: Checking if the passward math the data
         let flag = false;
 
-        if (employeeNumber === EMPLOYEENUM && password === PASSWORD) {
-            flag = true;
-        }
+        // if (employeeNumber === EMPLOYEENUM && password === PASSWORD) {
+        //     flag = true;
+        // }
 
-        auth.login(flag);
-        navigate('/home'); // Can use useEffect to check value of auth.isAuthenticated
+        //auth.login(flag);
+        //navigate('/home'); // Can use useEffect to check value of auth.isAuthenticated
     }
 
     function changeView() {
         signup ? setSignup(false) : setSignup(true);
     }
 
-    // const [accountData, setAccountData] = useState();
+    function loginAcc() {
+        let finalAccount = {
+            employeeID: 1357,
+            hashedPassword: sha512("password")
+        }
+
+        console.log(finalAccount);
+
+        axios.get(`http://localhost:8080/accounts/login`, finalAccount).then(result => {
+            setAccountData(result.data);
+            console.log(accountData);
+        });
+    }
+
+    loginAcc();
 
     // function getAccountData() {
     //     axios.get(`http://localhost:8080/accounts/${employeeNumber}`).then(result => {

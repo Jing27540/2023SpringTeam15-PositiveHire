@@ -76,29 +76,21 @@ public class APIAccountController extends APIController {
 
     // Update password
     @PutMapping("/accounts")
-    public ResponseEntity<String> updateEmployeePassword(@RequestBody String employeeId,
-            @RequestBody String oldPassword,
-            @RequestBody String newPassword) {
-        Account acc = accountServ.findByEmployeeId(employeeId);
+    public ResponseEntity<String> updateEmployeePassword(@RequestBody Account replaceAccount) {
+        Account acc = accountServ.findByEmployeeId(replaceAccount.getEmployeeID());
         // Account acc = accountServ.findById((long) replaceAcc.getId());
 
         if (acc == null) {
             return new ResponseEntity<String>(
-                    errorResponse("No Account found for employee id " + employeeId),
+                    errorResponse("No Account found for employee id " + replaceAccount.getEmployeeID()),
                     HttpStatus.NOT_FOUND);
         } else {
-            try {
-                acc.updatePassword(oldPassword, newPassword, newPassword);
-                accountServ.save(acc);
+            acc.updateAccount(replaceAccount);
+            accountServ.save(acc);
 
-                return new ResponseEntity<String>(
-                        successResponse(acc.getEmployeeID() + " was updated successfully"),
-                        HttpStatus.OK);
-            } catch (NoSuchAlgorithmException e) {
-                return new ResponseEntity<String>(
-                        errorResponse("No Account found for employee id " + employeeId),
-                        HttpStatus.NOT_FOUND);
-            }
+            return new ResponseEntity<String>(
+                    successResponse(acc.getEmployeeID() + " was updated successfully"),
+                    HttpStatus.OK);
         }
         // try {
         // if (acc.updatePassword(currentPassword, newPassword, repeateNewPassword)) {
@@ -131,5 +123,27 @@ public class APIAccountController extends APIController {
 
         accountServ.delete(acc);
         return new ResponseEntity<String>(successResponse("Accounte was deleted successfully"), HttpStatus.OK);
+    }
+
+    @GetMapping("/accounts/login")
+    public Account loginAccount(@RequestBody final Account acc) throws NoSuchAlgorithmException {
+
+        // Temporary new acc
+        // Account tempAcc = new Account("1357", "12345678", "12345678");
+
+        if (accountServ.employeeIdInUse(acc.getEmployeeID())) {
+            Account retAcc = accountServ.findByEmployeeId(acc.getEmployeeID());
+            if (acc.getHashedPassword() == retAcc.getHashedPassword()) {
+                return retAcc;
+            } else {
+                return null;
+            }
+            // String x =
+            // accountServ.findByEmployeeId(acc.getEmployeeID()).login(acc.getHashedPassword().toString());
+            // return x;
+        } else {
+            return null;
+        }
+
     }
 }
