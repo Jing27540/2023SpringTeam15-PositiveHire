@@ -22,7 +22,10 @@ export default function NavBar() {
 
   const [key, setKey] = React.useState('home');
   const [mode, setMode] = React.useState('');
+  const [pView, setPView] = React.useState('');
   const [employee, setEmployee] = React.useState({});
+
+  console.log(pView);
 
   // Get Employee Data
   React.useEffect(() => {
@@ -76,12 +79,12 @@ export default function NavBar() {
             <ImportData />
             :
             key === 'home' ?
-              <TabsBar titles={TITLE} setMode={setMode} />
+              <TabsBar titles={TITLE} setMode={setMode} setPView={setPView}/>
               :
               undefined
       }
       {
-        mode === 'Positions' ?
+        pView === 'Create/Edit Positions' ?
           <JobPosting />
           :
           undefined
