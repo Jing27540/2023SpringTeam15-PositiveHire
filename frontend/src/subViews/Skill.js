@@ -234,10 +234,12 @@ function Skill(props) {
                     technicalSkills = employee.technicalSkills;
                     peopleSkills = employee.peopleSkills;
                     workEthic = employee.workEthic;
+                    handleClose();
                     console.log("remove the skill");
                 }).catch(err => console.log(err));
             }).catch(error => {
-                console.log('unable to remove skill')
+                setMessage("Unable to remove skill");
+                console.log('unable to remove skill');
             });
         }
     }
