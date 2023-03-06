@@ -1,6 +1,11 @@
 import Card from 'react-bootstrap/Card';
 import styled from "styled-components";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import { getEmployeeById } from '../clients/employee';
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"></link>
 //import Stack from 'react-bootstrap/Stack';
 
 const Box = styled.div`
@@ -9,29 +14,27 @@ const Box = styled.div`
     border: none;
     overflow: auto;
 `
-const Stack = styled.div`
-    padding: 5px;
-    border: none;
-`
+// const Stack = styled.div`
+//     padding: 5px;
+//     width: 100%;
+//     border: none;
+// `
 const SideBox = styled.div`
     float: left;
 `;
 let currEmployee = [];
-
+// TODO: hardcode
 getEmployeeById(currEmployee, 1103024456);
 console.log(currEmployee);
 
-
 //let hist = "Employed for" + (currEmployee[0].daysEmployed / 365) + "years, " + (currEmployee[0].daysEmployed / 30) + "months";
 
-
-
-function ProfileCard() {
+function ProfileCard(props) {
     let hist = "Employed for ";
     if(Math.round(currEmployee[0].daysEmployed / 365) >= 2) {
-        hist += Math.round(currEmployee[0].daysEmployed / 365) + " years ";
+        hist += Math.round(currEmployee[0].daysEmployed / 365) + " years, ";
     } else {
-        hist += Math.round(currEmployee[0].daysEmployed / 365) + " year "
+        hist += Math.round(currEmployee[0].daysEmployed / 365) + " year, "
     }
     if(Math.round((currEmployee[0].daysEmployed % 365) / 30) >= 2) {
         hist += Math.round((currEmployee[0].daysEmployed % 365) / 30) + " months"
@@ -42,38 +45,46 @@ function ProfileCard() {
     let dept = " " + currEmployee[0].department;
 
   return (
-    <Card style={{ width: '100%', height: '100%' }} className="col-md-5 mx-auto">
+    <Card style={{ width: '100%', height: '100%'}} className="col-md-5 mx-auto">
       <Card.Img variant="top" src="../../public/PHBalancedLogo.png" />
-      <Card.Body style={{float: 'right'}}>
-        <h3>{currEmployee[0]['employeeName']}</h3>
-            <Box>
-                <Stack style={{justifyContent: 'center', alignItems: 'center'}}>
-                <Stack gap={2}>
-                    <h5>{currEmployee[0].position}</h5>
-                    <div>{hist}</div>
-                </Stack>
-                <Stack style={{justifyContent: 'ceneter', alignItems: 'ceneter'}}>
-                <Stack direction="horizontal" gap={2}>
-                    <SideBox>
-                        <div>Department</div>
-                    </SideBox>
-                    <div>{dept}</div>
-                </Stack>
-                <Stack direction="horizontal" gap={2}>
-                    <SideBox>
-                        <div>Office Location</div>
-                    </SideBox>
-                        <div>{currEmployee[0].state}</div>
-                </Stack>
-                <Stack direction="horizontal" gap={2}>
-                    <SideBox>
-                        <div>Reports to</div>
-                    </SideBox>
-                    <div>{currEmployee[0].managerName}</div>
-                </Stack>
-                </Stack>
-                </Stack>
-            </Box>
+      <Card.Body>
+        <Container>
+                <Row  style={{ textAlign: 'center'}}>
+                    <h3>{currEmployee[0]['employeeName']}</h3>
+                </Row>
+                <Row style={{ justifyContent: 'center', alignItems: 'center',  fontWeight: 'bold' }}>
+                    {currEmployee[0].position}
+                </Row>
+                <Row style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    {hist}
+                </Row>
+                <Row  style={{ justifyContent: 'center', alignItems: 'center', marginLeft: '3%'}}>
+                <Row style={{ fontSize: '12px', textAlign: 'left'}}>
+                    <Col>
+                        Department
+                    </Col>
+                    <Col style={{ fontWeight: 'bold'}}>
+                       {dept}
+                    </Col>
+                </Row>
+                <Row style={{ fontSize: '12px', textAlign: 'left'}}>
+                    <Col>
+                        Office Location
+                    </Col>
+                    <Col style={{ fontWeight: 'bold'}}>
+                        {currEmployee[0].state}
+                    </Col>
+                </Row>
+                <Row style={{ fontSize: '12px', textAlign: 'left'}}>
+                    <Col>
+                        Reports To
+                    </Col>
+                    <Col style={{ fontWeight: 'bold'}}>
+                        {currEmployee[0].managerName}
+                    </Col>
+                </Row>
+                </Row>
+            </Container>
       </Card.Body>
     </Card>
   );
