@@ -1,8 +1,5 @@
 package com.positivehire.phtalent.models;
 
-import java.security.SecureRandom;
-import java.util.Arrays;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -36,7 +33,7 @@ public class Account extends DomainObject {
     /**
      * Password associated with an account for authentication purposes.
      */
-    private byte[] hashedPassword;
+    private String hashedPassword;
 
     /**
      * Salt used to hash usernmae and password
@@ -90,7 +87,8 @@ public class Account extends DomainObject {
         // salt = ransalt;
 
         // Hash the password
-        hashedPassword = generateSHA512Hash(password);
+        // hashedPassword = generateSHA512Hash(password);
+        this.hashedPassword = password;
 
         // Set the Employee Id
         this.employeeID = employeeID;
@@ -112,9 +110,13 @@ public class Account extends DomainObject {
         // return -1;
         // }
 
-        byte[] hashedPasswordResult = generateSHA512Hash(passwordAttempt);
+        // byte[] hashedPasswordResult = generateSHA512Hash(passwordAttempt);
 
-        if (Arrays.equals(hashedPasswordResult, getHashedPassword()) == false) {
+        // if (Arrays.equals(hashedPasswordResult, getHashedPassword()) == false) {
+        //     return null;
+        // }
+
+        if(!this.hashedPassword.equals(passwordAttempt)) {
             return null;
         }
 
@@ -189,7 +191,8 @@ public class Account extends DomainObject {
     }
 
     public void setHashPassword(String newPass) throws NoSuchAlgorithmException {
-        this.hashedPassword = generateSHA512Hash(newPass);
+        //this.hashedPassword = generateSHA512Hash(newPass);
+        this.hashedPassword = newPass;
     }
 
     /**
@@ -197,7 +200,7 @@ public class Account extends DomainObject {
      * 
      * @return byte array containing the hash of the password
      */
-    public byte[] getHashedPassword() {
+    public String getHashedPassword() {
         return hashedPassword;
     }
 

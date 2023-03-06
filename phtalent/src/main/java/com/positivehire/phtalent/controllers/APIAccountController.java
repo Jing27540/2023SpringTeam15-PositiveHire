@@ -59,6 +59,17 @@ public class APIAccountController extends APIController {
         return accountServ.findByEmployeeId(employeeId);
     }
 
+
+    @PostMapping("/accounts/account")
+    public Account checkingAccount(@RequestBody final Account account) {
+        Account acc = accountServ.findByEmployeeId(account.getEmployeeID());
+        if(acc != null && acc.getHashedPassword().equals(account.getHashedPassword())) {
+            return acc;
+        } else {
+            return null;
+        }
+    }
+
     // @GetMapping("/accounts/{employeeId}")
     // public String login(@RequestBody final String employeeId, final String
     // password)

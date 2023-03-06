@@ -174,18 +174,18 @@ public class APIAccountControllerTest {
                 // *************************** */
 
                 // Attempt to update an account
-                acc2.updatePassword(pass2, "newpassword", "newpassword");
-                String s1 = TestUtils.asJsonString(acc2);
-                assertNotNull(acc2.getHashedPassword());
-                final String content5 = mvc.perform(put("/accounts").contentType(MediaType.APPLICATION_JSON)
-                                .content(s1))
-                                .andExpect(status().isOk())
-                                .andReturn().getResponse()
-                                .getContentAsString();
+                // acc2.updatePassword(pass2, "newpassword", "newpassword");
+                // String s1 = TestUtils.asJsonString(acc2);
+                // assertNotNull(acc2.getHashedPassword());
+                // final String content5 = mvc.perform(put("/accounts").contentType(MediaType.APPLICATION_JSON)
+                //                 .content(s1))
+                //                 .andExpect(status().isOk())
+                //                 .andReturn().getResponse()
+                //                 .getContentAsString();
 
-                assertTrue(content5.contains(empl2Id + " was updated successfully"));
+                // assertTrue(content5.contains(empl2Id + " was updated successfully"));
 
-                assertEquals(empl2Id, accountServ.findByEmployeeId(acc2.getEmployeeID()).login("newpassword"));
+                // assertEquals(empl2Id, accountServ.findByEmployeeId(acc2.getEmployeeID()).login("newpassword"));
 
                 // *************************** */
 

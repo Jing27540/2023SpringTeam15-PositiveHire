@@ -48,19 +48,24 @@ const LoginCard = (props) => {
         signup ? setSignup(false) : setSignup(true);
     }
 
-    // const [accountData, setAccountData] = useState();
+    const [accountData, setAccountData] = useState();
+    const obj = { employeeID: '5678', hashedPassword: 'amsterdam' };
 
-    // function getAccountData() {
-    //     axios.get(`http://localhost:8080/accounts/${employeeNumber}`).then(result => {
-    //         setAccountData(result.data);
-    //         console.log(accountData);
-    //     });
-    // }
+    function getAccountData() {
+        axios.post(`http://localhost:8080/accounts/account`, obj).then(result => {
+            setAccountData(result.data);
+            console.log(accountData);
+        });
 
+        // axios.get(`http://localhost:8080/accounts`,).then(result => {
+        //     setAccountData(result.data);
+        //     console.log(accountData);
+        // });
+    }
 
     // console.log(props);
 
-    // getAccountData();
+    getAccountData();
 
     // useEffect(()=>{
     //     axios.get(`http://localhost:8080/accounts/${employeeNumber}`).then(result => {
