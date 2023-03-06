@@ -3,6 +3,7 @@ package com.positivehire.phtalent.controllers;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import org.hibernate.type.descriptor.jdbc.RealJdbcType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,19 +32,22 @@ public class APIAccountController extends APIController {
     // private static final String BASE_PATH = "";
 
     @PostMapping("/accounts")
-    public ResponseEntity<String> createAccount(@RequestBody final Account newAcc) throws NoSuchAlgorithmException {
+    public Account createAccount(@RequestBody final Account newAcc) throws NoSuchAlgorithmException {
 
         // Temporary new acc
         // Account tempAcc = new Account("1357", "12345678", "12345678");
 
         if (accountServ.employeeIdInUse(newAcc.getEmployeeID()) == true) {
-            return new ResponseEntity<String>(
-                    successResponse("A user with that username already exists."),
-                    HttpStatus.CONFLICT);
+            // return new ResponseEntity<String>(
+            // successResponse("A user with that employee number already exists."),
+            // HttpStatus.CONFLICT);
+            return null;
         } else {
             accountServ.save(newAcc);
-            return new ResponseEntity<String>(successResponse("Account successfully created"),
-                    HttpStatus.OK);
+            // return new ResponseEntity<String>(successResponse("Account successfully
+            // created"),
+            // HttpStatus.OK);
+            return newAcc;
 
         }
 
@@ -59,11 +63,10 @@ public class APIAccountController extends APIController {
         return accountServ.findByEmployeeId(employeeId);
     }
 
-
     @PostMapping("/accounts/account")
     public Account checkingAccount(@RequestBody final Account account) {
         Account acc = accountServ.findByEmployeeId(account.getEmployeeID());
-        if(acc != null && acc.getHashedPassword().equals(account.getHashedPassword())) {
+        if (acc != null && acc.getHashedPassword().equals(account.getHashedPassword())) {
             return acc;
         } else {
             return null;
@@ -87,29 +90,21 @@ public class APIAccountController extends APIController {
 
     // Update password
     @PutMapping("/accounts")
-    public ResponseEntity<String> updateEmployeePassword(@RequestBody String employeeId,
-            @RequestBody String oldPassword,
-            @RequestBody String newPassword) {
-        Account acc = accountServ.findByEmployeeId(employeeId);
+    public ResponseEntity<String> updateEmployeePassword(@RequestBody Account replaceAccount) {
+        Account acc = accountServ.findByEmployeeId(replaceAccount.getEmployeeID());
         // Account acc = accountServ.findById((long) replaceAcc.getId());
 
         if (acc == null) {
             return new ResponseEntity<String>(
-                    errorResponse("No Account found for employee id " + employeeId),
+                    errorResponse("No Account found for employee id " + replaceAccount.getEmployeeID()),
                     HttpStatus.NOT_FOUND);
         } else {
-            try {
-                acc.updatePassword(oldPassword, newPassword, newPassword);
-                accountServ.save(acc);
+            acc.updateAccount(replaceAccount);
+            accountServ.save(acc);
 
-                return new ResponseEntity<String>(
-                        successResponse(acc.getEmployeeID() + " was updated successfully"),
-                        HttpStatus.OK);
-            } catch (NoSuchAlgorithmException e) {
-                return new ResponseEntity<String>(
-                        errorResponse("No Account found for employee id " + employeeId),
-                        HttpStatus.NOT_FOUND);
-            }
+            return new ResponseEntity<String>(
+                    successResponse(acc.getEmployeeID() + " was updated successfully"),
+                    HttpStatus.OK);
         }
         // try {
         // if (acc.updatePassword(currentPassword, newPassword, repeateNewPassword)) {

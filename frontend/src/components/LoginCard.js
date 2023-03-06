@@ -30,6 +30,7 @@ const LoginCard = (props) => {
 
     // switch the login and signup state
     const [signup, setSignup] = useState(false);
+    const [responseMessage, setResponseMessage] = useState("Hi");
 
     // authenticate user
     const checkAuthStatus = async () => {
@@ -49,6 +50,36 @@ const LoginCard = (props) => {
     // login
     const handleLogin = () => {
         checkAuthStatus();
+    }
+
+    // authenticate user
+    const signUpUser = async () => {
+        if (password != repeatedPassword) {
+            setResponseMessage("Password and repeat password do not match");
+            return (
+                <></>
+            );
+        }
+
+        const account = { employeeID: employeeNumber, hashedPassword: password };
+        return await axios.post(`http://localhost:8080/accounts`, account).then(result => {
+            let flag = result.data;
+            if (flag) {
+                // auth.login(true);
+                // navigate('/home');
+                responseMessage("Account successfully created");
+            } else {
+                // auth.login(false);
+                // navigate('/');
+                responseMessage("Account with that employee number already exists");
+            }
+        });
+    };
+
+    //Signup
+    const handleSignUp = () => {
+        signUpUser();
+        changeView();
     }
 
     function changeView() {
@@ -106,7 +137,7 @@ const LoginCard = (props) => {
                                     <Form.Control size="lg" type="password" placeholder="RepeatPassword" onChange={e => { setRepeatedPassword(e.target.value); }} />
                                 </FloatingLabel>
                             </Form.Group>
-                            <Button variant="primary" onClick={changeView} style={{ width: '200px', height: '50px' }}>
+                            <Button variant="primary" onClick={handleSignUp} style={{ width: '200px', height: '50px' }}>
                                 Submit
                             </Button>
                         </>
@@ -120,6 +151,8 @@ const LoginCard = (props) => {
                             <Button variant="primary" onClick={changeView} style={{ width: '200px', height: '50px' }}>
                                 Sign Up
                             </Button>
+                            <div style={{ display: 'flex', height: '10px' }}></div>
+                            {/* <label>{responseMessage.value}</label> */}
                         </>
                     )
             }
