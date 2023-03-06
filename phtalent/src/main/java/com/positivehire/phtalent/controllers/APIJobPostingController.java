@@ -58,7 +58,7 @@ public class APIJobPostingController extends APIController {
   @PostMapping("/jobpostings")
   public ResponseEntity<String> createJobPosting(@RequestBody JobPosting e) {
 
-    final JobPosting jp = jobPostingService.findById(e.getId());
+    final JobPosting jp =  jobPostingService.findById( (Long) e.getId());
     
     if (jp != null) {
       return new ResponseEntity<String>(successResponse("Job Posting with the job number + " + e.getId() + "already exists."), HttpStatus.CONFLICT);

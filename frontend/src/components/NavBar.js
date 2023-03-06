@@ -57,10 +57,10 @@ export default function NavBar() {
               <Nav.Link eventKey="profile">Profile</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="link2">Team</Nav.Link>
+              <Nav.Link eventKey="link2" disabled>Team</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="link3">Employee Experience</Nav.Link>
+              <Nav.Link eventKey="link3" disabled>Employee Experience</Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="importData">Import Data</Nav.Link>
