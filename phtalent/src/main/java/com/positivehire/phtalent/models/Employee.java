@@ -4,6 +4,7 @@ package com.positivehire.phtalent.models;
 // import javax.persistence.Id;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Entity;
@@ -20,7 +21,7 @@ public class Employee extends DomainObject {
 
     private String employeeName;
 
-    private String employeeNum;
+    private int employeeNum;
 
     private int marriedId;
 
@@ -50,13 +51,13 @@ public class Employee extends DomainObject {
 
     private String citizenDesc;
 
-    private String hispanicLation;
+    private String hispanicLatino;
 
     private String raceDesc;
 
     private String dateOfHire;
 
-    private int daysEmployeed;
+    private int daysEmployed;
 
     private String dateOfTermination;
 
@@ -76,7 +77,7 @@ public class Employee extends DomainObject {
 
     private String performanceScore;
 
-    private double annualBonus;
+    private String annualBonus;
 
     private double ptoHours;
 
@@ -93,24 +94,33 @@ public class Employee extends DomainObject {
 
     }
 
-    public Employee(Long id, String employeeName, String employeeNum, int employmentStatusId, int departmentId,
-            int performanceScoreId, double payRate, String state, int zip, String dateOfHire, int daysEmployeed,
+    public Employee(Long id, String employeeName, int employeeNum, int marriedId, int maritalStatusId, int genderId, int employmentStatusId, int departmentId,
+            int performanceScoreId, int age, double payRate, String state, int zip, String DOB, String sex, String maritalDesc, String citizenDesc, String hispanicLatino, String raceDesc, String dateOfHire, int daysEmployeed,
             String dateOfTermination, String reasonForTermination, String employementStatus, String department,
-            String position, String managerName, String employeeSource, String accessRole, String performanceScore,
+            String position, String managerName, String employeeSource, String accessRole, String performanceScore, String annualBonus, double ptoHours,
             List<Skill> technicalSkills, List<Skill> peopleSkills, List<Skill> workEthic,
-            List<Certification> certifications, Demographic employeeDemographics, double annualBonus,
-            double ptoHours) {
+            List<Certification> certifications) {
         setId(id);
         setEmployeeName(employeeName);
         setEmployeeNum(employeeNum);
+        setMarriedId(marriedId);
+        setMaritalStatusId(maritalStatusId);
+        setGenderId(genderId);
         setEmploymentStatusId(employmentStatusId);
         setDepartmentId(departmentId);
         setPerformanceScoreId(performanceScoreId);
+        setAge(age);
         setPayRate(payRate);
         setState(state);
         setZip(zip);
+        setDOB(DOB);
+        setSex(sex);
+        setMaritalDesc(maritalDesc);
+        setCitizenDesc(citizenDesc);
+        setHispanicLatino(hispanicLatino);
+        setRaceDesc(raceDesc);
         setDateOfHire(dateOfHire);
-        setDaysEmployeed(daysEmployeed);
+        setDaysEmployed(daysEmployeed);
         setDateOfTermination(dateOfTermination);
         setReasonForTermination(reasonForTermination);
         setEmployementStatus(employementStatus);
@@ -120,12 +130,18 @@ public class Employee extends DomainObject {
         setEmployeeSource(employeeSource);
         setAccessRole(accessRole);
         setPerformanceScore(performanceScore);
+        setAnnualBonus(annualBonus);
+        setPtoHours(ptoHours);
+
+        this.technicalSkills = new ArrayList<Skill>();
+        this.peopleSkills = new ArrayList<Skill>();
+        this.workEthic = new ArrayList<Skill>();
+        this.certifications = new ArrayList<Certification>();
+
         setTechnicalSkills(technicalSkills);
         setPeopleSkills(peopleSkills);
         setWorkEthic(workEthic);
         setCertifications(certifications);
-        setAnnualBonus(annualBonus);
-        setPtoHours(ptoHours);
 
     }
 
@@ -134,11 +150,11 @@ public class Employee extends DomainObject {
         setEmployeeName(employeeName);
     }
 
-    public String getEmployeeNum() {
+    public int getEmployeeNum() {
         return this.employeeNum;
     }
 
-    public void setEmployeeNum(String employeeNum) {
+    public void setEmployeeNum(int employeeNum) {
         this.employeeNum = employeeNum;
     }
 
@@ -215,12 +231,12 @@ public class Employee extends DomainObject {
         this.dateOfHire = dateOfHire;
     }
 
-    public int getDaysEmployeed() {
-        return daysEmployeed;
+    public int getDaysEmployed() {
+        return daysEmployed;
     }
 
-    public void setDaysEmployeed(int daysEmployeed) {
-        this.daysEmployeed = daysEmployeed;
+    public void setDaysEmployed(int daysEmployeed) {
+        this.daysEmployed = daysEmployeed;
     }
 
     public String getDateOfTermination() {
@@ -335,11 +351,11 @@ public class Employee extends DomainObject {
     //     this.employeeDemographics = employeeDemographics;
     // }
 
-    public double getAnnualBonus() {
+    public String getAnnualBonus() {
         return annualBonus;
     }
 
-    public void setAnnualBonus(double annualBonus) {
+    public void setAnnualBonus(String annualBonus) {
         this.annualBonus = annualBonus;
     }
 
@@ -415,12 +431,12 @@ public class Employee extends DomainObject {
         this.citizenDesc = citizenDesc;
     }
 
-    public String getHispanicLation() {
-        return this.hispanicLation;
+    public String getHispanicLatino() {
+        return this.hispanicLatino;
     }
 
-    public void setHispanicLation(String hispanicLation) {
-        this.hispanicLation = hispanicLation;
+    public void setHispanicLatino(String hispanicLatino) {
+        this.hispanicLatino = hispanicLatino;
     }
 
     public String getRaceDesc() {
@@ -431,32 +447,81 @@ public class Employee extends DomainObject {
         this.raceDesc = raceDesc;
     }
 
+
+    public void addTechSkills(List<Skill> techSkills) {
+        
+        for(int i = 0; i < techSkills.size(); i++) {
+            if(!this.technicalSkills.contains(techSkills.get(i))) {
+                this.technicalSkills.add(techSkills.get(i));
+            }
+        }
+    }
+
+    public void addPeopleSkills(List<Skill> peopSkills) {
+        for(int i = 0; i < peopSkills.size(); i++) {
+            if(!this.peopleSkills.contains(peopSkills.get(i))) {
+                this.peopleSkills.add(peopSkills.get(i));
+            }
+        }
+    }
+
+    public void addWorkEthic(List<Skill> workEthticSkill) {
+        for(int i = 0; i < workEthticSkill.size(); i++) {
+            if(!this.workEthic.contains(workEthticSkill.get(i)))
+                this.workEthic.add(workEthticSkill.get(i));
+        }
+    }
+
+    public void addCertifications(List<Certification> certs) {
+        
+        for(int i = 0; i < certs.size(); i++) {
+            if(!this.certifications.contains(certs.get(i)))
+                this.certifications.add(certs.get(i));
+        }
+    }
+
     public void updateEmployee(final Employee e) {
-        this.setId(id);
-        this.setEmployeeName(employeeName);
-        this.setEmploymentStatusId(employmentStatusId);
-        this.setDepartmentId(departmentId);
-        this.setPerformanceScoreId(performanceScoreId);
-        this.setPayRate(payRate);
-        this.setState(state);
-        this.setZip(zip);
-        this.setDateOfHire(dateOfHire);
-        this.setDaysEmployeed(daysEmployeed);
-        this.setDateOfTermination(dateOfTermination);
-        this.setReasonForTermination(reasonForTermination);
-        this.setEmployementStatus(employementStatus);
-        this.setDepartment(department);
-        this.setPosition(position);
-        this.setManagerName(managerName);
-        this.setEmployeeSource(employeeSource);
-        this.setAccessRole(accessRole);
-        this.setPerformanceScore(performanceScore);
-        this.setTechnicalSkills(technicalSkills);
-        this.setPeopleSkills(peopleSkills);
-        this.setWorkEthic(workEthic);
-        this.setCertifications(certifications);
+        this.setId(e.id);
+        this.setEmployeeName(e.employeeName);
+        this.setEmploymentStatusId(e.employmentStatusId);
+        this.setDepartmentId(e.departmentId);
+        this.setPerformanceScoreId(e.performanceScoreId);
+        this.setPayRate(e.payRate);
+        this.setState(e.state);
+        this.setZip(e.zip);
+        this.setDateOfHire(e.dateOfHire);
+        this.setDaysEmployed(e.daysEmployed);
+        this.setDateOfTermination(e.dateOfTermination);
+        this.setReasonForTermination(e.reasonForTermination);
+        this.setEmployementStatus(e.employementStatus);
+        this.setDepartment(e.department);
+        this.setPosition(e.position);
+        this.setManagerName(e.managerName);
+        this.setEmployeeSource(e.employeeSource);
+        this.setAccessRole(e.accessRole);
+        this.setPerformanceScore(e.performanceScore);
+
+        if(e.getTechnicalSkills().size() <= this.getTechnicalSkills().size() || e.getPeopleSkills().size() <= this.getPeopleSkills().size() 
+        || e.getWorkEthic().size() <= this.getWorkEthic().size() || e.getCertifications().size() <= this.getCertifications().size()) {
+            this.setTechnicalSkills(e.getTechnicalSkills());
+            this.setPeopleSkills(e.getPeopleSkills());
+            this.setWorkEthic(e.getWorkEthic());
+            this.setCertifications(e.getCertifications());
+        }
+        if(e.getTechnicalSkills().size() > this.getTechnicalSkills().size()) {
+            this.addTechSkills(e.getTechnicalSkills());
+        } 
+        
+        if(e.getPeopleSkills().size() > this.getPeopleSkills().size())
+            this.addPeopleSkills(e.getPeopleSkills());
+        
+        if(e.getWorkEthic().size() > this.getWorkEthic().size())
+            this.addWorkEthic(e.getWorkEthic());
+        
+        if(e.getCertifications().size() > this.getCertifications().size())
+            this.addCertifications(e.getCertifications());
        
-        this.setAnnualBonus(annualBonus);
+        this.setAnnualBonus(annualBonus );
         this.setPtoHours(ptoHours);
     }
 
@@ -473,7 +538,7 @@ public class Employee extends DomainObject {
             ", state='" + getState() + "'" +
             ", zip='" + getZip() + "'" +
             ", dateOfHire='" + getDateOfHire() + "'" +
-            ", daysEmployeed='" + getDaysEmployeed() + "'" +
+            ", daysEmployeed='" + getDaysEmployed() + "'" +
             ", dateOfTermination='" + getDateOfTermination() + "'" +
             ", reasonForTermination='" + getReasonForTermination() + "'" +
             ", employementStatus='" + getEmployementStatus() + "'" +

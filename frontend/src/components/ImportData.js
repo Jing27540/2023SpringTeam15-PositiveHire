@@ -62,7 +62,7 @@ const rejectStyle = {
 /**
  * Import Data fuction that handles taking in a CSV file and uploading the contained information to mySQL
  */
-export default function ImportData() {
+function ImportData() {
   // holds file object
   const [file, setFile] = useState(null)
 
@@ -89,7 +89,7 @@ export default function ImportData() {
   const [csvColumns, setCsvColumns] = useState([])
 
   // all columns in database
-  const [databaseColumns] = useState(["NA", "employeeName","John Owens","employeeNum","marriedId",
+  const [databaseColumns] = useState(["NA", "employeeName","employeeNum","marriedId",
                                       "maritalStatusId","genderId","employmentStatusId","departmentId",
                                       "performanceScoreId","age","payRate", "state", "zip", "DOB", "sex",
                                       "maritalDesc", "citizenDesc", "hispanicLatino", "raceDesc", "dateOfHire", 
@@ -326,41 +326,41 @@ export default function ImportData() {
     for (const employee of employeeData) {
       // initialze the final employee object
       let finalEmployee = {
-        employeeName: "",
-        employeeNum : "",
-        marriedId: 1,
+        employeeName: null,
+        employeeNum : 0,
+        marriedId: 0,
         maritalStatusId: 0,
-        genderId: 1,
-        employmentStatusId: 1,
-        departmentId: 1,
-        performanceScoreId: 3,
-        age: 31,    
-        payRate: 28.5,
-        state: "",
-        zip: 1450,
-        DOB: "",
-        sex: "",
-        maritalDesc: "",
-        citizenDesc: "",
-        hispanicLatino: "",
-        raceDesc: "",
-        dateOfHire: "",
-        daysEmployed: 3317,
-        dateOfTermination: "",
-        reasonForTermination: "",
-        employmentStatus: "",
-        department: "",
-        position: "",
-        managerName: "",
-        employeeSource: "",
-        accessRole: "",
-        performanceScore: "",
-        annualBonus: 0.0,
+        genderId: 0,
+        employmentStatusId: 0,
+        departmentId: 0,
+        performanceScoreId: 0,
+        age: 0,    
+        payRate: 0.0,
+        state: null,
+        zip: 0,
+        DOB: null,
+        sex: null,
+        maritalDesc: null,
+        citizenDesc: null,
+        hispanicLatino: null,
+        raceDesc: null,
+        dateOfHire: null,
+        daysEmployed: 0,
+        dateOfTermination: null,
+        reasonForTermination: null,
+        employmentStatus: null,
+        department: null,
+        position: null,
+        managerName: null,
+        employeeSource: null,
+        accessRole: null,
+        performanceScore: null,
+        annualBonus: null,
         ptoHours: 0.0,
-        technicalSkills: null,
-        peopleSkills: null,
-        workEthic: null,
-        certifications: null
+        technicalSkills: [],
+        peopleSkills: [],
+        workEthic: [],
+        certifications: []
       }
 
       // for every column in the matching array, get the matching field in the csv array from the employee
@@ -370,9 +370,10 @@ export default function ImportData() {
           finalEmployee[matchingArray[i]] = employee[csvColumns[i]]
         }
       }
-
+          
       // add the employee to the database
       await axios.post("http://localhost:8080/employees", finalEmployee).then(response => {
+        console.log(finalEmployee);
         console.log("done")
       }).catch(error => {
         console.log(finalEmployee)
@@ -393,7 +394,7 @@ export default function ImportData() {
             {
               loadingDeleteAll ? (
                 <div className="spinner-wrapper d-flex flex-column align-items-center justify-content-center">
-                  <div class="row">
+                  <div className="row">
                     <Spinner className="spinner-border-big" animation="border" role="status">
                       <span className="visually-hidden">Loading...</span>
                     </Spinner>
@@ -401,20 +402,20 @@ export default function ImportData() {
                 <br />
                 {showConfirmation &&
                   <> 
-                    <div class="row">
+                    <div className="row">
                       <font color="#FFFFFF">Finished Deleting</font>
                     </div>
-                    <div class="row">
+                    <div className="row">
                       <font color="#FFFFFF">Redirecting to the dashboard</font>
                     </div>
                   </>
                 }
                 {!showConfirmation &&
                   <> 
-                    <div class="row">
+                    <div className="row">
                       <font color="#FFFFFF">Deleting Data</font>
                     </div>
-                    <div class="row">
+                    <div className="row">
                       <font color="#FFFFFF">Please wait</font>
                     </div>
                   </>
@@ -423,29 +424,21 @@ export default function ImportData() {
               ):(null)
             }
             <h3>
-              <div class="d-flex align-items-center">
+              <div className="d-flex align-items-center">
                 <span>
                   <font>Data</font>
                 </span>
-              <span class="ms-auto"></span>
+              <span className="ms-auto"></span>
               {
                 employees.length > 0 ? (
                   <>
-                    <Button class="btn btn-space" variant="danger" size="sm" onClick={() => setShowDeleteAll(true)}>Delete All</Button>
+                    <Button className="btn btn-space" variant="danger" size="sm" onClick={() => setShowDeleteAll(true)}>Delete All</Button>
                   </>
                 ):(null)
               }
               </div>
             </h3>
             <hr />
-            <BootstrapTable
-              bootstrap4
-              keyField="id"
-              data={employees}
-              columns={columns}
-              pagination={paginationFactory(options)}
-              noDataIndication="There aren't any employees in the system"
-            />
           </div>
         ) : (
           <>
@@ -454,15 +447,15 @@ export default function ImportData() {
                 <>
                 <div style={{paddingTop: "1em"}}>
                   <h3>
-                    <div class="d-flex align-items-center">
+                    <div className="d-flex align-items-center">
                       <span>
                         <font color="#EE786C">Welocme to PH Balanced</font>
                       </span>
-                      <span class="ms-auto"></span>
+                      <span className="ms-auto"></span>
                         {
                           employees.length > 0 ? (
                             <>
-                              <Button class="btn btn-space" variant="danger" size="sm" onClick={() => setShowDeleteAll(true)}>Delete All</Button>
+                              <Button className="btn btn-space" variant="danger" size="sm" onClick={() => setShowDeleteAll(true)}>Delete All</Button>
                             </>
                           ):(null)
                         }
@@ -476,7 +469,7 @@ export default function ImportData() {
                     <div {...getRootProps({style})}>
                       <input {...getInputProps()} />
                       <h1><GrDocumentCsv /></h1>
-                      <p class="text-black">Drag and drop a CSV file here, or click here to select files</p>
+                      <p className="text-black">Drag and drop a CSV file here, or click here to select files</p>
                     </div>
                   </Col>
                 </Row>
@@ -490,12 +483,12 @@ export default function ImportData() {
                     <h5>
                       <Card>
                         <Card.Body>
-                        <div class="d-flex align-items-center">
+                        <div className="d-flex align-items-center">
                           <span>
                             <font>{file.name}</font>
                           </span>
-                          <span class="ms-auto"></span>
-                          <Button class="btn btn-space" variant="danger" size="sm" onClick={() => window.location.reload(false)}>Delete</Button>
+                          <span className="ms-auto"></span>
+                          <Button className="btn btn-space" variant="danger" size="sm" onClick={() => window.location.reload(false)}>Delete</Button>
                         </div>
                         </Card.Body>
                       </Card>
@@ -519,13 +512,13 @@ export default function ImportData() {
                                 <tbody>
                                   {
                                     csvColumns.map((header, idx) => {
-                                      return  <tr>
+                                      return  <tr key={idx}>
                                                 <td>{header}</td>
                                                 <td>
                                                   <Form.Select onChange={(e) => handleColumnSelect(e, idx)}>
                                                     {
-                                                      databaseColumns.map(col => {
-                                                        return <option value={col}>{col}</option>
+                                                      databaseColumns.map((col, index) => {
+                                                        return <option value={col} key={index}>{col}</option>
                                                       })
                                                     }
                                                   </Form.Select>
@@ -541,7 +534,7 @@ export default function ImportData() {
                           {
                             loadingUpload ? (
                               <div className="spinner-wrapper d-flex flex-column align-items-center justify-content-center">
-                                <div class="row">
+                                <div className="row">
                                   <Spinner className="spinner-border-big" animation="border" role="status">
                                     <span className="visually-hidden">Loading...</span>
                                   </Spinner>
@@ -549,20 +542,20 @@ export default function ImportData() {
                                 <br />
                                 {showUploadConfirmation &&
                                   <> 
-                                    <div class="row">
+                                    <div className="row">
                                       <font color="#FFFFFF">Finished Uploading</font>
                                     </div>
-                                    <div class="row">
+                                    <div className="row">
                                       <font color="#FFFFFF">Redirecting to the dashboard</font>
                                     </div>
                                   </>
                                 }
                                 {!showUploadConfirmation &&
                                   <> 
-                                    <div class="row">
+                                    <div className="row">
                                       <font color="#FFFFFF">Uploading Data</font>
                                     </div>
-                                    <div class="row">
+                                    <div className="row">
                                       <font color="#FFFFFF">Please wait</font>
                                     </div>
                                   </>
@@ -596,3 +589,5 @@ export default function ImportData() {
     </Container>
   )
 }
+
+export default ImportData;

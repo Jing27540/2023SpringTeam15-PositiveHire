@@ -33,7 +33,6 @@ function JobPosting() {
     console.log(mode);
 
     return (
-
         <Box>
             <LeftBox><VerticalBar setMode={setMode} /></LeftBox>
             <RightBox>
