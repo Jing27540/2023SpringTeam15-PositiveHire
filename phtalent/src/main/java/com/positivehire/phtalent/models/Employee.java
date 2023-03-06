@@ -91,7 +91,10 @@ public class Employee extends DomainObject {
     private List<Certification> certifications;
 
     public Employee() {
-
+        this.technicalSkills = new ArrayList<Skill>();
+        this.peopleSkills = new ArrayList<Skill>();
+        this.workEthic = new ArrayList<Skill>();
+        this.certifications = new ArrayList<Certification>();
     }
 
     public Employee(Long id, String employeeName, int employeeNum, int marriedId, int maritalStatusId, int genderId, int employmentStatusId, int departmentId,
