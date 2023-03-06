@@ -24,38 +24,48 @@ public class AccountService extends Service<Account, Long> {
         return repository;
     }
 
+    /**
+     * Retrieve a list of all Accounts
+     */
     public List<Account> findAll() {
         return repository.findAll();
     }
 
-    public Account saveAccount(Account e) {
-        return (Account) repository.save(e);
-    }
+    /**
+     * Saves a new account to the repo
+     * 
+     * @param e the Account to save
+     * @return the Account e
+     */
+    // public Account saveAccount(Account e) {
+    // return (Account) repository.save(e);
+    // }
 
-    private Account findByUsername(String username) {
+    public Account findByEmployeeId(String employeeId) {
         List<Account> allAccounts = repository.findAll();
         for (Account account : allAccounts) {
-            if (account.getUsername().equals(username)) {
+            if (account.getEmployeeID().equals(employeeId)) {
                 return account;
             }
         }
+
         return null;
     }
 
-    public boolean usernameAvailable(String username) {
-        if (findByUsername(username) == null) {
-            return true;
-        } else {
+    public boolean employeeIdInUse(String employeeId) {
+        if (findByEmployeeId(employeeId) == null) {
             return false;
+        } else {
+            return true;
         }
     }
 
-    public int login(String username, String password) throws NoSuchAlgorithmException {
-        Account acc = findByUsername(username);
+    public String login(String employeeId, String password) throws NoSuchAlgorithmException {
+        Account acc = findByEmployeeId(employeeId);
         if (acc == null) {
-            return -1;
+            return null;
         } else {
-            return acc.login(username, password);
+            return acc.login(password);
         }
     }
 }
