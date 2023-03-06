@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../base/auth';
 import axios from 'axios';
@@ -24,40 +24,50 @@ const LoginCard = (props) => {
     // inputs
     const [employeeNumber, setEmployeeNumber] = useState();
     const [password, setPassword] = useState();
+    const [accountData, setAccountData] = useState();
     const [repeatedPassword, setRepeatedPassword] = useState();
     const [error, setError] = useState('');
 
     // switch the login and signup state
     const [signup, setSignup] = useState(false);
 
-    // successful to login
+    // authenticate user
+    const checkAuthStatus = async () => {
+        const account = { employeeID: employeeNumber, hashedPassword: password };
+        return await axios.post(`http://localhost:8080/accounts/account`, account).then(result => {
+            let flag = result.data;
+            if (flag) {
+                auth.login(true);
+                navigate('/home');
+            } else {
+                auth.login(false);
+                navigate('/');
+            }
+        });
+    };
+
+    // login
     const handleLogin = () => {
-
-        // TODO: Checking if the passward math the data
-        let flag = false;
-
-        if (employeeNumber === EMPLOYEENUM && password === PASSWORD) {
-            flag = true;
-        }
-
-        auth.login(flag);
-        navigate('/home'); // Can use useEffect to check value of auth.isAuthenticated
+        checkAuthStatus();
     }
 
     function changeView() {
         signup ? setSignup(false) : setSignup(true);
     }
 
-    const [accountData, setAccountData] = useState();
-    const obj = { employeeID: '5678', hashedPassword: 'amsterdam' };
-
+    // For testing
     function getAccountData() {
-        axios.post(`http://localhost:8080/accounts/account`, obj).then(result => {
-            setAccountData(result.data);
-            console.log(accountData);
-        });
+        // axios.post(`http://localhost:8080/accounts/account`, { employeeID: employeeNumber, hashedPassword: password }).then(result => {
+        //     setAccountData(result.data);
+        //     console.log(accountData);
+        // });
 
         // axios.get(`http://localhost:8080/accounts`,).then(result => {
+        //     setAccountData(result.data);
+        //     console.log(accountData);
+        // });
+
+        // axios.put(`http://localhost:8080/accounts`, { employeeID: employeeNumber, hashedPassword: password }).then(result => {
         //     setAccountData(result.data);
         //     console.log(accountData);
         // });
@@ -65,7 +75,7 @@ const LoginCard = (props) => {
 
     // console.log(props);
 
-    getAccountData();
+    // getAccountData();
 
     // useEffect(()=>{
     //     axios.get(`http://localhost:8080/accounts/${employeeNumber}`).then(result => {
@@ -96,13 +106,13 @@ const LoginCard = (props) => {
                                     <Form.Control size="lg" type="password" placeholder="RepeatPassword" onChange={e => { setRepeatedPassword(e.target.value); }} />
                                 </FloatingLabel>
                             </Form.Group>
-                            <Button variant="primary" type="submit" onClick={changeView} style={{ width: '200px', height: '50px' }}>
+                            <Button variant="primary" onClick={changeView} style={{ width: '200px', height: '50px' }}>
                                 Submit
                             </Button>
                         </>
                     ) : (
                         <>
-                            <Button variant="primary" type="submit" style={{ width: '200px', height: '50px' }} onClick={handleLogin}>
+                            <Button variant="primary" style={{ width: '200px', height: '50px' }} onClick={handleLogin}>
                                 Login
                             </Button>
                             <div style={{ display: 'flex', height: '10px' }}>

@@ -8,7 +8,7 @@ import { useState, createContext, useMemo, useContext } from "react";
 const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
 
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState();
 
     // call this function when you want to authenticate the user
     const login = async (flag) => {
