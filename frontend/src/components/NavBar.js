@@ -18,7 +18,7 @@ export default function NavBar() {
   return (
     <>
       <Navbar className="navbar" variant="dark">
-        <Container fluid style={{position: "absolute", bottom: "5px"}}>
+        <Container fluid style={{ position: "absolute", bottom: "5px" }}>
           <Navbar.Brand href="/home">
             <img
               src="/PHBalancedLogo.png"
@@ -33,14 +33,8 @@ export default function NavBar() {
             defaultActiveKey="home"
             className="me-auto"
             onSelect={(selectedKey) => { setKey(selectedKey) }}
-            style={{gap: '10px', fontWeight: 'bold', fontSize: '15px'}}
+            style={{ gap: '10px', fontWeight: 'bold', fontSize: '15px' }}
           >
-          <NavDropdown
-              id="nav-dropdown-dark-example"
-              title="Dropdown"
-              menuVariant="dark"
-            ></NavDropdown>
-
             <Nav.Item>
               <Nav.Link eventKey="home">Home</Nav.Link>
             </Nav.Item>
@@ -48,29 +42,14 @@ export default function NavBar() {
               <Nav.Link eventKey="profile">Profile</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="link2">Team</Nav.Link>
+              <Nav.Link eventKey="link2" disabled>Team</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="link3">Employee Experience</Nav.Link>
+              <Nav.Link eventKey="link3" disabled>Employee Experience</Nav.Link>
             </Nav.Item>
             <Nav.Item>
               <Nav.Link eventKey="link4">Import Data</Nav.Link>
             </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="link5">Positions</Nav.Link>
-            </Nav.Item>
-  
-            {/* <DropdownButton id="link5" title="Dropdown button">
-              <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-            </DropdownButton> */}
-
-            {/* <Nav.Item>
-                <Nav.Link eventKey="disabled" disabled>
-                  ViewEmmployees
-                </Nav.Link>
-              </Nav.Item> */}
           </Nav>
         </Container>
       </Navbar>

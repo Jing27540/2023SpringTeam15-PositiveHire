@@ -48,8 +48,6 @@ function CreateJobPosting() {
             setJobPosting(result.data);
         });
 
-    console.log(jobPosting);
-
     React.useEffect(() => {
 
         let temp = process;
@@ -95,8 +93,8 @@ function CreateJobPosting() {
     function handleSaveClick() {
         // update value as user input
         // input validation checking
-        //let tmpLocation = [];
-        //tmpLocation.push(location);
+        let tmpLocation = [];
+        tmpLocation.push(location);
         let newJobPosting = {
             // "jobNumber": jobNumber,
             "jobTitle": jobTitle,
@@ -107,12 +105,12 @@ function CreateJobPosting() {
             "otherRequirements": null,
             "jobDescription": jobDescription,
             "availablePositions": availablePositions,
-            "location": locationsList,
+            "location": tmpLocation,
             "meetingType": meetingType,
             "meetingNotes": meetingNotes,
             "process": null,
             "applyLink": applyLink,
-            "listofApplicants": []
+            "listofApplicants": null
         };
         console.log(newJobPosting);
         // call api
@@ -247,7 +245,7 @@ const Availability = (props) => {
                 <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setAvailablePositions(e.target.value)} /> </Col>
             </Form.Group>
 
-
+{/* 
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Location </Form.Label>
                 <Col sm={2}>
@@ -259,12 +257,12 @@ const Availability = (props) => {
                 <Col sm={2}>
                     <FloatingLabel label="City" id="city" onChange={() => { }} style={{  marginRight: '10px'  }} />
                 </Col>
-            </Form.Group>
+            </Form.Group> */}
 
 
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Locations </Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." /> </Col>
+                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setLocation(e.target.value)}/> </Col>
             </Form.Group>
             
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
