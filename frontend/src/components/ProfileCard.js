@@ -46,7 +46,7 @@ function ProfileCard(props) {
 
   return (
     <Card style={{ width: '100%', height: '100%'}} className="col-md-5 mx-auto">
-      <Card.Img variant="top" src="../../public/PHBalancedLogo.png" />
+      <img variant="top" src={require("../img/profile_img.png")} style={{width: '300px', height: '300px'}}></img>
       <Card.Body>
         <Container>
                 <Row  style={{ textAlign: 'center'}}>

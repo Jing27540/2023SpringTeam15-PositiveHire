@@ -30,7 +30,7 @@ const LoginCard = (props) => {
 
     // switch the login and signup state
     const [signup, setSignup] = useState(false);
-    const [responseMessage, setResponseMessage] = useState("Hi");
+    const [responseMessage, setResponseMessage] = useState("");
 
     // authenticate user
     const checkAuthStatus = async () => {
@@ -42,6 +42,7 @@ const LoginCard = (props) => {
                 navigate('/home');
             } else {
                 auth.login(false);
+                setResponseMessage("Employee number or password incorrect");
                 navigate('/');
             }
         });
@@ -67,11 +68,11 @@ const LoginCard = (props) => {
             if (flag) {
                 // auth.login(true);
                 // navigate('/home');
-                responseMessage("Account successfully created");
+                setResponseMessage("Account successfully created");
             } else {
                 // auth.login(false);
                 // navigate('/');
-                responseMessage("Account with that employee number already exists");
+                setResponseMessage("Account with that employee number already exists");
             }
         });
     };
@@ -152,7 +153,7 @@ const LoginCard = (props) => {
                                 Sign Up
                             </Button>
                             <div style={{ display: 'flex', height: '10px' }}></div>
-                            {/* <label>{responseMessage.value}</label> */}
+                             <label>{responseMessage}</label> 
                         </>
                     )
             }

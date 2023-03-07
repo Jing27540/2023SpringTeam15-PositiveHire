@@ -29,7 +29,7 @@ function BasicLoginPage(props) {
   return (
     <>
       <div>
-        <img src="http://www.w3.org/2000/svg"></img>
+        <img src={require('../img/logo192.png')}></img>
       </div>
 
       <Box>
