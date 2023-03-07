@@ -27,6 +27,7 @@ const LoginCard = (props) => {
     const [accountData, setAccountData] = useState();
     const [repeatedPassword, setRepeatedPassword] = useState();
     const [error, setError] = useState('');
+    // const [destination, setDestination] = useState('/');
 
     // switch the login and signup state
     const [signup, setSignup] = useState(false);
@@ -39,7 +40,8 @@ const LoginCard = (props) => {
             let flag = result.data;
             if (flag) {
                 auth.login(true);
-                navigate('/home');
+                // setDestination('/home');
+                navigate(props.destination);
             } else {
                 auth.login(false);
                 setResponseMessage("Employee number or password incorrect");
@@ -53,7 +55,7 @@ const LoginCard = (props) => {
         checkAuthStatus();
     }
 
-    // authenticate user
+    // Sign up user
     const signUpUser = async () => {
         if (password != repeatedPassword) {
             setResponseMessage("Password and repeat password do not match");
@@ -61,6 +63,16 @@ const LoginCard = (props) => {
                 <></>
             );
         }
+
+        //Check if there is an employee with the employee number already. If not, do not create new Account
+        console.log(employeeNumber);
+        try {
+            await axios.get(`http://localhost:8080/employees/${employeeNumber}`);
+        } catch (err) {
+            // console.log();
+            setResponseMessage(err.response.data.message);
+            return;
+        } 
 
         const account = { employeeID: employeeNumber, hashedPassword: password };
         return await axios.post(`http://localhost:8080/accounts`, account).then(result => {
@@ -85,36 +97,8 @@ const LoginCard = (props) => {
 
     function changeView() {
         signup ? setSignup(false) : setSignup(true);
+        // getAccountData();
     }
-
-    // For testing
-    function getAccountData() {
-        // axios.post(`http://localhost:8080/accounts/account`, { employeeID: employeeNumber, hashedPassword: password }).then(result => {
-        //     setAccountData(result.data);
-        //     console.log(accountData);
-        // });
-
-        // axios.get(`http://localhost:8080/accounts`,).then(result => {
-        //     setAccountData(result.data);
-        //     console.log(accountData);
-        // });
-
-        // axios.put(`http://localhost:8080/accounts`, { employeeID: employeeNumber, hashedPassword: password }).then(result => {
-        //     setAccountData(result.data);
-        //     console.log(accountData);
-        // });
-    }
-
-    // console.log(props);
-
-    // getAccountData();
-
-    // useEffect(()=>{
-    //     axios.get(`http://localhost:8080/accounts/${employeeNumber}`).then(result => {
-    //                 setAccountData(result.data);
-    //                 console.log(accountData);
-    //             });
-    // }, []);
 
     return (
         <Form>
@@ -159,6 +143,47 @@ const LoginCard = (props) => {
             }
         </Form>
     );
+
+    // For testing
+    // function getAccountData() {
+        // axios.post(`http://localhost:8080/accounts/account`, { employeeID: employeeNumber, hashedPassword: password }).then(result => {
+        //     setAccountData(result.data);
+        //     console.log(accountData);
+        // });
+
+        // axios.get(`http://localhost:8080/accounts`,).then(result => {
+        //     setAccountData(result.data);
+        //     console.log(accountData);
+        // });
+
+        // axios.put(`http://localhost:8080/accounts`, { employeeID: employeeNumber, hashedPassword: password }).then(result => {
+        //     setAccountData(result.data);
+        //     console.log(accountData);
+        // });
+
+        // console.log(employeeNumber);
+        // try {
+        //     axios.get(`http://localhost:8080/employees/${employeeNumber}`).then(result => {
+        //         let resp = result.data;
+        //         console.log(resp);
+        //     });
+        // } catch (err) {
+        //     console.log("Recieved error");
+        //     setResponseMessage(err.response);
+        // }
+        
+    // }
+
+    // console.log(props);
+
+    // getAccountData();
+
+    // useEffect(()=>{
+    //     axios.get(`http://localhost:8080/accounts/${employeeNumber}`).then(result => {
+    //                 setAccountData(result.data);
+    //                 console.log(accountData);
+    //             });
+    // }, []);
 }
 
 export default LoginCard;

@@ -29,16 +29,16 @@ function BasicLoginPage(props) {
   return (
     <>
       <div>
-        <img src={require('../img/logo192.png')}></img>
+        <img src={require('../img/login_img.png')}></img>
       </div>
 
       <Box>
         <SideBox>
         </SideBox>
-        <LoginCard title="Employee" />
+        <LoginCard title="Employee" destination="/Home" />
         <SideBox>
         </SideBox>
-        <LoginCard title="HR/DEI" />
+        <LoginCard title="HR/DEI" destination="/Home"/>
       </Box>
 
     </>
