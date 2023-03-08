@@ -35,6 +35,7 @@ const LoginCard = (props) => {
 
     // authenticate user
     const checkAuthStatus = async () => {
+        setResponseMessage("");
         const account = { employeeID: employeeNumber, hashedPassword: password };
         return await axios.post(`http://localhost:8080/accounts/account`, account).then(result => {
             let flag = result.data;
@@ -57,6 +58,7 @@ const LoginCard = (props) => {
 
     // Sign up user
     const signUpUser = async () => {
+        setResponseMessage("");
         if (password != repeatedPassword) {
             setResponseMessage("Password and repeat password do not match");
             return (
