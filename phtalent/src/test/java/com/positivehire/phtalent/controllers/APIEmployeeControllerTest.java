@@ -115,6 +115,13 @@ class APIEmployeeControllerTest {
         employeeServ.deleteAll();
         // }
 
+        Employee emp = new Employee((long) 2, "employeeName", 500, 1, 1, 1, 1, 1,
+            1, 39, 55.55, "NC", 22222, "DOB", "Male", "married", "US", "Latino", "race", "dateOfHire", 5,
+            "dateOfTermination", "reasonForTermination", "employementStatus", "department",
+            "position", "managerName", "employeeSource", "accessRole", "performanceScore", "annualBonus", 5.5,
+            null, null, null,
+            null);
+
         // Create fake employees to test with
         final Skill s1 = new Skill( "c#", "Expert", 4 );
         final Skill s2 = new Skill( "Docker", "Expert", 4 );
@@ -211,6 +218,7 @@ class APIEmployeeControllerTest {
         mvc.perform(
                 get( "/employees/" + employees.get( 2 ).getEmployeeNum() ).contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( status().isOk() );
-    }
-
+        employeeServ.save(emp);
+        }
+    
 }
