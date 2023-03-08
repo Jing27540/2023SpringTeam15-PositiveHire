@@ -43,14 +43,19 @@ function ProfileCard(props) {
     }
 
     let dept = " " + currEmployee[0].department;
+    let name = currEmployee[0]['employeeName'].split(" ");
 
+    let firstName = name[1];
+    let lastName = name[0];
+
+    let fullName = firstName + " " + lastName;
   return (
     <Card style={{ width: '100%', height: '100%'}} className="col-md-5 mx-auto">
-      <Card.Img variant="top" src="../../public/PHBalancedLogo.png" />
+      <img variant="top" src={require("../img/profile_img.png")} style={{width: '300px', height: '300px', justifyContent: 'center', alignItems: 'center'}}></img>
       <Card.Body>
         <Container>
                 <Row  style={{ textAlign: 'center'}}>
-                    <h3>{currEmployee[0]['employeeName']}</h3>
+                    <h3>{fullName}</h3>
                 </Row>
                 <Row style={{ justifyContent: 'center', alignItems: 'center',  fontWeight: 'bold' }}>
                     {currEmployee[0].position}
