@@ -34,12 +34,13 @@ import junit.framework.Assert;
  *
  * @author Jing Huang
  * @author Biniyam Sima
+ * @author Zayda Cummings
  */
-@SuppressWarnings ( "deprecation" )
-@RunWith ( SpringRunner.class )
+@SuppressWarnings("deprecation")
+@RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-class APIEmployeeControllerTest {
+public class APIEmployeeControllerTest {
 
     /**
      * Creates a mock web application beans for testing
