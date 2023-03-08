@@ -1,7 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import VerticalBar from "../components/VerticalBar";
 import CreateJobPosting from "../subViews/CreateJobPosting";
+import Welcome from "./Welcome";
 /**
  * 
  * @author Jing Huang
@@ -28,21 +32,28 @@ const RightBox = styled.div`
 
 function JobPosting() {
 
-    const [mode, setMode] = React.useState();
+    const [mode, setMode] = React.useState('Welcome');
 
     console.log(mode);
 
     return (
-        <Box>
-            <LeftBox><VerticalBar setMode={setMode} /></LeftBox>
-            <RightBox>
-                {mode === 'Create' ?
-                    <CreateJobPosting />
-                    :
-                    undefined
-                }
-            </RightBox>
-        </Box>
+        <Container fluid>
+            <Row>
+                <Col sm={1} style={{ marginTop: '10%' }}>
+                    <VerticalBar setMode={setMode} />
+                </Col>
+                <Col>
+                    {mode === 'Create' ?
+                        <CreateJobPosting />
+                        :
+                        mode === 'Welcome' ?
+                            <Welcome />
+                            :
+                            undefined
+                    }
+                </Col>
+            </Row>
+        </Container>
     );
 
 }
