@@ -51,7 +51,9 @@ function ProfileCard(props) {
     let fullName = firstName + " " + lastName;
   return (
     <Card style={{ width: '100%', height: '100%'}} className="col-md-5 mx-auto">
-      <img variant="top" src={require("../img/profile_img.png")} style={{width: '300px', height: '300px', justifyContent: 'center', alignItems: 'center'}}></img>
+        <Row style={{ justifyContent: 'center', alignItems: 'center'}}>
+        <img variant="top" src={require("../img/profile_img.png")} style={{width: '300px', height: '300px'}}></img>
+        </Row>
       <Card.Body>
         <Container>
                 <Row  style={{ textAlign: 'center'}}>

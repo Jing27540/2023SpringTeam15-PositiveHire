@@ -7,6 +7,7 @@ import EmployeeProfile from '../views/EmployeeProfile'
 import ImportData from './ImportData';
 import TabsBar from './TabsBar';
 import JobPosting from '../views/JobPosting';
+import { useAuth } from '../base/auth';
 
 /**
  * NavBar class for the header of the application
@@ -17,19 +18,21 @@ import JobPosting from '../views/JobPosting';
 
 const TITLE = ['Positions', 'Talent Pipeline', 'Performance Reviews', 'Development Plans', 'Resources', 'Reports'];
 // TODO: hard code
-const EMPLOYEENUM = 1103024456;
+// const EMPLOYEENUM = 1103024456;
 export default function NavBar() {
+
+  const auth = useAuth();
 
   const [key, setKey] = React.useState('home');
   const [mode, setMode] = React.useState('');
   const [pView, setPView] = React.useState('');
   const [employee, setEmployee] = React.useState({});
 
-  console.log(pView);
+  console.log('checking 123... ' ,auth.user);
 
   // Get Employee Data
   React.useEffect(() => {
-    axios.get(`http://localhost:8080/employees/${EMPLOYEENUM}`).then(res => { setEmployee(res.data); })
+    axios.get(`http://localhost:8080/employees/${auth.user}`).then(res => { setEmployee(res.data); })
       .catch(err => console.log(err));
   }, []);
 

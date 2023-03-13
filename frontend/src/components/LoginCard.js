@@ -14,8 +14,6 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
  */
 
 // TODO: remove
-const EMPLOYEENUM = "1234";
-const PASSWORD = '1234';
 const LoginCard = (props) => {
 
     const auth = useAuth();
@@ -40,7 +38,7 @@ const LoginCard = (props) => {
         return await axios.post(`http://localhost:8080/accounts/account`, account).then(result => {
             let flag = result.data;
             if (flag) {
-                auth.login(true);
+                auth.login(true, employeeNumber);
                 // setDestination('/home');
                 navigate(props.destination);
             } else {
