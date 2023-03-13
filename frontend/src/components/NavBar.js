@@ -25,7 +25,7 @@ export default function NavBar() {
 
   const [key, setKey] = React.useState('home');
   const [mode, setMode] = React.useState('');
-  const [pView, setPView] = React.useState('');
+  const [pView, setPView] = React.useState('Create/Edit Positions');
   const [employee, setEmployee] = React.useState({});
 
   console.log('checking 123... ' ,auth.user);
@@ -40,7 +40,7 @@ export default function NavBar() {
     <>
       <Navbar className="navbar" variant="dark">
         <Container fluid style={{ position: "absolute", bottom: "5px" }}>
-          <Navbar.Brand href="/home">
+          <Navbar.Brand href="/">
             <img
               src="/PHBalancedLogo.png"
               width="110"
@@ -53,7 +53,7 @@ export default function NavBar() {
           <Nav
             defaultActiveKey="home"
             className="me-auto"
-            onSelect={(selectedKey) => { setKey(selectedKey); setMode(selectedKey); }}
+            onSelect={(selectedKey) => { setKey(selectedKey); setMode(selectedKey); if(selectedKey === "home"){setPView('Create/Edit Positions')}}}
             style={{ gap: '10px', fontWeight: 'bold', fontSize: '15px' }}
           >
             <Nav.Item>
@@ -87,7 +87,7 @@ export default function NavBar() {
               undefined
       }
       {
-        pView === 'Create/Edit Positions' ?
+        key === 'home' && pView === 'Create/Edit Positions' ?
           <JobPosting />
           :
           undefined

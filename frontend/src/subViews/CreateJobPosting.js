@@ -121,7 +121,7 @@ function CreateJobPosting() {
 
     return (
         <Container>
-            <Row style={{ marginTop: '15px' }}>
+            <Row style={{ marginTop: '5%' }}>
                 {
                     titles.map((item, index) => {
                         return (
@@ -137,7 +137,7 @@ function CreateJobPosting() {
                     })
                 }
             </Row>
-            <Row>
+            <Row style={{ marginTop: '5%' }}>
                 {
                     mode === titles[0] ?
                         <JobTitle
