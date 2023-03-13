@@ -71,7 +71,7 @@ function EmployeeProfile(props) {
             <Container>
                 <Row>
                     <Col sm></Col>
-                    <Col sm><ProfileCard /></Col>
+                    <Col sm><ProfileCard employee={employee}/></Col>
                     <Col sm>
                         <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%", float: 'right', width: '100px' }} onClick={handleShow}>
                             Edit
