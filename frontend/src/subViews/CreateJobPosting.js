@@ -27,19 +27,19 @@ function CreateJobPosting() {
     const [salary, setSalary] = React.useState();
     // Requirements
     const [skill, setSkill] = React.useState();
-    const [skillRequirements, setSkillRequirements] = React.useState();
-    const [cerificationRequirements, setCertificationRequirements] = React.useState();
-    const [otherRequirements, setOtherRequirements] = React.useState();
+    const [skillRequirements, setSkillRequirements] = React.useState(); // Skill []
+    const [cerificationRequirements, setCertificationRequirements] = React.useState(); // Certification []
+    const [otherRequirements, setOtherRequirements] = React.useState(); // String
     // Availability
-    const [availablePositions, setAvailablePositions] = React.useState();
+    const [availablePositions, setAvailablePositions] = React.useState(); // Integer
     const [location, setLocation] = React.useState({ state: '', city: '', country: '' });
-    const [locationsList, setLocationsList] = React.useState([]);
+    const [locationsList, setLocationsList] = React.useState([]); // String []
 
     const [meetingType, setMeetingType] = React.useState();
     const [meetingNotes, setMeetingNotes] = React.useState();
     // Process
-    const [process, setProcess] = React.useState([]);
-    const [processData, setProcessData] = React.useState([]);
+    const [process, setProcess] = React.useState([]); // String []
+    const [processData, setProcessData] = React.useState([]); // String []
 
     // console.log(jobTitle);
     // console.log(jobDescription);
@@ -49,9 +49,7 @@ function CreateJobPosting() {
         });
 
     React.useEffect(() => {
-
         let temp = process;
-
         for (let i = 0; i < processData.length; i++) {
             let item = processData[i];
             if (item) {
@@ -177,7 +175,11 @@ function CreateJobPosting() {
             </Row>
             <Row className="justify-content-end">
                 <Col>
-                    <Button variant={'warning'} style={{ width: '200px', marginRight: '5%' }} onClick={handleContinueClick}>Continue</Button>
+                    {mode !== 'Process' ?
+                        <Button variant={'warning'} style={{ width: '200px', marginRight: '5%' }} onClick={handleContinueClick}>Continue</Button>
+                        :
+                        <></>
+                    }
                 </Col>
                 <Col>
                     <Button style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Saved Jobs</Button>
@@ -245,7 +247,7 @@ const Availability = (props) => {
                 <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setAvailablePositions(e.target.value)} /> </Col>
             </Form.Group>
 
-{/* 
+            {/* 
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Location </Form.Label>
                 <Col sm={2}>
@@ -262,9 +264,9 @@ const Availability = (props) => {
 
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Locations </Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setLocation(e.target.value)}/> </Col>
+                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setLocation(e.target.value)} /> </Col>
             </Form.Group>
-            
+
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Meeting Type</Form.Label>
                 <Col sm={7}>
@@ -282,6 +284,7 @@ const Availability = (props) => {
     );
 }
 
+// processes
 const Processes = (props) => {
 
     // const [arr, setArr] = React.useState([]);

@@ -1,8 +1,5 @@
 package com.positivehire.phtalent.models;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import java.io.Serializable;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Entity;
