@@ -32,7 +32,6 @@ function CreateJobPosting() {
     const [otherRequirements, setOtherRequirements] = React.useState(); // String
     // Availability
     const [availablePositions, setAvailablePositions] = React.useState(); // Integer
-    const [location, setLocation] = React.useState({ state: '', city: '', country: '' });
     const [locationsList, setLocationsList] = React.useState([]); // String []
 
     const [meetingType, setMeetingType] = React.useState();
@@ -41,58 +40,27 @@ function CreateJobPosting() {
     const [process, setProcess] = React.useState([]); // String []
     const [processData, setProcessData] = React.useState([]); // String []
 
-    console.log(jobTitle);
-    // console.log(jobDescription);
-    axios.get(`http://localhost:8080/jobpostings`)
-        .then(result => {
-            setJobPosting(result.data);
-        });
-
-    React.useEffect(() => {
-        let temp = process;
-        for (let i = 0; i < processData.length; i++) {
-            let item = processData[i];
-            if (item) {
-                temp[i] = item;
-            }
-        }
-        setProcess(temp);
-    }, [processData]);
+    // console.log(jobTitle);
+    // console.log(locationsList);
+    // axios.get(`http://localhost:8080/jobpostings`)
+    //     .then(result => {
+    //         setJobPosting(result.data);
+    //     });
 
     function handleContinueClick() {
         if (mode === titles[0]) {
             setMode(titles[1]);
-            //setColors(["secondary", "warning", "secondary", "secondary"]);
         } else if (mode === titles[1]) {
             setMode(titles[2]);
-            // setColors(["secondary", "secondary", "warning", "secondary"]);
         } else if (mode === titles[2]) {
             setMode(titles[3]);
-            // setColors(["secondary", "secondary", "secondary", "warning"]);
         }
-    }
-
-    React.useEffect(() => {
-        if (mode === titles[0]) {
-            setColors(["warning", "secondary", "secondary", "secondary"]);
-        } else if (mode === titles[1]) {
-            setColors(["secondary", "warning", "secondary", "secondary"]);
-        } else if (mode === titles[2]) {
-            setColors(["secondary", "secondary", "warning", "secondary"]);
-        } else if (mode === titles[3]) {
-            setColors(["secondary", "secondary", "secondary", "warning"]);
-        }
-    }, [mode]);
-
-    function addNewLocation() {
-        locationsList.push(location);
     }
 
     function handleSaveClick() {
         // update value as user input
         // input validation checking
-        let tmpLocation = [];
-        tmpLocation.push(location);
+        console.log(locationsList);
         let newJobPosting = {
             // "jobNumber": jobNumber,
             "jobTitle": jobTitle,
@@ -103,7 +71,7 @@ function CreateJobPosting() {
             "otherRequirements": null,
             "jobDescription": jobDescription,
             "availablePositions": availablePositions,
-            "location": tmpLocation,
+            "location": locationsList,
             "meetingType": meetingType,
             "meetingNotes": meetingNotes,
             "process": null,
@@ -119,33 +87,28 @@ function CreateJobPosting() {
         });
     }
 
-    // job title
-const JobTitle = () => {
-    return (
-        <Container>
-            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Form.Label column sm={2}> Official Position Title </Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => setjobTitle(e.target.value)} /></Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Form.Label column sm={2}> Job Description </Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => setJobDescription(e.target.value)} /></Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Form.Label column sm={2}> Apply Link </Form.Label>
-                <Col sm={7}> <Form.Control rows={3} placeholder="Type here..." onChange={e => setApplyLink(e.target.value)} /></Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Form.Label column sm={2}> Department </Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => setDepartment(e.target.value)} /></Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }} onChange={e => setSalary(e.target.value)}>
-                <Form.Label column sm={2}> Median Salary (varies based on location)</Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." /> </Col>
-            </Form.Group>
-        </Container>
-    );
-}
+    React.useEffect(() => {
+        let temp = process;
+        for (let i = 0; i < processData.length; i++) {
+            let item = processData[i];
+            if (item) {
+                temp[i] = item;
+            }
+        }
+        setProcess(temp);
+    }, [processData]);
+
+    React.useEffect(() => {
+        if (mode === titles[0]) {
+            setColors(["warning", "secondary", "secondary", "secondary"]);
+        } else if (mode === titles[1]) {
+            setColors(["secondary", "warning", "secondary", "secondary"]);
+        } else if (mode === titles[2]) {
+            setColors(["secondary", "secondary", "warning", "secondary"]);
+        } else if (mode === titles[3]) {
+            setColors(["secondary", "secondary", "secondary", "warning"]);
+        }
+    }, [mode]);
 
     return (
         <Container>
@@ -174,7 +137,6 @@ const JobTitle = () => {
                             setJobDescription={setJobDescription}
                             setSalary={setSalary}
                             setApplyLink={setApplyLink}
-
                         />
                         :
                         mode === titles[1] ?
@@ -187,8 +149,9 @@ const JobTitle = () => {
                             mode === titles[2] ?
                                 <Availability
                                     setAvailablePositions={setAvailablePositions}
-                                    setLocation={setLocation}
-                                    addNewLocation={addNewLocation}
+                                    setLocationsList={setLocationsList}
+                                    locationsList={locationsList}
+                                    // addNewLocation={addNewLocation}
                                     setMeetingType={setMeetingType}
                                     setMeetingNotes={setMeetingNotes}
                                 />
@@ -218,6 +181,33 @@ const JobTitle = () => {
     );
 }
 
+// job title
+const JobTitle = (props) => {
+    return (
+        <Container>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}> Official Position Title </Form.Label>
+                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setjobTitle(e.target.value)} /></Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}> Job Description </Form.Label>
+                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setJobDescription(e.target.value)} /></Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}> Apply Link </Form.Label>
+                <Col sm={7}> <Form.Control rows={3} placeholder="Type here..." onChange={e => props.setApplyLink(e.target.value)} /></Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}> Department </Form.Label>
+                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setDepartment(e.target.value)} /></Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }} onChange={e => props.setSalary(e.target.value)}>
+                <Form.Label column sm={2}> Median Salary (varies based on location)</Form.Label>
+                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." /> </Col>
+            </Form.Group>
+        </Container>
+    );
+}
 
 
 // requirements
@@ -242,33 +232,40 @@ const Requirements = (props) => {
 
 // availability
 const Availability = (props) => {
+
+    const [state, setState] = React.useState();
+    const [city, setCity] = React.useState();
+    const [country, setCountry] = React.useState();
+    const [zipcode, setZipcode] = React.useState();
+    // const [location, setLocation] = React.useState({ state: '', city: '', country: '' });
+    let locations = props.locationsList;
+
+    function addLocation() {
+        if (state !== undefined && city !== undefined && country !== undefined && zipcode !== undefined) {
+            let location = city + ' ' + state + ' ' + zipcode + ' ' + country;
+            locations.push(location);
+            console.log(location, locations);
+            props.setLocationsList(locations);
+        }
+    }
+
     return (
         <Container>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> # of Positions Available </Form.Label>
                 <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setAvailablePositions(e.target.value)} /> </Col>
             </Form.Group>
-
-            {/* 
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Form.Label column sm={2}> Location </Form.Label>
-                <Col sm={2}>
-                    <FloatingLabel label="State" id="state" onChange={() => { }} style={{  marginRight: '10px' }} />
-                </Col>
-                <Col sm={2}>
-                    <FloatingLabel label="Country" id="country" onChange={() => { }} style={{  marginRight: '10px'  }} />
-                </Col>
-                <Col sm={2}>
-                    <FloatingLabel label="City" id="city" onChange={() => { }} style={{  marginRight: '10px'  }} />
-                </Col>
-            </Form.Group> */}
-
-
+                <Col sm={2}><Button variant="outline-primary" onClick={addLocation}>Add Location</Button></Col>
+                <Col sm={2}><FloatingLabel label="Country" id="country" onChange={e => setCountry(e.target.value)} /></Col>
+                <Col sm={2}><FloatingLabel label="State" id="state" onChange={(e) => { setState(e.target.value) }} style={{ marginRight: '10px' }} /></Col>
+                <Col sm={2}><FloatingLabel label="City" id="city" onChange={e => setCity(e.target.value)} /></Col>
+                <Col sm={2}><FloatingLabel label="Zipcode" id="zipcode" onChange={e => setZipcode(e.target.value)} /></Col>
+            </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Locations </Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setLocation(e.target.value)} /> </Col>
+                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder={locations} onChange={e => props.setLocation(e.target.value)} /> </Col>
             </Form.Group>
-
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Meeting Type</Form.Label>
                 <Col sm={7}>
