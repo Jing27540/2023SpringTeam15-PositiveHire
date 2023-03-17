@@ -25,5 +25,16 @@ public class JobPostingService extends Service<JobPosting, Long> {
         return repo;
     }
     
+    /**
+     * Gets the parameter jobNumber and returns the Job Posting that corresponds to the
+     * parameter.
+     *
+     * @param jobNumber
+     *            the number associated with the Job Posting
+     * @return Job Posting object
+     */
+    public JobPosting findByJobNumber ( final String jobNumber ) {
+      return repo.findByJobNumber(jobNumber);
+  }
 
 }

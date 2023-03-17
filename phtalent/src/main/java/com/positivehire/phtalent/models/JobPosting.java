@@ -1,6 +1,8 @@
 package com.positivehire.phtalent.models;
 import java.util.List;
 import java.io.Serializable;
+import java.util.Date;
+
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -71,6 +73,10 @@ public class JobPosting extends DomainObject {
     /** List of Employees who applied for the position */
     @OneToMany(cascade = CascadeType.ALL)
     private List<Employee> listofApplicants;
+
+    private Date postDate;
+
+    private Date closeDate;
 
     /**
      * For Hibernate to use (Must be an empty constructor)
@@ -340,6 +346,38 @@ public class JobPosting extends DomainObject {
     }
 
     /**
+     * Returns the date when the job was posted
+     * @return post date of the job posting
+     */
+    public Date getPostDate() {
+        return postDate;
+    }
+
+    /**
+     * Sets the date when the job posting is listed
+     * @param postDate post date of the job posting
+     */
+    public void setPostDate(Date postDate) {
+        this.postDate = postDate;
+    }
+
+    /**
+     * Returns the job close date
+     * @return return the job close date
+     */
+    public Date getCloseDate() {
+        return closeDate;
+    }
+
+    /**
+     * Sets the SQL Date the job is no longer available
+     * @param closeDate Date the job is no longer available
+     */
+    public void setCloseDate(Date closeDate) {
+        this.closeDate = closeDate;
+    }
+
+    /**
      * Returns the Job Posting as a String
      *
      * @return a Job Posting represented as a String
@@ -348,10 +386,11 @@ public class JobPosting extends DomainObject {
     public String toString() {
         return "JobPosting [id=" + id + ", jobNumber=" + jobNumber + ", jobTitle=" + jobTitle + ", salary=" + salary
                 + ", department=" + department + ", skillRequirements=" + skillRequirements
-                + ", certificationRequirements=" + certificationRequirements + ", jobDescription=" + jobDescription
-                + ", availablePositions=" + availablePositions + ", location=" + location + ", meetingType="
-                + meetingType + ", meetingNotes=" + meetingNotes + ", process=" + process + ", applyLink=" + applyLink
-                + ", listofApplicants=" + listofApplicants + "]";
+                + ", certificationRequirements=" + certificationRequirements + ", otherRequirements="
+                + otherRequirements + ", jobDescription=" + jobDescription + ", availablePositions="
+                + availablePositions + ", location=" + location + ", meetingType=" + meetingType + ", meetingNotes="
+                + meetingNotes + ", process=" + process + ", applyLink=" + applyLink + ", listofApplicants="
+                + listofApplicants + ", postDate=" + postDate + ", closeDate=" + closeDate + "]";
     }
 
 }

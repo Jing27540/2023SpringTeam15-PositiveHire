@@ -223,6 +223,7 @@ public class APIAccountControllerTest {
                 // *************************** */
 
                 // *************************** */
+                accountServ.deleteAll();
         }
 
 }

@@ -18,6 +18,8 @@ import com.positivehire.phtalent.services.JobPostingService;
 
 /**
  * API Job Posting Class that handles the REST APIs for the JobPosting model
+ * @author Zayda Cummings
+ * @author Juan Pinilla
  */
 @RestController
 @CrossOrigin("http://localhost:3000/")
