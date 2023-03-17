@@ -25,11 +25,11 @@ function VerticalBar(props) {
                 <HorizontalLine></HorizontalLine>
             </Nav.Item>
             <Nav.Item key={3} variant="drak" >
-                <Nav.Link eventKey="REVIEW" >REVIEW</Nav.Link>
+                <Nav.Link eventKey="Review" >REVIEW</Nav.Link>
                 <HorizontalLine></HorizontalLine>
             </Nav.Item>
             <Nav.Item key={4} variant="drak">
-                <Nav.Link eventKey="VIEW" >VIEW</Nav.Link>
+                <Nav.Link eventKey="View" >VIEW</Nav.Link>
                 <HorizontalLine></HorizontalLine>
             </Nav.Item>
         </Nav>

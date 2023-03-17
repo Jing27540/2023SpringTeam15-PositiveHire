@@ -122,7 +122,7 @@ public class APIEmployeeControllerTest {
                 "DOB", "Male", "married", "US", "Latino", "race", "dateOfHire", 5, "dateOfTermination",
                 "reasonForTermination", "employementStatus", "department", "position", "managerName", "employeeSource",
                 "accessRole", "performanceScore", "annualBonus", 5.5, null, null, null, null );
-        final Date d = new Date();
+        final Date d = new Date(); 
         final Certification cert = new Certification( "Leadership", "NC State", d, "2234",
                 "Teamwork, communication, leadership" );
         final List<Certification> li = new ArrayList<Certification>();

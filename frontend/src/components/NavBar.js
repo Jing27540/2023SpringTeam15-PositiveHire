@@ -40,7 +40,7 @@ export default function NavBar() {
     <>
       <Navbar className="navbar" variant="dark">
         <Container fluid style={{ position: "absolute", bottom: "5px" }}>
-          <Navbar.Brand href="/">
+          <Navbar.Brand href="/home">
             <img
               src="/PHBalancedLogo.png"
               width="110"

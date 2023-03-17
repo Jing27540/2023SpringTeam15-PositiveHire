@@ -246,7 +246,7 @@ function ImportData() {
     setShowDeleteAll(false)
     setLoadingDeleteAll(false)
     setShowConfirmation(false)
-    navigate("/dashboard")
+    navigate("/home")
   }
 
   // file reader initiaization 
@@ -383,7 +383,7 @@ function ImportData() {
     await delay(2000);
     setLoadingUpload(false)
     setShowUploadConfirmation(false)
-    navigate("/dashboard")
+    navigate("/home")
   }
 
   return (
@@ -406,7 +406,7 @@ function ImportData() {
                       <font color="#FFFFFF">Finished Deleting</font>
                     </div>
                     <div className="row">
-                      <font color="#FFFFFF">Redirecting to the dashboard</font>
+                      <font color="#FFFFFF">Redirecting to the home</font>
                     </div>
                   </>
                 }
@@ -546,7 +546,7 @@ function ImportData() {
                                       <font color="#FFFFFF">Finished Uploading</font>
                                     </div>
                                     <div className="row">
-                                      <font color="#FFFFFF">Redirecting to the dashboard</font>
+                                      <font color="#FFFFFF">Redirecting to the home</font>
                                     </div>
                                   </>
                                 }

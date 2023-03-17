@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import VerticalBar from "../components/VerticalBar";
 import CreateJobPosting from "../subViews/CreateJobPosting";
 import Welcome from "./Welcome";
+import ViewJobPosting from "../subViews/ViewJobPosting";
 /**
  * 
  * @author Jing Huang
@@ -49,7 +50,10 @@ function JobPosting() {
                         mode === 'Welcome' ?
                             <Welcome />
                             :
-                            undefined
+                            mode === 'View' ?
+                                <ViewJobPosting />
+                                :
+                                undefined
                     }
                 </Col>
             </Row>

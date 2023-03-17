@@ -41,7 +41,7 @@ function CreateJobPosting() {
     const [process, setProcess] = React.useState([]); // String []
     const [processData, setProcessData] = React.useState([]); // String []
 
-    console.log(jobTitle);
+    // console.log(jobTitle);
     // console.log(jobDescription);
     axios.get(`http://localhost:8080/jobpostings`)
         .then(result => {
@@ -91,8 +91,8 @@ function CreateJobPosting() {
     function handleSaveClick() {
         // update value as user input
         // input validation checking
-        let tmpLocation = [];
-        tmpLocation.push(location);
+        // let tmpLocation = [];
+        // tmpLocation.push(location);
         let newJobPosting = {
             // "jobNumber": jobNumber,
             "jobTitle": jobTitle,
@@ -103,7 +103,7 @@ function CreateJobPosting() {
             "otherRequirements": null,
             "jobDescription": jobDescription,
             "availablePositions": availablePositions,
-            "location": tmpLocation,
+            "location": location,
             "meetingType": meetingType,
             "meetingNotes": meetingNotes,
             "process": null,
@@ -119,33 +119,7 @@ function CreateJobPosting() {
         });
     }
 
-    // job title
-const JobTitle = () => {
-    return (
-        <Container>
-            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Form.Label column sm={2}> Official Position Title </Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => setjobTitle(e.target.value)} /></Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Form.Label column sm={2}> Job Description </Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => setJobDescription(e.target.value)} /></Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Form.Label column sm={2}> Apply Link </Form.Label>
-                <Col sm={7}> <Form.Control rows={3} placeholder="Type here..." onChange={e => setApplyLink(e.target.value)} /></Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Form.Label column sm={2}> Department </Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => setDepartment(e.target.value)} /></Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }} onChange={e => setSalary(e.target.value)}>
-                <Form.Label column sm={2}> Median Salary (varies based on location)</Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." /> </Col>
-            </Form.Group>
-        </Container>
-    );
-}
+
 
     return (
         <Container>
@@ -170,7 +144,7 @@ const JobTitle = () => {
                     mode === titles[0] ?
                         <JobTitle
                             setjobTitle={setjobTitle}
-                            addLocation setDepartment={setDepartment}
+                            setDepartment={setDepartment}
                             setJobDescription={setJobDescription}
                             setSalary={setSalary}
                             setApplyLink={setApplyLink}
@@ -218,6 +192,33 @@ const JobTitle = () => {
     );
 }
 
+// job title
+const JobTitle = (props) => {
+    return (
+        <Container>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}> Official Position Title </Form.Label>
+                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setjobTitle(e.target.value)} /></Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}> Job Description </Form.Label>
+                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setJobDescription(e.target.value)} /></Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}> Apply Link </Form.Label>
+                <Col sm={7}> <Form.Control rows={3} placeholder="Type here..." onChange={e => props.setApplyLink(e.target.value)} /></Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}> Department </Form.Label>
+                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setDepartment(e.target.value)} /></Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }} onChange={e => props.setSalary(e.target.value)}>
+                <Form.Label column sm={2}> Median Salary (varies based on location)</Form.Label>
+                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." /> </Col>
+            </Form.Group>
+        </Container>
+    );
+}
 
 
 // requirements
