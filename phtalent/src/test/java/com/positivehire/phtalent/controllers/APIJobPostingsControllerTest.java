@@ -78,7 +78,7 @@ public class APIJobPostingsControllerTest {
 
 		//Tester locations
 		ArrayList<String> locs = new ArrayList<String>();
-		locs.add("Raleigh, NC");
+		locs.add("Raleigh NC");
 		locs.add("Remote");
 
 		//Tester skills
