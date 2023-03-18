@@ -34,13 +34,28 @@ const LoginCard = (props) => {
     // authenticate user
     const checkAuthStatus = async () => {
         setResponseMessage("");
+        let role = "";
+
+        try {
+            await axios.get(`http://localhost:8080/employees/${employeeNumber}`).then(result => {
+                role = result.data.accessRole;
+            });
+        } catch (err) {
+            //setResponseMessage(err.response.data.message);
+        } 
+
         const account = { employeeID: employeeNumber, hashedPassword: password };
         return await axios.post(`http://localhost:8080/accounts/account`, account).then(result => {
             let flag = result.data;
             if (flag) {
                 auth.login(true, employeeNumber);
                 // setDestination('/home');
-                navigate(props.destination);
+                //navigate(props.destination);
+                if (role == "HR" || role == "DEI") {
+                    navigate(props.destination);
+                } else {
+                    navigate("/Home");
+                }
             } else {
                 auth.login(false);
                 setResponseMessage("Employee number or password incorrect");
