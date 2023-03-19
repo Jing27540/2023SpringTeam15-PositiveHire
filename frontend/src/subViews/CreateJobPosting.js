@@ -41,11 +41,23 @@ function CreateJobPosting() {
     const [processData, setProcessData] = React.useState([]); // String []
 
     // console.log(jobTitle);
-    // console.log(locationsList);
-    // axios.get(`http://localhost:8080/jobpostings`)
-    //     .then(result => {
-    //         setJobPosting(result.data);
-    //     });
+    // console.log(jobDescription);
+    axios.get(`http://localhost:8080/jobpostings`)
+        .then(result => {
+            setJobPosting(result.data);
+        });
+
+    React.useEffect(() => {
+        let temp = process;
+        for (let i = 0; i < processData.length; i++) {
+            let item = processData[i];
+            if (item) {
+                temp[i] = item;
+            }
+        }
+        setProcess(temp);
+    }, [processData]);
+
 
     function handleContinueClick() {
         if (mode === titles[0]) {
@@ -60,7 +72,8 @@ function CreateJobPosting() {
     function handleSaveClick() {
         // update value as user input
         // input validation checking
-        console.log(locationsList);
+        // let tmpLocation = [];
+        // tmpLocation.push(location);
         let newJobPosting = {
             // "jobNumber": jobNumber,
             "jobTitle": jobTitle,
@@ -71,7 +84,7 @@ function CreateJobPosting() {
             "otherRequirements": null,
             "jobDescription": jobDescription,
             "availablePositions": availablePositions,
-            "location": locationsList,
+            "location": location,
             "meetingType": meetingType,
             "meetingNotes": meetingNotes,
             "process": null,
@@ -86,29 +99,6 @@ function CreateJobPosting() {
 
         });
     }
-
-    React.useEffect(() => {
-        let temp = process;
-        for (let i = 0; i < processData.length; i++) {
-            let item = processData[i];
-            if (item) {
-                temp[i] = item;
-            }
-        }
-        setProcess(temp);
-    }, [processData]);
-
-    React.useEffect(() => {
-        if (mode === titles[0]) {
-            setColors(["warning", "secondary", "secondary", "secondary"]);
-        } else if (mode === titles[1]) {
-            setColors(["secondary", "warning", "secondary", "secondary"]);
-        } else if (mode === titles[2]) {
-            setColors(["secondary", "secondary", "warning", "secondary"]);
-        } else if (mode === titles[3]) {
-            setColors(["secondary", "secondary", "secondary", "warning"]);
-        }
-    }, [mode]);
 
     return (
         <Container>
@@ -133,7 +123,7 @@ function CreateJobPosting() {
                     mode === titles[0] ?
                         <JobTitle
                             setjobTitle={setjobTitle}
-                            addLocation setDepartment={setDepartment}
+                            setDepartment={setDepartment}
                             setJobDescription={setJobDescription}
                             setSalary={setSalary}
                             setApplyLink={setApplyLink}

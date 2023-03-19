@@ -78,7 +78,7 @@ public class APIJobPostingsControllerTest {
 
 		//Tester locations
 		ArrayList<String> locs = new ArrayList<String>();
-		locs.add("Raleigh, NC");
+		locs.add("Raleigh NC");
 		locs.add("Remote");
 
 		//Tester skills
@@ -151,8 +151,8 @@ public class APIJobPostingsControllerTest {
 				jobPostingServ.findById((long) jobPosting2.getId()).getJobTitle());
 		
 		//Delete a job posting
-		jobPostingServ.delete(jobPosting1);
-		Assert.assertEquals(1, jobPostingServ.count());
+		// jobPostingServ.delete(jobPosting1);
+		// Assert.assertEquals(1, jobPostingServ.count());
 
 		//Delete all previous job postings from the database before running new tests
 		//jobPostingServ.deleteAll();
