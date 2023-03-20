@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import axios from "axios";
 import FloatingLabel from 'react-bootstrap-floating-label';
-
+import ListGroup from 'react-bootstrap/ListGroup';
 
 /**
  * This view will show the form allow user to create a job posting
@@ -14,38 +14,90 @@ import FloatingLabel from 'react-bootstrap-floating-label';
  */
 function CreateJobPosting() {
 
-    const [jobPosting, setJobPosting] = React.useState();
+    const [jobPosting, setJobPosting] = React.useState({});
     const titles = ['JobTitle', 'Requirements', 'Availabliltiy', 'Process']
     const [colors, setColors] = React.useState(["warning", "secondary", "secondary", "secondary"]);
     const [mode, setMode] = React.useState('JobTitle');
 
     // Job Title
-    const [jobTitle, setjobTitle] = React.useState();
-    const [applyLink, setApplyLink] = React.useState();
-    const [jobDescription, setJobDescription] = React.useState();
-    const [department, setDepartment] = React.useState();
-    const [salary, setSalary] = React.useState();
+    // const [jobTitle, setjobTitle] = React.useState();
+    // const [applyLink, setApplyLink] = React.useState();
+    // const [jobDescription, setJobDescription] = React.useState();
+    // const [department, setDepartment] = React.useState();
+    // const [salary, setSalary] = React.useState();
+
     // Requirements
-    const [skill, setSkill] = React.useState();
-    const [skillRequirements, setSkillRequirements] = React.useState(); // Skill []
-    const [cerificationRequirements, setCertificationRequirements] = React.useState(); // Certification []
-    const [otherRequirements, setOtherRequirements] = React.useState(); // String
+    // const [skillRequirements, setSkillRequirements] = React.useState(); // Skill []
+    // const [cerificationRequirements, setCertificationRequirements] = React.useState(); // Certification []
+    // const [otherRequirements, setOtherRequirements] = React.useState(); // String
+
     // Availability
     const [availablePositions, setAvailablePositions] = React.useState(); // Integer
-    const [locationsList, setLocationsList] = React.useState([]); // String []
-
+    const [locations, setLocations] = React.useState([]); // String []
     const [meetingType, setMeetingType] = React.useState();
     const [meetingNotes, setMeetingNotes] = React.useState();
+
     // Process
     const [process, setProcess] = React.useState([]); // String []
     const [processData, setProcessData] = React.useState([]); // String []
 
-    // console.log(jobTitle);
-    // console.log(jobDescription);
-    axios.get(`http://localhost:8080/jobpostings`)
-        .then(result => {
-            setJobPosting(result.data);
+    function handleContinueClick() {
+        if (mode === titles[0]) {
+            setMode(titles[1]);
+            setColors(["secondary", "warning", "secondary", "secondary"]);
+            // console.log(jobPosting);
+        } else if (mode === titles[1]) {
+            setMode(titles[2]);
+            setColors(["secondary", "secondary", "warning", "secondary"]);
+            // console.log(skillRequirements, cerificationRequirements, otherRequirements);
+        } else if (mode === titles[2]) {
+            setMode(titles[3]);
+            setColors(["secondary", "secondary", "secondary", "warning"]);
+            // console.log(availablePositions, locations, meetingType, meetingNotes);
+        }
+    }
+
+    React.useEffect(() => {
+        if (mode === titles[0]) {
+            setColors(["warning", "secondary", "secondary", "secondary"]);
+        } else if (mode === titles[1]) {
+            setColors(["secondary", "warning", "secondary", "secondary"]);
+        } else if (mode === titles[2]) {
+            setColors(["secondary", "secondary", "warning", "secondary"]);
+        } else if (mode === titles[3]) {
+            setColors(["secondary", "secondary", "secondary", "warning"]);
+        }
+    }, [mode]);
+
+    function handleSaveClick() {
+        // update value as user input
+        // input validation checking
+        let newJobPosting = {
+            // "jobNumber": jobNumber,
+            "jobTitle": jobPosting.jobTitle,
+            "salary": jobPosting.salary,
+            "department": jobPosting.department,
+            "skillRequirements": jobPosting.skillRequirements,
+            "certificationRequirements": jobPosting.certificationRequirements,
+            "otherRequirements": jobPosting.otherRequirements,
+            "jobDescription": jobPosting.jobDescription,
+            "availablePositions": availablePositions,
+            "location": locations,
+            "meetingType": meetingType,
+            "meetingNotes": meetingNotes,
+            "process": null,
+            "applyLink": jobPosting.applyLink,
+            "listofApplicants": null
+        };
+        console.log(newJobPosting);
+
+        // call api
+        axios.post("http://localhost:8080/jobpostings", newJobPosting).then(response => {
+            console.log("Successful to create a job posting");
+        }).catch(error => {
+
         });
+    }
 
     React.useEffect(() => {
         let temp = process;
@@ -58,50 +110,8 @@ function CreateJobPosting() {
         setProcess(temp);
     }, [processData]);
 
-
-    function handleContinueClick() {
-        if (mode === titles[0]) {
-            setMode(titles[1]);
-        } else if (mode === titles[1]) {
-            setMode(titles[2]);
-        } else if (mode === titles[2]) {
-            setMode(titles[3]);
-        }
-    }
-
-    function handleSaveClick() {
-        // update value as user input
-        // input validation checking
-        // let tmpLocation = [];
-        // tmpLocation.push(location);
-        let newJobPosting = {
-            // "jobNumber": jobNumber,
-            "jobTitle": jobTitle,
-            "salary": salary,
-            "department": department,
-            "skillRequirements": [],
-            "certificationRequirements": [],
-            "otherRequirements": null,
-            "jobDescription": jobDescription,
-            "availablePositions": availablePositions,
-            "location": location,
-            "meetingType": meetingType,
-            "meetingNotes": meetingNotes,
-            "process": null,
-            "applyLink": applyLink,
-            "listofApplicants": null
-        };
-        console.log(newJobPosting);
-        // call api
-        axios.post("http://localhost:8080/jobpostings", newJobPosting).then(response => {
-            console.log("Successful to create a job posting");
-        }).catch(error => {
-
-        });
-    }
-
     return (
-        <Container>
+        <Container fluid>
             <Row style={{ marginTop: '5%' }}>
                 {
                     titles.map((item, index) => {
@@ -110,7 +120,8 @@ function CreateJobPosting() {
                                 <Button
                                     variant={colors[index]}
                                     style={{ width: '200px' }}
-                                    onClick={() => { setMode(item); }}>
+                                    onClick={() => setMode(item)}
+                                >
                                     {item}
                                 </Button>
                             </Col>
@@ -122,26 +133,30 @@ function CreateJobPosting() {
                 {
                     mode === titles[0] ?
                         <JobTitle
-                            setjobTitle={setjobTitle}
-                            setDepartment={setDepartment}
-                            setJobDescription={setJobDescription}
-                            setSalary={setSalary}
-                            setApplyLink={setApplyLink}
+                            jobPosting={jobPosting}
+                            setJobPosting={setJobPosting}
+                            handleContinueClick={handleContinueClick}
+                        // setjobTitle={setjobTitle}
+                        // setDepartment={setDepartment}
+                        // setJobDescription={setJobDescription}
+                        // setSalary={setSalary}
+                        // setApplyLink={setApplyLink}
                         />
                         :
                         mode === titles[1] ?
                             <Requirements
-                                setOtherRequirements={setOtherRequirements}
-                                setCertificationRequirements={setCertificationRequirements}
-                                setSkillRequirements={setSkillRequirements}
+                                jobPosting={jobPosting}
+                                setJobPosting={setJobPosting}
+                                handleContinueClick={handleContinueClick}
+                            // setOtherRequirements={setOtherRequirements}
+                            // setCertificationRequirements={setCertificationRequirements}
+                            // setSkillRequirements={setSkillRequirements}
                             />
                             :
                             mode === titles[2] ?
                                 <Availability
                                     setAvailablePositions={setAvailablePositions}
-                                    setLocationsList={setLocationsList}
-                                    locationsList={locationsList}
-                                    // addNewLocation={addNewLocation}
+                                    setLocations={setLocations}
                                     setMeetingType={setMeetingType}
                                     setMeetingNotes={setMeetingNotes}
                                 />
@@ -154,18 +169,17 @@ function CreateJobPosting() {
                                     undefined
                 }
             </Row>
-            <Row className="justify-content-end">
-                <Col>
-                    {mode !== 'Process' ?
+            {/* <Row className="justify-content-end">
+                {mode !== 'Process' ?
+                    <Col>
                         <Button variant={'warning'} style={{ width: '200px', marginRight: '5%' }} onClick={handleContinueClick}>Continue</Button>
-                        :
-                        <></>
-                    }
-                </Col>
-                <Col>
-                    <Button style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Saved Jobs</Button>
-                </Col>
-            </Row>
+                    </Col>
+                    :
+                    <Col>
+                        <Button style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Saved Jobs</Button>
+                    </Col>
+                }
+            </Row> */}
         </Container>
 
     );
@@ -173,49 +187,200 @@ function CreateJobPosting() {
 
 // job title
 const JobTitle = (props) => {
+
+    const [jobPostingData, setJobPostingData] = React.useState(props.jobPosting);
+    const [jobTitle, setjobTitle] = React.useState(props.jobPosting.jobTitle ? props.jobPosting.jobTitle : "");
+    const [applyLink, setApplyLink] = React.useState(props.jobPosting.applyLink ? props.jobPosting.applyLink : "");
+    const [jobDescription, setJobDescription] = React.useState(props.jobPosting.jobDescription ? props.jobPosting.jobDescription : "");
+    const [department, setDepartment] = React.useState(props.jobPosting.department ? props.jobPosting.department : "");
+    const [salary, setSalary] = React.useState(props.jobPosting.salary ? props.jobPosting.salary : "");
+
+    // console.log(jobTitle, applyLink, jobDescription, department, salary);
+
+    function handleSaveClick() {
+        jobPostingData.jobTitle = jobTitle;
+        jobPostingData.applyLink = applyLink;
+        jobPostingData.jobDescription = jobDescription;
+        jobPostingData.department = department;
+        jobPostingData.salary = salary;
+        // TODO: check input validation
+        // save data
+        props.setJobPosting(jobPostingData);
+        // switch to next
+        props.handleContinueClick();
+    }
+
     return (
         <Container>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Official Position Title </Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setjobTitle(e.target.value)} /></Col>
+                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." value={jobTitle} onChange={e => setjobTitle(e.target.value)} /></Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Job Description </Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setJobDescription(e.target.value)} /></Col>
+                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." value={jobDescription} onChange={e => setJobDescription(e.target.value)} /></Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Apply Link </Form.Label>
-                <Col sm={7}> <Form.Control rows={3} placeholder="Type here..." onChange={e => props.setApplyLink(e.target.value)} /></Col>
+                <Col sm={7}> <Form.Control rows={1} placeholder="Type here..." value={applyLink} onChange={e => setApplyLink(e.target.value)} /></Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Department </Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setDepartment(e.target.value)} /></Col>
+                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." value={department} onChange={e => setDepartment(e.target.value)} /></Col>
             </Form.Group>
-            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }} onChange={e => props.setSalary(e.target.value)}>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Median Salary (varies based on location)</Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." /> </Col>
+                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." value={salary} onChange={e => setSalary(e.target.value)} /> </Col>
             </Form.Group>
+            <Row className="justify-content-end">
+                <Button variant={'warning'} style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Save & Continue</Button>
+            </Row>
         </Container>
     );
 }
 
-
 // requirements
 const Requirements = (props) => {
+
+    console.log(props);
+    const [jobPostingData, setJobPostingData] = React.useState(props.jobPosting);
+    const [sName, setSName] = React.useState();
+    const [yearExperience, setYearExperience] = React.useState();
+    const [cName, setCName] = React.useState();
+    const [comment1, setComment1] = React.useState();
+    const [skillRequirements, setSkillRequirements] = React.useState(props.jobPosting.skillRequirements ? props.jobPosting.skillRequirements : []); // Skill []
+    const [comment2, setComment2] = React.useState();
+    const [certificationRequirements, setCertificationRequirements] = React.useState(props.jobPosting.certificationRequirements ? props.jobPosting.certificationRequirements : []); // Certification []
+    const [otherRequirements, setOtherRequirements] = React.useState(props.jobPosting.otherRequirements ? props.jobPosting.otherRequirements : ''); // String
+
+
+    // TODO: The list is not Undate
+    function addSkill() {
+        let exists = false;
+
+        if (skillRequirements === undefined) {
+            skillRequirements = [];
+        }
+
+        // TODO: input validation
+        let newSkill = {
+            name: sName,
+            level: comment1, // string
+            score: yearExperience
+        }
+
+        skillRequirements.forEach(element => {
+            if (element.name === newSkill.name) {
+                exists = true;
+            }
+        });
+
+        if (!exists) {
+            skillRequirements.push(newSkill);
+        }
+
+        console.log(skillRequirements);
+    }
+
+    function addCertification() {
+
+        let exists = false;
+
+        if (certificationRequirements === undefined) {
+            certificationRequirements = [];
+        }
+
+        // TODO: input validation
+        let newCertification = {
+            name: cName,
+            institution: '',
+            issuedDate: null,
+            credentialID: '',
+            skills: comment2,
+        }
+
+        certificationRequirements.forEach(element => {
+            if (element.name === newCertification.name) {
+                exists = true;
+            }
+        });
+
+        if (!exists) {
+            certificationRequirements.push(newCertification);
+        }
+
+        console.log(certificationRequirements);
+
+    }
+
+    function handleSaveClick() {
+
+        jobPostingData.skillRequirements = skillRequirements;
+        jobPostingData.certificationRequirements = certificationRequirements;
+        jobPostingData.otherRequirements = otherRequirements;
+        // TODO: check input validation
+        // save data
+        props.setJobPosting(jobPostingData);
+        // switch to next
+        props.handleContinueClick();
+    }
+
     return (
         <Container>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Form.Label column sm={2}> SKILL REQUIREMENET </Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setSkillRequirements(e.target.value)} /> </Col>
+                <Col sm={2}><Button variant="outline-primary" onClick={addSkill}>Add Skill</Button></Col>
+                <Col sm={2}><FloatingLabel label="Name" id="name" value={sName} onChange={e => setSName(e.target.value)} /></Col>
+                <Col sm={2}><FloatingLabel label="Year Experience" id="YearExperience" value={yearExperience} onChange={(e) => { setYearExperience(e.target.value) }} style={{ marginRight: '10px' }} /></Col>
+                <Col sm={5}><FloatingLabel as="textarea" rows={3} label="Comments" id="comments1" value={comment1} onChange={(e) => { setComment1(e.target.value) }} style={{ marginRight: '10px' }} /></Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Form.Label column sm={2}> CERTIFICATION SKILL </Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setCertificationRequirements(e.target.value)} /> </Col>
+                <Form.Label column sm={2}> SKILL REQUIREMENETS </Form.Label>
+                <Col sm={9}>
+                    {skillRequirements.length > 0 ?
+                        <ListGroup>
+                            {skillRequirements.map((item, index) => {
+                                // TODO: generate String with missing value, the list is not updated
+                                let combine = item.name + " with " + item.score + " Years Experience : " + item.level;
+                                return (
+                                    <ListGroup.Item key={index}>{combine}</ListGroup.Item>
+                                );
+                            })}
+                        </ListGroup>
+                        :
+                        <Form.Control as="textarea" disabled={true} rows={2} placeholder="No Skill Requirements..." />
+                    }
+                </Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Form.Label column sm={2}> OTHER REQUIREMENET</Form.Label>
-                <Col sm={7}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => props.setOtherRequirements(e.target.value)} /> </Col>
+                <Col sm={2}><Button variant="outline-primary" onClick={addCertification}>Add Certification</Button></Col>
+                <Col sm={3}><FloatingLabel label="Name" id="name" value={sName} onChange={e => setCName(e.target.value)} /></Col>
+                <Col sm={6}><FloatingLabel as="textarea" rows={3} label="Comments" id="comment2" value={comment2} onChange={(e) => { setComment2(e.target.value) }} style={{ marginRight: '10px' }} /></Col>
             </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}> CERTIFICATION REQUIREMENETS </Form.Label>
+                <Col sm={9}>
+                    {certificationRequirements.length > 0 ?
+                        <ListGroup>
+                            {certificationRequirements.map((item, index) => {
+                                // TODO: generate String with missing value, the list is not updated
+                                let combine = item.name + " : " + item.skills;
+                                return (
+                                    <ListGroup.Item key={index}>{combine}</ListGroup.Item>
+                                );
+                            })}
+                        </ListGroup>
+                        :
+                        <Form.Control as="textarea" disabled={true} rows={2} placeholder="No Certification Requirements..." />
+                    }
+                </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}> OTHER REQUIREMENETS</Form.Label>
+                <Col sm={9}> <Form.Control as="textarea" rows={3} placeholder="Type here..." value={otherRequirements} onChange={e => setOtherRequirements(e.target.value)} /> </Col>
+            </Form.Group>
+            <Row className="justify-content-end">
+                <Button variant={'warning'} style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Save & Continue</Button>
+            </Row>
         </Container>
     );
 }
@@ -291,6 +456,9 @@ const Processes = (props) => {
                     );
                 })
             }
+            <Col>
+                <Button style={{ width: '200px', marginRight: '5%' }} onClick={props.handleSaveClick}>Saved Jobs</Button>
+            </Col>
         </Container>
     );
 }
