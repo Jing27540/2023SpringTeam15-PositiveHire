@@ -27,12 +27,13 @@ export default function NavBar() {
   const [mode, setMode] = React.useState('');
   const [pView, setPView] = React.useState('Create/Edit Positions');
   const [employee, setEmployee] = React.useState({});
+  const [accessRole, setAccessRole] = React.useState('');
 
   console.log('checking 123... ' ,auth.user);
 
   // Get Employee Data
   React.useEffect(() => {
-    axios.get(`http://localhost:8080/employees/${auth.user}`).then(res => { setEmployee(res.data); })
+    axios.get(`http://localhost:8080/employees/${auth.user}`).then(res => { setEmployee(res.data); setAccessRole(res.data.accessRole); })
       .catch(err => console.log(err));
   }, []);
 
@@ -78,7 +79,7 @@ export default function NavBar() {
         key === 'profile' ?
           <EmployeeProfile employee={employee} />
           :
-          key === 'importData' ?
+          key === 'importData' && accessRole === "HR" ?
             <ImportData />
             :
             key === 'home' ?
@@ -87,7 +88,7 @@ export default function NavBar() {
               undefined
       }
       {
-        key === 'home' && pView === 'Create/Edit Positions' ?
+        key === 'home' && pView === 'Create/Edit Positions' && accessRole === "HR" ?
           <JobPosting />
           :
           undefined
