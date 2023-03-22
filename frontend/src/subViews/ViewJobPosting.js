@@ -36,8 +36,6 @@ function ViewJobPosting() {
         loadCurrentData(); // actio
     }, []);
 
-    // console.log(selected);
-
     // children component to hold the single job posting from the list
     function getListData() {
 
@@ -75,7 +73,7 @@ const ChildrenJP = (props) => {
     const [jobPosting, setJobPosting] = React.useState(props.jp);
     const [jobTitle, setJobTitle] = React.useState(jobPosting.jobTitle);
     const [department, setDepartment] = React.useState('Department: ' + jobPosting.department);
-    const [location, setLocation] = React.useState(jobPosting.location.toString());
+    const [location, setLocation] = React.useState(jobPosting.location ? jobPosting.location.toString() : "");
 
     return (
         <Row style={{ itemAlign: 'center' }}>
@@ -97,28 +95,7 @@ const ChildrenJP = (props) => {
 }
 
 const ChildrenJPContent = (props) => {
-
-    console.log(props.jp)
-
     const [jobPosting, setJobPosting] = React.useState(props.jp);
-    // const [jobTitle, setJobTitle] = React.useState(props.jp ? props.jp.jobTitle : '');
-    // const [department, setDepartment] = React.useState(props.jp ? 'Department: ' + props.jp.department : '');
-    // const [location, setLocation] = React.useState(props.jp ? 'Location: ' + props.jp.location.toString() : '');
-    // const [jobNumber, setJobNumber] = React.useState(props.jp ? 'Position #: ' + props.jp.jobNumber : '');
-    // const [applyLink, setApplyLink] = React.useState(props.jp ? 'Apply Link: ' + props.jp.applyLink : '');
-
-    // const [jobDescription, setJobDescription] = React.useState(props.jp ? props.jp.jobDescription : '');
-    // const [certificationRequirements, setCertificationRequirements] = React.useState(jobPosting.certificationRequirements);
-    // const [skillRequirements, setSkillRequirements] = React.useState(jobPosting.skillRequirements);
-    // const [otherRequirements, setOtherRequirements] = React.useState(jobPosting.otherRequirements);
-
-    // const [salary, setSalary] = React.useState(props.jp ? props.jp.salary : '');
-    // const [process, setProcess] = React.useState(props.jp ? props.jp.process : '');
-
-    // const [availablePositions, setAvailablePositions] = React.useState(jobPosting.availablePositions);
-    // const [meetingNotes, setMeetingNotes] = React.useState(jobPosting.meetingNotes);
-    // const [meetingType, setMeetingType] = React.useState(jobPosting.meetingType);
-    console.log(jobPosting);
 
     function getProcessData() {
         if (props.jp.process) {
@@ -132,9 +109,6 @@ const ChildrenJPContent = (props) => {
 
 
     function getSCsData(r, flag) {
-        // console.log(props.jp.skillRequirements);
-        // console.log(props.jp.certificationRequirements);
-        console.log(r)
         let arr = undefined
         if (flag) {
             arr = r.map((item, index) =>
@@ -148,27 +122,24 @@ const ChildrenJPContent = (props) => {
         return arr;
     }
 
-    // React.useEffect(() => {
-    //     if (props.jp) {
-    //         getSCsData();
-    //     }
-    // }, [props.jp])
-
     return (
         props.jp ?
-            <Container style={{ itemAlign: 'center', margin: '5%', height: '100%' }}>
+            <Container style={{ itemAlign: 'center', marginTop: '5%', marginLeft: '5%', height: '100%' }}>
                 <Row style={{ marginTop: '1%' }}>
                     <Col sm={9}>
-                        <Row style={{ fontWeight: 'bold', fontSize: '30px' }}>{props.jp.jobTitle}</Row>
-                        <Row>{'Department: ' + props.jp.department}</Row>
+                        <Row style={{ fontWeight: 'bold', fontSize: '30px', textAlign: "left" }}>{props.jp.jobTitle}</Row>
+                        <Row>
+                            {'Department: ' + props.jp.department}
+                        </Row>
                         <Row>{'Location: ' + props.jp.location}</Row>
                         <Row>{'Position #: ' + props.jp.jobNumber}</Row>
-                        <Row sytle={{ marginTop: '2%' }}>
-                            {/* <Button size="sm" onClick={props.jp.applyLink} style={{ marginTop: '10%', backgroundColor: "#0f123F", borderColor: "#0f123F", width: '100px' }} >
-                                Apply Link
-                            </Button> */}
-                            <a className="btn btn-primary" href={props.jp.applyLink} role="button" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", width: '110px' }}>Apply Link</a>
-                        </Row>
+                        {props.jp.applyLink && props.jp.applyLink !== undefined ?
+                            <Row sytle={{ marginTop: '2%' }}>
+                                <a className="btn btn-primary" href={props.jp.applyLink} role="button" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", width: '110px', marginTop: "2%" }}>Apply Link</a>
+                            </Row>
+                            :
+                            undefined
+                        }
                     </Col>
                     <Col sm={2}>
                         <Button size="sm" style={{ marginTop: '10%', backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} >
@@ -178,7 +149,9 @@ const ChildrenJPContent = (props) => {
                 </Row >
                 <Row style={{ marginTop: '5%' }}>
                     <Row style={{ fontWeight: 'bold', fontSize: '20px' }}>Job Description</Row>
-                    <Row>{props.jp.jobDescription}</Row>
+                    <Row style={{ textAlign: "left", width: "95%" }}>
+                        <p>{props.jp.jobDescription}</p>
+                    </Row>
                 </Row>
                 <Row style={{ marginTop: '5%' }}>
                     <Row style={{ fontWeight: 'bold', fontSize: '20px' }}> Required Qualifications</Row>
