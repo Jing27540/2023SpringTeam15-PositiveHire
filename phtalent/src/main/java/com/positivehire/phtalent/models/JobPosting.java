@@ -1,5 +1,8 @@
 package com.positivehire.phtalent.models;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -74,8 +77,10 @@ public class JobPosting extends DomainObject {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Employee> listofApplicants;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="MMM d, yyyy, hh:mm:ss a")
     private Date postDate;
-
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="MMM d, yyyy, hh:mm:ss a")
     private Date closeDate;
 
     /**
@@ -349,6 +354,7 @@ public class JobPosting extends DomainObject {
      * Returns the date when the job was posted
      * @return post date of the job posting
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="MMM d, yyyy, hh:mm:ss a")
     public Date getPostDate() {
         return postDate;
     }
@@ -365,6 +371,7 @@ public class JobPosting extends DomainObject {
      * Returns the job close date
      * @return return the job close date
      */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="MMM d, yyyy, hh:mm:ss a")
     public Date getCloseDate() {
         return closeDate;
     }

@@ -86,8 +86,8 @@ public class APIJobPostingsControllerTest {
         jobPostingServ.deleteAll();
 
 		//Tester post and close dates
-		Date postDate = new Date("2023-03-10");
-		Date closeDate = new Date("2023-08-01");
+		Date postDate = new Date();
+		Date closeDate = new Date();
 
         //Tester locations
 		List<String> locs = new ArrayList<String>();
@@ -116,7 +116,7 @@ public class APIJobPostingsControllerTest {
 		
 		//Tester certifications
 		List<Certification> testCerts1 = new ArrayList<Certification>();
-		Date date1 = new Date("2009-03-26");
+		Date date1 = new Date();
 		Certification cert1 = new Certification("AWS Certified Cloud Practitioner", "Amazon Web Services", date1, "AWS1938", "Can manage AWS cloud tools");
 		Certification cert2 = new Certification("Professional Baker", "Great British Bake Off", date1, "Gordon-Ramsey Approved", "Can make a mean apple pie");
 
@@ -138,7 +138,7 @@ public class APIJobPostingsControllerTest {
         jobPostings.add(job1 = createJobPosting("A30694", "Software Developer", "$100,000",
 		"logistics division", testSkills1, testCerts1, "This is a very easy job I guess",
 		"Do you like managing cloud services and baking on the side? Well this is the job for you!",
-		4, locs, "Online", "Testing meeting notes", processes, "linkedin.com", null, postDate, closeDate));
+		4, locs, "Online", "Testing meeting notes", processes, "https://www.linkedin.com", null, postDate, closeDate));
 
 		jobPostingServ.save(job1);
 
@@ -146,7 +146,7 @@ public class APIJobPostingsControllerTest {
 		jobPostings.add(job2 = createJobPosting("B30694", "Senior Software Developer", "$120,000",
 		"logistics division", testSkills2, testCerts2, "This is a slightly harder job",
 		"Do you like managing cloud services and baking on the side? Well this is the job for you!",
-		4, locs, "Online", "Testing meeting notes", processes, "linkedin.com", null, postDate, closeDate));
+		4, locs, "Online", "Testing meeting notes", processes, "https://www.linkedin.com", null, postDate, closeDate));
 
 		jobPostingServ.save(job2);
 
@@ -268,11 +268,13 @@ public class APIJobPostingsControllerTest {
 
 		System.out.println("\n Number of job postings in database = " + jobPostingServ.count());
 
-        mvc.perform(post( "/jobpostings" ).contentType( MediaType.APPLICATION_JSON )
-		.content(TestUtils.asJsonString(job1))).andExpect(status().isOk())
-		.andReturn().getResponse().getContentAsString();
+        mvc.perform(post("/jobpostings")
+	      .content(TestUtils.asJsonString(job1))
+	      .contentType(MediaType.APPLICATION_JSON)
+	      .accept(MediaType.APPLICATION_JSON))
+      .andExpect(status().isOk());
 
-		//assertEquals(1, jobPostingServ.findAll().size());
+		assertEquals("Software Developer", jobPostingServ.findByJobNumber("A30694").getJobTitle());
 
         //assertEquals(job1, jobPostingServ.findByJobNumber("A30694") );
 	}
