@@ -34,18 +34,18 @@ const RightBox = styled.div`
 function JobPosting() {
 
     const [mode, setMode] = React.useState('Welcome');
+    const [childMode, setChildMode] = React.useState("JobTitle");
 
-    console.log(mode);
-
+    console.log(childMode);
     return (
         <Container fluid>
             <Row>
                 <Col sm={1} style={{ marginTop: '10%' }}>
-                    <VerticalBar setMode={setMode} />
+                    <VerticalBar setMode={setMode} setChildMode={setChildMode}/>
                 </Col>
                 <Col>
                     {mode === 'Create' ?
-                        <CreateJobPosting />
+                        <CreateJobPosting mode={childMode} />
                         :
                         mode === 'Welcome' ?
                             <Welcome />
