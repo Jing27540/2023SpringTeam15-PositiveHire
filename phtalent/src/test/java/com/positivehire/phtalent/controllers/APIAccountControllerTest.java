@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -219,6 +220,22 @@ public class APIAccountControllerTest {
                 assertNotSame("1357", accountServ.findByEmployeeId("1357").login("12345678"));
 
                 // *************************** */
+
+                // Attempt to login to an Account stored in the database
+                String content8 = mvc.perform(post("/accounts/account").contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(acc3))).andReturn().getResponse().getContentAsString();
+
+                assertTrue(content8.contains(acc3.getEmployeeID()));
+                assertTrue(content8.contains(acc3.getHashedPassword()));
+
+                // Attempt to login to an Account not stored in the database
+                Account accountNotStored = new Account("user", "ohioman7", "ohioman7");
+
+                String content9 = mvc.perform(post("/accounts/account").contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(accountNotStored))).andReturn().getResponse()
+                                .getContentAsString();
+
+                assertEquals(content9, "");
 
                 // *************************** */
 
