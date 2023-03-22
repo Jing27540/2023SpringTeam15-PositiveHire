@@ -63,6 +63,16 @@ public class APIAccountController extends APIController {
         return accountServ.findByEmployeeId(employeeId);
     }
 
+    /**
+     * RestAPI that serves as the call to login to the web application. Account
+     * information is upon successful login.
+     * 
+     * @param account Account holding the username and password for the login
+     *                attempt. Values are compared to Accounts in the database to
+     *                check authenticity.
+     * @return the Account object stored in the database upon successful login;
+     *         otherwise null.
+     */
     @PostMapping("/accounts/account")
     public Account checkingAccount(@RequestBody final Account account) {
         Account acc = accountServ.findByEmployeeId(account.getEmployeeID());
