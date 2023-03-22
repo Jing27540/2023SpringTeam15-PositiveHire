@@ -35,6 +35,8 @@ public class Account extends DomainObject {
      */
     private String hashedPassword;
 
+    private String employeeEmail;
+
     /**
      * Salt used to hash usernmae and password
      */
@@ -64,7 +66,7 @@ public class Account extends DomainObject {
      * @throws IllegalArgumentException If the username or password is less than 8
      *                                  characters long
      */
-    public Account(String employeeID, String password, String repeatPassword)
+    public Account(String employeeID, String password, String repeatPassword, String email)
             throws NoSuchAlgorithmException {
         // Check if username and password is valid
 
@@ -92,6 +94,9 @@ public class Account extends DomainObject {
 
         // Set the Employee Id
         this.employeeID = employeeID;
+
+        // Set the Employee email
+        this.employeeEmail = email;
     }
 
     /**
@@ -239,6 +244,10 @@ public class Account extends DomainObject {
 
     public String getEmployeeID() {
         return employeeID;
+    }
+
+    public String getEmployeeEmail() {
+        return employeeEmail;
     }
 
     public Account updateAccount(Account a) {

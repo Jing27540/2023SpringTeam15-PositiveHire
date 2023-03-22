@@ -52,6 +52,17 @@ public class AccountService extends Service<Account, Long> {
         return null;
     }
 
+    public Account findByEmployeeEmail(String employeeEmail) {
+        List<Account> allAccounts = repository.findAll();
+        for (Account account : allAccounts) {
+            if (account.getEmployeeEmail().equals(employeeEmail)) {
+                return account;
+            }
+        }
+
+        return null;
+    }
+
     public boolean employeeIdInUse(String employeeId) {
         if (findByEmployeeId(employeeId) == null) {
             return false;
