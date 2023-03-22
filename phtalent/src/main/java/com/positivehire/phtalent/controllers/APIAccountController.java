@@ -58,9 +58,15 @@ public class APIAccountController extends APIController {
         return accountServ.findAll();
     }
 
-    @GetMapping("/accounts/{employeeId}")
-    public Account findAccountByEmployeeId(@PathVariable("employeeId") final String employeeId) {
-        return accountServ.findByEmployeeId(employeeId);
+    // @GetMapping("/accounts/{employeeId}")
+    // public Account findAccountByEmployeeId(@PathVariable("employeeId") final
+    // String employeeId) {
+    // return accountServ.findByEmployeeId(employeeId);
+    // }
+
+    @GetMapping("/accounts/{employeeEmail}")
+    public Account findAccountByEmployeeId(@PathVariable("employeeEmail") final String employeeEmail) {
+        return accountServ.findByEmployeeEmail(employeeEmail);
     }
 
     /**
@@ -75,7 +81,7 @@ public class APIAccountController extends APIController {
      */
     @PostMapping("/accounts/account")
     public Account checkingAccount(@RequestBody final Account account) {
-        Account acc = accountServ.findByEmployeeId(account.getEmployeeID());
+        Account acc = accountServ.findByEmployeeEmail(account.getEmployeeEmail());
         if (acc != null && acc.getHashedPassword().equals(account.getHashedPassword())) {
             return acc;
         } else {
