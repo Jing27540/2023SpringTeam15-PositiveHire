@@ -29,7 +29,7 @@ function BasicLoginPage(props) {
   return (
     <>
       <div>
-        <img src={require('../img/login_img.png')}></img>
+        <img src={require('../img/phbanner.png')}></img>
       </div>
 
       <Box>
