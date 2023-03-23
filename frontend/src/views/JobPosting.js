@@ -31,30 +31,34 @@ const RightBox = styled.div`
     float: left;
 `;
 
-function JobPosting() {
+function JobPosting(props) {
 
     const [mode, setMode] = React.useState('Welcome');
-    const [childMode, setChildMode] = React.useState("JobTitle");
 
-    console.log(childMode);
+    function changeSubView() {
+        if ((mode === 'Create' || props.pView === 'Create/Edit Positions') && props.accessRole === "HR") {
+            return (
+                <CreateJobPosting accessRole={props.accessRole} />
+            );
+        } else if (mode === 'View' || props.pView === 'See Open Positions') {
+            return (
+                <ViewJobPosting accessRole={props.accessRole} />
+            );
+        } else if (mode === 'Welcome' || mode === 'Edit' ||  props.pView === 'Welcome') {
+            return (
+                <Welcome />
+            );
+        }
+    }
+
     return (
         <Container fluid>
             <Row>
                 <Col sm={1} style={{ marginTop: '10%' }}>
-                    <VerticalBar setMode={setMode} setChildMode={setChildMode}/>
+                    <VerticalBar setMode={setMode} accessRole={props.accessRole} setPView={props.setPView} />
                 </Col>
                 <Col>
-                    {mode === 'Create' ?
-                        <CreateJobPosting mode={childMode} />
-                        :
-                        mode === 'Welcome' ?
-                            <Welcome />
-                            :
-                            mode === 'View' ?
-                                <ViewJobPosting />
-                                :
-                                undefined
-                    }
+                    {changeSubView()}
                 </Col>
             </Row>
         </Container>

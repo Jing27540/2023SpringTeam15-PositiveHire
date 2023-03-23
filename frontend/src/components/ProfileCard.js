@@ -8,23 +8,6 @@ import { getEmployeeById } from '../clients/employee';
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"></link>
 //import Stack from 'react-bootstrap/Stack';
 
-const Box = styled.div`
-    display: flex;
-    margin: 10px;
-    border: none;
-    overflow: auto;
-`
-// const Stack = styled.div`
-//     padding: 5px;
-//     width: 100%;
-//     border: none;
-// `
-const SideBox = styled.div`
-    float: left;
-`;
-
-//let hist = "Employed for" + (props.employee.daysEmployed / 365) + "years, " + (props.employee.daysEmployed / 30) + "months";
-
 function ProfileCard(props) {
 
     //  console.log(props.employee);
@@ -56,7 +39,7 @@ function ProfileCard(props) {
 
     let fullName = firstName + " " + lastName;
     return (
-        <Card style={{ width: '100%', height: '100%' }} className="col-md-5 mx-auto">
+        <Card style={{ width: '100%', height: '100%', border: "none" }} className="col-md-5 mx-auto">
             <Row style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <img variant="top" src={require("../img/profile_img.png")} style={{ width: '300px', height: '300px' }}></img>
             </Row>
