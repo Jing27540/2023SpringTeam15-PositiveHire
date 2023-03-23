@@ -15,58 +15,33 @@ function Welcome() {
             <Row style={{ height: '40px', backgroundColor: "#0f123F", color: 'white', fontWeight: 'bold', justifyContent: 'center', placeItems: 'center' }}>
                 WELCOME BACK!
             </Row>
-            <Row style={{ justifyContent: 'between' }}>
-                <Col className="border border-2" style={{ marginTop: '5%', height: '300px', marginRight: '5%' }}>
+            <Row className="justify-content-between" style={{ height: 'auto' }}>
+                <Col sm={5} className="border border-2" style={{ marginTop: '5%' }}>
                     <Row style={{ height: '40px', backgroundColor: "#0f123F", color: 'white', fontWeight: 'bold', justifyContent: 'center', placeItems: 'center' }}>
                         Positions
                     </Row>
-                    <Row style={{ marginTop: '20%', justifyContent: 'center', placeItems: 'center' }}>
-                        <Col>
-                            <Button variant="outline-primary" onClick={() => alert('Not implement yet!')}>
-                                Create Position Listings
-                            </Button>
-                        </Col>
-                        <Col>
-                            <Button variant="outline-success" onClick={() => alert('Not implement yet!')}>
-                                Edit Position Listings
-                            </Button>
-                        </Col>
-                    </Row>
+                    <img variant="top" src={require("../img/openPositions.png")} style={{ width: "100%" }}></img>
+                    <Button variant="outline-success" style={{ margin: "2%" }} onClick={() => alert('Not implement yet!')}>
+                        View Open Positions
+                    </Button>
                 </Col>
-                <Col className="border border-2" style={{ marginTop: '5%', height: '300px', marginLeft: '5%' }}>
+                <Col sm={5} className="border border-2" style={{ marginTop: '5%' }}>
                     <Row style={{ height: '40px', backgroundColor: "#0f123F", color: 'white', fontWeight: 'bold', justifyContent: 'center', placeItems: 'center' }}>
                         Training Program
                     </Row>
-                    <Row style={{ marginTop: '20%', justifyContent: 'center', placeItems: 'center' }}>
-                        <Col>
-                            <Button variant="outline-primary" onClick={() => alert('Not implement yet!')}>
-                                Create
-                            </Button>
-                        </Col>
-                        <Col>
-                            <Button variant="outline-success" onClick={() => alert('Not implement yet!')}>
-                                View
-                            </Button>
-                        </Col>
-                        <Col>
-                            <Button variant="outline-warning" onClick={() => alert('Not implement yet!')} >
-                                Review and Approve
-                            </Button>
-                        </Col>
-                    </Row>
+                    <img variant="top" src={require("../img/trainingProgram.jpeg")} style={{ width: "100%" }}></img>
+                    <Button variant="outline-success" style={{ margin: "2%" }} onClick={() => alert('Not implement yet!')}>
+                        View Training Programs
+                    </Button>
                 </Col>
             </Row>
             <Row style={{ marginTop: '5%', height: '40px', backgroundColor: "#0f123F", color: 'white', fontWeight: 'bold', justifyContent: 'center', placeItems: 'center' }}>
                 Reports
             </Row>
-            <Row className="border border-2" style={{ height: '200px' }}>
-                <Col>
-                    <Button variant="outline-primary" onClick={() => alert('Not implement yet!')} >Create</Button>
-                </Col>
-                <Col>
-                    <Button variant="outline-success" onClick={() => alert('Not implement yet!')} >View</Button>
-                </Col>
-            </Row>
+            <img variant="top" src={require("../img/report2.png")} style={{ width: "100%" }}></img>
+            <Button variant="outline-success" style={{ margin: "2%" }} onClick={() => alert('Not implement yet!')}>
+                View Reports
+            </Button>
         </Container>
     );
 }
