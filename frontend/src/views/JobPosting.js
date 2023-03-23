@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import VerticalBar from "../components/VerticalBar";
 import CreateJobPosting from "../subViews/CreateJobPosting";
 import Welcome from "./Welcome";
+import ViewJobPosting from "../subViews/ViewJobPosting";
 /**
  * 
  * @author Jing Huang
@@ -30,27 +31,34 @@ const RightBox = styled.div`
     float: left;
 `;
 
-function JobPosting() {
+function JobPosting(props) {
 
     const [mode, setMode] = React.useState('Welcome');
 
-    console.log(mode);
+    function changeSubView() {
+        if ((mode === 'Create' || props.pView === 'Create/Edit Positions') && props.accessRole === "HR") {
+            return (
+                <CreateJobPosting accessRole={props.accessRole} />
+            );
+        } else if (mode === 'View' || props.pView === 'See Open Positions') {
+            return (
+                <ViewJobPosting accessRole={props.accessRole} />
+            );
+        } else if (mode === 'Welcome' || mode === 'Edit' ||  props.pView === 'Welcome') {
+            return (
+                <Welcome />
+            );
+        }
+    }
 
     return (
         <Container fluid>
             <Row>
                 <Col sm={1} style={{ marginTop: '10%' }}>
-                    <VerticalBar setMode={setMode} />
+                    <VerticalBar setMode={setMode} accessRole={props.accessRole} setPView={props.setPView} />
                 </Col>
                 <Col>
-                    {mode === 'Create' ?
-                        <CreateJobPosting />
-                        :
-                        mode === 'Welcome' ?
-                            <Welcome />
-                            :
-                            undefined
-                    }
+                    {changeSubView()}
                 </Col>
             </Row>
         </Container>

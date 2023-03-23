@@ -1,8 +1,5 @@
 package com.positivehire.phtalent.models;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import java.io.Serializable;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Entity;
@@ -47,8 +44,7 @@ public class JobPosting extends DomainObject {
     private List<Certification> certificationRequirements;
 
     /** Non-metric job position requirements */
-    private List<String> otherRequirements;
-
+    private String otherRequirements;
     
     @Column( length = 100000 )
     /** Main job description */
@@ -200,25 +196,33 @@ public class JobPosting extends DomainObject {
     }
 
     /**
-     * Get the job description for the job Position
-     * @return
+     * Get the other non-metric tracked requirements for the job
+     * @return other job requirements
      */
-    public List<String> getOtherRequirements() {
+    public String getOtherRequirements() {
         return otherRequirements;
     }
 
+    /**
+     * Get the job description for the job Position
+     * @return the job description
+     */
     public String getJobDescription() {
         return jobDescription;
     }
 
     /**
-     * Sets job description for the Job Position
-     * @param jobDescription
+     * Sets other requirements
+     * @param otherRequirements other job requirements
      */
-    public void setOtherRequirements(List<String> otherRequirements) {
+    public void setOtherRequirements(String otherRequirements) {
         this.otherRequirements = otherRequirements;   
     }
 
+    /**
+     * Sets job description for the Job Position
+     * @param jobDescription description of the job
+     */
     public void setJobDescription(String jobDescription) {
         this.jobDescription = jobDescription;
     }
@@ -299,7 +303,7 @@ public class JobPosting extends DomainObject {
      * Set the list of processes
      * @param process
      */
-    public void setProcess(ArrayList<String> process) {
+    public void setProcess(List<String> process) {
         this.process = process;
     }
 
@@ -331,7 +335,7 @@ public class JobPosting extends DomainObject {
      * Set the list of applicants
      * @param listofApplicants
      */
-    public void setListofApplicants(ArrayList<Employee> listofApplicants) {
+    public void setListofApplicants(List<Employee> listofApplicants) {
         this.listofApplicants = listofApplicants;
     }
 

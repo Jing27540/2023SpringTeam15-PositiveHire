@@ -14,22 +14,25 @@ const HorizontalLine = styled.div`
 `;
 
 function VerticalBar(props) {
+
+    console.log(props);
+
     return (
-        <Nav defaultActiveKey="Edit" className="flex-column" style={{ fontWeight: 'bold' }} onSelect={(selectedKey) => { props.setMode(selectedKey) }}>
+        <Nav defaultActiveKey="Edit" className="flex-column" style={{ fontWeight: 'bold' }} onSelect={(selectedKey) => { props.setMode(selectedKey); props.setPView("") }}>
             <Nav.Item key={1} variant="drak">
-                <Nav.Link eventKey="Create" >CREATE</Nav.Link>
+                <Nav.Link eventKey="Create" disabled={!(props.accessRole === "HR" || props.accessRole === "DEI")} >CREATE</Nav.Link>
                 <HorizontalLine></HorizontalLine>
             </Nav.Item>
             <Nav.Item key={2} variant="drak">
-                <Nav.Link eventKey="Edit" >EDIT</Nav.Link>
+                <Nav.Link eventKey="Edit" disabled={!(props.accessRole === "HR" || props.accessRole === "DEI")} >EDIT</Nav.Link>
                 <HorizontalLine></HorizontalLine>
             </Nav.Item>
             <Nav.Item key={3} variant="drak" >
-                <Nav.Link eventKey="REVIEW" >REVIEW</Nav.Link>
+                <Nav.Link eventKey="Review" disabled={true}>REVIEW</Nav.Link>
                 <HorizontalLine></HorizontalLine>
             </Nav.Item>
             <Nav.Item key={4} variant="drak">
-                <Nav.Link eventKey="VIEW" >VIEW</Nav.Link>
+                <Nav.Link eventKey="View" >VIEW</Nav.Link>
                 <HorizontalLine></HorizontalLine>
             </Nav.Item>
         </Nav>

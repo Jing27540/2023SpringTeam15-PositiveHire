@@ -13,6 +13,7 @@ import General from "../subViews/General";
 import Skill from "../subViews/Skill";
 import Certification from "../subViews/Certification"
 import ProfileCard from "../components/ProfileCard";
+import Alert from 'react-bootstrap/Alert';
 
 /**
  * EmployeeProfile component is used to manage profile information.
@@ -25,6 +26,7 @@ const ContentBox = styled.div`
     overflow: auto;
     justify-content: center;
     border: 1px solid #808080;
+    min-height: 500px;
 `;
 
 const GTITLE = ['General', 'Skills & Certifications', 'Performance Review', 'Career Development Plans', 'Open Positions'];
@@ -62,7 +64,7 @@ function EmployeeProfile(props) {
                 return (<Skill employee={employee} />);
             }
         } else {
-            return undefined;
+            return (<Alert variant="danger"> Not Implement Yet!</Alert>);
         }
     }
 
@@ -71,7 +73,7 @@ function EmployeeProfile(props) {
             <Container>
                 <Row>
                     <Col sm></Col>
-                    <Col sm><ProfileCard /></Col>
+                    <Col sm><ProfileCard employee={employee} /></Col>
                     <Col sm>
                         <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%", float: 'right', width: '100px' }} onClick={handleShow}>
                             Edit
@@ -94,7 +96,7 @@ function EmployeeProfile(props) {
             <Container>
                 <ContentBox>
                     <TabsBar titles={title} setMode={setTool} />
-                    <Container styled={{marginTop: "10px"}}>
+                    <Container styled={{ marginTop: "10px" }}>
                         {changeTool(mode)}
                     </Container>
                 </ContentBox>

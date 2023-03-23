@@ -7,6 +7,7 @@ import EmployeeProfile from '../views/EmployeeProfile'
 import ImportData from './ImportData';
 import TabsBar from './TabsBar';
 import JobPosting from '../views/JobPosting';
+import { useAuth } from '../base/auth';
 
 /**
  * NavBar class for the header of the application
@@ -16,20 +17,20 @@ import JobPosting from '../views/JobPosting';
  */
 
 const TITLE = ['Positions', 'Talent Pipeline', 'Performance Reviews', 'Development Plans', 'Resources', 'Reports'];
-// TODO: hard code
-const EMPLOYEENUM = 1103024456;
+
 export default function NavBar() {
 
-  const [key, setKey] = React.useState('home');
-  const [mode, setMode] = React.useState('');
-  const [pView, setPView] = React.useState('Create/Edit Positions');
-  const [employee, setEmployee] = React.useState({});
+  const auth = useAuth();
 
-  console.log(pView);
+  const [key, setKey] = React.useState('home');
+  const [mode, setMode] = React.useState('Positions');
+  const [pView, setPView] = React.useState('Welcome');
+  const [employee, setEmployee] = React.useState({});
+  const [accessRole, setAccessRole] = React.useState('');
 
   // Get Employee Data
   React.useEffect(() => {
-    axios.get(`http://localhost:8080/employees/${EMPLOYEENUM}`).then(res => { setEmployee(res.data); })
+    axios.get(`http://localhost:8080/employees/${auth.user}`).then(res => { setEmployee(res.data); setAccessRole(res.data.accessRole); })
       .catch(err => console.log(err));
   }, []);
 
@@ -37,7 +38,7 @@ export default function NavBar() {
     <>
       <Navbar className="navbar" variant="dark">
         <Container fluid style={{ position: "absolute", bottom: "5px" }}>
-          <Navbar.Brand href="/">
+          <Navbar.Brand href="/home">
             <img
               src="/PHBalancedLogo.png"
               width="110"
@@ -50,7 +51,7 @@ export default function NavBar() {
           <Nav
             defaultActiveKey="home"
             className="me-auto"
-            onSelect={(selectedKey) => { setKey(selectedKey); setMode(selectedKey); if(selectedKey === "home"){setPView('Create/Edit Positions')}}}
+            onSelect={(selectedKey) => { setKey(selectedKey); setPView('Welcome'); }}
             style={{ gap: '10px', fontWeight: 'bold', fontSize: '15px' }}
           >
             <Nav.Item>
@@ -66,7 +67,7 @@ export default function NavBar() {
               <Nav.Link eventKey="link3" disabled>Employee Experience</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="importData">Import Data</Nav.Link>
+              <Nav.Link eventKey="importData" disabled={!(accessRole === "HR" || accessRole === "DEI")}>Import Data</Nav.Link>
             </Nav.Item>
           </Nav>
         </Container>
@@ -75,19 +76,20 @@ export default function NavBar() {
         key === 'profile' ?
           <EmployeeProfile employee={employee} />
           :
-          key === 'importData' ?
+          key === 'importData' && accessRole === "HR" ?
             <ImportData />
             :
             key === 'home' ?
-              <TabsBar titles={TITLE} setMode={setMode} setPView={setPView}/>
+              <>
+                <TabsBar titles={TITLE} setMode={setMode} setPView={setPView} accessRole={accessRole} />
+                {mode === "Positions" ?
+                  <JobPosting accessRole={accessRole} pView={pView} setPView={setPView} />
+                  :
+                  undefined
+                }
+              </>
               :
               undefined
-      }
-      {
-        key === 'home' && pView === 'Create/Edit Positions' ?
-          <JobPosting />
-          :
-          undefined
       }
     </>
   );

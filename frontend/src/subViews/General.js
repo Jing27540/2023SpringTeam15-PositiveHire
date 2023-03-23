@@ -24,7 +24,7 @@ function General(props) {
     const [employee, setEmployee] = React.useState(props.employee);
 
     return (
-        <Container fluid style={{ alignItems: 'left' }}>
+        <Container fluid style={{ alignItems: 'left', marginTop: "2%", marginLeft: "2%" }}>
             <Row style={{ marginBottom: "15px", fontSize: '25px' }}>General Employee Information</Row>
             {
                 (employee !== undefined) ?

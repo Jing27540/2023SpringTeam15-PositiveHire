@@ -29,16 +29,16 @@ function BasicLoginPage(props) {
   return (
     <>
       <div>
-        <img src="http://www.w3.org/2000/svg"></img>
+        <img src={require('../img/phbanner.png')}></img>
       </div>
 
       <Box>
         <SideBox>
         </SideBox>
-        <LoginCard title="Employee" />
+        <LoginCard title="Employee" destination="/Home" />
         <SideBox>
         </SideBox>
-        <LoginCard title="HR/DEI" />
+        <LoginCard title="HR/DEI" destination="/Home"/>
       </Box>
 
     </>
