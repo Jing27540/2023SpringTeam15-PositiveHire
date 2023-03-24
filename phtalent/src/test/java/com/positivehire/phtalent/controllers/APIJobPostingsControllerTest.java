@@ -83,6 +83,7 @@ public class APIJobPostingsControllerTest {
 		//Delete all previous job postings from the database before running new tests
         jobPostingServ.deleteAll();
 
+
 		//Tester post and close dates
 		Date postDate = new Date();
 		Date closeDate = new Date();

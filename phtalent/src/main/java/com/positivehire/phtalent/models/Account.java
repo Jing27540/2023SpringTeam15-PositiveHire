@@ -35,6 +35,8 @@ public class Account extends DomainObject {
      */
     private String hashedPassword;
 
+    private String employeeEmail;
+
     /**
      * Salt used to hash usernmae and password
      */
@@ -64,7 +66,7 @@ public class Account extends DomainObject {
      * @throws IllegalArgumentException If the username or password is less than 8
      *                                  characters long
      */
-    public Account(String employeeID, String password, String repeatPassword)
+    public Account(String employeeID, String password, String repeatPassword, String email)
             throws NoSuchAlgorithmException {
         // Check if username and password is valid
 
@@ -92,6 +94,9 @@ public class Account extends DomainObject {
 
         // Set the Employee Id
         this.employeeID = employeeID;
+
+        // Set the Employee email
+        this.employeeEmail = email;
     }
 
     /**
@@ -113,10 +118,10 @@ public class Account extends DomainObject {
         // byte[] hashedPasswordResult = generateSHA512Hash(passwordAttempt);
 
         // if (Arrays.equals(hashedPasswordResult, getHashedPassword()) == false) {
-        //     return null;
+        // return null;
         // }
 
-        if(!this.hashedPassword.equals(passwordAttempt)) {
+        if (!this.hashedPassword.equals(passwordAttempt)) {
             return null;
         }
 
@@ -191,7 +196,7 @@ public class Account extends DomainObject {
     }
 
     public void setHashPassword(String newPass) throws NoSuchAlgorithmException {
-        //this.hashedPassword = generateSHA512Hash(newPass);
+        // this.hashedPassword = generateSHA512Hash(newPass);
         this.hashedPassword = newPass;
     }
 
@@ -214,29 +219,35 @@ public class Account extends DomainObject {
     // return salt;
     // }
 
-    /**
-     * Helper function for generating a SHA512 hash from the given value
-     * 
-     * @param value the value to hash
-     * @return the value hashed with the Account's salt
-     * @throws NoSuchAlgorithmException if there is an error trying to use the
-     *                                  SHA512 hash algorithm
-     */
-    private byte[] generateSHA512Hash(String value) throws NoSuchAlgorithmException {
-        try {
-            // Hash the given String with the Account's salt
-            MessageDigest md = MessageDigest.getInstance("SHA-512");
-            // md.update(getSalt());
-            byte[] hashedResult = md.digest(value.getBytes(StandardCharsets.UTF_8));
-            return hashedResult;
-        } catch (NoSuchAlgorithmException e) {
-            throw new NoSuchAlgorithmException(
-                    "ERROR: hashing algorithm is not available for use. Could not perform the action that required hashing.");
-        }
-    }
+    // /**
+    // * Helper function for generating a SHA512 hash from the given value
+    // *
+    // * @param value the value to hash
+    // * @return the value hashed with the Account's salt
+    // * @throws NoSuchAlgorithmException if there is an error trying to use the
+    // * SHA512 hash algorithm
+    // */
+    // private byte[] generateSHA512Hash(String value) throws
+    // NoSuchAlgorithmException {
+    // try {
+    // // Hash the given String with the Account's salt
+    // MessageDigest md = MessageDigest.getInstance("SHA-512");
+    // // md.update(getSalt());
+    // byte[] hashedResult = md.digest(value.getBytes(StandardCharsets.UTF_8));
+    // return hashedResult;
+    // } catch (NoSuchAlgorithmException e) {
+    // throw new NoSuchAlgorithmException(
+    // "ERROR: hashing algorithm is not available for use. Could not perform the
+    // action that required hashing.");
+    // }
+    // }
 
     public String getEmployeeID() {
         return employeeID;
+    }
+
+    public String getEmployeeEmail() {
+        return employeeEmail;
     }
 
     public Account updateAccount(Account a) {
@@ -249,12 +260,12 @@ public class Account extends DomainObject {
         return id;
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-                " id='" + getId() + "'" +
-                ", employeeID='" + getEmployeeID() + "'" +
-                ", hashedPassword='" + getHashedPassword() + "'" +
-                "}";
-    }
+    // @Override
+    // public String toString() {
+    // return "{" +
+    // " id='" + getId() + "'" +
+    // ", employeeID='" + getEmployeeID() + "'" +
+    // ", hashedPassword='" + getHashedPassword() + "'" +
+    // "}";
+    // }
 }

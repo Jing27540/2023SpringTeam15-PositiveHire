@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,7 @@ public class APIAccountControllerTest {
 
         private Account acc1, acc2, acc3;
 
+        private String empEmail1 = "hms@email.com", empEmail2 = "re@email.com", empEmail3 = "fff@email.com";
         private String empl1Id = "1234", empl2Id = "5678", empl3Id = "0000";
         private String pass1 = "password", pass2 = "amsterdam", pass3 = "observer";
 
@@ -83,11 +85,11 @@ public class APIAccountControllerTest {
 
                 // Create a few test accounts
                 try {
-                        acc1 = new Account(empl1Id, pass1, pass1);
+                        acc1 = new Account(empl1Id, pass1, pass1, empEmail1);
 
-                        acc2 = new Account(empl2Id, pass2, pass2);
+                        acc2 = new Account(empl2Id, pass2, pass2, empEmail2);
 
-                        acc3 = new Account(empl3Id, pass3, pass3);
+                        acc3 = new Account(empl3Id, pass3, pass3, empEmail3);
                 } catch (Exception e) {
                         fail();
                 }
@@ -105,30 +107,41 @@ public class APIAccountControllerTest {
                                 .andReturn().getResponse()
                                 .getContentAsString();
 
-                // Check that there is an object that has the employee id.
+                // Check that there is an object that has the employee id, email, and password
                 assertTrue(content1.contains(empl1Id));
                 assertTrue(content1.contains(empl2Id));
                 assertTrue(content1.contains(empl3Id));
+
+                assertTrue(content1.contains(empEmail1));
+                assertTrue(content1.contains(empEmail2));
+                assertTrue(content1.contains(empEmail3));
+
+                assertTrue(content1.contains(pass1));
+                assertTrue(content1.contains(pass2));
+                assertTrue(content1.contains(pass3));
                 assertEquals(accountServ.findAll().size(), 3);
 
                 // // *************************** */
 
                 // // Test finding by a specific employee id
+                // final String content2 = mvc.perform(get("/accounts/" +
+                // empl1Id).contentType(MediaType.APPLICATION_JSON))
+                // .andExpect(status().isOk())
+                // .andReturn().getResponse()
+                // .getContentAsString();
+
+                // assertTrue(content2.contains(empl1Id));
+
+                // Test finding by a specific employee email (username)
                 final String content2 = mvc.perform(get("/accounts/" +
-                                empl1Id).contentType(MediaType.APPLICATION_JSON))
+                                empEmail1).contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isOk())
                                 .andReturn().getResponse()
                                 .getContentAsString();
 
                 assertTrue(content2.contains(empl1Id));
-
-                // Attempt to get account by ID
-                // final String content2 = mvc.perform(get("/accounts/" +
-                // empl1Id)).andExpect(status().isOk()).andReturn().getResponse()
-                // .getContentAsString();
-
-                // assertTrue(content2.contains(empl1Id));
-                // Assert.assertEquals(acc1, accountServ.findById((long) acc1.getId()));
+                assertTrue(content2.contains(empEmail1));
+                assertTrue(content2.contains(pass1));
 
                 // // *************************** */
 
@@ -188,7 +201,7 @@ public class APIAccountControllerTest {
 
                 // Attempt to create a new account (sign up)
 
-                Account addAcc = new Account("1357", "12345678", "12345678");
+                Account addAcc = new Account("1357", "12345678", "12345678", "hello@email.com");
                 final String content6 = mvc.perform(post("/accounts").contentType(MediaType.APPLICATION_JSON)
                                 .content(TestUtils.asJsonString(addAcc)))
                                 .andExpect(status().isOk())
@@ -205,7 +218,7 @@ public class APIAccountControllerTest {
 
                 // Attempt to create a new account with a conflicting employe id
 
-                Account addDupAcc = new Account("0000", "12345678", "12345678");
+                Account addDupAcc = new Account("0000", "12345678", "12345678", "hello@email.com");
                 final String content7 = mvc.perform(post("/accounts").contentType(MediaType.APPLICATION_JSON)
                                 .content(TestUtils.asJsonString(addDupAcc)))
                                 .andReturn().getResponse()
@@ -219,6 +232,22 @@ public class APIAccountControllerTest {
                 assertNotSame("1357", accountServ.findByEmployeeId("1357").login("12345678"));
 
                 // *************************** */
+
+                // Attempt to login to an Account stored in the database
+                String content8 = mvc.perform(post("/accounts/account").contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(acc3))).andReturn().getResponse().getContentAsString();
+
+                assertTrue(content8.contains(acc3.getEmployeeID()));
+                assertTrue(content8.contains(acc3.getHashedPassword()));
+
+                // Attempt to login to an Account not stored in the database
+                Account accountNotStored = new Account("user", "ohioman7", "ohioman7", "ohio@email.com");
+
+                String content9 = mvc.perform(post("/accounts/account").contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(accountNotStored))).andReturn().getResponse()
+                                .getContentAsString();
+
+                assertEquals(content9, "");
 
                 // *************************** */
 
