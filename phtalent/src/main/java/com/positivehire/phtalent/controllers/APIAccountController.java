@@ -32,17 +32,24 @@ public class APIAccountController extends APIController {
     // private static final String BASE_PATH = "";
 
     @PostMapping("/accounts")
-    public Account createAccount(@RequestBody final Account newAcc) throws NoSuchAlgorithmException {
+    public Account createAccount(@RequestBody final Account passedInAcc) throws NoSuchAlgorithmException {
 
         // Temporary new acc
-        // Account tempAcc = new Account("1357", "12345678", "12345678");
+        Account newAcc;
 
-        if (accountServ.employeeIdInUse(newAcc.getEmployeeID()) == true) {
+        if (accountServ.employeeIdInUse(passedInAcc.getEmployeeID()) == true) {
             // return new ResponseEntity<String>(
             // successResponse("A user with that employee number already exists."),
             // HttpStatus.CONFLICT);
             return null;
         } else {
+            try {
+                newAcc = new Account(passedInAcc.getEmployeeID(), passedInAcc.getHashedPassword(),
+                        passedInAcc.getHashedPassword(), passedInAcc.getEmployeeEmail());
+            } catch (IllegalArgumentException e) {
+                return null;
+            }
+
             accountServ.save(newAcc);
             // return new ResponseEntity<String>(successResponse("Account successfully
             // created"),
