@@ -83,6 +83,13 @@ const LoginCard = (props) => {
             );
         }
 
+        if (password.length < 8) {
+            setResponseMessage("Passwords must be 8 or more characters");
+            return (
+                <></>
+            );
+        }
+
         //Check if there is an employee with the employee number already. If not, do not create new Account
         console.log(employeeNumber);
         try {
