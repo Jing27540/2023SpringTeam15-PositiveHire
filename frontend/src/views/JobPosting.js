@@ -7,6 +7,7 @@ import VerticalBar from "../components/VerticalBar";
 import CreateJobPosting from "../subViews/CreateJobPosting";
 import Welcome from "./Welcome";
 import ViewJobPosting from "../subViews/ViewJobPosting";
+import EditJobPosting from "../subViews/EditJobPosting";
 /**
  * 
  * @author Jing Huang
@@ -44,9 +45,13 @@ function JobPosting(props) {
             return (
                 <ViewJobPosting accessRole={props.accessRole} />
             );
-        } else if (mode === 'Welcome' || mode === 'Edit' ||  props.pView === 'Welcome') {
+        } else if (mode === 'Welcome' || props.pView === 'Welcome') {
             return (
                 <Welcome />
+            );
+        } else if (mode === 'Edit') {
+            return (
+                <EditJobPosting />
             );
         }
     }
