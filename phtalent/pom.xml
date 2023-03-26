@@ -43,22 +43,40 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.8.6</version><!--$NO-MVN-MAN-VER$ -->
 		</dependency>
+
 		 <dependency>
     		<groupId>javax.validation</groupId>
     		<artifactId>validation-api</artifactId>
     		<version>1.0.0.GA</version>
  	 	</dependency>
+		<!--Dependencies added to get the applciation to run 2/13/23 by Isaacz.-->
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>6.1.5.Final</version><!--$NO-MVN-MAN-VER$ -->
+    		<groupId>mysql</groupId>
+    		<artifactId>mysql-connector-java</artifactId>
+    		<version>8.0.32</version>
+			<scope>runtime</scope>
 		</dependency>
 
+		<dependency>
+    		<groupId>junit</groupId>
+    		<artifactId>junit</artifactId>
+    		<version>4.12</version>
+    		<scope>test</scope>
+		</dependency> 
+
+		<dependency>
+		    <groupId>junit</groupId>
+		    <artifactId>junit-dep</artifactId>
+		    <version>4.8.2</version>
+		    <scope>test</scope>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -67,6 +85,51 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<!--Dependencies added added for testing and coverage 3/7/23 by Zayda C.-->
+				<plugin>
+  <groupId>org.jacoco</groupId>
+  <artifactId>jacoco-maven-plugin</artifactId>
+  <version>0.8.3</version>
+  <executions>
+    <execution>
+      <id>coverage-initialize</id>
+      <goals>
+        <goal>prepare-agent</goal>
+      </goals>
+    </execution>
+    <execution>
+      <id>coverage-report</id>
+      <phase>post-integration-test</phase>
+      <goals>
+        <goal>report</goal>
+      </goals>
+    </execution>
+    <!-- Threshold -->
+    <execution>
+      <id>coverage-check</id>
+      <goals>
+        <goal>check</goal>
+      </goals>
+      <configuration>
+        <rules>
+          <rule>
+            <element>CLASS</element>
+            <excludes>
+              <exclude>com.asimio.demo.Application</exclude>
+            </excludes>
+            <limits>
+              <limit>
+                <counter>LINE</counter>
+                <value>COVEREDRATIO</value>
+                <minimum>80%</minimum>
+              </limit>
+            </limits>
+          </rule>
+        </rules>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>
 		</plugins>
 	</build>
 
