@@ -139,7 +139,7 @@ function CreateJobPosting(props) {
 }
 
 // job title
-const JobTitle = (props) => {
+export const JobTitle = (props) => {
 
     const [jobPostingData, setJobPostingData] = React.useState(props.jobPosting);
     const [jobTitle, setjobTitle] = React.useState(props.jobPosting.jobTitle ? props.jobPosting.jobTitle : "");
@@ -177,6 +177,15 @@ const JobTitle = (props) => {
 
     return (
         <Container>
+            {props.saveMode !== undefined && props.saveMode === false ?
+                <Row className="justify-content-start">
+                    <Button size="sm" style={{ backgroundColor: "green", borderColor: "green", width: '70px', marginTop: '1%' }} >
+                        Save
+                    </Button>
+                </Row>
+                :
+                <></>
+            }
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Official Position Title </Form.Label>
                 <Col sm={9}> <Form.Control rows={1} placeholder="Type here..." value={jobTitle} onChange={e => setjobTitle(e.target.value)} /></Col>
@@ -201,15 +210,19 @@ const JobTitle = (props) => {
                 <Form.Label column sm={2}> Median Salary (varies based on location)</Form.Label>
                 <Col sm={9}> <Form.Control placeholder="Type here..." value={salary} onChange={e => setSalary(e.target.value)} /> </Col>
             </Form.Group>
-            <Row className="justify-content-end">
-                <Button variant={'warning'} style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Save & Continue</Button>
-            </Row>
+            {props.saveMode !== undefined && props.saveMode === false ?
+                <></>
+                :
+                <Row className="justify-content-end">
+                    <Button variant={'warning'} style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Save & Continue</Button>
+                </Row>
+            }
         </Container>
     );
 }
 
 // requirements
-const Requirements = (props) => {
+export const Requirements = (props) => {
     const [jobPostingData, setJobPostingData] = React.useState(props.jobPosting);
 
     const [sType, setSType] = React.useState("");
@@ -224,18 +237,6 @@ const Requirements = (props) => {
     const [skillRequirements, setSkillRequirements] = React.useState(props.jobPosting.skillRequirements ? props.jobPosting.skillRequirements : []); // Skill []
     const [certificationRequirements, setCertificationRequirements] = React.useState(props.jobPosting.certificationRequirements ? props.jobPosting.certificationRequirements : []); // Certification []
     const [otherRequirements, setOtherRequirements] = React.useState(props.jobPosting.otherRequirements ? props.jobPosting.otherRequirements : ''); // String
-
-    // React.useEffect(() => {
-    //     // update list values
-    //     if (props.jobPosting.skillRequirements && props.jobPosting.skillRequirements.length > 0) {
-    //         setSkillRequirements(props.jobPosting.skillRequirements);
-    //     }
-
-    //     if (props.jobPosting.certificationRequirements && props.jobPosting.certificationRequirements.length > 0) {
-    //         setCertificationRequirements(props.jobPosting.certificationRequirements);
-    //     }
-
-    // }, [props.jobPosting.skillRequirements, props.jobPosting.certificationRequirements]);
 
     // TODO: The list is not Update
     function addSkill() {
@@ -284,6 +285,21 @@ const Requirements = (props) => {
 
     }
 
+    function removeSkill(index) {
+        if (skillRequirements && skillRequirements.length > 0) {
+            skillRequirements.splice(index, 1);
+            handleSkillRequirementsChange();
+            alert("Sucessfully to remove skill.");
+        } else {
+            alert("No Skills data.");
+        }
+    }
+
+    const handleSkillRequirementsChange = () => {
+        const newSK = [...skillRequirements];
+        setSkillRequirements(newSK);
+    };
+
     function addCertification() {
 
         let exists = false;
@@ -326,6 +342,21 @@ const Requirements = (props) => {
         }
     }
 
+    function removeCertification(index) {
+        if (certificationRequirements && certificationRequirements.length > 0) {
+            certificationRequirements.splice(index, 1);
+            handleCertificationRequirementsChange();
+            alert("Sucessfully to remove certification.");
+        } else {
+            alert("No Certifications data.");
+        }
+    }
+
+    const handleCertificationRequirementsChange = () => {
+        const newC = [...certificationRequirements];
+        setCertificationRequirements(newC);
+    };
+
     function handleSaveClick() {
 
         if (skillRequirements.length > 0 || certificationRequirements.length > 0 || otherRequirements !== "") {
@@ -343,6 +374,15 @@ const Requirements = (props) => {
 
     return (
         <Container>
+            {props.saveMode !== undefined && props.saveMode === false ?
+                <Row className="justify-content-start">
+                    <Button size="sm" style={{ backgroundColor: "green", borderColor: "green", width: '70px', marginTop: '1%' }} >
+                        Save
+                    </Button>
+                </Row>
+                :
+                <></>
+            }
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> SKILL REQUIREMENETS </Form.Label>
                 <Col sm={9}>
@@ -352,6 +392,7 @@ const Requirements = (props) => {
                                 <tr>
                                     <th>Skill #</th>
                                     <th>Comment</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -362,6 +403,11 @@ const Requirements = (props) => {
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td key={index}>{combine}</td>
+                                            <td>
+                                                <Button onClick={() => { removeSkill(index); }} size="sm" style={{ backgroundColor: "#990033", borderColor: "#990033", width: '30px', marginTop: '1%' }} >
+                                                    X
+                                                </Button>
+                                            </td>
                                         </tr>
                                     );
                                 })}
@@ -373,7 +419,7 @@ const Requirements = (props) => {
                 </Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Col sm={2}><Button variant="outline-primary" onClick={addSkill}>Add Skill</Button></Col>
+                <Col sm={2}><Button variant="outline-primary" onClick={() => { addSkill(); }}>Add Skill</Button></Col>
                 <Col sm={2}><FloatingLabel label="Name" id="name" value={sName} onChange={e => setSName(e.target.value)} /></Col>
                 <Col sm={2}><FloatingLabel label="Year Experience" id="YearExperience" value={yearExperience} onChange={(e) => { setYearExperience(e.target.value) }} style={{ marginRight: '10px' }} /></Col>
                 <Col sm={5}><FloatingLabel as="textarea" rows={3} label="Comments" id="comments1" value={comment1} onChange={(e) => { setComment1(e.target.value) }} style={{ marginRight: '10px' }} /></Col>
@@ -398,6 +444,7 @@ const Requirements = (props) => {
                                 <tr>
                                     <th>Certification #</th>
                                     <th>Comment</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -407,6 +454,11 @@ const Requirements = (props) => {
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td key={index}>{combine}</td>
+                                            <td>
+                                                <Button onClick={() => { removeCertification(index); }} size="sm" style={{ backgroundColor: "#990033", borderColor: "#990033", width: '30px', marginTop: '1%' }} >
+                                                    X
+                                                </Button>
+                                            </td>
                                         </tr>
                                     );
                                 })}
@@ -418,7 +470,7 @@ const Requirements = (props) => {
                 </Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Col sm={2}><Button variant="outline-primary" onClick={addCertification}>Add Certification</Button></Col>
+                <Col sm={2}><Button variant="outline-primary" onClick={()=>{addCertification();}}>Add Certification</Button></Col>
                 <Col sm={3}><FloatingLabel label="Name" id="name" value={sName} onChange={e => setCName(e.target.value)} /></Col>
                 <Col sm={6}><FloatingLabel as="textarea" rows={3} label="Comments" id="comment2" value={comment2} onChange={(e) => { setComment2(e.target.value) }} style={{ marginRight: '10px' }} /></Col>
             </Form.Group>
@@ -437,15 +489,23 @@ const Requirements = (props) => {
                 <Form.Label column sm={2}> OTHER REQUIREMENETS</Form.Label>
                 <Col sm={9}> <Form.Control as="textarea" rows={3} placeholder="Type here..." value={otherRequirements} onChange={e => setOtherRequirements(e.target.value)} /> </Col>
             </Form.Group>
-            <Row className="justify-content-end">
+            {/* <Row className="justify-content-end">
                 <Button variant={'warning'} style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Save & Continue</Button>
-            </Row>
+            </Row> */}
+            {props.saveMode !== undefined && props.saveMode === false ?
+                <></>
+                :
+                <Row className="justify-content-end">
+                    <Button variant={'warning'} style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Save & Continue</Button>
+                </Row>
+
+            }
         </Container>
     );
 }
 
 // availability
-const Availability = (props) => {
+export const Availability = (props) => {
 
     const [jobPostingData, setJobPostingData] = React.useState(props.jobPosting);
     const [state, setState] = React.useState("");
@@ -457,13 +517,6 @@ const Availability = (props) => {
     const [locations, setLocations] = React.useState(props.jobPosting.location ? props.jobPosting.location : []); // String []
     const [meetingType, setMeetingType] = React.useState(props.jobPosting.meetingType ? props.jobPosting.meetingType : '');
     const [meetingNotes, setMeetingNotes] = React.useState(props.jobPosting.meetingNotes ? props.jobPosting.meetingNotes : '');
-
-    // React.useEffect(() => {
-    //     // update list values
-    //     if (props.jobPosting.location && props.jobPosting.location.length > 0) {
-    //         setLocations(props.jobPosting.location);
-    //     }
-    // }, [props.jobPosting]);
 
     function addLocation() {
         // input checking
@@ -479,12 +532,28 @@ const Availability = (props) => {
             setCity();
             setCountry();
             setZipcode();
+            handlechange();
             alert("Successfully to add new location.");
 
         } else {
             alert("Missing inputs of city/state/country/zipcode! Please N/A instead.");
         }
     }
+
+    function removeLocation(index) {
+        if (locations && locations.length > 0) {
+            locations.splice(index, 1);
+            handlechange();
+            alert("Sucessfully to remove location.");
+        } else {
+            alert("No Loactions data.");
+        }
+    }
+
+    const handlechange = () => {
+        const newLocations = [...locations];
+        setLocations(newLocations);
+    };
 
     function handleSaveClick() {
         if (availablePositions || locations.length > 0 || meetingType !== "" && meetingNotes !== "") {
@@ -508,12 +577,21 @@ const Availability = (props) => {
 
     return (
         <Container>
+            {props.saveMode !== undefined && props.saveMode === false ?
+                <Row className="justify-content-start">
+                    <Button size="sm" style={{ backgroundColor: "green", borderColor: "green", width: '70px', marginTop: '1%' }} >
+                        Save
+                    </Button>
+                </Row>
+                :
+                <></>
+            }
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> # of Positions Available </Form.Label>
                 <Col sm={3}> <Form.Control rows={1} placeholder="Type Number..." onChange={e => setAvailablePositions(e.target.value)} /> </Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Col sm={2}><Button variant="outline-primary" onClick={addLocation}>Add Location</Button></Col>
+                <Col sm={2}><Button variant="outline-primary" onClick={()=>{addLocation();}}>Add Location</Button></Col>
                 <Col sm={2}><FloatingLabel label="Country" id="country" onChange={e => setCountry(e.target.value)} /></Col>
                 <Col sm={2}><FloatingLabel label="State" id="state" onChange={(e) => { setState(e.target.value) }} style={{ marginRight: '10px' }} /></Col>
                 <Col sm={2}><FloatingLabel label="City" id="city" onChange={e => setCity(e.target.value)} /></Col>
@@ -528,6 +606,7 @@ const Availability = (props) => {
                                 <tr>
                                     <th>Location #</th>
                                     <th>Comment</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -537,6 +616,11 @@ const Availability = (props) => {
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td>{item}</td>
+                                            <td>
+                                                <Button onClick={() => { removeLocation(index) }} size="sm" style={{ backgroundColor: "#990033", borderColor: "#990033", width: '30px', marginTop: '1%' }} >
+                                                    X
+                                                </Button>
+                                            </td>
                                         </tr>
                                     );
                                 })}
@@ -561,15 +645,19 @@ const Availability = (props) => {
                 <Form.Label column sm={2}> Meeting Notes </Form.Label>
                 <Col sm={9}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => setMeetingNotes(e.target.value)} /> </Col>
             </Form.Group>
-            <Row className="justify-content-end">
-                <Button variant={'warning'} style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Save & Continue</Button>
-            </Row>
+            {props.saveMode !== undefined && props.saveMode === false ?
+                <></>
+                :
+                <Row className="justify-content-end">
+                    <Button variant={'warning'} style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Save & Continue</Button>
+                </Row>
+            }
         </Container>
     );
 }
 
 // processes
-const Processes = (props) => {
+export const Processes = (props) => {
     const [jobPostingData, setJobPostingData] = React.useState(props.jobPosting);
     const [process, setProcess] = React.useState(props.jobPosting.process ? props.jobPosting.process : ['', '', '', '', '']);
 
@@ -596,14 +684,17 @@ const Processes = (props) => {
         props.handleSave();
     }
 
-    // function addProcess() {
-    //     let tmp = process;
-    //     tmp.push('Type here...');
-    //     setProcess(tmp);
-    // }
-
     return (
         <Container>
+            {props.saveMode !== undefined && props.saveMode === false ?
+                <Row className="justify-content-start">
+                    <Button size="sm" style={{ backgroundColor: "green", borderColor: "green", width: '70px', marginTop: '1%' }} >
+                        Save
+                    </Button>
+                </Row>
+                :
+                <></>
+            }
             {
                 process.map((item, index) => {
                     return (
@@ -616,14 +707,26 @@ const Processes = (props) => {
                     );
                 })
             }
-            <Row className="justify-content-end">
-                {/* <Col className="justify-content-start">
+            {/* <Row className="justify-content-end">
+                <Col className="justify-content-start">
+                    <Button variant="outline-primary" onClick={addProcess}>Add Process</Button>
+                </Col>
+                <Col className="justify-content-end">
+                    <Button style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Saved Jobs</Button>
+                </Col>
+            </Row> */}
+            {props.saveMode !== undefined && props.saveMode === false ?
+                <></>
+                :
+                <Row className="justify-content-end">
+                    {/* <Col className="justify-content-start">
                     <Button variant="outline-primary" onClick={addProcess}>Add Process</Button>
                 </Col> */}
-                {/* <Col className="justify-content-end"> */}
-                <Button style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Saved Jobs</Button>
-                {/* </Col> */}
-            </Row>
+                    {/* <Col className="justify-content-end"> */}
+                    <Button style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Saved Jobs</Button>
+                    {/* </Col> */}
+                </Row>
+            }
         </Container>
     );
 }
