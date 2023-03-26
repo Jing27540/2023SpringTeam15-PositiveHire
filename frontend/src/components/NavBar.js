@@ -1,97 +1,34 @@
-import React from 'react';
-import axios from 'axios';
+import React, { Component } from 'react'
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import EmployeeProfile from '../views/EmployeeProfile'
-import ImportData from './ImportData';
-import TabsBar from './TabsBar';
-import JobPosting from '../views/JobPosting';
-import { useAuth } from '../base/auth';
+import { NavLink } from "react-router-dom";
 
 /**
  * NavBar class for the header of the application
- * @author Juan Franco Pinilla
- * @author Jing Huang
- * @author Previous Team // Used some code from previous team, like the logo and navigation bar
  */
-
-const TITLE = ['Positions', 'Talent Pipeline', 'Performance Reviews', 'Development Plans', 'Resources', 'Reports'];
-
-export default function NavBar() {
-
-  const auth = useAuth();
-
-  const [key, setKey] = React.useState('home');
-  const [mode, setMode] = React.useState('Positions');
-  const [pView, setPView] = React.useState('Welcome');
-  const [employee, setEmployee] = React.useState({});
-  const [accessRole, setAccessRole] = React.useState('');
-
-  // Get Employee Data
-  React.useEffect(() => {
-    axios.get(`http://localhost:8080/employees/${auth.user}`).then(res => { setEmployee(res.data); setAccessRole(res.data.accessRole); })
-      .catch(err => console.log(err));
-  }, []);
-
-  return (
-    <>
-      <Navbar className="navbar" variant="dark">
-        <Container fluid style={{ position: "absolute", bottom: "5px" }}>
-          <Navbar.Brand href="/home">
+export default class NavBar extends Component {
+  render() {
+    return (
+      <Navbar class="navbar" variant="dark">
+        <Container fluid>
+          <Navbar.Brand href="/dashboard">
             <img
               src="/PHBalancedLogo.png"
-              width="110"
-              height="40"
-              hspace="10"
+              width="132"
+              height="45"
+              hspace="3.5"
               className="d-inline-block align-top"
               alt="logo"
             />
           </Navbar.Brand>
-          <Nav
-            defaultActiveKey="home"
-            className="me-auto"
-            onSelect={(selectedKey) => { setKey(selectedKey); setPView('Welcome'); }}
-            style={{ gap: '10px', fontWeight: 'bold', fontSize: '15px' }}
-          >
-            <Nav.Item>
-              <Nav.Link eventKey="home">Home</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="profile">Profile</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="link2" disabled>Team</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="link3" disabled>Employee Experience</Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="importData" disabled={!(accessRole === "HR" || accessRole === "DEI")}>Import Data</Nav.Link>
-            </Nav.Item>
+          <Nav className="me-auto">
+            <NavLink className='text-link' exact activeClassName="active" to="/dashboard">Dashboard</NavLink>
+            <NavLink className='text-link' exact activeClassName="active" to="/createchart">Create Chart</NavLink>
+            <NavLink className='text-link' exact activeClassName="active" to="/importdata">Data</NavLink>
           </Nav>
         </Container>
       </Navbar>
-      {
-        key === 'profile' ?
-          <EmployeeProfile employee={employee} />
-          :
-          key === 'importData' && accessRole === "HR" ?
-            <ImportData />
-            :
-            key === 'home' ?
-              <>
-                <TabsBar titles={TITLE} setMode={setMode} setPView={setPView} accessRole={accessRole} />
-                {mode === "Positions" ?
-                  <JobPosting accessRole={accessRole} pView={pView} setPView={setPView} />
-                  :
-                  undefined
-                }
-              </>
-              :
-              undefined
-      }
-    </>
-  );
-
+    )
+  }
 }

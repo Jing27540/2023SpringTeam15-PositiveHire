@@ -2,9 +2,7 @@ package com.positivehire.phtalent.models;
 
 import java.util.Objects;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 
 /**
@@ -23,7 +21,7 @@ public class Skill {
     /** The level of this created Skill object */
     private String level;
     /** The score of this created Skill object */
-    @Min(0)
+    @Min(0) 
     private Integer score;
 
     /**
