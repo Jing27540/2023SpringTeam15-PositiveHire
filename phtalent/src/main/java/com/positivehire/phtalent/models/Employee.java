@@ -17,87 +17,90 @@ import jakarta.persistence.OneToMany;
 public class Employee extends DomainObject {
     @Id
     @GeneratedValue
-    private Long                id;
+    private Long id;
 
-    private String              employeeName;
+    private String employeeName;
 
-    private int                 employeeNum;
+    private int employeeNum;
 
-    private int                 marriedId;
+    private int marriedId;
 
-    private int                 maritalStatusId;
+    private int maritalStatusId;
 
-    private int                 genderId;
+    private int genderId;
 
-    private int                 employmentStatusId;
+    private int employmentStatusId;
 
-    private int                 departmentId;
+    private int departmentId;
 
-    private int                 performanceScoreId;
+    private int performanceScoreId;
 
-    private int                 age;
+    private int age;
 
-    private double              payRate;
+    private double payRate;
 
-    private String              state;
+    private String state;
 
-    private int                 zip;
+    private int zip;
 
-    private String              DOB;
+    private String DOB;
 
-    private String              sex;
+    private String sex;
 
-    private String              maritalDesc;
+    private String maritalDesc;
 
-    private String              citizenDesc;
+    private String citizenDesc;
 
-    private String              hispanicLatino;
+    private String hispanicLatino;
 
-    private String              raceDesc;
+    private String raceDesc;
 
-    private String              dateOfHire;
+    private String dateOfHire;
 
-    private int                 daysEmployed;
+    private int daysEmployed;
 
-    private String              dateOfTermination;
+    private String dateOfTermination;
 
-    private String              reasonForTermination;
+    private String reasonForTermination;
 
-    private String              employementStatus;
+    private String employementStatus;
 
-    private String              department;
+    private String department;
 
-    private String              position;
+    private String position;
 
-    private String              managerName;
+    private String managerName;
 
-    private String              employeeSource;
+    private String employeeSource;
 
-    private String              accessRole;
+    private String accessRole;
 
-    private String              performanceScore;
+    private String performanceScore;
 
-    private String              annualBonus;
+    private String annualBonus;
 
-    private double              ptoHours;
+    private double ptoHours;
 
-    @OneToMany ( cascade = CascadeType.ALL )
-    private List<Skill>         technicalSkills;
-    @OneToMany ( cascade = CascadeType.ALL )
-    private List<Skill>         peopleSkills;
-    @OneToMany ( cascade = CascadeType.ALL )
-    private List<Skill>         workEthic;
-    @OneToMany ( cascade = CascadeType.ALL )
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Skill> technicalSkills;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Skill> peopleSkills;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Skill> workEthic;
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Certification> certifications;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<JobRecord> jobRecords;
 
-    public Employee () {
+    public Employee() {
         this.technicalSkills = new ArrayList<Skill>();
         this.peopleSkills = new ArrayList<Skill>();
         this.workEthic = new ArrayList<Skill>();
         this.certifications = new ArrayList<Certification>();
+        this.jobRecords = new ArrayList<JobRecord>();
     }
 
-    public Employee ( final Long id, final String employeeName, final int employeeNum, final int marriedId,
+    public Employee(final Long id, final String employeeName, final int employeeNum, final int marriedId,
             final int maritalStatusId, final int genderId, final int employmentStatusId, final int departmentId,
             final int performanceScoreId, final int age, final double payRate, final String state, final int zip,
             final String DOB, final String sex, final String maritalDesc, final String citizenDesc,
@@ -106,49 +109,51 @@ public class Employee extends DomainObject {
             final String department, final String position, final String managerName, final String employeeSource,
             final String accessRole, final String performanceScore, final String annualBonus, final double ptoHours,
             final List<Skill> technicalSkills, final List<Skill> peopleSkills, final List<Skill> workEthic,
-            final List<Certification> certifications ) {
-        setId( id );
-        setEmployeeName( employeeName );
-        setEmployeeNum( employeeNum );
-        setMarriedId( marriedId );
-        setMaritalStatusId( maritalStatusId );
-        setGenderId( genderId );
-        setEmploymentStatusId( employmentStatusId );
-        setDepartmentId( departmentId );
-        setPerformanceScoreId( performanceScoreId );
-        setAge( age );
-        setPayRate( payRate );
-        setState( state );
-        setZip( zip );
-        setDOB( DOB );
-        setSex( sex );
-        setMaritalDesc( maritalDesc );
-        setCitizenDesc( citizenDesc );
-        setHispanicLatino( hispanicLatino );
-        setRaceDesc( raceDesc );
-        setDateOfHire( dateOfHire );
-        setDaysEmployed( daysEmployeed );
-        setDateOfTermination( dateOfTermination );
-        setReasonForTermination( reasonForTermination );
-        setEmployementStatus( employementStatus );
-        setDepartment( department );
-        setPosition( position );
-        setManagerName( managerName );
-        setEmployeeSource( employeeSource );
-        setAccessRole( accessRole );
-        setPerformanceScore( performanceScore );
-        setAnnualBonus( annualBonus );
-        setPtoHours( ptoHours );
+            final List<Certification> certifications, final List<JobRecord> jobRecords) {
+        setId(id);
+        setEmployeeName(employeeName);
+        setEmployeeNum(employeeNum);
+        setMarriedId(marriedId);
+        setMaritalStatusId(maritalStatusId);
+        setGenderId(genderId);
+        setEmploymentStatusId(employmentStatusId);
+        setDepartmentId(departmentId);
+        setPerformanceScoreId(performanceScoreId);
+        setAge(age);
+        setPayRate(payRate);
+        setState(state);
+        setZip(zip);
+        setDOB(DOB);
+        setSex(sex);
+        setMaritalDesc(maritalDesc);
+        setCitizenDesc(citizenDesc);
+        setHispanicLatino(hispanicLatino);
+        setRaceDesc(raceDesc);
+        setDateOfHire(dateOfHire);
+        setDaysEmployed(daysEmployeed);
+        setDateOfTermination(dateOfTermination);
+        setReasonForTermination(reasonForTermination);
+        setEmployementStatus(employementStatus);
+        setDepartment(department);
+        setPosition(position);
+        setManagerName(managerName);
+        setEmployeeSource(employeeSource);
+        setAccessRole(accessRole);
+        setPerformanceScore(performanceScore);
+        setAnnualBonus(annualBonus);
+        setPtoHours(ptoHours);
 
         this.technicalSkills = new ArrayList<Skill>();
         this.peopleSkills = new ArrayList<Skill>();
         this.workEthic = new ArrayList<Skill>();
         this.certifications = new ArrayList<Certification>();
+        this.jobRecords = new ArrayList<JobRecord>();
 
-        setTechnicalSkills( technicalSkills );
-        setPeopleSkills( peopleSkills );
-        setWorkEthic( workEthic );
-        setCertifications( certifications );
+        setTechnicalSkills(technicalSkills);
+        setPeopleSkills(peopleSkills);
+        setWorkEthic(workEthic);
+        setCertifications(certifications);
+        setJobRecords(jobRecords);
 
     }
 
@@ -157,197 +162,205 @@ public class Employee extends DomainObject {
     // setEmployeeName( employeeName );
     // }
 
-    public int getEmployeeNum () {
+    public int getEmployeeNum() {
         return this.employeeNum;
     }
 
-    public void setEmployeeNum ( final int employeeNum ) {
+    public void setEmployeeNum(final int employeeNum) {
         this.employeeNum = employeeNum;
     }
 
     @Override
-    public Serializable getId () {
+    public Serializable getId() {
         return id;
     }
 
-    public void setId ( final Long id ) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
-    public String getEmployeeName () {
+    public String getEmployeeName() {
         return employeeName;
     }
 
-    public void setEmployeeName ( final String employeeName ) {
+    public void setEmployeeName(final String employeeName) {
         this.employeeName = employeeName;
     }
 
-    public int getEmploymentStatusId () {
+    public int getEmploymentStatusId() {
         return employmentStatusId;
     }
 
-    public void setEmploymentStatusId ( final int employmentStatusId ) {
+    public void setEmploymentStatusId(final int employmentStatusId) {
         this.employmentStatusId = employmentStatusId;
     }
 
-    public int getDepartmentId () {
+    public int getDepartmentId() {
         return departmentId;
     }
 
-    public void setDepartmentId ( final int departmentId ) {
+    public void setDepartmentId(final int departmentId) {
         this.departmentId = departmentId;
     }
 
-    public int getPerformanceScoreId () {
+    public int getPerformanceScoreId() {
         return performanceScoreId;
     }
 
-    public void setPerformanceScoreId ( final int performanceScoreId ) {
+    public void setPerformanceScoreId(final int performanceScoreId) {
         this.performanceScoreId = performanceScoreId;
     }
 
-    public double getPayRate () {
+    public double getPayRate() {
         return payRate;
     }
 
-    public void setPayRate ( final double payRate ) {
+    public void setPayRate(final double payRate) {
         this.payRate = payRate;
     }
 
-    public String getState () {
+    public String getState() {
         return state;
     }
 
-    public void setState ( final String state ) {
+    public void setState(final String state) {
         this.state = state;
     }
 
-    public int getZip () {
+    public int getZip() {
         return zip;
     }
 
-    public void setZip ( final int zip ) {
+    public void setZip(final int zip) {
         this.zip = zip;
     }
 
-    public String getDateOfHire () {
+    public String getDateOfHire() {
         return dateOfHire;
     }
 
-    public void setDateOfHire ( final String dateOfHire ) {
+    public void setDateOfHire(final String dateOfHire) {
         this.dateOfHire = dateOfHire;
     }
 
-    public int getDaysEmployed () {
+    public int getDaysEmployed() {
         return daysEmployed;
     }
 
-    public void setDaysEmployed ( final int daysEmployeed ) {
+    public void setDaysEmployed(final int daysEmployeed) {
         this.daysEmployed = daysEmployeed;
     }
 
-    public String getDateOfTermination () {
+    public String getDateOfTermination() {
         return dateOfTermination;
     }
 
-    public void setDateOfTermination ( final String dateOfTermination ) {
+    public void setDateOfTermination(final String dateOfTermination) {
         this.dateOfTermination = dateOfTermination;
     }
 
-    public String getReasonForTermination () {
+    public String getReasonForTermination() {
         return reasonForTermination;
     }
 
-    public void setReasonForTermination ( final String reasonForTermination ) {
+    public void setReasonForTermination(final String reasonForTermination) {
         this.reasonForTermination = reasonForTermination;
     }
 
-    public String getEmployementStatus () {
+    public String getEmployementStatus() {
         return employementStatus;
     }
 
-    public void setEmployementStatus ( final String employementStatus ) {
+    public void setEmployementStatus(final String employementStatus) {
         this.employementStatus = employementStatus;
     }
 
-    public String getDepartment () {
+    public String getDepartment() {
         return department;
     }
 
-    public void setDepartment ( final String department ) {
+    public void setDepartment(final String department) {
         this.department = department;
     }
 
-    public String getPosition () {
+    public String getPosition() {
         return position;
     }
 
-    public void setPosition ( final String position ) {
+    public void setPosition(final String position) {
         this.position = position;
     }
 
-    public String getManagerName () {
+    public String getManagerName() {
         return managerName;
     }
 
-    public void setManagerName ( final String managerName ) {
+    public void setManagerName(final String managerName) {
         this.managerName = managerName;
     }
 
-    public String getEmployeeSource () {
+    public String getEmployeeSource() {
         return employeeSource;
     }
 
-    public void setEmployeeSource ( final String employeeSource ) {
+    public void setEmployeeSource(final String employeeSource) {
         this.employeeSource = employeeSource;
     }
 
-    public String getAccessRole () {
+    public String getAccessRole() {
         return accessRole;
     }
 
-    public void setAccessRole ( final String accessRole ) {
+    public void setAccessRole(final String accessRole) {
         this.accessRole = accessRole;
     }
 
-    public String getPerformanceScore () {
+    public String getPerformanceScore() {
         return performanceScore;
     }
 
-    public void setPerformanceScore ( final String performanceScore ) {
+    public void setPerformanceScore(final String performanceScore) {
         this.performanceScore = performanceScore;
     }
 
-    public List<Skill> getTechnicalSkills () {
+    public List<Skill> getTechnicalSkills() {
         return technicalSkills;
     }
 
-    public void setTechnicalSkills ( final List<Skill> technicalSkills ) {
+    public void setTechnicalSkills(final List<Skill> technicalSkills) {
         this.technicalSkills = technicalSkills;
     }
 
-    public List<Skill> getPeopleSkills () {
+    public List<Skill> getPeopleSkills() {
         return peopleSkills;
     }
 
-    public void setPeopleSkills ( final List<Skill> peopleSkills ) {
+    public void setPeopleSkills(final List<Skill> peopleSkills) {
         this.peopleSkills = peopleSkills;
     }
 
-    public List<Skill> getWorkEthic () {
+    public List<Skill> getWorkEthic() {
         return workEthic;
     }
 
-    public void setWorkEthic ( final List<Skill> workEthic ) {
+    public void setWorkEthic(final List<Skill> workEthic) {
         this.workEthic = workEthic;
     }
 
-    public List<Certification> getCertifications () {
+    public List<Certification> getCertifications() {
         return certifications;
     }
 
-    public void setCertifications ( final List<Certification> certifications ) {
+    public void setCertifications(final List<Certification> certifications) {
         this.certifications = certifications;
+    }
+
+    public List<JobRecord> getJobRecords() {
+        return jobRecords;
+    }
+
+    public void setJobRecords(final List<JobRecord> jobRecords) {
+        this.jobRecords = jobRecords;
     }
 
     // public Demographic getEmployeeDemographics() {
@@ -358,196 +371,212 @@ public class Employee extends DomainObject {
     // this.employeeDemographics = employeeDemographics;
     // }
 
-    public String getAnnualBonus () {
+    public String getAnnualBonus() {
         return annualBonus;
     }
 
-    public void setAnnualBonus ( final String annualBonus ) {
+    public void setAnnualBonus(final String annualBonus) {
         this.annualBonus = annualBonus;
     }
 
-    public double getPtoHours () {
+    public double getPtoHours() {
         return ptoHours;
     }
 
-    public void setPtoHours ( final double ptoHours ) {
+    public void setPtoHours(final double ptoHours) {
         this.ptoHours = ptoHours;
     }
 
-    public Integer getMarriedId () {
+    public Integer getMarriedId() {
         return this.marriedId;
     }
 
-    public void setMarriedId ( final Integer marriedId ) {
+    public void setMarriedId(final Integer marriedId) {
         this.marriedId = marriedId;
     }
 
-    public Integer getMaritalStatusId () {
+    public Integer getMaritalStatusId() {
         return this.maritalStatusId;
     }
 
-    public void setMaritalStatusId ( final Integer maritalStatusId ) {
+    public void setMaritalStatusId(final Integer maritalStatusId) {
         this.maritalStatusId = maritalStatusId;
     }
 
-    public Integer getGenderId () {
+    public Integer getGenderId() {
         return this.genderId;
     }
 
-    public void setGenderId ( final Integer genderId ) {
+    public void setGenderId(final Integer genderId) {
         this.genderId = genderId;
     }
 
-    public Integer getAge () {
+    public Integer getAge() {
         return this.age;
     }
 
-    public void setAge ( final Integer age ) {
+    public void setAge(final Integer age) {
         this.age = age;
     }
 
-    public String getDOB () {
+    public String getDOB() {
         return this.DOB;
     }
 
-    public void setDOB ( final String DOB ) {
+    public void setDOB(final String DOB) {
         this.DOB = DOB;
     }
 
-    public String getSex () {
+    public String getSex() {
         return this.sex;
     }
 
-    public void setSex ( final String sex ) {
+    public void setSex(final String sex) {
         this.sex = sex;
     }
 
-    public String getMaritalDesc () {
+    public String getMaritalDesc() {
         return this.maritalDesc;
     }
 
-    public void setMaritalDesc ( final String maritalDesc ) {
+    public void setMaritalDesc(final String maritalDesc) {
         this.maritalDesc = maritalDesc;
     }
 
-    public String getCitizenDesc () {
+    public String getCitizenDesc() {
         return this.citizenDesc;
     }
 
-    public void setCitizenDesc ( final String citizenDesc ) {
+    public void setCitizenDesc(final String citizenDesc) {
         this.citizenDesc = citizenDesc;
     }
 
-    public String getHispanicLatino () {
+    public String getHispanicLatino() {
         return this.hispanicLatino;
     }
 
-    public void setHispanicLatino ( final String hispanicLatino ) {
+    public void setHispanicLatino(final String hispanicLatino) {
         this.hispanicLatino = hispanicLatino;
     }
 
-    public String getRaceDesc () {
+    public String getRaceDesc() {
         return this.raceDesc;
     }
 
-    public void setRaceDesc ( final String raceDesc ) {
+    public void setRaceDesc(final String raceDesc) {
         this.raceDesc = raceDesc;
     }
 
-    public void addTechSkills ( final List<Skill> techSkills ) {
+    public void addTechSkills(final List<Skill> techSkills) {
 
-        for ( int i = 0; i < techSkills.size(); i++ ) {
-            if ( !this.technicalSkills.contains( techSkills.get( i ) ) ) {
-                this.technicalSkills.add( techSkills.get( i ) );
+        for (int i = 0; i < techSkills.size(); i++) {
+            if (!this.technicalSkills.contains(techSkills.get(i))) {
+                this.technicalSkills.add(techSkills.get(i));
             }
         }
     }
 
-    public void addPeopleSkills ( final List<Skill> peopSkills ) {
-        for ( int i = 0; i < peopSkills.size(); i++ ) {
-            if ( !this.peopleSkills.contains( peopSkills.get( i ) ) ) {
-                this.peopleSkills.add( peopSkills.get( i ) );
+    public void addPeopleSkills(final List<Skill> peopSkills) {
+        for (int i = 0; i < peopSkills.size(); i++) {
+            if (!this.peopleSkills.contains(peopSkills.get(i))) {
+                this.peopleSkills.add(peopSkills.get(i));
             }
         }
     }
 
-    public void addWorkEthic ( final List<Skill> workEthticSkill ) {
-        for ( int i = 0; i < workEthticSkill.size(); i++ ) {
-            if ( !this.workEthic.contains( workEthticSkill.get( i ) ) ) {
-                this.workEthic.add( workEthticSkill.get( i ) );
+    public void addWorkEthic(final List<Skill> workEthticSkill) {
+        for (int i = 0; i < workEthticSkill.size(); i++) {
+            if (!this.workEthic.contains(workEthticSkill.get(i))) {
+                this.workEthic.add(workEthticSkill.get(i));
             }
         }
     }
 
-    public void addCertifications ( final List<Certification> certs ) {
+    public void addCertifications(final List<Certification> certs) {
 
-        for ( int i = 0; i < certs.size(); i++ ) {
-            if ( !this.certifications.contains( certs.get( i ) ) ) {
-                this.certifications.add( certs.get( i ) );
+        for (int i = 0; i < certs.size(); i++) {
+            if (!this.certifications.contains(certs.get(i))) {
+                this.certifications.add(certs.get(i));
             }
         }
     }
 
-    public void updateEmployee ( final Employee e ) {
-        this.setId( e.id );
-        this.setEmployeeName( e.employeeName );
-        this.setEmploymentStatusId( e.employmentStatusId );
-        this.setDepartmentId( e.departmentId );
-        this.setPerformanceScoreId( e.performanceScoreId );
-        this.setPayRate( e.payRate );
-        this.setState( e.state );
-        this.setZip( e.zip );
-        this.setDateOfHire( e.dateOfHire );
-        this.setDaysEmployed( e.daysEmployed );
-        this.setDateOfTermination( e.dateOfTermination );
-        this.setReasonForTermination( e.reasonForTermination );
-        this.setEmployementStatus( e.employementStatus );
-        this.setDepartment( e.department );
-        this.setPosition( e.position );
-        this.setManagerName( e.managerName );
-        this.setEmployeeSource( e.employeeSource );
-        this.setAccessRole( e.accessRole );
-        this.setPerformanceScore( e.performanceScore );
+    public void addJobRecord(final List<JobRecord> jrs) {
+        for (int i = 0; i < jrs.size(); i++) {
+            if (!this.jobRecords.contains(jrs.get(i))) {
+                this.jobRecords.add(jrs.get(i));
+            }
+        }
+    }
 
-        if ( e.getTechnicalSkills().size() <= this.getTechnicalSkills().size() ) {
-            this.setTechnicalSkills( e.getTechnicalSkills() );
+    public void updateEmployee(final Employee e) {
+        this.setId(e.id);
+        this.setEmployeeName(e.employeeName);
+        this.setEmploymentStatusId(e.employmentStatusId);
+        this.setDepartmentId(e.departmentId);
+        this.setPerformanceScoreId(e.performanceScoreId);
+        this.setPayRate(e.payRate);
+        this.setState(e.state);
+        this.setZip(e.zip);
+        this.setDateOfHire(e.dateOfHire);
+        this.setDaysEmployed(e.daysEmployed);
+        this.setDateOfTermination(e.dateOfTermination);
+        this.setReasonForTermination(e.reasonForTermination);
+        this.setEmployementStatus(e.employementStatus);
+        this.setDepartment(e.department);
+        this.setPosition(e.position);
+        this.setManagerName(e.managerName);
+        this.setEmployeeSource(e.employeeSource);
+        this.setAccessRole(e.accessRole);
+        this.setPerformanceScore(e.performanceScore);
+
+        if (e.getTechnicalSkills().size() <= this.getTechnicalSkills().size()) {
+            this.setTechnicalSkills(e.getTechnicalSkills());
 
         }
 
-        if ( e.getPeopleSkills().size() <= this.getPeopleSkills().size() ) {
-            this.setPeopleSkills( e.getPeopleSkills() );
+        if (e.getPeopleSkills().size() <= this.getPeopleSkills().size()) {
+            this.setPeopleSkills(e.getPeopleSkills());
         }
 
-        if ( e.getWorkEthic().size() <= this.getWorkEthic().size() ) {
-            this.setWorkEthic( e.getWorkEthic() );
+        if (e.getWorkEthic().size() <= this.getWorkEthic().size()) {
+            this.setWorkEthic(e.getWorkEthic());
         }
 
-        if ( e.getCertifications().size() <= this.getCertifications().size() ) {
-            this.setCertifications( e.getCertifications() );
+        if (e.getCertifications().size() <= this.getCertifications().size()) {
+            this.setCertifications(e.getCertifications());
         }
 
-        if ( e.getTechnicalSkills().size() > this.getTechnicalSkills().size() ) {
-            this.addTechSkills( e.getTechnicalSkills() );
+        if (e.getJobRecords().size() <= this.getJobRecords().size()) {
+            this.setJobRecords(e.getJobRecords());
         }
 
-        if ( e.getPeopleSkills().size() > this.getPeopleSkills().size() ) {
-            this.addPeopleSkills( e.getPeopleSkills() );
+        if (e.getTechnicalSkills().size() > this.getTechnicalSkills().size()) {
+            this.addTechSkills(e.getTechnicalSkills());
         }
 
-        if ( e.getWorkEthic().size() > this.getWorkEthic().size() ) {
-            this.addWorkEthic( e.getWorkEthic() );
+        if (e.getPeopleSkills().size() > this.getPeopleSkills().size()) {
+            this.addPeopleSkills(e.getPeopleSkills());
         }
 
-        if ( e.getCertifications().size() > this.getCertifications().size() ) {
-            this.addCertifications( e.getCertifications() );
+        if (e.getWorkEthic().size() > this.getWorkEthic().size()) {
+            this.addWorkEthic(e.getWorkEthic());
         }
 
-        this.setAnnualBonus( annualBonus );
-        this.setPtoHours( ptoHours );
+        if (e.getCertifications().size() > this.getCertifications().size()) {
+            this.addCertifications(e.getCertifications());
+        }
+
+        if (e.getJobRecords().size() > this.getJobRecords().size()) {
+            this.addJobRecord((e.getJobRecords()));
+        }
+
+        this.setAnnualBonus(annualBonus);
+        this.setPtoHours(ptoHours);
     }
 
     @Override
-    public String toString () {
+    public String toString() {
         return "{" + " id='" + getId() + "'" + ", employeeName='" + getEmployeeName() + "'" + ", employeeNum='"
                 + getEmployeeNum() + "'" + ", employmentStatusId='" + getEmploymentStatusId() + "'" + ", departmentId='"
                 + getDepartmentId() + "'" + ", performanceScoreId='" + getPerformanceScoreId() + "'" + ", payRate='"
@@ -559,7 +588,8 @@ public class Employee extends DomainObject {
                 + ", employeeSource='" + getEmployeeSource() + "'" + ", accessRole='" + getAccessRole() + "'"
                 + ", performanceScore='" + getPerformanceScore() + "'" + ", technicalSkills='" + getTechnicalSkills()
                 + "'" + ", peopleSkills='" + getPeopleSkills() + "'" + ", workEthic='" + getWorkEthic() + "'"
-                + ", certifications='" + getCertifications() + "'" + ", annualBonus='" + getAnnualBonus() + "'"
+                + ", certifications='" + getCertifications() + "'" + ", jobRecords='" + getJobRecords() + "'"
+                + ", annualBonus='" + getAnnualBonus() + "'"
                 + ", ptoHours='" + getPtoHours() + "'" + "}";
     }
 
