@@ -1,5 +1,7 @@
 package com.positivehire.phtalent.models;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -23,11 +25,15 @@ public class Education extends DomainObject {
     private String institution;
     /** Type of education */
     private String type;
+    /** date achieved*/
+    private Date dateAchieved;
+
      /** Skills associated with education */
     @OneToMany ( cascade = CascadeType.ALL )
     private List<Skill> skills;
 
     public Education() {
+        this.skills = new ArrayList<Skill>();
     }
 
     /**
@@ -37,10 +43,11 @@ public class Education extends DomainObject {
      * @param type of education
      * @param skills of education
      */
-    public Education(String name, String institution, String type, List<Skill> skills) {
+    public Education(String name, String institution, String type, Date datAchieved, List<Skill> skills) {
         setName(name);
         setInstitution(institution);
         setType(type);
+        this.skills = new ArrayList<Skill>();
         setSkills(skills);
     }
 
@@ -74,6 +81,14 @@ public class Education extends DomainObject {
 
     public void setSkills(List<Skill> skills) {
         this.skills = skills;
+    }
+
+    public void setDateAchieved(Date dateAchieved) {
+        this.dateAchieved = dateAchieved;
+    }
+
+    public Date getDateAchieved() {
+        return this.dateAchieved;
     }
 
     @Override
