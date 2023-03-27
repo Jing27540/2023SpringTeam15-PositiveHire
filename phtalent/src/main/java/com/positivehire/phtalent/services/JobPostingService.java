@@ -11,19 +11,32 @@ import jakarta.transaction.Transactional;
 
 /**
  * Spring service for job Postings
+ * 
  * @author Zayda Cummings
  */
 @Component
 @Transactional
 public class JobPostingService extends Service<JobPosting, Long> {
-    
+
   @Autowired
-  private JobPostingRepository<JobPosting> repo; 
+  private JobPostingRepository<JobPosting> repo;
 
   @Override
-    protected JpaRepository<JobPosting, Long> getRepository () {
-        return repo;
-    }
-    
+  protected JpaRepository<JobPosting, Long> getRepository() {
+    return repo;
+  }
+
+  /**
+   * Gets the parameter jobNumber and returns the Job Posting that corresponds to
+   * the
+   * parameter.
+   *
+   * @param jobNumber
+   *                  the number associated with the Job Posting
+   * @return Job Posting object
+   */
+  public JobPosting findByJobNumber(final String jobNumber) {
+    return repo.findByJobNumber(jobNumber);
+  }
 
 }
