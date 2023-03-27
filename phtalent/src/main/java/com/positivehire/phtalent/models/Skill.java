@@ -1,5 +1,6 @@
 package com.positivehire.phtalent.models;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
@@ -13,7 +14,7 @@ import javax.validation.constraints.Min;
  * @author Jing Huang
  */
 @Entity
-public class Skill {
+public class Skill extends DomainObject {
     /** The id of this created Skill object */
     @Id
     @GeneratedValue
@@ -124,5 +125,10 @@ public class Skill {
     @Override
     public int hashCode() {
         return Objects.hash(name, level, score);
+    }
+
+    @Override
+    public Serializable getId() {
+        return id;
     }
 }

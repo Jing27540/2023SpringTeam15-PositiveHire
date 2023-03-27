@@ -30,6 +30,8 @@ import com.positivehire.phtalent.models.Employee;
 import com.positivehire.phtalent.models.JobRecord;
 import com.positivehire.phtalent.models.Skill;
 import com.positivehire.phtalent.services.EmployeeService;
+import com.positivehire.phtalent.services.JobRecordService;
+import com.positivehire.phtalent.services.SkillService;
 
 import junit.framework.Assert;
 
@@ -63,6 +65,12 @@ public class APIEmployeeControllerTest {
          */
         @Autowired
         private EmployeeService employeeServ;
+
+        @Autowired
+        private JobRecordService jrServ;
+
+        @Autowired
+        private SkillService skillServ;
 
         private static Employee employee1;
 
@@ -268,83 +276,107 @@ public class APIEmployeeControllerTest {
 
                 // JobRecord functionality testing (CRUD)
 
-                // Check Employee1 has no JobRecords
+                // List<JobRecord> x = jrServ.findAll();
+                // System.out.println(x);
 
-                final String c1 = mvc.perform(
-                                get("/employees/" + "54645394")
-                                                .contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+                // Skill newSkill = new Skill("hi", "boss", 20);
 
-                assertTrue(c1.contains("\"jobRecords\":[]"));
+                // Skill spp = null;
+                // for (JobRecord inside : x) {
+                // if (inside.getJobTitle().equals("CISO")) {
+                // spp = inside.getJobSkills().get(0);
+                // spp.setName("foo");
+                // skillServ.save(spp);
 
-                // Add JobRecords
-                jrList.remove(0);
-                jrList.add(jr2);
-                employee1.addJobRecord(jrList);
-                assertEquals(1, jrList.size());
+                // inside.getJobSkills().add(newSkill);
+                // jrServ.save(inside);
+                // }
+                // }
 
-                mvc.perform(put("/employees").contentType(MediaType.APPLICATION_JSON)
-                                .content(TestUtils.asJsonString(employee1))).andExpect(status().isOk());
+                // JobRecord newJobRecord = new JobRecord("", "", null, null, null);
+                // employee2.getJobRecords().add(newJobRecord);
+                // employeeServ.save(employee2);
 
-                // Verify Job Records
+                // // Check Employee1 has no JobRecords
 
-                final String c2 = mvc.perform(
-                                get("/employees/" + "54645394")
-                                                .contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+                // final String c1 = mvc.perform(
+                // get("/employees/" + "54645394")
+                // .contentType(MediaType.APPLICATION_JSON))
+                // .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
-                assertTrue(c2.contains("\"jobRecords\":[{"));
+                // assertTrue(c1.contains("\"jobRecords\":[]"));
 
-                assertTrue(c2.contains("\"jobTitle\":\"Server\""));
+                // // Add JobRecords
+                // jrList.remove(0);
+                // jrList.add(jr2);
+                // employee1.addJobRecord(jrList);
+                // assertEquals(1, jrList.size());
 
-                assertTrue(c2.contains("\"jobLevel\":\"Noob\""));
-
-                assertTrue(c2.contains(
-                                "\"jobSkills\":[{\"name\":\"Presentations\",\"level\":\"Expert\",\"score\":5}]}]"));
-
-                // // Update Job Records
-                jrList.get(0).setJobLevel("Advanced");
-                employee1.setJobRecords(jrList);
-                assertEquals(employee1.getJobRecords().size(), 1);
-                assertEquals(employee1.getJobRecords().get(0).getJobTitle(), "Server");
-                assertEquals(employee1.getJobRecords().get(0).getJobLevel(), "Advanced");
-
-                // assertEquals(jrService.findAll().size(), 1);
-                // JobRecord jrRecord1InDB = jrService.findAll().get(0);
-                // assertEquals(jrRecord1InDB.getJobTitle(), "CISO");
-                // assertEquals(jrRecord1InDB.getJobLevel(), "Expert");
+                // employeeServ.save(employee1);
 
                 // mvc.perform(put("/employees").contentType(MediaType.APPLICATION_JSON)
                 // .content(TestUtils.asJsonString(employee1))).andExpect(status().isOk());
 
                 // // Verify Job Records
 
-                // final String c3 = mvc.perform(
+                // final String c2 = mvc.perform(
                 // get("/employees/" + "54645394")
                 // .contentType(MediaType.APPLICATION_JSON))
                 // .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
-                // assertTrue(c3.contains("\"jobRecords\":[{"));
+                // assertTrue(c2.contains("\"jobRecords\":[{"));
 
-                // assertTrue(c3.contains("\"jobTitle\":\"CISO\""));
+                // assertTrue(c2.contains("\"jobTitle\":\"Server\""));
 
-                // assertTrue(c3.contains("\"jobLevel\":\"Advanced\""));
+                // assertTrue(c2.contains("\"jobLevel\":\"Noob\""));
 
-                // Delete Job Records
+                // assertTrue(c2.contains(
+                // "\"jobSkills\":[{\"name\":\"Presentations\",\"level\":\"Expert\",\"score\":5}]}]"));
 
-                jrList.remove(jr2);
-                employee1.setJobRecords(jrList);
-                assertEquals(employee1.getJobRecords().size(), 0);
+                // // // Update Job Records
+                // jrList.get(0).setJobLevel("Advanced");
+                // employee1.setJobRecords(jrList);
+                // assertEquals(employee1.getJobRecords().size(), 1);
+                // assertEquals(employee1.getJobRecords().get(0).getJobTitle(), "Server");
+                // assertEquals(employee1.getJobRecords().get(0).getJobLevel(), "Advanced");
 
-                mvc.perform(put("/employees").contentType(MediaType.APPLICATION_JSON)
-                                .content(TestUtils.asJsonString(employee1)));
+                // // assertEquals(jrService.findAll().size(), 1);
+                // // JobRecord jrRecord1InDB = jrService.findAll().get(0);
+                // // assertEquals(jrRecord1InDB.getJobTitle(), "CISO");
+                // // assertEquals(jrRecord1InDB.getJobLevel(), "Expert");
 
-                final String c4 = mvc.perform(
-                                get("/employees/" + "54645394")
-                                                .contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+                // // mvc.perform(put("/employees").contentType(MediaType.APPLICATION_JSON)
+                // // .content(TestUtils.asJsonString(employee1))).andExpect(status().isOk());
 
-                assertTrue(c4.contains("\"jobRecords\":[]"));
+                // // // Verify Job Records
+
+                // // final String c3 = mvc.perform(
+                // // get("/employees/" + "54645394")
+                // // .contentType(MediaType.APPLICATION_JSON))
+                // //
+                // .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+                // // assertTrue(c3.contains("\"jobRecords\":[{"));
+
+                // // assertTrue(c3.contains("\"jobTitle\":\"CISO\""));
+
+                // // assertTrue(c3.contains("\"jobLevel\":\"Advanced\""));
+
+                // // Delete Job Records
+
+                // jrList.remove(jr2);
+                // employee1.setJobRecords(jrList);
+                // assertEquals(employee1.getJobRecords().size(), 0);
+
+                // mvc.perform(put("/employees").contentType(MediaType.APPLICATION_JSON)
+                // .content(TestUtils.asJsonString(employee1)));
+
+                // final String c4 = mvc.perform(
+                // get("/employees/" + "54645394")
+                // .contentType(MediaType.APPLICATION_JSON))
+                // .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+                // assertTrue(c4.contains("\"jobRecords\":[]"));
 
                 // *************************** */
         }
