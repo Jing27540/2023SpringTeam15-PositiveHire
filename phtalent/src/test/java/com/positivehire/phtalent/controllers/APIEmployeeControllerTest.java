@@ -219,6 +219,9 @@ public class APIEmployeeControllerTest {
                 Assert.assertEquals(3, employees.size());
 
                 Assert.assertEquals("Johnny Dep", employeeServ.findById((long) employee2.getId()).getManagerName());
+                System.out.println(employeeServ.findById((long) employee2.getId()).getTechnicalSkills().size());
+                // Assert.assertEquals(employeeServ.findById((long)
+                // employee2.getId()).getTechnicalSkills().size(), 0);
                 // System.out.println(employees.toString());
 
                 final Employee employee4 = new Employee();
@@ -275,10 +278,13 @@ public class APIEmployeeControllerTest {
                 assertTrue(c1.contains("\"jobRecords\":[]"));
 
                 // Add JobRecords
+                jrList.remove(0);
+                jrList.add(jr2);
                 employee1.addJobRecord(jrList);
+                assertEquals(1, jrList.size());
 
                 mvc.perform(put("/employees").contentType(MediaType.APPLICATION_JSON)
-                                .content(TestUtils.asJsonString(employee1)));
+                                .content(TestUtils.asJsonString(employee1))).andExpect(status().isOk());
 
                 // Verify Job Records
 
@@ -289,19 +295,24 @@ public class APIEmployeeControllerTest {
 
                 assertTrue(c2.contains("\"jobRecords\":[{"));
 
-                assertTrue(c2.contains("\"jobTitle\":\"CISO\""));
+                assertTrue(c2.contains("\"jobTitle\":\"Server\""));
 
-                assertTrue(c2.contains("\"jobLevel\":\"Senior\""));
+                assertTrue(c2.contains("\"jobLevel\":\"Noob\""));
 
                 assertTrue(c2.contains(
                                 "\"jobSkills\":[{\"name\":\"Presentations\",\"level\":\"Expert\",\"score\":5}]}]"));
 
                 // // Update Job Records
-                // jrList.get(0).setJobLevel("Advanced");
-                // employee1.setJobRecords(jrList);
-                // assertEquals(employee1.getJobRecords().size(), 1);
-                // assertEquals(employee1.getJobRecords().get(0).getJobTitle(), "CISO");
-                // assertEquals(employee1.getJobRecords().get(0).getJobLevel(), "Advanced");
+                jrList.get(0).setJobLevel("Advanced");
+                employee1.setJobRecords(jrList);
+                assertEquals(employee1.getJobRecords().size(), 1);
+                assertEquals(employee1.getJobRecords().get(0).getJobTitle(), "Server");
+                assertEquals(employee1.getJobRecords().get(0).getJobLevel(), "Advanced");
+
+                // assertEquals(jrService.findAll().size(), 1);
+                // JobRecord jrRecord1InDB = jrService.findAll().get(0);
+                // assertEquals(jrRecord1InDB.getJobTitle(), "CISO");
+                // assertEquals(jrRecord1InDB.getJobLevel(), "Expert");
 
                 // mvc.perform(put("/employees").contentType(MediaType.APPLICATION_JSON)
                 // .content(TestUtils.asJsonString(employee1))).andExpect(status().isOk());
@@ -321,7 +332,7 @@ public class APIEmployeeControllerTest {
 
                 // Delete Job Records
 
-                jrList.remove(jr1);
+                jrList.remove(jr2);
                 employee1.setJobRecords(jrList);
                 assertEquals(employee1.getJobRecords().size(), 0);
 

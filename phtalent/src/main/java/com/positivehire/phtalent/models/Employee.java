@@ -547,9 +547,10 @@ public class Employee extends DomainObject {
             this.setCertifications(e.getCertifications());
         }
 
-        if (e.getJobRecords().size() <= this.getJobRecords().size()) {
-            this.setJobRecords(e.getJobRecords());
-        }
+        // if (e.getJobRecords().size() <= this.getJobRecords().size()) {
+        // this.setJobRecords(e.getJobRecords());
+        // }
+        this.setJobRecords(e.getJobRecords());
 
         if (e.getTechnicalSkills().size() > this.getTechnicalSkills().size()) {
             this.addTechSkills(e.getTechnicalSkills());
@@ -567,9 +568,9 @@ public class Employee extends DomainObject {
             this.addCertifications(e.getCertifications());
         }
 
-        if (e.getJobRecords().size() > this.getJobRecords().size()) {
-            this.addJobRecord((e.getJobRecords()));
-        }
+        // if (e.getJobRecords().size() > this.getJobRecords().size()) {
+        // this.addJobRecord((e.getJobRecords()));
+        // }
 
         this.setAnnualBonus(annualBonus);
         this.setPtoHours(ptoHours);
