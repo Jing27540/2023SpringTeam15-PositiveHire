@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.positivehire.phtalent.services.EmployeeService;
+import com.positivehire.phtalent.models.Education;
 import com.positivehire.phtalent.models.Employee;
 
 /**
@@ -132,4 +133,21 @@ public class APIEmployeeController extends APIController {
         : new ResponseEntity<Employee>( emp, HttpStatus.OK );
     }
 
+
+    @PostMapping("/employees/{employeeNum}/education")
+    public ResponseEntity<String> createEducation(@PathVariable("employeeNum") final int employeeNum, @RequestBody Education edu) {
+        final Employee emp = employeeServ.findByEmployeeNum(employeeNum);
+
+        if(edu.getId() != null) {
+            return new ResponseEntity<String>(
+                successResponse("Education with the name " + edu.getName() + " already exists"),
+                HttpStatus.CONFLICT);
+        } else {
+            emp.addEducation(edu);
+            employeeServ.save(emp);
+            return new ResponseEntity<String>(successResponse(e.getEmployeeName() + "successfully created"),
+                    HttpStatus.OK);
+        }
+      
+    }
 }
