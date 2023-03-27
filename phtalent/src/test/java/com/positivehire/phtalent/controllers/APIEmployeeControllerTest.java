@@ -272,9 +272,35 @@ public class APIEmployeeControllerTest {
                                 .andExpect(status().isOk());
                 employeeServ.save(emp);
 
+
                 // *************************** */
 
+
                 // JobRecord functionality testing (CRUD)
+
+                JobRecord newJR1 = new JobRecord("firstEmp", "entry", null, null, null);
+                
+                List<Skill> moreskills = new ArrayList<Skill>();
+                Skill soccer = new Skill("Soccer", "pro", 5);
+                moreskills.add(soccer);
+
+                JobRecord newJR2 = new JobRecord("secJR", "junior", null, null, moreskills);
+
+                System.out.println(newJR2.getId());
+                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords").contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJsonString(newJR1))).andExpect(status().isOk());
+
+                employees = employeeServ.findAll();
+
+                Employee check = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
+                
+                assertEquals(check.getJobRecords().get(0).getJobTitle(), newJR1.getJobTitle());
+
+                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords").contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtils.asJsonString(newJR2))).andExpect(status().isOk());
+                Employee check2 = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
+                
+                assertEquals(check2.getJobRecords().get(1).getJobTitle(), newJR2.getJobTitle());
 
                 // List<JobRecord> x = jrServ.findAll();
                 // System.out.println(x);

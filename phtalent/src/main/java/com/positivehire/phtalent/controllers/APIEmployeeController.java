@@ -1,5 +1,6 @@
 package com.positivehire.phtalent.controllers;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.positivehire.phtalent.services.EmployeeService;
 import com.positivehire.phtalent.models.Education;
 import com.positivehire.phtalent.models.Employee;
+import com.positivehire.phtalent.models.JobRecord;
 
 /**
  * API Employee class
@@ -143,11 +145,38 @@ public class APIEmployeeController extends APIController {
                 successResponse("Education with the name " + edu.getName() + " already exists"),
                 HttpStatus.CONFLICT);
         } else {
-            emp.addEducation(edu);
+         //   emp;
             employeeServ.save(emp);
-            return new ResponseEntity<String>(successResponse(e.getEmployeeName() + "successfully created"),
+            return new ResponseEntity<String>(successResponse(edu.getName() + "successfully created"),
                     HttpStatus.OK);
         }
       
     }
+
+    @PostMapping("/employees/{employeeNum}/jobrecords")
+    public ResponseEntity<String> createJobRecords(@PathVariable("employeeNum") final int employeeNum, @RequestBody JobRecord rec) {
+        final Employee emp = employeeServ.findByEmployeeNum(employeeNum);
+
+        
+
+        // if (rec.getId().toString() != 0) {
+        //     return new ResponseEntity<String>(
+        //         successResponse("Job record with the name " + rec.getJobTitle() + " already exists"),
+        //         HttpStatus.CONFLICT);
+        // } else 
+        if (emp != null) {
+            emp.getJobRecords().add(rec);
+            employeeServ.save(emp);
+            return new ResponseEntity<String>(successResponse(rec.getJobTitle() + "successfully created"),
+                    HttpStatus.OK);
+        } else {
+            return new ResponseEntity<String>(successResponse("Error employee does not exist"),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+
+
+
 }
