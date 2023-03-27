@@ -21,7 +21,7 @@ import com.positivehire.phtalent.services.JobPostingService;
  * API Job Posting Class that handles the REST APIs for the JobPosting model
  * 
  * @author Zayda Cummings
- * @author Juan Pinilla
+ * @author Juan Franco Pinilla
  */
 @RestController
 @CrossOrigin("http://localhost:3000/")
@@ -94,65 +94,65 @@ public class APIJobPostingController extends APIController {
         HttpStatus.OK);
   }
 
-  // /**
-  //  * Updates a job posting
-  //  * 
-  //  * @param posting to be edited
-  //  * @return Whether or not the job posting was edited successfully
-  //  */
-  // @PutMapping("/jobpostings/{jobNumber}")
-  // public ResponseEntity<String> editVaccine(@RequestBody JobPosting newJobPosting,
-  //     @PathVariable("jobNumber") final String jobNumber) {
-  //   try {
+  /**
+   * Updates a job posting
+   * 
+   * @param posting to be edited
+   * @return Whether or not the job posting was edited successfully
+   */
+  @PutMapping("/jobpostings/{jobNumber}")
+  public ResponseEntity<String> editJobPosting(@RequestBody JobPosting newJobPosting,
+      @PathVariable("jobNumber") final String jobNumber) {
+    try {
 
-  //     // Try and find a job posting with the same job number
-  //     final JobPosting jp = jobPostingService.findByJobNumber(jobNumber);
+      // Try and find a job posting with the same job number
+      final JobPosting jp = jobPostingService.findByJobNumber(jobNumber);
 
-  //     // If no job posting with the same job number exists in the database
-  //     if (jp == null) {
+      // If no job posting with the same job number exists in the database
+      if (jp == null) {
 
-  //       // Return a bad request with an error message
-  //       return new ResponseEntity<String>(
-  //           errorResponse("No job posting in system associated with the job number: " + newJobPosting.getJobNumber()),
-  //           HttpStatus.NOT_FOUND);
-  //     } else {
+        // Return a bad request with an error message
+        return new ResponseEntity<String>(
+            errorResponse("No job posting in system associated with the job number: " + newJobPosting.getJobNumber()),
+            HttpStatus.NOT_FOUND);
+      } else {
 
-  //       // Update and save it to the database
-  //       jp.setApplyLink(newJobPosting.getApplyLink());
-  //       jp.setAvailablePositions(newJobPosting.getAvailablePositions());
-  //       jp.setCertificationRequirements(newJobPosting.getCertificationRequirements());
-  //       jp.setCloseDate(newJobPosting.getCloseDate());
-  //       jp.setDepartment(newJobPosting.getDepartment());
-  //       jp.setJobDescription(newJobPosting.getJobDescription());
-  //       // jp.setJobNumber(newJobPosting.getJobNumber());
-  //       jp.setJobTitle(newJobPosting.getJobTitle());
-  //       jp.setListofApplicants(newJobPosting.getListofApplicants());
-  //       jp.setLocation(newJobPosting.getLocation());
-  //       jp.setMeetingNotes(newJobPosting.getMeetingNotes());
-  //       jp.setMeetingType(newJobPosting.getMeetingType());
-  //       jp.setOtherRequirements(newJobPosting.getOtherRequirements());
-  //       jp.setPostDate(newJobPosting.getPostDate());
-  //       jp.setProcess(newJobPosting.getProcess());
-  //       jp.setSalary(newJobPosting.getSalary());
-  //       jp.setSkillRequirements(newJobPosting.getSkillRequirements());
+        // Update and save it to the database
+        jp.setApplyLink(newJobPosting.getApplyLink());
+        jp.setAvailablePositions(newJobPosting.getAvailablePositions());
+        jp.setCertificationRequirements(newJobPosting.getCertificationRequirements());
+        jp.setCloseDate(newJobPosting.getCloseDate());
+        jp.setDepartment(newJobPosting.getDepartment());
+        jp.setJobDescription(newJobPosting.getJobDescription());
+        //jp.setJobNumber(newJobPosting.getJobNumber());
+        jp.setJobTitle(newJobPosting.getJobTitle());
+        jp.setListofApplicants(newJobPosting.getListofApplicants());
+        jp.setLocation(newJobPosting.getLocation());
+        jp.setMeetingNotes(newJobPosting.getMeetingNotes());
+        jp.setMeetingType(newJobPosting.getMeetingType());
+        jp.setOtherRequirements(newJobPosting.getOtherRequirements());
+        jp.setPostDate(newJobPosting.getPostDate());
+        jp.setProcess(newJobPosting.getProcess());
+        jp.setSalary(newJobPosting.getSalary());
+        jp.setSkillRequirements(newJobPosting.getSkillRequirements());
 
-  //       jobPostingService.save(newJobPosting);
+        // Job posting is saved
+        jobPostingService.save(newJobPosting);
 
-  //       // Return a ok status with the new vaccine that was created
-  //       return new ResponseEntity<String>(
-  //           successResponse(super.toJson(jobPostingService.findByJobNumber(newJobPosting.getJobNumber()))),
-  //           HttpStatus.OK);
+        // Return a ok status with the new job posting that was created
+        return new ResponseEntity<String>(
+            successResponse(super.toJson(jobPostingService.findByJobNumber(newJobPosting.getJobNumber()))),
+            HttpStatus.OK);
+      }
 
-  //     }
+      // Catch for internal server errors
+    } catch (Exception | Error e) {
+      return new ResponseEntity<String>(
+          errorResponse("Unexpected " + e.getClass().getSimpleName() + " with message: " + e.getMessage()),
+          HttpStatus.INTERNAL_SERVER_ERROR);
 
-  //     // Catch for internal server errors
-  //   } catch (Exception | Error e) {
-  //     return new ResponseEntity<String>(
-  //         errorResponse("Unexpected " + e.getClass().getSimpleName() + " with message: " + e.getMessage()),
-  //         HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
-  //   }
-
-  // }
+  }
 
 }

@@ -4,6 +4,10 @@ import com.positivehire.phtalent.models.JobPosting;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+/**
+ * @author Juan Franco Pinilla
+ * @author Zayda Cummings
+ */
 @Repository
 public interface JobPostingRepository<T extends JobPosting> extends JpaRepository<JobPosting, Long> {
     /**

@@ -180,7 +180,7 @@ public class APIJobPostingsControllerTest {
 		jobPostings = new ArrayList<JobPosting>();
 
 		//Delete all previous job postings from the database before running new tests
-        jobPostingServ.deleteAll();
+    jobPostingServ.deleteAll();
 
 		//Tester post and close dates
 		DateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy, hh:mm:ss a");
@@ -188,7 +188,7 @@ public class APIJobPostingsControllerTest {
 		Date postDate = dateFormat.parse("Mar 14, 2023, 12:05:55 PM");
 		Date closeDate = dateFormat.parse("May 26, 2023, 12:05:55 PM");
 
-        //Tester locations
+    //Tester locations
 		ArrayList<String> locs = new ArrayList<String>();
 		locs.add("Raleigh, NC");
 		locs.add("Remote");
@@ -279,10 +279,11 @@ public class APIJobPostingsControllerTest {
 
 		mvc = MockMvcBuilders.webAppContextSetup( context ).build();
 
+		// Job postings array list
 		jobPostings = new ArrayList<JobPosting>();
 
 		//Delete all previous job postings from the database before running new tests
-        jobPostingServ.deleteAll();
+    jobPostingServ.deleteAll();
 
 		//Tester post and close dates
 		DateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy, hh:mm:ss a");
@@ -290,7 +291,7 @@ public class APIJobPostingsControllerTest {
 		Date postDate = dateFormat.parse("Mar 14, 2023, 12:05:55 PM");
 		Date closeDate = dateFormat.parse("May 26, 2023, 12:05:55 PM");
 
-        //Tester locations
+    //Tester locations
 		ArrayList<String> locs = new ArrayList<String>();
 		locs.add("Raleigh, NC");
 		locs.add("Remote");
@@ -338,7 +339,7 @@ public class APIJobPostingsControllerTest {
 		"logistics division", testSkills1, testCerts1, "This is a very easy job I guess",
 		"Do you like managing cloud services and baking on the side? Well this is the job for you!",
 		4, locs, "Online", "Testing meeting notes", null, "linkedin.com", null, postDate, closeDate));
-
+ 
         mvc.perform(post("/jobpostings")
 	      .content(TestUtils.asJsonString(job1))
 	      .contentType(MediaType.APPLICATION_JSON)
@@ -365,19 +366,19 @@ public class APIJobPostingsControllerTest {
 	      .content(TestUtils.asJsonString(invalidJob))
 	      .contentType(MediaType.APPLICATION_JSON)
 	      .accept(MediaType.APPLICATION_JSON))
-      .andExpect(status().isNotFound());
+        .andExpect(status().isNotFound());
 
 		//Test valid update
-		//job1.setJobTitle("Really Super Cool Software Developer"); //Changing the job title
+		job1.setJobTitle("Really Super Cool Software Developer"); //Changing the job title
 
 		System.out.println("TOTAL NUMBER OF JOB POSTINGS IN THE DATABASE: " + jobPostingServ.count());
 		System.out.println("JOB NUMBER: " + jobPostingServ.findByJobNumber("A30694").toString());
 
-		//mvc.perform(put("/jobposting/{jobNumber}", "A30694")
-	    //  .content(TestUtils.asJsonString(jobPostingServ.findByJobNumber("A30694")))
-	    //  .contentType(MediaType.APPLICATION_JSON)
-	    //  .accept(MediaType.APPLICATION_JSON))
-      //.andExpect(status().isOk());
+		mvc.perform(put("/jobpostings/{jobNumber}", "A30694")
+	     .content(TestUtils.asJsonString(jobPostingServ.findByJobNumber("A30694")))
+	     .contentType(MediaType.APPLICATION_JSON)
+	     .accept(MediaType.APPLICATION_JSON))
+       .andExpect(status().isOk());
 
 	  System.out.println(job1.toString());
 	}
