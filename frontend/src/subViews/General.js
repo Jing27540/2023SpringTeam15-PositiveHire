@@ -30,7 +30,7 @@ function General(props) {
                 (employee !== undefined) ?
                     Object.keys(employee).map((item, index) => {
                         if (item !== 'id' && item !== 'technicalSkills' && item !== 'peopleSkills'
-                            && item !== 'workEthic' && item !== 'certifications') {
+                            && item !== 'workEthic' && item !== 'certifications' && item !== 'jobRecords' && item !== 'education') {
                             return (
                                 <Row key={index} style={{ textAlign: 'left', justifyContent: "space-between" }}>
                                     <Col>

@@ -14,6 +14,8 @@ import Skill from "../subViews/Skill";
 import Certification from "../subViews/Certification"
 import ProfileCard from "../components/ProfileCard";
 import Alert from 'react-bootstrap/Alert';
+import jobHistory from "../subViews/JobHistory";
+import JobHistory from "../subViews/JobHistory";
 
 /**
  * EmployeeProfile component is used to manage profile information.
@@ -29,8 +31,9 @@ const ContentBox = styled.div`
     min-height: 500px;
 `;
 
-const GTITLE = ['General', 'Skills & Certifications', 'Performance Review', 'Career Development Plans', 'Open Positions'];
+const GTITLE = ['General', 'Skills & Certifications', 'Performance Review', 'Career Development Plans', 'Open Positions', 'Job & Education History'];
 const SKTITLE = ['Skills', 'Certifications'];
+const JRTITLE = ['Job History', 'Education History'];
 const PRTITLE = ['Reviews', 'Goals', 'Training Resources', 'Schedule'];
 const CDPTITLE = ['Goals', 'Training Resources', 'Statistics'];
 
@@ -50,6 +53,7 @@ function EmployeeProfile(props) {
         if (mode === GTITLE[1]) { setTitle(SKTITLE); }
         else if (mode === GTITLE[2]) { setTitle(PRTITLE); }
         else if (mode === GTITLE[3]) { setTitle(CDPTITLE); }
+        else if (mode === GTITLE[5]) { setTitle(JRTITLE); }
         else { setTitle([]) }
     }, [mode]);
 
@@ -63,6 +67,10 @@ function EmployeeProfile(props) {
             } else {
                 return (<Skill employee={employee} />);
             }
+        } else if (mode === 'Job & Education History') {
+            return (
+                <JobHistory employee={employee}/>
+            );
         } else {
             return (<Alert variant="danger"> Not Implement Yet!</Alert>);
         }

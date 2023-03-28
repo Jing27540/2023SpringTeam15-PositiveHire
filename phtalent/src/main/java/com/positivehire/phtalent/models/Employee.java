@@ -112,7 +112,8 @@ public class Employee extends DomainObject {
             final String department, final String position, final String managerName, final String employeeSource,
             final String accessRole, final String performanceScore, final String annualBonus, final double ptoHours,
             final List<Skill> technicalSkills, final List<Skill> peopleSkills, final List<Skill> workEthic,
-            final List<Certification> certifications, final List<JobRecord> jobRecords, final List<Education> education) {
+            final List<Certification> certifications, final List<JobRecord> jobRecords,
+            final List<Education> education) {
         setId(id);
         setEmployeeName(employeeName);
         setEmployeeNum(employeeNum);
@@ -562,7 +563,7 @@ public class Employee extends DomainObject {
         // if (e.getJobRecords().size() <= this.getJobRecords().size()) {
         // this.setJobRecords(e.getJobRecords());
         // }
-        this.setJobRecords(e.getJobRecords());
+        // this.setJobRecords(e.getJobRecords());
 
         if (e.getTechnicalSkills().size() > this.getTechnicalSkills().size()) {
             this.addTechSkills(e.getTechnicalSkills());
