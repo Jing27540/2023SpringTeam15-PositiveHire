@@ -26,9 +26,11 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.positivehire.phtalent.common.TestUtils;
 import com.positivehire.phtalent.models.Certification;
+import com.positivehire.phtalent.models.Education;
 import com.positivehire.phtalent.models.Employee;
 import com.positivehire.phtalent.models.JobRecord;
 import com.positivehire.phtalent.models.Skill;
+import com.positivehire.phtalent.services.EducationService;
 import com.positivehire.phtalent.services.EmployeeService;
 import com.positivehire.phtalent.services.JobRecordService;
 import com.positivehire.phtalent.services.SkillService;
@@ -71,6 +73,8 @@ public class APIEmployeeControllerTest {
 
         // @Autowired
         // private SkillService skillServ;
+        @Autowired
+        private EducationService eduServ;
 
         private static Employee employee1;
 
@@ -359,7 +363,27 @@ public class APIEmployeeControllerTest {
 
                 assertEquals(check3.getJobRecords().get(0).getJobTitle(), newJR1.getJobTitle());
                 assertEquals(check3.getJobRecords().get(0).getJobLevel(), newJR1.getJobLevel());
+                
+                List<Skill> eduSkills = new ArrayList<Skill>();
+                Skill nSkill = new Skill("csskill", "advanced", 5);
+                eduSkills.add(nSkill);
+                Education newEd = new Education("BS CS", "NCSU", "BS", null, eduSkills);
+                Employee newEmpForEd = new Employee();
+                newEmpForEd.setEmployeeName("empFOrEd");
+                newEmpForEd.setEmployeeNum(8889888);
+                
+                
+               employeeServ.save(newEmpForEd);
 
+                mvc.perform(post("/employees/" + newEmpForEd.getEmployeeNum() + "/education")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(newEd))).andExpect(status().isOk());
+                List<Education> eduli = eduServ.findAll();
+                Long id = (Long)eduli.get(0).getId();
+                
+
+                mvc.perform(delete("/employees/" + newEmpForEd.getEmployeeNum() + "/education/" + id).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
                 // List<JobRecord> x = jrServ.findAll();
                 // System.out.println(x);
 

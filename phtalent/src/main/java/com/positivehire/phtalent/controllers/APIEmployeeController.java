@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.positivehire.phtalent.services.EducationService;
 import com.positivehire.phtalent.services.EmployeeService;
 import com.positivehire.phtalent.services.JobRecordService;
 import com.positivehire.phtalent.services.SkillService;
@@ -39,6 +40,8 @@ public class APIEmployeeController extends APIController {
     @Autowired
     private JobRecordService jrServ;
 
+    @Autowired
+    private EducationService eduServ;
     /**
      * Gets a list of saved employees from the database
      * 
@@ -144,23 +147,7 @@ public class APIEmployeeController extends APIController {
                 : new ResponseEntity<Employee>(emp, HttpStatus.OK);
     }
 
-    @PostMapping("/employees/{employeeNum}/education")
-    public ResponseEntity<String> createEducation(@PathVariable("employeeNum") final int employeeNum,
-            @RequestBody Education edu) {
-        final Employee emp = employeeServ.findByEmployeeNum(employeeNum);
 
-        if (edu.getId() != null) {
-            return new ResponseEntity<String>(
-                    successResponse("Education with the name " + edu.getName() + " already exists"),
-                    HttpStatus.CONFLICT);
-        } else {
-            emp.getEducation().add(edu);
-            employeeServ.save(emp);
-            return new ResponseEntity<String>(successResponse(edu.getName() + "successfully created"),
-                    HttpStatus.OK);
-        }
-
-    }
 
     @PostMapping("/employees/{employeeNum}/jobrecords")
     public ResponseEntity<String> createJobRecord(@PathVariable("employeeNum") final int employeeNum,
@@ -301,4 +288,107 @@ public class APIEmployeeController extends APIController {
                 HttpStatus.OK);
     }
 
+    @PostMapping("/employees/{employeeNum}/education")
+    public ResponseEntity<String> createEducation(@PathVariable("employeeNum") final int employeeNum,
+            @RequestBody Education edu) {
+        final Employee emp = employeeServ.findByEmployeeNum(employeeNum);
+
+        if (edu.getId() != null) {
+            return new ResponseEntity<String>(
+                    successResponse("Education with the name " + edu.getName() + " already exists"),
+                    HttpStatus.CONFLICT);
+        } else {
+            emp.getEducation().add(edu);
+            employeeServ.save(emp);
+            return new ResponseEntity<String>(successResponse(edu.getName() + "successfully created"),
+                    HttpStatus.OK);
+        }
+
+    }
+    /**
+     * Deletes an education associated with an employee
+     * @param employeeNum the employee number to delete an education from
+     * @param name the name of education to delete
+     * @return response
+     */
+    @DeleteMapping("/employees/{employeeNum}/education/{id}")
+    public ResponseEntity<String> deleteEducation(@PathVariable("employeeNum") final int employeeNum, @PathVariable("id") Long id) {
+        final Employee emp = employeeServ.findByEmployeeNum(employeeNum);
+        Education toDelete = eduServ.findById(id);
+        if(emp != null) {
+            for(Skill s: toDelete.getSkills()) {
+                skillServ.delete(s);
+            }
+            eduServ.delete(toDelete);
+
+            for(Education e: emp.getEducation()) {
+                if(e.getId() == id) {
+                    emp.getEducation().remove(e);
+                }
+            }
+        } else {
+            return new ResponseEntity<String>(
+                successResponse("Employee with the name does not exist"),
+                HttpStatus.CONFLICT);
+        }
+        return new ResponseEntity<String>(successResponse(toDelete.getName() + "successfully removed"),
+                HttpStatus.OK);
+    }
+
+    @PutMapping("/employees/{employeeNum}/education")
+    public ResponseEntity<String> updateEducation(@PathVariable("employeeNum") final int employeeNum, @RequestBody Education newEd) {
+        if(employeeServ.findByEmployeeNum(employeeNum) != null) {
+            Education toEdit = eduServ.findById((long)newEd.getId());
+            toEdit.setName(newEd.getName());
+            toEdit.setDateAchieved(newEd.getDateAchieved());
+            toEdit.setInstitution(newEd.getInstitution());
+            toEdit.setSkills(newEd.getSkills());
+            toEdit.setType(newEd.getType());
+            eduServ.save(toEdit);
+        } else {
+            return new ResponseEntity<String>(
+                successResponse("Employee with the name does not exist"),
+                HttpStatus.CONFLICT);
+        }
+        
+        
+        return new ResponseEntity<String>(successResponse(newEd.getName() + " was updated successfully"),
+                HttpStatus.OK);
+    }
+
+    @PostMapping("/employees/{employeeNum}/education/{id}/skills")
+    public ResponseEntity<String> addSkillToEdu(@PathVariable("employeeNum") final int employeeNum, @PathVariable("id") Long eduId, @RequestBody Skill newskill) {
+        if(employeeServ.findByEmployeeNum(employeeNum) != null) {
+            Education toAdd = eduServ.findById(eduId);
+            toAdd.getSkills().add(newskill);
+            eduServ.save(toAdd);
+
+        } else {
+            return new ResponseEntity<String>(
+                successResponse("Employee with the name does not exist"),
+                HttpStatus.CONFLICT);
+        }
+
+        return new ResponseEntity<String>(successResponse(eduServ.findById(eduId).getName() + " was updated successfully"),
+        HttpStatus.OK);
+    }
+
+    @PutMapping("/employees/{employeeNum}/education/{id}/skills/{skillId}")
+    public ResponseEntity<String> editSkillInEdu(@PathVariable("employeeNum") final int employeeNum, @PathVariable("id") Long eduId, @PathVariable("skillId") Long skillId, @RequestBody Skill editedSkill) {
+        if(employeeServ.findByEmployeeNum(employeeNum) != null) {
+           // Education toEdit = eduServ.findById(eduId);
+            Skill stoEdit = skillServ.findById(skillId);
+          //  toEdit.getSkills().remove(stoEdit);
+            stoEdit.setLevel(editedSkill.getLevel());
+            stoEdit.setName(editedSkill.getName());
+            stoEdit.setScore(editedSkill.getScore());
+            skillServ.save(stoEdit);
+        } else {
+            return new ResponseEntity<String>(
+                successResponse("Employee with the name does not exist"),
+                HttpStatus.CONFLICT);
+        }
+        return new ResponseEntity<String>(successResponse(eduServ.findById(eduId).getName() + " was updated successfully"),
+        HttpStatus.OK);
+    }
 }
