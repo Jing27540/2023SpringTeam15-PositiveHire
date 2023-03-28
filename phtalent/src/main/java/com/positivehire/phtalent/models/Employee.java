@@ -91,6 +91,8 @@ public class Employee extends DomainObject {
     private List<Certification> certifications;
     @OneToMany(cascade = CascadeType.ALL)
     private List<JobRecord> jobRecords;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Education> education;
 
     public Employee() {
         this.technicalSkills = new ArrayList<Skill>();
@@ -98,6 +100,7 @@ public class Employee extends DomainObject {
         this.workEthic = new ArrayList<Skill>();
         this.certifications = new ArrayList<Certification>();
         this.jobRecords = new ArrayList<JobRecord>();
+        this.education = new ArrayList<Education>();
     }
 
     public Employee(final Long id, final String employeeName, final int employeeNum, final int marriedId,
@@ -109,7 +112,7 @@ public class Employee extends DomainObject {
             final String department, final String position, final String managerName, final String employeeSource,
             final String accessRole, final String performanceScore, final String annualBonus, final double ptoHours,
             final List<Skill> technicalSkills, final List<Skill> peopleSkills, final List<Skill> workEthic,
-            final List<Certification> certifications, final List<JobRecord> jobRecords) {
+            final List<Certification> certifications, final List<JobRecord> jobRecords, final List<Education> education) {
         setId(id);
         setEmployeeName(employeeName);
         setEmployeeNum(employeeNum);
@@ -148,13 +151,14 @@ public class Employee extends DomainObject {
         this.workEthic = new ArrayList<Skill>();
         this.certifications = new ArrayList<Certification>();
         this.jobRecords = new ArrayList<JobRecord>();
+        this.education = new ArrayList<Education>();
 
         setTechnicalSkills(technicalSkills);
         setPeopleSkills(peopleSkills);
         setWorkEthic(workEthic);
         setCertifications(certifications);
         setJobRecords(jobRecords);
-
+        setEducation(education);
     }
 
     // public Employee ( final long id, final String employeeName ) {
@@ -490,6 +494,14 @@ public class Employee extends DomainObject {
                 this.workEthic.add(workEthticSkill.get(i));
             }
         }
+    }
+
+    public List<Education> getEducation() {
+        return this.education;
+    }
+
+    public void setEducation(List<Education> education) {
+        this.education = education;
     }
 
     public void addCertifications(final List<Certification> certs) {

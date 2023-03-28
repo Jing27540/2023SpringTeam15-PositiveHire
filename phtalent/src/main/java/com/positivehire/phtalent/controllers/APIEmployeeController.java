@@ -154,7 +154,7 @@ public class APIEmployeeController extends APIController {
                     successResponse("Education with the name " + edu.getName() + " already exists"),
                     HttpStatus.CONFLICT);
         } else {
-            // emp;
+            emp.getEducation().add(edu);
             employeeServ.save(emp);
             return new ResponseEntity<String>(successResponse(edu.getName() + "successfully created"),
                     HttpStatus.OK);

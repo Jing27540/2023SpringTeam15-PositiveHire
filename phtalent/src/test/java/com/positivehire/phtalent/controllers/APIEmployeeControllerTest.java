@@ -134,7 +134,7 @@ public class APIEmployeeControllerTest {
                                 "DOB", "Male", "married", "US", "Latino", "race", "dateOfHire", 5, "dateOfTermination",
                                 "reasonForTermination", "employementStatus", "department", "position", "managerName",
                                 "employeeSource",
-                                "accessRole", "performanceScore", "annualBonus", 5.5, null, null, null, null, null);
+                                "accessRole", "performanceScore", "annualBonus", 5.5, null, null, null, null, null, null);
                 final Date d = new Date();
 
                 // Certifications
