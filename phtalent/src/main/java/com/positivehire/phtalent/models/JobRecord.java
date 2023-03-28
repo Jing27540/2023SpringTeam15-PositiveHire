@@ -23,6 +23,10 @@ public class JobRecord extends DomainObject {
 
     private String jobLevel;
 
+    private String organization;
+
+    private String location;
+
     private Date startDate;
 
     private Date endDate;
@@ -43,9 +47,12 @@ public class JobRecord extends DomainObject {
 
     // }
 
-    public JobRecord(String jobTitle, String jobLevel, Date startDate, Date endDate, List<Skill> jobSkills) {
+    public JobRecord(String jobTitle, String jobLevel, String organization, String location, Date startDate,
+            Date endDate, List<Skill> jobSkills) {
         this.jobTitle = jobTitle;
         this.jobLevel = jobLevel;
+        this.organization = organization;
+        this.location = location;
         this.startDate = startDate;
         this.endDate = endDate;
         this.jobSkills = jobSkills;
@@ -74,6 +81,22 @@ public class JobRecord extends DomainObject {
 
     public void setJobLevel(String jobLevel) {
         this.jobLevel = jobLevel;
+    }
+
+    public String getOrganization() {
+        return this.organization;
+    }
+
+    public void setOrganization(String organization) {
+        this.organization = organization;
+    }
+
+    public String getlocation() {
+        return this.location;
+    }
+
+    public void setlocation(String location) {
+        this.location = location;
     }
 
     public Date getStartDate() {

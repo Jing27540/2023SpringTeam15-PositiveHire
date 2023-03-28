@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.positivehire.phtalent.services.EmployeeService;
+import com.positivehire.phtalent.services.JobRecordService;
+import com.positivehire.phtalent.services.SkillService;
 import com.positivehire.phtalent.models.Education;
 import com.positivehire.phtalent.models.Employee;
 import com.positivehire.phtalent.models.JobRecord;
+import com.positivehire.phtalent.models.Skill;
 
 /**
  * API Employee class
@@ -29,6 +32,12 @@ public class APIEmployeeController extends APIController {
 
     @Autowired
     private EmployeeService employeeServ;
+
+    @Autowired
+    private SkillService skillServ;
+
+    @Autowired
+    private JobRecordService jrServ;
 
     /**
      * Gets a list of saved employees from the database
@@ -50,13 +59,13 @@ public class APIEmployeeController extends APIController {
     // @GetMapping("/employees/{id}")
     // public ResponseEntity<Employee> getEmployeeByNumber(@PathVariable Long id) {
 
-    //     Employee emp = employeeServ.findById(id);
+    // Employee emp = employeeServ.findById(id);
 
-    //     return null == emp
-    //     ? new ResponseEntity( errorResponse( "No employee with the id found" ),
-    //     HttpStatus.NOT_FOUND )
-    //     : new ResponseEntity<Employee>( emp, HttpStatus.OK );
-       
+    // return null == emp
+    // ? new ResponseEntity( errorResponse( "No employee with the id found" ),
+    // HttpStatus.NOT_FOUND )
+    // : new ResponseEntity<Employee>( emp, HttpStatus.OK );
+
     // }
 
     /**
@@ -89,7 +98,6 @@ public class APIEmployeeController extends APIController {
     public ResponseEntity<String> deleteEmployee(@PathVariable("employeeNum") final int employeeNum) {
 
         Employee employee = employeeServ.findByEmployeeNum(employeeNum);
-     
 
         if (employee == null) {
             return new ResponseEntity<String>(errorResponse("No employee with the given number"), HttpStatus.NOT_FOUND);
@@ -122,6 +130,7 @@ public class APIEmployeeController extends APIController {
 
     /**
      * Returns the employee with the given employeeNumber
+     * 
      * @param employeeNum employee number to look for
      * @return response entity with employee
      */
@@ -130,40 +139,40 @@ public class APIEmployeeController extends APIController {
         final Employee emp = employeeServ.findByEmployeeNum(employeeNum);
 
         return null == emp
-        ? new ResponseEntity( errorResponse( "No employee with the id found" ),
-        HttpStatus.NOT_FOUND )
-        : new ResponseEntity<Employee>( emp, HttpStatus.OK );
+                ? new ResponseEntity(errorResponse("No employee with the id found"),
+                        HttpStatus.NOT_FOUND)
+                : new ResponseEntity<Employee>(emp, HttpStatus.OK);
     }
 
-
     @PostMapping("/employees/{employeeNum}/education")
-    public ResponseEntity<String> createEducation(@PathVariable("employeeNum") final int employeeNum, @RequestBody Education edu) {
+    public ResponseEntity<String> createEducation(@PathVariable("employeeNum") final int employeeNum,
+            @RequestBody Education edu) {
         final Employee emp = employeeServ.findByEmployeeNum(employeeNum);
 
-        if(edu.getId() != null) {
+        if (edu.getId() != null) {
             return new ResponseEntity<String>(
-                successResponse("Education with the name " + edu.getName() + " already exists"),
-                HttpStatus.CONFLICT);
+                    successResponse("Education with the name " + edu.getName() + " already exists"),
+                    HttpStatus.CONFLICT);
         } else {
-         //   emp;
+            // emp;
             employeeServ.save(emp);
             return new ResponseEntity<String>(successResponse(edu.getName() + "successfully created"),
                     HttpStatus.OK);
         }
-      
+
     }
 
     @PostMapping("/employees/{employeeNum}/jobrecords")
-    public ResponseEntity<String> createJobRecords(@PathVariable("employeeNum") final int employeeNum, @RequestBody JobRecord rec) {
+    public ResponseEntity<String> createJobRecord(@PathVariable("employeeNum") final int employeeNum,
+            @RequestBody JobRecord rec) {
         final Employee emp = employeeServ.findByEmployeeNum(employeeNum);
 
-        
-
         // if (rec.getId().toString() != 0) {
-        //     return new ResponseEntity<String>(
-        //         successResponse("Job record with the name " + rec.getJobTitle() + " already exists"),
-        //         HttpStatus.CONFLICT);
-        // } else 
+        // return new ResponseEntity<String>(
+        // successResponse("Job record with the name " + rec.getJobTitle() + " already
+        // exists"),
+        // HttpStatus.CONFLICT);
+        // } else
         if (emp != null) {
             emp.getJobRecords().add(rec);
             employeeServ.save(emp);
@@ -176,7 +185,120 @@ public class APIEmployeeController extends APIController {
 
     }
 
+    @PutMapping("/employees/{employeeNum}/jobrecords")
+    public ResponseEntity<String> updateJobRecord(@PathVariable("employeeNum") final int employeeNum,
+            @RequestBody JobRecord rec) {
 
+        final Employee emp = employeeServ.findByEmployeeNum(employeeNum);
 
+        JobRecord jobRecordToUpdate = null;
+
+        if (emp != null) {
+            // Get the job record
+            for (JobRecord jr : emp.getJobRecords()) {
+                if (jr.getJobTitle().equals(rec.getJobTitle())) {
+                    jobRecordToUpdate = jr;
+                    break;
+                }
+            }
+
+            // check if JobRecord was found
+            if (jobRecordToUpdate != null) {
+                // Update base fields
+                jobRecordToUpdate.setJobLevel(rec.getJobLevel());
+                jobRecordToUpdate.setOrganization((rec.getOrganization()));
+                jobRecordToUpdate.setlocation(rec.getlocation());
+                jobRecordToUpdate.setStartDate(rec.getStartDate());
+                jobRecordToUpdate.setEndDate(rec.getEndDate());
+
+                // Update skills
+                boolean newSkill = true;
+
+                List<Skill> jrSkills = jobRecordToUpdate.getJobSkills();
+                if (rec.getJobSkills() != null) {
+
+                    for (Skill updated : rec.getJobSkills()) {
+                        for (Skill old : jrSkills) {
+                            if (updated.getName().equals(old.getName())) {
+                                newSkill = false;
+                                jrSkills.remove(old);
+                                jrSkills.add(updated);
+                                skillServ.delete(old);
+                                break;
+                            }
+                        }
+                        if (newSkill) {
+                            // skillServ.save(updated);
+                            jrSkills.add(updated);
+                            newSkill = false;
+                        } else {
+                            newSkill = true;
+                        }
+                    }
+                }
+
+                jobRecordToUpdate.setJobSkills(jrSkills);
+                jrServ.save(jobRecordToUpdate);
+
+            } else {
+                // If no JobRecord found
+                return new ResponseEntity<String>(successResponse("Error: Job Record does not exist"),
+                        HttpStatus.BAD_REQUEST);
+            }
+            // Save employee to push changes
+            // emp.getJobRecords().remove(jobRecordToUpdate);
+            // employeeServ.save(emp);
+        } else {
+            return new ResponseEntity<String>(successResponse("Error: employee does not exist"),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<String>(successResponse(rec.getJobTitle() + "successfully updated"),
+                HttpStatus.OK);
+    }
+
+    @DeleteMapping("/employees/{employeeNum}/jobrecords")
+    public ResponseEntity<String> deleteJobRecord(@PathVariable("employeeNum") final int employeeNum,
+            @RequestBody JobRecord rec) {
+        final Employee emp = employeeServ.findByEmployeeNum(employeeNum);
+
+        JobRecord employeeJobRecordToBeDeleted = null;
+
+        if (emp != null) {
+            // Get the job record
+            for (JobRecord jr : emp.getJobRecords()) {
+                if (jr.getJobTitle().equals(rec.getJobTitle())) {
+                    employeeJobRecordToBeDeleted = jr;
+                    break;
+                }
+            }
+
+            // check if JobRecord was found
+            if (employeeJobRecordToBeDeleted != null) {
+                // Remove all skills associated with the JobRecord
+
+                for (Skill x : employeeJobRecordToBeDeleted.getJobSkills()) {
+                    skillServ.delete(x);
+                }
+
+                // Remove the JobRecord object from the DB
+                // jrServ.save(employeeJobRecordToBeDeleted);
+                jrServ.delete(employeeJobRecordToBeDeleted);
+
+            } else {
+                // If no JobRecord found
+                return new ResponseEntity<String>(successResponse("Error: Job Record does not exist"),
+                        HttpStatus.BAD_REQUEST);
+            }
+            // Save employee to push changes
+            emp.getJobRecords().remove(employeeJobRecordToBeDeleted);
+            employeeServ.save(emp);
+        } else {
+            return new ResponseEntity<String>(successResponse("Error: employee does not exist"),
+                    HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<String>(successResponse(rec.getJobTitle() + "successfully removed"),
+                HttpStatus.OK);
+    }
 
 }
