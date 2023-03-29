@@ -24,6 +24,56 @@ function EditJobPosting() {
         })
     };
 
+    function handleSaveClick() {
+        // update value as user input
+        // input validation checking
+        let newJobPosting = {
+              "jobNumber": null,
+              "jobTitle": "Software Developer",
+              "salary": "120,000-140,000",
+              "department": "IT Department",
+              "skillRequirements": [
+                {
+                  "name": "Python",
+                  "level": "Srudsdsdaddsdadsada (Required)",
+                  "score": 1
+                }
+              ],
+              "certificationRequirements": [
+                {
+                  "name": "fsdfsddsfds",
+                  "institution": "",
+                  "issuedDate": null,
+                  "credentialID": "",
+                  "skills": "sfsfdsfdsgasgaagag (Suggested)"
+                }
+              ],
+              "otherRequirements": "other requirements",
+              "jobDescription": "Stuff here ",
+              "availablePositions": 3,
+              "location": null,
+              "meetingType": "inPersion",
+              "meetingNotes": "meeting notes",
+              "process": [
+                "sdfdsfd",
+                "dsfdsfds",
+                "fdsfdsfdsf",
+                "sfdsfds",
+                "fdsfdsf"
+              ],
+              "applyLink": "https://www.google.com/",
+              "listofApplicants": []
+            }
+          };
+
+    //     // call api
+    //     axios.post("http://localhost:8080/jobpostings", newJobPosting).then(response => {
+    //         setMessage("Successful to create a job posting!");
+    //     }).catch(error => {
+
+    //     });
+    // }
+
     React.useEffect(() => {
         loadCurrentData(); // action
     }, []);
