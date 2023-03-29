@@ -71,8 +71,8 @@ public class APIEmployeeControllerTest {
         // @Autowired
         // private JobRecordService jrServ;
 
-        // @Autowired
-        // private SkillService skillServ;
+         @Autowired
+         private SkillService skillServ;
         @Autowired
         private EducationService eduServ;
 
@@ -380,10 +380,49 @@ public class APIEmployeeControllerTest {
                                 .content(TestUtils.asJsonString(newEd))).andExpect(status().isOk());
                 List<Education> eduli = eduServ.findAll();
                 Long id = (Long)eduli.get(0).getId();
-                
 
+               
+                Education newEd2 = new Education("BS CS", "other inst", "BS", null, eduSkills);
+                newEd2.setId((Long)eduServ.findAll().get(0).getId());
+
+                eduSkills.add(nSkill);
+                newEd2.setSkills(eduSkills);
+
+                
+                mvc.perform(put("/employees/" + newEmpForEd.getEmployeeNum() + "/education")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(newEd2))).andExpect(status().isOk());
+
+                Skill benTen = new Skill("benten", "ten", 10);
+
+                                mvc.perform(post("/employees/" + newEmpForEd.getEmployeeNum() + "/education/" + id + "/skills")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(benTen))).andExpect(status().isOk());
+
+                                Long skId = null;
+                                int size = skillServ.findAll().size();
+                                for(Skill sk: skillServ.findAll()) {
+                                        if(sk.getName().equals("benten")) {
+                                                skId = (Long)sk.getId();
+                                        }
+                                }
+                Skill benTenTwo = new Skill("bententwo", "twenty", 20);
+                
+                                mvc.perform(put("/employees/" +  newEmpForEd.getEmployeeNum() + "/education/" + id + "/skills/" + skId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(benTenTwo))).andExpect(status().isOk());
+
+                                mvc.perform(delete("/employees/" + newEmpForEd.getEmployeeNum() + "/education/" + id + "/skills/" + skId).contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk());
+                
                 mvc.perform(delete("/employees/" + newEmpForEd.getEmployeeNum() + "/education/" + id).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+
+                assertEquals(0, eduServ.findAll().size());
+                
+
+                
+
                 // List<JobRecord> x = jrServ.findAll();
                 // System.out.println(x);
 

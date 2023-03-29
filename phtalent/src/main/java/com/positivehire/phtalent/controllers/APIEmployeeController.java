@@ -316,16 +316,18 @@ public class APIEmployeeController extends APIController {
         final Employee emp = employeeServ.findByEmployeeNum(employeeNum);
         Education toDelete = eduServ.findById(id);
         if(emp != null) {
+           
+            
             for(Skill s: toDelete.getSkills()) {
                 skillServ.delete(s);
             }
+
+           
             eduServ.delete(toDelete);
 
-            for(Education e: emp.getEducation()) {
-                if(e.getId() == id) {
-                    emp.getEducation().remove(e);
-                }
-            }
+
+            emp.getEducation().remove(toDelete);
+            employeeServ.save(emp);
         } else {
             return new ResponseEntity<String>(
                 successResponse("Employee with the name does not exist"),
@@ -389,6 +391,20 @@ public class APIEmployeeController extends APIController {
                 HttpStatus.CONFLICT);
         }
         return new ResponseEntity<String>(successResponse(eduServ.findById(eduId).getName() + " was updated successfully"),
+        HttpStatus.OK);
+    }
+
+    @DeleteMapping("/employees/{employeeNum}/education/{id}/skills/{skillId}")
+    public ResponseEntity<String> deleteSkillFromEducation(@PathVariable("employeeNum") final int employeeNum, @PathVariable("id") Long eduId, @PathVariable("skillId") Long skillId) {
+        if(employeeServ.findByEmployeeNum(employeeNum) != null) {
+            skillServ.delete(skillServ.findById(skillId));
+        } else {
+            return new ResponseEntity<String>(
+                successResponse("Employee with the name does not exist"),
+                HttpStatus.CONFLICT);
+        }
+
+        return new ResponseEntity<String>(successResponse("successful deletion"),
         HttpStatus.OK);
     }
 }
