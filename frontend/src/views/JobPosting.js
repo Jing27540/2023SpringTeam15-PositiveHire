@@ -39,11 +39,25 @@ function JobPosting(props) {
     function changeSubView() {
         if ((mode === 'Create' || props.pView === 'Create/Edit Positions') && props.accessRole === "HR") {
             return (
-                <CreateJobPosting accessRole={props.accessRole} />
+                <Row>
+                    <Col sm={1} style={{ marginTop: '10%' }}>
+                        <VerticalBar setMode={setMode} accessRole={props.accessRole} setPView={props.setPView} />
+                    </Col>
+                    <Col>
+                        <CreateJobPosting accessRole={props.accessRole} />
+                    </Col>
+                </Row>
             );
         } else if (mode === 'View' || props.pView === 'See Open Positions') {
             return (
-                <ViewJobPosting accessRole={props.accessRole} />
+                <Row>
+                    <Col sm={1} style={{ marginTop: '10%' }}>
+                        <VerticalBar setMode={setMode} accessRole={props.accessRole} setPView={props.setPView} />
+                    </Col>
+                    <Col>
+                        <ViewJobPosting accessRole={props.accessRole} />
+                    </Col>
+                </Row>
             );
         } else if (mode === 'Welcome' || props.pView === 'Welcome') {
             return (
@@ -51,21 +65,21 @@ function JobPosting(props) {
             );
         } else if (mode === 'Edit') {
             return (
-                <EditJobPosting />
+                <Row>
+                    <Col sm={1} style={{ marginTop: '10%' }}>
+                        <VerticalBar setMode={setMode} accessRole={props.accessRole} setPView={props.setPView} />
+                    </Col>
+                    <Col>
+                        <EditJobPosting />
+                    </Col>
+                </Row>
             );
         }
     }
 
     return (
         <Container fluid>
-            <Row>
-                <Col sm={1} style={{ marginTop: '10%' }}>
-                    <VerticalBar setMode={setMode} accessRole={props.accessRole} setPView={props.setPView} />
-                </Col>
-                <Col>
-                    {changeSubView()}
-                </Col>
-            </Row>
+            {changeSubView()}
         </Container>
     );
 
