@@ -68,9 +68,11 @@ function EmployeeProfile(props) {
                 return (<Skill employee={employee} />);
             }
         } else if (mode === 'Job & Education History') {
-            return (
-                <JobHistory employee={employee}/>
-            );
+            if (tool === 'Education History') {
+                return (<h1>Hello!</h1>);
+            } else {
+                return (<JobHistory employee={employee} />);
+            }
         } else {
             return (<Alert variant="danger"> Not Implement Yet!</Alert>);
         }
