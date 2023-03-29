@@ -361,10 +361,13 @@ public class APIEmployeeController extends APIController {
     @PostMapping("/employees/{employeeNum}/education/{id}/skills")
     public ResponseEntity<String> addSkillToEdu(@PathVariable("employeeNum") final int employeeNum, @PathVariable("id") Long eduId, @RequestBody Skill newskill) {
         if(employeeServ.findByEmployeeNum(employeeNum) != null) {
+            
             Education toAdd = eduServ.findById(eduId);
+            
             toAdd.getSkills().add(newskill);
+            
             eduServ.save(toAdd);
-
+           
         } else {
             return new ResponseEntity<String>(
                 successResponse("Employee with the name does not exist"),
@@ -406,5 +409,10 @@ public class APIEmployeeController extends APIController {
 
         return new ResponseEntity<String>(successResponse("successful deletion"),
         HttpStatus.OK);
+    }
+
+    @GetMapping("/employees/{employeeNum}/education")
+    public List<Education> getAllEducation() {
+        return eduServ.findAll();
     }
 }
