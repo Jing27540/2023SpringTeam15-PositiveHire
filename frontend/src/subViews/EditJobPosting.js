@@ -51,12 +51,10 @@ function EditJobPosting() {
 
 const ChildrenJP = (props) => {
 
+    console.log('checking', props);
+
     const [remove, setRemove] = React.useState(false);
     const [edit, setEdit] = React.useState(false);
-
-    React.useEffect(() => {
-        // TODO: remove the list, update the list
-    }, [remove]);
 
     function getSCsData(r, flag) {
         let arr = undefined
@@ -75,11 +73,12 @@ const ChildrenJP = (props) => {
     return (
         !edit ?
             <>
-                <Row style={{ height: '40px', marginTop: '2%', backgroundColor: "#0f123F", color: 'white', fontWeight: 'bold', justifyContent: 'center', placeItems: 'center' }}>
+                <Row style={{ height: '40px', marginTop: '4%', backgroundColor: "#0f123F", color: 'white', fontWeight: 'bold', justifyContent: 'center', placeItems: 'center' }}>
                     <Col>JOB TITLE</Col>
                     <Col>REQUIREMENTS</Col>
                     <Col>AVAILABILITY</Col>
                     <Col>PROCESS</Col>
+                    <Col sm={1}>Options</Col>
                 </Row>
                 <Row className="border border-2" style={{ fontSize: '13px' }}>
                     <Col className="border border-1">
@@ -157,23 +156,26 @@ const ChildrenJP = (props) => {
                                 }
                             </Col>
                             <Col sm={4} className="justify-content-end">
-                                {/* <Row className="justify-content-end"> */}
-                                    <Button size="sm" onClick={() => setRemove(true)} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px', marginTop: '1%' }} >
-                                        Remove
-                                    </Button>
-                                {/* </Row> */}
-                                {/* <Row className="justify-content-end"> */}
-                                    <Button size="sm" onClick={() => setEdit(true)} style={{ marginTop: "4%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} >
-                                        Edit
-                                    </Button>
-                                {/* </Row> */}
+
                             </Col>
+                        </Row>
+                    </Col>
+                    <Col className="border border-1" sm={1}>
+                        <Row className="justify-content-center">
+                            <Button size="sm" onClick={() => setRemove(true)} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px', marginTop: '1%' }} >
+                                Remove
+                            </Button>
+                        </Row>
+                        <Row className="justify-content-center">
+                            <Button size="sm" onClick={() => setEdit(true)} style={{ marginTop: "4%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} >
+                                Edit
+                            </Button>
                         </Row>
                     </Col>
                 </Row>
             </>
             :
-            <Row className="border border-2 border-dark" style={{ marginTop: '2%' }}>
+            <Row className="border border-2 border-dark" style={{ marginTop: '4%' }}>
                 <Container style={{ justifyContent: 'center', placeItems: 'center' }}>
                     <Row style={{ height: '40px', backgroundColor: "#0f123F", color: 'white', fontWeight: 'bold', justifyContent: 'center', placeItems: 'center' }}>
                         Edit Form
@@ -185,7 +187,7 @@ const ChildrenJP = (props) => {
                             </Button>
                         </Row>
                     </Container>
-                    <Container className="border border-1 border-dark">
+                    <Container className="border border-1">
                         <Row className="square border-bottom border-dark" style={{ height: '40px', backgroundColor: "#0f123F", color: 'white', fontWeight: 'bold', justifyContent: 'center', placeItems: 'center' }}>
                             Job Title
                         </Row>
@@ -194,7 +196,7 @@ const ChildrenJP = (props) => {
                             saveMode={false}
                         />
                     </Container>
-                    <Container className="border border-1 border-dark" style={{ marginTop: "2%" }}>
+                    <Container className="border border-1" style={{ marginTop: "2%" }}>
                         <Row style={{ height: '40px', backgroundColor: "#0f123F", color: 'white', fontWeight: 'bold', justifyContent: 'center', placeItems: 'center' }}>
                             Requirements
                         </Row>
@@ -203,7 +205,7 @@ const ChildrenJP = (props) => {
                             saveMode={false}
                         />
                     </Container>
-                    <Container className="border border-1 border-dark" style={{ marginTop: "2%" }}>
+                    <Container className="border border-1" style={{ marginTop: "2%" }}>
                         <Row style={{ height: '40px', backgroundColor: "#0f123F", color: 'white', fontWeight: 'bold', justifyContent: 'center', placeItems: 'center' }}>
                             Availability
                         </Row>
@@ -212,7 +214,7 @@ const ChildrenJP = (props) => {
                             saveMode={false}
                         />
                     </Container>
-                    <Container className="border border-1 border-dark" style={{ marginTop: "2%", marginBottom: "2%" }}>
+                    <Container className="border border-1" style={{ margin: "2%" }}>
                         <Row style={{ height: '40px', backgroundColor: "#0f123F", color: 'white', fontWeight: 'bold', justifyContent: 'center', placeItems: 'center' }}>
                             Processes
                         </Row>
