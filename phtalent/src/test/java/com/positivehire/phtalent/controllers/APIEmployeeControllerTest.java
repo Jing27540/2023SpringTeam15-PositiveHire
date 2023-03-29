@@ -71,8 +71,8 @@ public class APIEmployeeControllerTest {
         // @Autowired
         // private JobRecordService jrServ;
 
-         @Autowired
-         private SkillService skillServ;
+        @Autowired
+        private SkillService skillServ;
         @Autowired
         private EducationService eduServ;
 
@@ -138,7 +138,8 @@ public class APIEmployeeControllerTest {
                                 "DOB", "Male", "married", "US", "Latino", "race", "dateOfHire", 5, "dateOfTermination",
                                 "reasonForTermination", "employementStatus", "department", "position", "managerName",
                                 "employeeSource",
-                                "accessRole", "performanceScore", "annualBonus", 5.5, null, null, null, null, null, null);
+                                "accessRole", "performanceScore", "annualBonus", 5.5, null, null, null, null, null,
+                                null);
                 final Date d = new Date();
 
                 // Certifications
@@ -363,7 +364,22 @@ public class APIEmployeeControllerTest {
 
                 assertEquals(check3.getJobRecords().get(0).getJobTitle(), newJR1.getJobTitle());
                 assertEquals(check3.getJobRecords().get(0).getJobLevel(), newJR1.getJobLevel());
-                
+
+                // For database data to sue on frontend
+                Skill refSkill = new Skill("Jings Assistant", "High", 6);
+                Skill refSkill2 = new Skill("Java", "Low", 3);
+                moreskills = new ArrayList<Skill>();
+                moreskills.add(refSkill);
+                moreskills.add(refSkill2);
+
+                JobRecord newJR3 = new JobRecord("Basketball", "junior", "NCSU", null, null, null, moreskills);
+
+                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(newJR3))).andExpect(status().isOk());
+
+                /* ******************************************* */
+
                 List<Skill> eduSkills = new ArrayList<Skill>();
                 Skill nSkill = new Skill("csskill", "advanced", 5);
                 eduSkills.add(nSkill);
@@ -371,57 +387,61 @@ public class APIEmployeeControllerTest {
                 Employee newEmpForEd = new Employee();
                 newEmpForEd.setEmployeeName("empFOrEd");
                 newEmpForEd.setEmployeeNum(8889888);
-                
-                
-               employeeServ.save(newEmpForEd);
+
+                employeeServ.save(newEmpForEd);
 
                 mvc.perform(post("/employees/" + newEmpForEd.getEmployeeNum() + "/education")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(TestUtils.asJsonString(newEd))).andExpect(status().isOk());
                 List<Education> eduli = eduServ.findAll();
-                Long id = (Long)eduli.get(0).getId();
+                Long id = (Long) eduli.get(0).getId();
 
-               
-                Education newEd2 = new Education("BS CS", "other inst", "BS", null, eduSkills);
-                newEd2.setId((Long)eduServ.findAll().get(0).getId());
+                Education newEd2 = new Education("BS CS", "other inst", "BS", null,
+                                eduSkills);
+                newEd2.setId((Long) eduServ.findAll().get(0).getId());
 
                 eduSkills.add(nSkill);
                 newEd2.setSkills(eduSkills);
 
-                
                 mvc.perform(put("/employees/" + newEmpForEd.getEmployeeNum() + "/education")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(TestUtils.asJsonString(newEd2))).andExpect(status().isOk());
 
                 Skill benTen = new Skill("benten", "ten", 10);
 
-                                mvc.perform(post("/employees/" + newEmpForEd.getEmployeeNum() + "/education/" + id + "/skills")
+                mvc.perform(post("/employees/" + newEmpForEd.getEmployeeNum() + "/education/"
+                                + id + "/skills")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(TestUtils.asJsonString(benTen))).andExpect(status().isOk());
 
-                                Long skId = null;
-                                int size = skillServ.findAll().size();
-                                for(Skill sk: skillServ.findAll()) {
-                                        if(sk.getName().equals("benten")) {
-                                                skId = (Long)sk.getId();
-                                        }
-                                }
+                Long skId = null;
+                int size = skillServ.findAll().size();
+                for (Skill sk : skillServ.findAll()) {
+                        if (sk.getName().equals("benten")) {
+                                skId = (Long) sk.getId();
+                        }
+                }
                 Skill benTenTwo = new Skill("bententwo", "twenty", 20);
-                
-                                mvc.perform(put("/employees/" +  newEmpForEd.getEmployeeNum() + "/education/" + id + "/skills/" + skId)
+
+                mvc.perform(put("/employees/" + newEmpForEd.getEmployeeNum() + "/education/"
+                                + id + "/skills/" + skId)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(TestUtils.asJsonString(benTenTwo))).andExpect(status().isOk());
 
-                                mvc.perform(delete("/employees/" + newEmpForEd.getEmployeeNum() + "/education/" + id + "/skills/" + skId).contentType(MediaType.APPLICATION_JSON))
+                mvc.perform(delete(
+                                "/employees/" + newEmpForEd.getEmployeeNum() + "/education/" + id +
+                                                "/skills/" + skId)
+                                .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isOk());
-                
-                mvc.perform(delete("/employees/" + newEmpForEd.getEmployeeNum() + "/education/" + id).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+
+                mvc.perform(delete("/employees/" + newEmpForEd.getEmployeeNum() +
+                                "/education/" + id)
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk());
 
                 assertEquals(0, eduServ.findAll().size());
-                
 
-                
+                /* ********************************************** */
 
                 // List<JobRecord> x = jrServ.findAll();
                 // System.out.println(x);
