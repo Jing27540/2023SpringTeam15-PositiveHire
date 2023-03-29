@@ -14,6 +14,8 @@ import com.positivehire.phtalent.repositories.EmployeeRepository;
 
 /**
  * Service class to do crud operations for an employee
+ * @author Juan Franco Pinilla
+ * @author Zayda Cummings
  */
 @Component
 @Transactional
