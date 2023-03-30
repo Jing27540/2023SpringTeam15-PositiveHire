@@ -68,8 +68,8 @@ public class APIEmployeeControllerTest {
         @Autowired
         private EmployeeService employeeServ;
 
-        // @Autowired
-        // private JobRecordService jrServ;
+        @Autowired
+        private JobRecordService jrServ;
 
         @Autowired
         private SkillService skillServ;
@@ -311,9 +311,22 @@ public class APIEmployeeControllerTest {
                 assertEquals(check2.getJobRecords().get(1).getJobTitle(), newJR2.getJobTitle());
                 assertEquals(check2.getJobRecords().get(1).getJobLevel(), newJR2.getJobLevel());
 
+                JobRecord updateMe1 = null;
+                JobRecord updateMe2 = null;
+                for (JobRecord x : jrServ.findAll()) {
+                        if (x.getJobTitle().equals(newJR2.getJobTitle())) {
+                                updateMe2 = x;
+                        } else if (x.getJobTitle().equals(newJR1.getJobTitle())) {
+                                updateMe1 = x;
+                        }
+                }
+
+                Long updateMeId1 = Long.parseLong(updateMe1.getId().toString());
+                Long updateMeId2 = Long.parseLong(updateMe2.getId().toString());
+
                 // Attempt to update a JobRecords level
                 newJR1.setJobLevel("newlevel");
-                mvc.perform(put("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
+                mvc.perform(put("/employees/" + employee1.getEmployeeNum() + "/jobrecords/" + updateMeId1)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(TestUtils.asJsonString(newJR1))).andExpect(status().isOk());
 
@@ -327,7 +340,7 @@ public class APIEmployeeControllerTest {
                 moreskills.get(0).setScore(1);
                 newJR2.setJobSkills(moreskills);
 
-                mvc.perform(put("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
+                mvc.perform(put("/employees/" + employee1.getEmployeeNum() + "/jobrecords/" + updateMeId2)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(TestUtils.asJsonString(newJR2))).andExpect(status().isOk());
 
@@ -344,7 +357,7 @@ public class APIEmployeeControllerTest {
                 moreskills.add(emptySkill);
                 newJR2.setJobSkills(moreskills);
 
-                mvc.perform(put("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
+                mvc.perform(put("/employees/" + employee1.getEmployeeNum() + "/jobrecords/" + updateMeId2)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(TestUtils.asJsonString(newJR2))).andExpect(status().isOk());
 
@@ -355,9 +368,9 @@ public class APIEmployeeControllerTest {
                 // assertEquals("newlevel", check6.getJobRecords().get(0).getJobLevel());
 
                 // Attempt to delete a JobRecord from an Employee
-                mvc.perform(delete("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(TestUtils.asJsonString(newJR2))).andExpect(status().isOk());
+                mvc.perform(delete("/employees/" + employee1.getEmployeeNum() + "/jobrecords/" + updateMeId2)
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk());
 
                 Employee check3 = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
                 assertEquals(1, check3.getJobRecords().size());
