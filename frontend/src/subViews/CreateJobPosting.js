@@ -148,6 +148,19 @@ export const JobTitle = (props) => {
     const [jobDescription, setJobDescription] = React.useState(props.jobPosting.jobDescription ? props.jobPosting.jobDescription : "");
     const [department, setDepartment] = React.useState(props.jobPosting.department ? props.jobPosting.department : "");
     const [salary, setSalary] = React.useState(props.jobPosting.salary ? props.jobPosting.salary : "");
+    // get jobPostings list
+    const [jobPostings, setJobPostings] = React.useState([]);
+
+    //Loading the job postings from the database
+    const loadCurrentData = () => {
+        axios.get("http://localhost:8080/jobpostings").then(result => {
+            setJobPostings(result.data);
+        })
+    };
+
+    React.useEffect(() => {
+        loadCurrentData(); // action
+    }, []);
 
     const isValidUrl = urlString => {
         var a = document.createElement('a');
@@ -157,31 +170,49 @@ export const JobTitle = (props) => {
 
     function handleSaveClick(flag) {
 
-        if (jobNumber !== "" && jobTitle !== "" && jobDescription !== '' && department !== '' && salary !== '') {
-            jobPostingData.jobTitle = jobTitle;
-            jobPostingData.jobNumber = jobNumber;
-            if (applyLink !== "") {
-                jobPostingData.applyLink = applyLink;
-            } else {
-                jobPostingData.applyLink = "";
-            }
-            jobPostingData.jobDescription = jobDescription;
-            jobPostingData.department = department;
-            jobPostingData.salary = salary;
+        // if (jobNumber !== "") {
+        //     // TODO: check duplicate jobNumber
+        //     const result = jobPostings.filter(item => jobNumber === item.jobNumber);
+        //     console.log('checking result', result);
+        //     if (result && result.length > 0) {
+        //         alert("JobNumber has been existed!");
+        //     } else {
+        //         jobPostingData.jobNumber = jobNumber;
+        //     }
+        // } else {
+        //     alert("JobNumber cannot be empty!");
+        // }
 
-            // save data
-            props.setJobPosting(jobPostingData);
-            if (props.saveMode !== undefined && props.saveMode === false) {
-                // api call
-                axios.put("http://localhost:8080/jobpostings", jobPostingData).then(response => {
-                    console.log("save", jobPostingData);
-                    alert("Save Successfully!!");
-                }).catch(error => {
-                    alert("Unsuccessful to update the Job Title!")
-                });
+        if (jobNumber !== "" && jobTitle !== "" && jobDescription !== '' && department !== '' && salary !== '') {
+            const result = jobPostings.filter(item => jobNumber === item.jobNumber);
+            if (result && result.length > 0) {
+                alert("Duplicate JobNumber!");
             } else {
-                // switch to next
-                props.handleContinueClick();
+                jobPostingData.jobNumber = jobNumber;
+                jobPostingData.jobTitle = jobTitle;
+                if (applyLink !== "") {
+                    jobPostingData.applyLink = applyLink;
+                } else {
+                    jobPostingData.applyLink = "";
+                }
+                jobPostingData.jobDescription = jobDescription;
+                jobPostingData.department = department;
+                jobPostingData.salary = salary;
+
+                // save data
+                props.setJobPosting(jobPostingData);
+                if (props.saveMode !== undefined && props.saveMode === false) {
+                    // api call
+                    axios.put("http://localhost:8080/jobpostings", jobPostingData).then(response => {
+                        console.log("save", jobPostingData);
+                        alert("Save Successfully!!");
+                    }).catch(error => {
+                        alert("Unsuccessful to update the Job Title!")
+                    });
+                } else {
+                    // switch to next
+                    props.handleContinueClick();
+                }
             }
         } else {
             alert('Missing input! Please enter N/A instead.');
@@ -715,8 +746,8 @@ export const Processes = (props) => {
         // save data
         props.setJobPosting(jobPostingData);
         if (props.saveMode !== undefined && props.saveMode === false) {
-             // api call
-             axios.put("http://localhost:8080/jobpostings", jobPostingData).then(response => {
+            // api call
+            axios.put("http://localhost:8080/jobpostings", jobPostingData).then(response => {
                 console.log("save", jobPostingData);
                 alert("Save Successfully!!");
             }).catch(error => {
