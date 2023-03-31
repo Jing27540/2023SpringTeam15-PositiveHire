@@ -10,7 +10,9 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 
 /**
- * @Author Isaac Handy
+ * Represents a job post in the context of creating a feature to see a list of job postings
+ * @author Zayda Cummings
+ * @author Juan Franco Pinilla
  */
 @Entity
 public class JobPosting extends DomainObject {
