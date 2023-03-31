@@ -198,33 +198,33 @@ public class APIEmployeeController extends APIController {
                 jobRecordToUpdate.setStartDate(rec.getStartDate());
                 jobRecordToUpdate.setEndDate(rec.getEndDate());
 
-                // Update skills
-                boolean newSkill = true;
+                // // Update skills
+                // boolean newSkill = true;
 
-                List<Skill> jrSkills = jobRecordToUpdate.getJobSkills();
-                if (rec.getJobSkills() != null) {
+                // List<Skill> jrSkills = jobRecordToUpdate.getJobSkills();
+                // if (rec.getJobSkills() != null) {
 
-                    for (Skill updated : rec.getJobSkills()) {
-                        for (Skill old : jrSkills) {
-                            if (updated.getName().equals(old.getName())) {
-                                newSkill = false;
-                                jrSkills.remove(old);
-                                jrSkills.add(updated);
-                                skillServ.delete(old);
-                                break;
-                            }
-                        }
-                        if (newSkill) {
-                            // skillServ.save(updated);
-                            jrSkills.add(updated);
-                            newSkill = false;
-                        } else {
-                            newSkill = true;
-                        }
-                    }
-                }
+                // for (Skill updated : rec.getJobSkills()) {
+                // for (Skill old : jrSkills) {
+                // if (updated.getName().equals(old.getName())) {
+                // newSkill = false;
+                // jrSkills.remove(old);
+                // jrSkills.add(updated);
+                // skillServ.delete(old);
+                // break;
+                // }
+                // }
+                // if (newSkill) {
+                // // skillServ.save(updated);
+                // jrSkills.add(updated);
+                // newSkill = false;
+                // } else {
+                // newSkill = true;
+                // }
+                // }
+                // }
 
-                jobRecordToUpdate.setJobSkills(jrSkills);
+                // jobRecordToUpdate.setJobSkills(jrSkills);
                 jrServ.save(jobRecordToUpdate);
 
             } else {
@@ -280,6 +280,107 @@ public class APIEmployeeController extends APIController {
         return new ResponseEntity<String>(successResponse(deleteJR.getJobTitle() + "successfully removed"),
                 HttpStatus.OK);
     }
+
+    /**
+     * Add Job Record Skill
+     * 
+     * @param employeeNum employee id
+     * @param jrId        id of the job record to add the new skill to
+     * @param newSkill    the skill to create
+     * @return HttpStatus 200 on success or 400 if no employee found
+     */
+    @PostMapping("/employees/{employeeNum}/jobrecords/{id}/skills")
+    public ResponseEntity<String> createJobRecordSkill(@PathVariable("employeeNum") final int employeeNum,
+            @PathVariable("id") Long jrId, @RequestBody Skill newSkill) {
+        if (employeeServ.findByEmployeeNum(employeeNum) != null) {
+
+            JobRecord toAdd = jrServ.findById(jrId);
+
+            if (toAdd != null) {
+                toAdd.getJobSkills().add(newSkill);
+                jrServ.save(toAdd);
+            } else {
+                return new ResponseEntity<String>(
+                        successResponse("Job record does not exist"),
+                        HttpStatus.BAD_REQUEST);
+            }
+
+        } else {
+            return new ResponseEntity<String>(
+                    successResponse("Employee with the name does not exist"),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<String>(
+                successResponse(jrServ.findById(jrId).getJobTitle() + " was updated successfully"),
+                HttpStatus.OK);
+    }
+
+    @PutMapping("/employees/{employeeNum}/jobrecords/{id}/skills/{skillId}")
+    public ResponseEntity<String> updateJobRecordSkill(@PathVariable("employeeNum") final int employeeNum,
+            @PathVariable("id") Long jrId, @PathVariable("skillId") Long skillId, @RequestBody Skill editedSkill) {
+        if (employeeServ.findByEmployeeNum(employeeNum) != null) {
+            // Education toEdit = eduServ.findById(eduId);
+            Skill stoEdit = skillServ.findById(skillId);
+
+            if (stoEdit != null) {
+                // toEdit.getSkills().remove(stoEdit);
+                stoEdit.setLevel(editedSkill.getLevel());
+                stoEdit.setName(editedSkill.getName());
+                stoEdit.setScore(editedSkill.getScore());
+                skillServ.save(stoEdit);
+            } else {
+                return new ResponseEntity<String>(
+                        successResponse("Job record does not exist"),
+                        HttpStatus.BAD_REQUEST);
+            }
+
+        } else {
+            return new ResponseEntity<String>(
+                    successResponse("Employee with the name does not exist"),
+                    HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<String>(
+                successResponse(jrServ.findById(jrId).getJobTitle() + " was updated successfully"),
+                HttpStatus.OK);
+    }
+
+    @DeleteMapping("/employees/{employeeNum}/jobrecords/{id}/skills/{skillId}")
+    public ResponseEntity<String> deleteJobRecordSkill(@PathVariable("employeeNum") final int employeeNum,
+            @PathVariable("id") Long jrId, @PathVariable("skillId") Long skillId) {
+        if (employeeServ.findByEmployeeNum(employeeNum) != null) {
+
+            JobRecord jr = jrServ.findById(jrId);
+            if (jr != null) {
+                Skill toDelete = skillServ.findById(skillId);
+                skillServ.delete(toDelete);
+
+                // //Object will not be the same
+                // Skill id = null;
+                // for (Skill x : jr.getJobSkills()) {
+                // if (x.getName().equals(toDelete.getName())) {
+                // jr.getJobSkills().remove(x);
+                // }
+                // }
+                jr.getJobSkills().remove(toDelete);
+
+                jrServ.save(jr);
+            } else {
+                return new ResponseEntity<String>(
+                        successResponse("Job record does not exist"),
+                        HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return new ResponseEntity<String>(
+                    successResponse("Employee with the name does not exist"),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<String>(successResponse("successful deletion"),
+                HttpStatus.OK);
+    }
+
+    /********************************************************************* */
 
     @PostMapping("/employees/{employeeNum}/education")
     public ResponseEntity<String> createEducation(@PathVariable("employeeNum") final int employeeNum,
