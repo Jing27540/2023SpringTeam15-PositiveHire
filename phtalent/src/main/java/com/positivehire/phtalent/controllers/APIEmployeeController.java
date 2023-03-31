@@ -148,6 +148,8 @@ public class APIEmployeeController extends APIController {
                 : new ResponseEntity<Employee>(emp, HttpStatus.OK);
     }
 
+    /**************************************************** */
+
     @PostMapping("/employees/{employeeNum}/jobrecords")
     public ResponseEntity<String> createJobRecord(@PathVariable("employeeNum") final int employeeNum,
             @RequestBody JobRecord rec) {
@@ -160,12 +162,29 @@ public class APIEmployeeController extends APIController {
         // HttpStatus.CONFLICT);
         // } else
         if (emp != null) {
+
+            // boolean isDup = false;
+            // List<JobRecord> list = emp.getJobRecords();
+            // for (JobRecord x : list) {
+            // if (x.getJobTitle().equals(rec.getJobTitle())) {
+            // isDup = true;
+            // }
+            // }
+            // if (!isDup) {
+            // emp.getJobRecords().add(rec);
+            // employeeServ.save(emp);
+            // } else {
+            // return new ResponseEntity<String>(successResponse(rec.getJobTitle() + " is a
+            // duplicate"),
+            // HttpStatus.CONFLICT);
+            // }
             emp.getJobRecords().add(rec);
             employeeServ.save(emp);
-            return new ResponseEntity<String>(successResponse(rec.getJobTitle() + "successfully created"),
+            return new ResponseEntity<String>(
+                    successResponse("New Job History: " + rec.getJobTitle() + " successfully created"),
                     HttpStatus.OK);
         } else {
-            return new ResponseEntity<String>(successResponse("Error employee does not exist"),
+            return new ResponseEntity<String>(successResponse("Error: employee does not exist"),
                     HttpStatus.BAD_REQUEST);
         }
 
@@ -240,7 +259,8 @@ public class APIEmployeeController extends APIController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<String>(successResponse(rec.getJobTitle() + "successfully updated"),
+        return new ResponseEntity<String>(
+                successResponse("Job History: " + rec.getJobTitle() + " successfully updated"),
                 HttpStatus.OK);
     }
 
@@ -277,7 +297,8 @@ public class APIEmployeeController extends APIController {
             return new ResponseEntity<String>(successResponse("Error: employee does not exist"),
                     HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<String>(successResponse(deleteJR.getJobTitle() + "successfully removed"),
+        return new ResponseEntity<String>(
+                successResponse("Job History: " + deleteJR.getJobTitle() + " successfully removed"),
                 HttpStatus.OK);
     }
 
@@ -307,12 +328,13 @@ public class APIEmployeeController extends APIController {
 
         } else {
             return new ResponseEntity<String>(
-                    successResponse("Employee with the name does not exist"),
+                    successResponse("Error: employee does not exist"),
                     HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<String>(
-                successResponse(jrServ.findById(jrId).getJobTitle() + " was updated successfully"),
+                successResponse("Job History: " + jrServ.findById(jrId).getJobTitle()
+                        + " was updated successfully with skill " + newSkill.getName()),
                 HttpStatus.OK);
     }
 
@@ -337,22 +359,25 @@ public class APIEmployeeController extends APIController {
 
         } else {
             return new ResponseEntity<String>(
-                    successResponse("Employee with the name does not exist"),
+                    successResponse("Error: employee does not exist"),
                     HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<String>(
-                successResponse(jrServ.findById(jrId).getJobTitle() + " was updated successfully"),
+                successResponse("Job History: " + jrServ.findById(jrId).getJobTitle() + "'s skill "
+                        + editedSkill.getName() + " was successfully updated"),
                 HttpStatus.OK);
     }
 
     @DeleteMapping("/employees/{employeeNum}/jobrecords/{id}/skills/{skillId}")
     public ResponseEntity<String> deleteJobRecordSkill(@PathVariable("employeeNum") final int employeeNum,
             @PathVariable("id") Long jrId, @PathVariable("skillId") Long skillId) {
+
+        Skill toDelete = null;
         if (employeeServ.findByEmployeeNum(employeeNum) != null) {
 
             JobRecord jr = jrServ.findById(jrId);
             if (jr != null) {
-                Skill toDelete = skillServ.findById(skillId);
+                toDelete = skillServ.findById(skillId);
                 skillServ.delete(toDelete);
 
                 // //Object will not be the same
@@ -372,11 +397,13 @@ public class APIEmployeeController extends APIController {
             }
         } else {
             return new ResponseEntity<String>(
-                    successResponse("Employee with the name does not exist"),
+                    successResponse("Error: employee does not exist"),
                     HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<String>(successResponse("successful deletion"),
+        return new ResponseEntity<String>(
+                successResponse("Job History: " + jrServ.findById(jrId).getJobTitle() + "'s skill "
+                        + toDelete.getName() + " was successfully deleted"),
                 HttpStatus.OK);
     }
 
