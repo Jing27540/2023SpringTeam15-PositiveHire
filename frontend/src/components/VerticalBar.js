@@ -14,9 +14,6 @@ const HorizontalLine = styled.div`
 `;
 
 function VerticalBar(props) {
-
-    console.log(props);
-
     return (
         <Nav defaultActiveKey="Edit" className="flex-column" style={{ fontWeight: 'bold' }} onSelect={(selectedKey) => { props.setMode(selectedKey); props.setPView("") }}>
             <Nav.Item key={1} variant="drak">

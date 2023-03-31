@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
  * Welcome component is the first screen the user see when they is directed to the PHBalanced app.
  * @author Jing Huang
  */
-function Welcome() {
+function Welcome(props) {
 
     //className="border border-secondary" 
     return (
@@ -21,7 +21,7 @@ function Welcome() {
                         Positions
                     </Row>
                     <img variant="top" src={require("../img/openPositions.png")} style={{ width: "100%" }}></img>
-                    <Button variant="outline-success" style={{ margin: "2%" }} onClick={() => alert('Not implement yet!')}>
+                    <Button variant="outline-success" style={{ margin: "2%" }} onClick={() => props.setMode('View')}>
                         View Open Positions
                     </Button>
                 </Col>

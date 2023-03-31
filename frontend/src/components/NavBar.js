@@ -22,6 +22,8 @@ export default function NavBar() {
 
   const auth = useAuth();
 
+  console.log(auth);
+
   const [key, setKey] = React.useState('home');
   const [mode, setMode] = React.useState('Positions');
   const [pView, setPView] = React.useState('Welcome');
@@ -30,7 +32,11 @@ export default function NavBar() {
 
   // Get Employee Data
   React.useEffect(() => {
-    axios.get(`http://localhost:8080/employees/${auth.user}`).then(res => { setEmployee(res.data); setAccessRole(res.data.accessRole); })
+    axios.get(`http://localhost:8080/employees/${auth.user}`).then(res => {
+      setEmployee(res.data);
+      // setAccessRole(res.data.accessRole);
+      setAccessRole(auth.role);
+    })
       .catch(err => console.log(err));
   }, []);
 

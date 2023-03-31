@@ -65,30 +65,7 @@ function EditForm(props) {
             console.log(newSkill);
         }
     }
-
-    // React.useEffect(() => {
-    //     console.log(skill);
-    // }, [skill]);
-
-    // TODO: Testing
-
-    // const [employee, setEmployee] = React.useState({});
-
-    // Get Employee Data
-
-    // axios.get(`http://localhost:8080/employees/${1103024456}`).then(res => { setEmployee(res.data); })
-    //     .catch(err => console.log(err));
-
-    // console.log(employee);
-    // employee.technicalSkills = [];
-
-    // axios.put("http://localhost:8080/employees", employee).then(response => {
-    //     console.log(employee);
-    //     console.log("done")
-    // }).catch(error => {
-    //     console.log(employee)
-    // });
-
+    
     return (
         <div>
             <Box>

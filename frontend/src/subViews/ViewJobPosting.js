@@ -83,7 +83,7 @@ const ChildrenJP = (props) => {
                     <Row> {department}</Row>
                     <Row>{location}</Row>
                 </Col>
-                <Col sm={2} style={{ itemAlign: 'right' }}>
+                <Col sm={2} style={{ itemAlign: 'right', marginTop: "2%" }}>
                     <Button size="sm" onClick={() => props.setSelected(props.jp)} style={{ marginTop: '10%', backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} >
                         Details
                     </Button>
@@ -124,8 +124,8 @@ const ChildrenJPContent = (props) => {
 
     return (
         props.jp ?
-            <Container style={{ itemAlign: 'center', marginTop: '5%', marginLeft: '5%', height: '100%' }}>
-                <Row style={{ marginTop: '1%' }}>
+            <Container style={{ itemAlign: 'center', marginTop: '2%', marginLeft: '5%', height: '100%' }}>
+                <Row>
                     <Col sm={9}>
                         <Row style={{ fontWeight: 'bold', fontSize: '30px', textAlign: "left" }}>{props.jp.jobTitle}</Row>
                         <Row>
@@ -141,11 +141,11 @@ const ChildrenJPContent = (props) => {
                             undefined
                         }
                     </Col>
-                    <Col sm={2}>
+                    {/* <Col sm={2}>
                         <Button size="sm" style={{ marginTop: '10%', backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} >
                             Edit
                         </Button>
-                    </Col>
+                    </Col> */}
                 </Row >
                 <Row style={{ marginTop: '5%' }}>
                     <Row style={{ fontWeight: 'bold', fontSize: '20px' }}>Job Description</Row>
