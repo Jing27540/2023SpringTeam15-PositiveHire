@@ -13,95 +13,13 @@ import { Availability, JobTitle, Processes, Requirements } from "./CreateJobPost
 function EditJobPosting() {
 
     const [jobPostings, setJobPostings] = React.useState([]);
-    const [selected, setSelected] = React.useState();
-    const [edit, setEdit] = React.useState(false);
 
     //Loading the job postings from the database
     const loadCurrentData = () => {
         axios.get("http://localhost:8080/jobpostings").then(result => {
             setJobPostings(result.data);
-            setSelected(result.data[0]);
         })
     };
-
-    function handleSaveClick() {
-        // update value as user input
-        // input validation checking
-        // let newJobPosting = {
-        //     "jobNumber": "5",
-        //     "jobTitle": "Software",
-        //     "salary": "120,000",
-        //     "department": "IT Departmnent",
-        //     "skillRequirements": [
-
-        //     ],
-        //     "certificationRequirements": [],
-        //     "otherRequirements": jobPosting.otherRequirements,
-        //     "jobDescription": jobPosting.jobDescription,
-        //     "availablePositions": jobPosting.availablePositions,
-        //     "location": jobPosting.locations,
-        //     "meetingType": jobPosting.meetingType,
-        //     "meetingNotes": jobPosting.meetingNotes,
-        //     "process": jobPosting.process,
-        //     "applyLink": jobPosting.applyLink,
-        //     "listofApplicants": null
-        // };
-        let newJobPosting = {
-            "id": 1,
-            "jobNumber": "A30694",
-            "jobTitle": "IT Developer",
-            "salary": "120,000-130,000",
-            "department": "Description",
-            "skillRequirements": [
-              {
-                "name": "rust ",
-                "level": "stuff  (Required)",
-                "score": 1
-              }
-            ],
-            "certificationRequirements": [
-              {
-                "name": "linkedin",
-                "institution": "",
-                "issuedDate": null,
-                "credentialID": "",
-                "skills": "sutff (Required)"
-              }
-            ],
-            "otherRequirements": "Other req",
-            "jobDescription": "Job studddgfdsgfd ",
-            "availablePositions": 6,
-            "location": null,
-            "meetingType": "inPersion",
-            "meetingNotes": "Meeting Notes",
-            "process": [
-              "ABCD",
-              "ABCD",
-              "ABCD",
-              "ABCD ",
-              "ABCD "
-            ],
-            "applyLink": "https://github.ncsu.edu/engr-csc-sdc/2023SpringTeam15-PositiveHire/blob/jhuang42/editjp_frontend/phtalent/src/main/java/com/positivehire/phtalent/controllers/APIJobPostingController.java",
-            "listofApplicants": [],
-            "postDate": null,
-            "closeDate": null
-          };
-
-        // axios.put("http://localhost:8080/jobpostings", newJobPosting).then(response => {
-        //             console.log("Successful to update the job posting");
-        // }).catch(error => {
-        //     console.log("Unsuccessful")
-        // });
-
-    }
-
-    //     // call api
-    //     axios.post("http://localhost:8080/jobpostings", newJobPosting).then(response => {
-    //         setMessage("Successful to create a job posting!");
-    //     }).catch(error => {
-
-    //     });
-    // }
 
     React.useEffect(() => {
         loadCurrentData(); // action
@@ -109,24 +27,10 @@ function EditJobPosting() {
 
     // children component to hold the single job posting from the list
     function showProjectList() {
-
-        console.log(selected);
-
-        let arr = jobPostings.map((item) => {
-            // if (!edit) {
-            //     return (<ViewChildrenJP jp={item} key={item.id} setSelected={setSelected} setEdit={setEdit} />);
-            // } else {
-            //     if (selected && item.id === selected.id) {
-            //         return (<EditChildrenJP jp={item} key={item.id} setSelected={setSelected} setEdit={setEdit} />);
-            //     } else {
-            //         return (<></>);
-            //     }
-            // }
-            return <ChildrenJP jp={item} key={item.id} setSelected={setSelected} handleSaveClick={handleSaveClick}/>
+        let arr = jobPostings.map((item, index) => {
+            return <ChildrenJP jp={item} key={index} jobPostings={jobPostings} setJobPostings={setJobPostings} />
         }
-
         );
-
         return arr;
     }
 
@@ -145,8 +49,7 @@ function EditJobPosting() {
 
 const ChildrenJP = (props) => {
 
-    console.log('checking', props);
-
+    const [jobPosting, setJobPosting] = React.useState(props.jp);
     const [remove, setRemove] = React.useState(false);
     const [edit, setEdit] = React.useState(false);
 
@@ -162,6 +65,14 @@ const ChildrenJP = (props) => {
             );
         }
         return arr;
+    }
+
+    function removeJPFromList() {
+        const result = props.jobPostings.filter(item => item.id !== props.jp.id);
+        props.setJobPostings(result);
+        axios.delete(`http://localhost:8080/jobpostings/${props.jp.jobNumber}`).then(result => {
+            alert("Delete Successfully!");
+        }).catch(err => alert("Delete Unsuccessfully!"));
     }
 
     return (
@@ -239,9 +150,8 @@ const ChildrenJP = (props) => {
                                         props.jp.process.map((item, index) => {
                                             if (item === "") { item = "N/A" }
                                             return (
-                                                <Row key={index}>
-                                                    <Col sm={1} style={{ fontWeight: 'bold' }}>{index + 1}.</Col>
-                                                    <Col sm={5} className="overflow-scroll">{item}</Col>
+                                                <Row key={index} style={{ textAlign: "left" }}>
+                                                    <Col>{index + 1}. {item}</Col>
                                                 </Row>
                                             );
                                         })
@@ -249,14 +159,11 @@ const ChildrenJP = (props) => {
                                         <>[N/A]</>
                                 }
                             </Col>
-                            <Col sm={4} className="justify-content-end">
-
-                            </Col>
                         </Row>
                     </Col>
                     <Col className="border border-1" sm={1}>
                         <Row className="justify-content-center">
-                            <Button size="sm" onClick={() => props.handleSaveClick()} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px', marginTop: '1%' }} >
+                            <Button size="sm" onClick={removeJPFromList} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px', marginTop: '1%' }} >
                                 Remove
                             </Button>
                         </Row>
@@ -270,12 +177,12 @@ const ChildrenJP = (props) => {
             </>
             :
             <Row className="border border-2 border-dark" style={{ marginTop: '4%' }}>
-                <Container  style={{ justifyContent: 'center', placeItems: 'center' }}>
+                <Container style={{ justifyContent: 'center', placeItems: 'center' }}>
                     <Row style={{ height: '40px', backgroundColor: "#0f123F", color: 'white', fontWeight: 'bold', justifyContent: 'center', placeItems: 'center' }}>
                         Edit Form
                     </Row>
                     <Container>
-                        <Row className="justify-content-start">
+                        <Row className="justify-content-between">
                             <Button size="sm" onClick={() => setEdit(false)} style={{ margin: "1%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} >
                                 Back
                             </Button>
@@ -287,7 +194,7 @@ const ChildrenJP = (props) => {
                         </Row>
                         <JobTitle
                             jobPosting={props.jp}
-                            // setJobPosting={setJobPosting}
+                            setJobPosting={setJobPosting}
                             saveMode={false}
                         />
                     </Container>
@@ -297,6 +204,7 @@ const ChildrenJP = (props) => {
                         </Row>
                         <Requirements
                             jobPosting={props.jp}
+                            setJobPosting={setJobPosting}
                             saveMode={false}
                         />
                     </Container>
@@ -306,6 +214,7 @@ const ChildrenJP = (props) => {
                         </Row>
                         <Availability
                             jobPosting={props.jp}
+                            setJobPosting={setJobPosting}
                             saveMode={false}
                         />
                     </Container>
@@ -315,6 +224,7 @@ const ChildrenJP = (props) => {
                         </Row>
                         <Processes
                             jobPosting={props.jp}
+                            setJobPosting={setJobPosting}
                             saveMode={false}
                         />
                     </Container>
