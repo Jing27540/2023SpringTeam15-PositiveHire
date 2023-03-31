@@ -41,6 +41,7 @@ function Education(props) {
         setSName(undefined);
         setLevel(undefined);
         setScore(undefined);
+        
     }
     function deleteSkill(sn) {
 
@@ -62,24 +63,24 @@ function Education(props) {
     function saveSkill(s) {
         if(secmode) {
             let duplicate = false;
-            currskills.forEach(element => {
-                if(element.name == s.name) {
-                    duplicate = true;
-                }
-            });
+            // currskills.forEach(element => {
+            //     if(element.name == s.name) {
+            //         duplicate = true;
+            //     }
+            // });
             let newSkill = {
                 name: s.name,
                 level: s.level,
                 score:s.score
             };
-            if(!duplicate) {
+         //   if(!duplicate) {
                 axios.post(`http://localhost:8080/employees/${props.employee.employeeNum}/education/${currid}/skills`, newSkill).then( response => {
                     axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                         setEmployee(res.data);
                         console.log(res.data);
                     })
                 })
-            }
+        //    }
         } else {
             let skiId = 0;
             currskills.forEach(element => {
@@ -221,7 +222,7 @@ function Education(props) {
                                     </Button>
                                 </Col>
                                 <Col>
-                                    <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} onClick={() => { handleShow(); setsecMode(true); setId(item.id) }}>Add Skills</Button>
+                                    <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} onClick={() => { handleShow(); setsecMode(true); setId(item.id) }}>Add Skill</Button>
                                 </Col>
                                 <Col>
                                     <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} onClick={() => { handleShow(); setsecMode(false); setId(item.id); setName(item.name); setCurrSkills(item.skills)}}>
@@ -272,7 +273,7 @@ function Education(props) {
                                 
             <Modal show={show} onHide={handleClose} animation={false}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Education</Modal.Title>
+                    <Modal.Title>Skill</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {/* <EditForm addMode={mode} employee={props.employee} mode={true} /> */}
