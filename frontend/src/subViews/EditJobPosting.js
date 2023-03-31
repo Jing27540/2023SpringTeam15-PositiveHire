@@ -27,44 +27,72 @@ function EditJobPosting() {
     function handleSaveClick() {
         // update value as user input
         // input validation checking
+        // let newJobPosting = {
+        //     "jobNumber": "5",
+        //     "jobTitle": "Software",
+        //     "salary": "120,000",
+        //     "department": "IT Departmnent",
+        //     "skillRequirements": [
+
+        //     ],
+        //     "certificationRequirements": [],
+        //     "otherRequirements": jobPosting.otherRequirements,
+        //     "jobDescription": jobPosting.jobDescription,
+        //     "availablePositions": jobPosting.availablePositions,
+        //     "location": jobPosting.locations,
+        //     "meetingType": jobPosting.meetingType,
+        //     "meetingNotes": jobPosting.meetingNotes,
+        //     "process": jobPosting.process,
+        //     "applyLink": jobPosting.applyLink,
+        //     "listofApplicants": null
+        // };
         let newJobPosting = {
-              "jobNumber": null,
-              "jobTitle": "Software Developer",
-              "salary": "120,000-140,000",
-              "department": "IT Department",
-              "skillRequirements": [
-                {
-                  "name": "Python",
-                  "level": "Srudsdsdaddsdadsada (Required)",
-                  "score": 1
-                }
-              ],
-              "certificationRequirements": [
-                {
-                  "name": "fsdfsddsfds",
-                  "institution": "",
-                  "issuedDate": null,
-                  "credentialID": "",
-                  "skills": "sfsfdsfdsgasgaagag (Suggested)"
-                }
-              ],
-              "otherRequirements": "other requirements",
-              "jobDescription": "Stuff here ",
-              "availablePositions": 3,
-              "location": null,
-              "meetingType": "inPersion",
-              "meetingNotes": "meeting notes",
-              "process": [
-                "sdfdsfd",
-                "dsfdsfds",
-                "fdsfdsfdsf",
-                "sfdsfds",
-                "fdsfdsf"
-              ],
-              "applyLink": "https://www.google.com/",
-              "listofApplicants": []
-            }
+            "jobNumber": "5",
+            "jobTitle": "IT Developer",
+            "salary": "120,000-130,000",
+            "department": "Description",
+            "skillRequirements": [
+              {
+                "name": "rust ",
+                "level": "stuff  (Required)",
+                "score": 1
+              }
+            ],
+            "certificationRequirements": [
+              {
+                "name": "linkedin",
+                "institution": "",
+                "issuedDate": null,
+                "credentialID": "",
+                "skills": "sutff (Required)"
+              }
+            ],
+            "otherRequirements": "Other req",
+            "jobDescription": "Job studddgfdsgfd ",
+            "availablePositions": 6,
+            "location": null,
+            "meetingType": "inPersion",
+            "meetingNotes": "Meeting Notes",
+            "process": [
+              "ABCD",
+              "ABCD",
+              "ABCD",
+              "ABCD ",
+              "ABCD "
+            ],
+            "applyLink": "https://github.ncsu.edu/engr-csc-sdc/2023SpringTeam15-PositiveHire/blob/jhuang42/editjp_frontend/phtalent/src/main/java/com/positivehire/phtalent/controllers/APIJobPostingController.java",
+            "listofApplicants": [],
+            "postDate": null,
+            "closeDate": null
           };
+
+        axios.put("http://localhost:8080/jobpostings/5", newJobPosting).then(response => {
+                    console.log("Successful to update the job posting");
+        }).catch(error => {
+            console.log("Unsuccessful")
+        });
+
+    }
 
     //     // call api
     //     axios.post("http://localhost:8080/jobpostings", newJobPosting).then(response => {
@@ -93,7 +121,7 @@ function EditJobPosting() {
             //         return (<></>);
             //     }
             // }
-            return <ChildrenJP jp={item} key={item.id} setSelected={setSelected} />
+            return <ChildrenJP jp={item} key={item.id} setSelected={setSelected} handleSaveClick={handleSaveClick}/>
         }
 
         );
@@ -219,7 +247,7 @@ const ViewChildrenJP = (props) => {
                 </Col>
                 <Col className="border border-1" sm={1}>
                     <Row className="justify-content-center">
-                        <Button size="sm" onClick={() => setRemove(true)} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px' }} >
+                        <Button size="sm" onClick={() => props. handleSaveClick()} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px' }} >
                             Remove
                         </Button>
                     </Row>
@@ -402,7 +430,7 @@ const ChildrenJP = (props) => {
                     </Col>
                     <Col className="border border-1" sm={1}>
                         <Row className="justify-content-center">
-                            <Button size="sm" onClick={() => setRemove(true)} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px', marginTop: '1%' }} >
+                            <Button size="sm" onClick={() => props.handleSaveClick()} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px', marginTop: '1%' }} >
                                 Remove
                             </Button>
                         </Row>

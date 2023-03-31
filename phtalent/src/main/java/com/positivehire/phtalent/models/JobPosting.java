@@ -107,7 +107,7 @@ public class JobPosting extends DomainObject {
      * 
      * @param id The id that is set
      */
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 

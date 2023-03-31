@@ -49,7 +49,7 @@ function CreateJobPosting(props) {
         // update value as user input
         // input validation checking
         let newJobPosting = {
-            // "jobNumber": jobNumber,
+            "jobNumber": jobPosting.jobNumber,
             "jobTitle": jobPosting.jobTitle,
             "salary": jobPosting.salary,
             "department": jobPosting.department,
@@ -142,6 +142,7 @@ function CreateJobPosting(props) {
 export const JobTitle = (props) => {
 
     const [jobPostingData, setJobPostingData] = React.useState(props.jobPosting);
+    const [jobNumber, setJobNumber] = React.useState(props.jobPosting.jobNumber ? props.jobPosting.jobNumber: "");
     const [jobTitle, setjobTitle] = React.useState(props.jobPosting.jobTitle ? props.jobPosting.jobTitle : "");
     const [applyLink, setApplyLink] = React.useState(props.jobPosting.applyLink ? props.jobPosting.applyLink : "");
     const [jobDescription, setJobDescription] = React.useState(props.jobPosting.jobDescription ? props.jobPosting.jobDescription : "");
@@ -156,8 +157,9 @@ export const JobTitle = (props) => {
 
     function handleSaveClick() {
 
-        if (jobTitle !== "" && jobDescription !== '' && department !== '' && salary !== '') {
+        if (jobNumber !== "" && jobTitle !== "" && jobDescription !== '' && department !== '' && salary !== '') {
             jobPostingData.jobTitle = jobTitle;
+            jobPostingData.jobNumber = jobNumber;
             if (applyLink !== "") {
                 jobPostingData.applyLink = applyLink;
             } else {
@@ -189,6 +191,10 @@ export const JobTitle = (props) => {
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Official Position Title </Form.Label>
                 <Col sm={9}> <Form.Control rows={1} placeholder="Type here..." value={jobTitle} onChange={e => setjobTitle(e.target.value)} /></Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}> Job Number </Form.Label>
+                <Col sm={9}> <Form.Control rows={1} placeholder="Type here..." value={jobNumber} onChange={e => setJobNumber(e.target.value)} /></Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Job Description </Form.Label>
