@@ -1,5 +1,6 @@
 package com.positivehire.phtalent.models;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +27,7 @@ public class Education extends DomainObject {
     /** Type of education */
     private String type;
     /** date achieved*/
-    private Date dateAchieved;
+    private String dateAchieved;
 
      /** Skills associated with education */
     @OneToMany ( cascade = CascadeType.ALL )
@@ -43,7 +44,7 @@ public class Education extends DomainObject {
      * @param type of education
      * @param skills of education
      */
-    public Education(String name, String institution, String type, Date datAchieved, List<Skill> skills) {
+    public Education(String name, String institution, String type, String datAchieved, List<Skill> skills) {
         setName(name);
         setInstitution(institution);
         setType(type);
@@ -83,11 +84,11 @@ public class Education extends DomainObject {
         this.skills = skills;
     }
 
-    public void setDateAchieved(Date dateAchieved) {
+    public void setDateAchieved(String dateAchieved) {
         this.dateAchieved = dateAchieved;
     }
 
-    public Date getDateAchieved() {
+    public String getDateAchieved() {
         return this.dateAchieved;
     }
 
