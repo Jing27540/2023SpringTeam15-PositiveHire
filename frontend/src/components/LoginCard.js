@@ -23,10 +23,7 @@ const LoginCard = (props) => {
     const [employeeNumber, setEmployeeNumber] = useState();
     const [password, setPassword] = useState();
     const [employeeEmail, setEmployeeEmail] = useState();
-    const [accountData, setAccountData] = useState();
     const [repeatedPassword, setRepeatedPassword] = useState();
-    const [error, setError] = useState('');
-    // const [destination, setDestination] = useState('/');
 
     // switch the login and signup state
     const [signup, setSignup] = useState(false);
@@ -47,25 +44,24 @@ const LoginCard = (props) => {
         await axios.post(`http://localhost:8080/accounts/account`, account).then(result => {
             flag = result.data;
             id = result.data.employeeID
-        });
+        }).catch(err => console.log(err));
 
         return await axios.get(`http://localhost:8080/employees/${id}`).then(result => {
-                role = result.data.accessRole;
-                if (flag) {
-                    auth.login(true, id);
-                    // setDestination('/home');
-                    //navigate(props.destination);
-                    if (role === "HR" || role === "DEI") {
-                        navigate(props.destination);
-                    } else {
-                        navigate("/Home");
-                    }
+            role = result.data.accessRole;
+            if (flag) {
+                if ((role === "HR" || role === "DEI") && props.title === "HR/DEI") {
+                    navigate(props.destination);
+                    auth.login(true, id, "HR");
                 } else {
-                    auth.login(false);
-                    setResponseMessage("Employee number or password incorrect");
-                    navigate('/');
+                    navigate("/Home");
+                    auth.login(true, id, "Employee");
                 }
-            }).catch(err => setResponseMessage(err))
+            } else {
+                auth.login(false);
+                setResponseMessage("Employee number or password incorrect");
+                navigate('/');
+            }
+        }).catch(err => setResponseMessage(err))
     };
 
     // login
