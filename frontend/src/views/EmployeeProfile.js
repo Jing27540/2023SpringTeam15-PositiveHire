@@ -15,7 +15,7 @@ import Certification from "../subViews/Certification"
 import ProfileCard from "../components/ProfileCard";
 import Alert from 'react-bootstrap/Alert';
 import jobHistory from "../subViews/JobHistory";
-import JobHistory from "../subViews/JobHistory";
+import JobHistory2 from "../subViews/JobHistory2";
 
 /**
  * EmployeeProfile component is used to manage profile information.
@@ -71,7 +71,7 @@ function EmployeeProfile(props) {
             if (tool === 'Education History') {
                 return (<h1>Hello!</h1>);
             } else {
-                return (<JobHistory employee={employee} />);
+                return (<JobHistory2 employee={employee} />);
             }
         } else {
             return (<Alert variant="danger"> Not Implement Yet!</Alert>);
