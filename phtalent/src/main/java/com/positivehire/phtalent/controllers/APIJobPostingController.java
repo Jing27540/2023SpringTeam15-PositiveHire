@@ -100,58 +100,61 @@ public class APIJobPostingController extends APIController {
    * @param posting to be edited
    * @return Whether or not the job posting was edited successfully
    */
-  @PutMapping("/jobpostings/{jobNumber}")
-  public ResponseEntity<String> editJobPosting(@RequestBody JobPosting newJobPosting,
-      @PathVariable("jobNumber") final String jobNumber) {
-    try {
+  @PutMapping("/jobpostings")
+  public ResponseEntity<String> editJobPosting(@RequestBody JobPosting j) {
+    // try {
 
       // Try and find a job posting with the same job number
-      final JobPosting jp = jobPostingService.findByJobNumber(jobNumber);
+      final JobPosting jp = jobPostingService.findById((long) j.getId());
 
       // If no job posting with the same job number exists in the database
       if (jp == null) {
 
         // Return a bad request with an error message
         return new ResponseEntity<String>(
-            errorResponse("No job posting in system associated with the job number: " + newJobPosting.getJobNumber()),
+            errorResponse("No job posting in system associated with the job number: " + j.getJobNumber()),
             HttpStatus.NOT_FOUND);
       } else {
 
-        // Update and save it to the database
-        jp.setApplyLink(newJobPosting.getApplyLink());
-        jp.setAvailablePositions(newJobPosting.getAvailablePositions());
-        jp.setCertificationRequirements(newJobPosting.getCertificationRequirements());
-        jp.setCloseDate(newJobPosting.getCloseDate());
-        jp.setDepartment(newJobPosting.getDepartment());
-        jp.setJobDescription(newJobPosting.getJobDescription());
-        //jp.setJobNumber(newJobPosting.getJobNumber());
-        jp.setJobTitle(newJobPosting.getJobTitle());
-        jp.setListofApplicants(newJobPosting.getListofApplicants());
-        jp.setLocation(newJobPosting.getLocation());
-        jp.setMeetingNotes(newJobPosting.getMeetingNotes());
-        jp.setMeetingType(newJobPosting.getMeetingType());
-        jp.setOtherRequirements(newJobPosting.getOtherRequirements());
-        jp.setPostDate(newJobPosting.getPostDate());
-        jp.setProcess(newJobPosting.getProcess());
-        jp.setSalary(newJobPosting.getSalary());
-        jp.setSkillRequirements(newJobPosting.getSkillRequirements());
+        // Update and save it to the databas
+        jp.setId((long) j.getId());
+        jp.setApplyLink(j.getApplyLink());
+        jp.setAvailablePositions(j.getAvailablePositions());
+        jp.setCertificationRequirements(j.getCertificationRequirements());
+        jp.setCloseDate(j.getCloseDate());
+        jp.setDepartment(j.getDepartment());
+        jp.setJobDescription(j.getJobDescription());
+        //jp.setJobNumber(j.getJobNumber());
+        jp.setJobTitle(j.getJobTitle());
+        jp.setListofApplicants(j.getListofApplicants());
+        jp.setLocation(j.getLocation());
+        jp.setMeetingNotes(j.getMeetingNotes());
+        jp.setMeetingType(j.getMeetingType());
+        jp.setOtherRequirements(j.getOtherRequirements());
+        jp.setPostDate(j.getPostDate());
+        jp.setProcess(j.getProcess());
+        jp.setSalary(j.getSalary());
+        jp.setSkillRequirements(j.getSkillRequirements());
 
         // Job posting is saved
-        jobPostingService.save(newJobPosting);
+        jobPostingService.save(j);
 
         // Return a ok status with the new job posting that was created
-        return new ResponseEntity<String>(
-            successResponse(super.toJson(jobPostingService.findByJobNumber(newJobPosting.getJobNumber()))),
-            HttpStatus.OK);
+        // return new ResponseEntity<String>(
+        //     successResponse(super.toJson(jobPostingService.findByJobNumber(j.getJobNumber()))),
+        //     HttpStatus.OK);\
+
+        return new ResponseEntity<String>(successResponse("update was successful"),
+                HttpStatus.OK);
       }
 
       // Catch for internal server errors
-    } catch (Exception | Error e) {
-      return new ResponseEntity<String>(
-          errorResponse("Unexpected " + e.getClass().getSimpleName() + " with message: " + e.getMessage()),
-          HttpStatus.INTERNAL_SERVER_ERROR);
+    // } catch (Exception | Error e) {
+    //   return new ResponseEntity<String>(
+    //       errorResponse("Unexpected " + e.getClass().getSimpleName() + " with message: " + e.getMessage()),
+    //       HttpStatus.INTERNAL_SERVER_ERROR);
 
-    }
+    // }
 
   }
 

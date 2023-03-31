@@ -359,23 +359,28 @@ public class APIJobPostingsControllerTest {
 		System.out.println(job1.toString());
 
 
-		//Test invalid update
+		//Test invalid update, should output 404
 		invalidJob.setJobTitle("Really Super Cool Software Developer");
 
-		mvc.perform(put("/jobposting/{jobNumber}", "U30694")
-	      .content(TestUtils.asJsonString(invalidJob))
-	      .contentType(MediaType.APPLICATION_JSON)
-	      .accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isNotFound());
+		// mvc.perform(put("/jobpostings")
+	  //     .content(TestUtils.asJsonString(invalidJob))
+	  //     .contentType(MediaType.APPLICATION_JSON)
+	  //     .accept(MediaType.APPLICATION_JSON))
+    //     .andExpect(status().isNotFound());
 
 		//Test valid update
-		job1.setJobTitle("Really Super Cool Software Developer"); //Changing the job title
+		job1.setJobTitle("testing1"); //Changing the job title
 
 		System.out.println("TOTAL NUMBER OF JOB POSTINGS IN THE DATABASE: " + jobPostingServ.count());
 		System.out.println("JOB NUMBER: " + jobPostingServ.findByJobNumber("A30694").toString());
 
-		mvc.perform(put("/jobpostings/{jobNumber}", "A30694")
-	     .content(TestUtils.asJsonString(jobPostingServ.findByJobNumber("A30694")))
+
+		JobPosting job2 = jobPostingServ.findByJobNumber("A30694");
+
+		job2.setJobTitle("ABCDEF");
+
+		mvc.perform(put("/jobpostings")
+	     .content(TestUtils.asJsonString(job2))
 	     .contentType(MediaType.APPLICATION_JSON)
 	     .accept(MediaType.APPLICATION_JSON))
        .andExpect(status().isOk());

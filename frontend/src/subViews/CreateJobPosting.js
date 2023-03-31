@@ -49,7 +49,7 @@ function CreateJobPosting(props) {
         // update value as user input
         // input validation checking
         let newJobPosting = {
-            // "jobNumber": jobNumber,
+            "jobNumber": jobPosting.jobNumber,
             "jobTitle": jobPosting.jobTitle,
             "salary": jobPosting.salary,
             "department": jobPosting.department,
@@ -142,6 +142,7 @@ function CreateJobPosting(props) {
 export const JobTitle = (props) => {
 
     const [jobPostingData, setJobPostingData] = React.useState(props.jobPosting);
+    const [jobNumber, setJobNumber] = React.useState(props.jobPosting.jobNumber ? props.jobPosting.jobNumber : "");
     const [jobTitle, setjobTitle] = React.useState(props.jobPosting.jobTitle ? props.jobPosting.jobTitle : "");
     const [applyLink, setApplyLink] = React.useState(props.jobPosting.applyLink ? props.jobPosting.applyLink : "");
     const [jobDescription, setJobDescription] = React.useState(props.jobPosting.jobDescription ? props.jobPosting.jobDescription : "");
@@ -154,10 +155,11 @@ export const JobTitle = (props) => {
         return (a.host && a.host != window.location.host);
     }
 
-    function handleSaveClick() {
+    function handleSaveClick(flag) {
 
-        if (jobTitle !== "" && jobDescription !== '' && department !== '' && salary !== '') {
+        if (jobNumber !== "" && jobTitle !== "" && jobDescription !== '' && department !== '' && salary !== '') {
             jobPostingData.jobTitle = jobTitle;
+            jobPostingData.jobNumber = jobNumber;
             if (applyLink !== "") {
                 jobPostingData.applyLink = applyLink;
             } else {
@@ -166,10 +168,21 @@ export const JobTitle = (props) => {
             jobPostingData.jobDescription = jobDescription;
             jobPostingData.department = department;
             jobPostingData.salary = salary;
+
             // save data
             props.setJobPosting(jobPostingData);
-            // switch to next
-            props.handleContinueClick();
+            if (props.saveMode !== undefined && props.saveMode === false) {
+                // api call
+                axios.put("http://localhost:8080/jobpostings", jobPostingData).then(response => {
+                    console.log("save", jobPostingData);
+                    alert("Save Successfully!!");
+                }).catch(error => {
+                    alert("Unsuccessful to update the Job Title!")
+                });
+            } else {
+                // switch to next
+                props.handleContinueClick();
+            }
         } else {
             alert('Missing input! Please enter N/A instead.');
         }
@@ -179,7 +192,7 @@ export const JobTitle = (props) => {
         <Container>
             {props.saveMode !== undefined && props.saveMode === false ?
                 <Row className="justify-content-start">
-                    <Button size="sm" style={{ backgroundColor: "green", borderColor: "green", width: '70px', marginTop: '1%' }} >
+                    <Button size="sm" onClick={handleSaveClick} style={{ backgroundColor: "green", borderColor: "green", width: '70px', marginTop: '1%' }} >
                         Save
                     </Button>
                 </Row>
@@ -189,6 +202,10 @@ export const JobTitle = (props) => {
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Official Position Title </Form.Label>
                 <Col sm={9}> <Form.Control rows={1} placeholder="Type here..." value={jobTitle} onChange={e => setjobTitle(e.target.value)} /></Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}> Job Number </Form.Label>
+                <Col sm={9}> <Form.Control rows={1} placeholder="Type here..." value={jobNumber} onChange={e => setJobNumber(e.target.value)} /></Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Job Description </Form.Label>
@@ -247,7 +264,6 @@ export const Requirements = (props) => {
         }
 
         if (comment1 !== "" && sType !== "" && yearExperience !== undefined && yearExperience !== "") {
-            console.log(comment1, sType, yearExperience);
             if (isNaN(yearExperience)) {
                 alert("Year Experience should be Integer!");
             } else {
@@ -363,10 +379,21 @@ export const Requirements = (props) => {
             jobPostingData.skillRequirements = skillRequirements;
             jobPostingData.certificationRequirements = certificationRequirements;
             jobPostingData.otherRequirements = otherRequirements;
+
             // save data
             props.setJobPosting(jobPostingData);
-            // switch to next
-            props.handleContinueClick();
+            if (props.saveMode !== undefined && props.saveMode === false) {
+                // api call
+                axios.put("http://localhost:8080/jobpostings", jobPostingData).then(response => {
+                    alert("Save Successfully!!");
+                }).catch(error => {
+                    alert("Unsuccessful to update the Requirements!")
+                });
+            } else {
+                // switch to next
+                props.handleContinueClick();
+            }
+
         } else {
             alert("Missing inputs of skillRequirements, certificiationRequirements and otherRequirements, Please enter N/A instead!");
         }
@@ -376,7 +403,7 @@ export const Requirements = (props) => {
         <Container>
             {props.saveMode !== undefined && props.saveMode === false ?
                 <Row className="justify-content-start">
-                    <Button size="sm" style={{ backgroundColor: "green", borderColor: "green", width: '70px', marginTop: '1%' }} >
+                    <Button size="sm" onClick={handleSaveClick} style={{ backgroundColor: "green", borderColor: "green", width: '70px', marginTop: '1%' }} >
                         Save
                     </Button>
                 </Row>
@@ -470,7 +497,7 @@ export const Requirements = (props) => {
                 </Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Col sm={2}><Button variant="outline-primary" onClick={()=>{addCertification();}}>Add Certification</Button></Col>
+                <Col sm={2}><Button variant="outline-primary" onClick={() => { addCertification(); }}>Add Certification</Button></Col>
                 <Col sm={3}><FloatingLabel label="Name" id="name" value={sName} onChange={e => setCName(e.target.value)} /></Col>
                 <Col sm={6}><FloatingLabel as="textarea" rows={3} label="Comments" id="comment2" value={comment2} onChange={(e) => { setComment2(e.target.value) }} style={{ marginRight: '10px' }} /></Col>
             </Form.Group>
@@ -564,11 +591,20 @@ export const Availability = (props) => {
                 jobPostingData.location = locations;
                 jobPostingData.meetingType = meetingType;
                 jobPostingData.meetingNotes = meetingNotes;
-                console.log(jobPostingData);
+
                 // save data
                 props.setJobPosting(jobPostingData);
-                // switch to next
-                props.handleContinueClick();
+                if (props.saveMode !== undefined && props.saveMode === false) {
+                    // api call
+                    axios.put("http://localhost:8080/jobpostings", jobPostingData).then(response => {
+                        alert("Save Successfully!!");
+                    }).catch(error => {
+                        alert("Unsuccessful to update the Availability!")
+                    });
+                } else {
+                    // switch to next
+                    props.handleContinueClick();
+                }
             }
         } else {
             alert("Missing inputs of availablePositions/location/meetingType/meetingNotes! Please N/A instead.");
@@ -579,7 +615,7 @@ export const Availability = (props) => {
         <Container>
             {props.saveMode !== undefined && props.saveMode === false ?
                 <Row className="justify-content-start">
-                    <Button size="sm" style={{ backgroundColor: "green", borderColor: "green", width: '70px', marginTop: '1%' }} >
+                    <Button onClick={handleSaveClick} size="sm" style={{ backgroundColor: "green", borderColor: "green", width: '70px', marginTop: '1%' }} >
                         Save
                     </Button>
                 </Row>
@@ -588,10 +624,10 @@ export const Availability = (props) => {
             }
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> # of Positions Available </Form.Label>
-                <Col sm={3}> <Form.Control rows={1} placeholder="Type Number..." onChange={e => setAvailablePositions(e.target.value)} /> </Col>
+                <Col sm={3}> <Form.Control rows={1} placeholder="Type Number..." value={availablePositions} onChange={e => setAvailablePositions(e.target.value)} /> </Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Col sm={2}><Button variant="outline-primary" onClick={()=>{addLocation();}}>Add Location</Button></Col>
+                <Col sm={2}><Button variant="outline-primary" onClick={() => { addLocation(); }}>Add Location</Button></Col>
                 <Col sm={2}><FloatingLabel label="Country" id="country" onChange={e => setCountry(e.target.value)} /></Col>
                 <Col sm={2}><FloatingLabel label="State" id="state" onChange={(e) => { setState(e.target.value) }} style={{ marginRight: '10px' }} /></Col>
                 <Col sm={2}><FloatingLabel label="City" id="city" onChange={e => setCity(e.target.value)} /></Col>
@@ -611,7 +647,6 @@ export const Availability = (props) => {
                             </thead>
                             <tbody>
                                 {locations.map((item, index) => {
-                                    // TODO: generate String with missing value, the list is not updated
                                     return (
                                         <tr key={index}>
                                             <td>{index + 1}</td>
@@ -643,7 +678,7 @@ export const Availability = (props) => {
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Meeting Notes </Form.Label>
-                <Col sm={9}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => setMeetingNotes(e.target.value)} /> </Col>
+                <Col sm={9}> <Form.Control as="textarea" rows={3} placeholder="Type here..." value={meetingNotes} onChange={e => setMeetingNotes(e.target.value)} /> </Col>
             </Form.Group>
             {props.saveMode !== undefined && props.saveMode === false ?
                 <></>
@@ -658,73 +693,90 @@ export const Availability = (props) => {
 
 // processes
 export const Processes = (props) => {
+
     const [jobPostingData, setJobPostingData] = React.useState(props.jobPosting);
     const [process, setProcess] = React.useState(props.jobPosting.process ? props.jobPosting.process : ['', '', '', '', '']);
-
-    React.useEffect(() => {
-        if (props.jobPosting.process && props.jobPosting.process.length > 0) {
-            setProcess(props.jobPosting.process);
-        }
-    }, [props.jobPosting.process]);
-
-    function handleProcessChange(newP, index) {
-        let tmp = process;
-        tmp[index] = newP;
-        setProcess(tmp);
-    }
+    const [p1, setP1] = React.useState(props.jobPosting.process ? props.jobPosting.process[0] : "");
+    const [p2, setP2] = React.useState(props.jobPosting.process ? props.jobPosting.process[1] : "");
+    const [p3, setP3] = React.useState(props.jobPosting.process ? props.jobPosting.process[2] : "");
+    const [p4, setP4] = React.useState(props.jobPosting.process ? props.jobPosting.process[3] : "");
+    const [p5, setP5] = React.useState(props.jobPosting.process ? props.jobPosting.process[4] : "");
 
     function handleSaveClick() {
-        jobPostingData.process = process;
+        let p = [];
+        p.push(p1);
+        p.push(p2);
+        p.push(p3);
+        p.push(p4);
+        p.push(p5);
+        setProcess(p);
+        jobPostingData.process = p;
+        console.log(jobPostingData);
         // save data
         props.setJobPosting(jobPostingData);
-        // switch to next
-        props.handleContinueClick();
-        // reset
-        setProcess(['', '', '', '', '']);
-        props.handleSave();
+        if (props.saveMode !== undefined && props.saveMode === false) {
+             // api call
+             axios.put("http://localhost:8080/jobpostings", jobPostingData).then(response => {
+                console.log("save", jobPostingData);
+                alert("Save Successfully!!");
+            }).catch(error => {
+                alert("Unsuccessful to update the Processes!")
+            });
+        } else {
+            // switch to next
+            props.handleContinueClick();
+            // reset
+            // setProcess(['', '', '', '', '']);
+            props.handleSave();
+        }
     }
 
     return (
         <Container>
             {props.saveMode !== undefined && props.saveMode === false ?
                 <Row className="justify-content-start">
-                    <Button size="sm" style={{ backgroundColor: "green", borderColor: "green", width: '70px', marginTop: '1%' }} >
+                    <Button onClick={handleSaveClick} size="sm" style={{ backgroundColor: "green", borderColor: "green", width: '70px', marginTop: '1%' }} >
                         Save
                     </Button>
                 </Row>
                 :
                 <></>
             }
-            {
-                process.map((item, index) => {
-                    return (
-                        <Form.Group as={Row} key={index} className="mb-3" style={{ marginTop: '20px' }}>
-                            <Form.Label column sm={2}>Step {index + 1}</Form.Label>
-                            <Col sm={9}>
-                                <Form.Control as="textarea" rows={2} placeholder="Type here..." onChange={e => { handleProcessChange(e.target.value, index); }} />
-                            </Col>
-                        </Form.Group>
-                    );
-                })
-            }
-            {/* <Row className="justify-content-end">
-                <Col className="justify-content-start">
-                    <Button variant="outline-primary" onClick={addProcess}>Add Process</Button>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}>Step 1</Form.Label>
+                <Col sm={9}>
+                    <Form.Control as="textarea" rows={2} value={p1} placeholder="Type here..." onChange={e => { setP1(e.target.value); }} />
                 </Col>
-                <Col className="justify-content-end">
-                    <Button style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Saved Jobs</Button>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}>Step 2</Form.Label>
+                <Col sm={9}>
+                    <Form.Control as="textarea" rows={2} value={p2} placeholder="Type here..." onChange={e => { setP2(e.target.value); }} />
                 </Col>
-            </Row> */}
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}>Step 3</Form.Label>
+                <Col sm={9}>
+                    <Form.Control as="textarea" rows={2} value={p3} placeholder="Type here..." onChange={e => { setP3(e.target.value); }} />
+                </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}>Step 4</Form.Label>
+                <Col sm={9}>
+                    <Form.Control as="textarea" rows={2} value={p4} placeholder="Type here..." onChange={e => { setP4(e.target.value); }} />
+                </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}>Step 5</Form.Label>
+                <Col sm={9}>
+                    <Form.Control as="textarea" rows={2} value={p5} placeholder="Type here..." onChange={e => { setP5(e.target.value); }} />
+                </Col>
+            </Form.Group>
             {props.saveMode !== undefined && props.saveMode === false ?
                 <></>
                 :
                 <Row className="justify-content-end">
-                    {/* <Col className="justify-content-start">
-                    <Button variant="outline-primary" onClick={addProcess}>Add Process</Button>
-                </Col> */}
-                    {/* <Col className="justify-content-end"> */}
                     <Button style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Saved Jobs</Button>
-                    {/* </Col> */}
                 </Row>
             }
         </Container>
