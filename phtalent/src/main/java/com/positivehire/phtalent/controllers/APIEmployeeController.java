@@ -410,9 +410,3 @@ public class APIEmployeeController extends APIController {
         return new ResponseEntity<String>(successResponse("successful deletion"),
         HttpStatus.OK);
     }
-
-    @GetMapping("/employees/{employeeNum}/education")
-    public List<Education> getAllEducation() {
-        return eduServ.findAll();
-    }
-}
