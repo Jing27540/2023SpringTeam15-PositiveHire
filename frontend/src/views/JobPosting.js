@@ -61,7 +61,7 @@ function JobPosting(props) {
             );
         } else if (mode === 'Welcome' || props.pView === 'Welcome') {
             return (
-                <Welcome />
+                <Welcome setMode={setMode}/>
             );
         } else if (mode === 'Edit') {
             return (

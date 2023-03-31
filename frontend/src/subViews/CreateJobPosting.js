@@ -18,7 +18,6 @@ function CreateJobPosting(props) {
     const titles = ['JobTitle', 'Requirements', 'Availabliltiy', 'Process']
     const [colors, setColors] = React.useState(["warning", "secondary", "secondary", "secondary"]);
     const [mode, setMode] = React.useState(props.mode ? props.mode : 'JobTitle');
-    const [message, setMessage] = React.useState("");
 
     React.useEffect(() => {
         if (mode === titles[0]) {
@@ -68,7 +67,8 @@ function CreateJobPosting(props) {
 
         // call api
         axios.post("http://localhost:8080/jobpostings", newJobPosting).then(response => {
-            setMessage("Successful to create a job posting!");
+            setMode(titles[0]);
+            alert("Successful to create a new job posting!");
         }).catch(error => {
 
         });
@@ -76,13 +76,13 @@ function CreateJobPosting(props) {
 
     return (
         <Container fluid>
-            {message && message !== "" ?
+            {/* {message && message !== "" ?
                 <div className="alert alert-success" role="alert">
                     {message}
                 </div>
                 :
                 undefined
-            }
+            } */}
             <Row style={{ marginTop: '5%' }}>
                 {
                     titles.map((item, index) => {
@@ -165,7 +165,7 @@ export const JobTitle = (props) => {
     const isValidUrl = urlString => {
         var a = document.createElement('a');
         a.href = urlString;
-        return (a.host && a.host != window.location.host);
+        return (a.host && a.host !== window.location.host);
     }
 
     function handleSaveClick(flag) {
@@ -291,7 +291,7 @@ export const Requirements = (props) => {
         let exists = false;
 
         if (skillRequirements === undefined) {
-            skillRequirements = [];
+            setSkillRequirements([]);
         }
 
         if (comment1 !== "" && sType !== "" && yearExperience !== undefined && yearExperience !== "") {
@@ -352,7 +352,7 @@ export const Requirements = (props) => {
         let exists = false;
 
         if (certificationRequirements === undefined) {
-            certificationRequirements = [];
+            setCertificationRequirements([]);
         }
 
         if (comment2 !== "" && cType !== "" && cName !== "") {
@@ -614,7 +614,7 @@ export const Availability = (props) => {
     };
 
     function handleSaveClick() {
-        if (availablePositions || locations.length > 0 || meetingType !== "" && meetingNotes !== "") {
+        if (availablePositions || locations.length > 0 || meetingType !== "" ||  meetingNotes !== "") {
             if (isNaN(availablePositions)) {
                 alert("availablePositions should be integer.");
             } else {

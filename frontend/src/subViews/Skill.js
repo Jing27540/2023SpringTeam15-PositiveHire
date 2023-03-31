@@ -246,64 +246,62 @@ function Skill(props) {
 
     return (
         <Container>
-            <Col sm={8}>
-                <Container style={{ marginTop: '2%', justifyContent: "space-between" }}>
-                    <Row style={{ textAlign: 'left' }}>
-                        {/* <Col style={{ fontSize: '15px', float: 'left' }}>Updated: Dec 30, 2022</Col> */}
-                        <Col>
-                            <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'left', width: '100px' }} onClick={() => { handleShow(); setMode(true) }}>
-                                Add
-                            </Button>
-                        </Col>
-                        <Col>
-                            <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'right', width: '100px' }} onClick={() => { handleShow(); setMode(false) }}>
-                                Edit
-                            </Button>
-                        </Col>
-                    </Row>
-                    <Row style={{ textAlign: 'left', margin: '2%', backgroundColor: "#0F123F", color: "white", height: "50px", borderRadius: 10, fontWeight: 'bold', alignItems: 'center' }}>
-                        <Col>Skills</Col>
-                        <Col>Level</Col>
-                        <Col>Score</Col>
-                    </Row>
-                    <Row style={{ fontWeight: 'bold', fontSize: '18px', margin: "10px" }}>Technique Skills</Row>
-                    <HorizontalLine></HorizontalLine>
-                    {employee.technicalSkills.map((item, index) => {
-                        return (
-                            <Row key={index} style={{ textAlign: 'left', margin: '2%' }}>
-                                <Col>{item.name}</Col>
-                                <Col>{item.level}</Col>
-                                <Col>{item.score}</Col>
-                            </Row>
-                        );
-                    })}
-                    <Row style={{ fontWeight: 'bold', fontSize: '18px', margin: "10px" }}>People Skills</Row>
-                    <HorizontalLine></HorizontalLine>
-                    {employee.peopleSkills.map((item, index) => {
-                        return (
-                            <Row key={index} style={{ textAlign: 'left', margin: '2%' }}>
-                                <Col>{item.name}</Col>
-                                <Col>{item.level}</Col>
-                                <Col>{item.score}</Col>
-                            </Row>
-                        );
-                    })}
-                    <Row style={{ fontWeight: 'bold', fontSize: '18px', margin: "10px" }}>Work Ethics</Row>
-                    <HorizontalLine></HorizontalLine>
-                    {employee.workEthic.map((item, index) => {
-                        return (
-                            <Row key={index} style={{ textAlign: 'left', margin: '2%' }}>
-                                <Col>{item.name}</Col>
-                                <Col>{item.level}</Col>
-                                <Col>{item.score}</Col>
-                            </Row>
-                        );
-                    })}
-                </Container>
-            </Col>
-            <Col>
+            <Container style={{ marginTop: '3%', justifyContent: "space-between" }}>
+                <Row style={{ textAlign: 'left' }}>
+                    {/* <Col style={{ fontSize: '15px', float: 'left' }}>Updated: Dec 30, 2022</Col> */}
+                    <Col>
+                        <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'left', width: '100px' }} onClick={() => { handleShow(); setMode(true) }}>
+                            Add
+                        </Button>
+                    </Col>
+                    <Col>
+                        <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'right', width: '100px' }} onClick={() => { handleShow(); setMode(false) }}>
+                            Edit
+                        </Button>
+                    </Col>
+                </Row>
+                <Row style={{ textAlign: 'center', marginTop: '2%', backgroundColor: "#0F123F", color: "white", height: "40px", borderRadius: 5, fontWeight: 'bold', alignItems: 'center' }}>
+                    <Col>Skills</Col>
+                    <Col>Level</Col>
+                    <Col>Score</Col>
+                </Row>
+                <Row style={{ fontWeight: 'bold', fontSize: '18px', marginTop: '2%', marginLeft: '1%' }}>Technique Skills</Row>
+                <HorizontalLine></HorizontalLine>
+                {employee.technicalSkills.map((item, index) => {
+                    return (
+                        <Row key={index} style={{ textAlign: 'center', marginTop: '2%' }}>
+                            <Col>{item.name}</Col>
+                            <Col>{item.level}</Col>
+                            <Col>{item.score}</Col>
+                        </Row>
+                    );
+                })}
+                <Row style={{ fontWeight: 'bold', fontSize: '18px', marginTop: '2%', marginLeft: '1%' }}>People Skills</Row>
+                <HorizontalLine></HorizontalLine>
+                {employee.peopleSkills.map((item, index) => {
+                    return (
+                        <Row key={index} style={{ textAlign: 'center', marginTop: '2%' }}>
+                            <Col>{item.name}</Col>
+                            <Col>{item.level}</Col>
+                            <Col>{item.score}</Col>
+                        </Row>
+                    );
+                })}
+                <Row style={{ fontWeight: 'bold', fontSize: '18px', marginTop: '2%', marginLeft: '1%' }}>Work Ethics</Row>
+                <HorizontalLine></HorizontalLine>
+                {employee.workEthic.map((item, index) => {
+                    return (
+                        <Row key={index} style={{ textAlign: 'center', marginTop: '2%' }}>
+                            <Col>{item.name}</Col>
+                            <Col>{item.level}</Col>
+                            <Col>{item.score}</Col>
+                        </Row>
+                    );
+                })}
+            </Container>
+            {/* <Col>
                 <VerticleLine></VerticleLine>
-            </Col>
+            </Col> */}
             <Modal show={show} onHide={handleClose} animation={false}>
                 <Modal.Header closeButton>
                     <Modal.Title>Skill & Certification</Modal.Title>
