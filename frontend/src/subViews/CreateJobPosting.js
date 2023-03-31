@@ -155,7 +155,7 @@ export const JobTitle = (props) => {
         return (a.host && a.host != window.location.host);
     }
 
-    function handleSaveClick() {
+    function handleSaveClick(flag) {
 
         if (jobNumber !== "" && jobTitle !== "" && jobDescription !== '' && department !== '' && salary !== '') {
             jobPostingData.jobTitle = jobTitle;
@@ -171,7 +171,10 @@ export const JobTitle = (props) => {
             // save data
             props.setJobPosting(jobPostingData);
             // switch to next
-            props.handleContinueClick();
+            if(flag === true) {
+                props.handleContinueClick()
+            }
+
         } else {
             alert('Missing input! Please enter N/A instead.');
         }
@@ -181,7 +184,7 @@ export const JobTitle = (props) => {
         <Container>
             {props.saveMode !== undefined && props.saveMode === false ?
                 <Row className="justify-content-start">
-                    <Button size="sm" style={{ backgroundColor: "green", borderColor: "green", width: '70px', marginTop: '1%' }} >
+                    <Button size="sm" onClick={handleSaveClick} style={{ backgroundColor: "green", borderColor: "green", width: '70px', marginTop: '1%' }} >
                         Save
                     </Button>
                 </Row>
