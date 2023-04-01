@@ -44,7 +44,7 @@ function JobPosting(props) {
                         <VerticalBar setMode={setMode} accessRole={props.accessRole} setPView={props.setPView} />
                     </Col>
                     <Col>
-                        <CreateJobPosting accessRole={props.accessRole} />
+                        <CreateJobPosting setMode={setMode} accessRole={props.accessRole} />
                     </Col>
                 </Row>
             );
