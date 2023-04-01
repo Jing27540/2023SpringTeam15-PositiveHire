@@ -466,7 +466,7 @@ public class APIEmployeeController extends APIController {
             toEdit.setName(newEd.getName());
             toEdit.setDateAchieved(newEd.getDateAchieved());
             toEdit.setInstitution(newEd.getInstitution());
-            toEdit.setSkills(newEd.getSkills());
+            //toEdit.setSkills(newEd.getSkills());
             toEdit.setType(newEd.getType());
             eduServ.save(toEdit);
         } else {

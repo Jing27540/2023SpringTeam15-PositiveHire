@@ -147,49 +147,47 @@ function Certification(props) {
     return (
         <div>
             <Container>
-                <Col sm={8}>
-                    <Container style={{ marginTop: '2%', justifyContent: "space-between" }}>
-                        <Row style={{ textAlign: 'left' }}>
-                            {/* <Col style={{ fontSize: '15px', float: 'left' }}>Updated: Dec 30, 2022</Col> */}
-                            <Col>
-                                <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'left', width: '100px' }} onClick={() => { handleShow(); setMode(true) }}>
-                                    Add
-                                </Button>
-                            </Col>
-                            <Col>
-                                <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'right', width: '100px' }} onClick={() => { handleShow(); setMode(false) }}>
-                                    Edit
-                                </Button>
-                            </Col>
-                        </Row>
-                        <Row style={{ textAlign: 'left', marginTop: '2%', backgroundColor: "#0F123F", color: "white", height: "50px", borderRadius: 10, fontWeight: 'bold', alignItems: 'center' }}>
-                            <Col>Certifications</Col>
-                        </Row>
-
-                        {certifications.map((item, index) => {
-                            return (
-                                <div key={index}>
-                                    <Row style={{ textAlign: 'left', margin: '4%' }}>
-                                        {item.name}
-                                    </Row>
-                                    <Row style={{ textAlign: 'left', margin: '4%' }}>
-                                        {item.institution}
-                                    </Row>
-                                    <Row style={{ textAlign: 'left', margin: '4%' }}>
-                                        {item.issuedDate}
-                                    </Row>
-                                    <Row style={{ textAlign: 'left', margin: '4%' }}>
-                                        {item.credentialID}
-                                    </Row>
-                                    <HorizontalLine></HorizontalLine>
-                                </div>
-                            );
-                        })}
-                    </Container>
-                </Col>
-                <Col>
-                    <VerticleLine></VerticleLine>
-                </Col>
+                <Container style={{ marginTop: '2%', justifyContent: "space-between" }}>
+                    <Row style={{ textAlign: 'left' }}>
+                        {/* <Col style={{ fontSize: '15px', float: 'left' }}>Updated: Dec 30, 2022</Col> */}
+                        <Col>
+                            <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'left', width: '100px' }} onClick={() => { handleShow(); setMode(true) }}>
+                                Add
+                            </Button>
+                        </Col>
+                        <Col>
+                            <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'right', width: '100px' }} onClick={() => { handleShow(); setMode(false) }}>
+                                Edit
+                            </Button>
+                        </Col>
+                    </Row>
+                    <Row style={{ textAlign: 'center', marginTop: '2%', backgroundColor: "#0F123F", color: "white", height: "40px", borderRadius: 5, fontWeight: 'bold', alignItems: 'center' }}>
+                        <Col>Certifications</Col>
+                    </Row>
+                    {certifications.map((item, index) => {
+                        return (
+                            <div key={index}>
+                                <Row style={{ textAlign: 'left', margin: '2%' }}>
+                                    <Col style={{ fontWeight: 'bold' }} sm={3}>CertificationName</Col>
+                                    <Col>{item.name}</Col>
+                                </Row>
+                                <Row style={{ textAlign: 'left', margin: '2%' }}>
+                                    <Col style={{ fontWeight: 'bold' }} sm={3}>Institution</Col>
+                                    <Col>{item.institution}</Col>
+                                </Row>
+                                <Row style={{ textAlign: 'left', margin: '2%' }}>
+                                    <Col style={{ fontWeight: 'bold' }} sm={3}>IssuedDate</Col>
+                                    <Col>{item.issuedDate}</Col>
+                                </Row>
+                                <Row style={{ textAlign: 'left', margin: '2%' }}>
+                                    <Col style={{ fontWeight: 'bold' }} sm={3}>CredentialID</Col>
+                                    <Col>{item.credentialID}</Col>
+                                </Row>
+                                <HorizontalLine></HorizontalLine>
+                            </div>
+                        );
+                    })}
+                </Container>
                 <Modal show={show} onHide={handleClose} animation={false}>
                     <Modal.Header closeButton>
                         <Modal.Title>Skill & Certification</Modal.Title>

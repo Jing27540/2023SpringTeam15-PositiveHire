@@ -18,7 +18,6 @@ function CreateJobPosting(props) {
     const titles = ['JobTitle', 'Requirements', 'Availabliltiy', 'Process']
     const [colors, setColors] = React.useState(["warning", "secondary", "secondary", "secondary"]);
     const [mode, setMode] = React.useState(props.mode ? props.mode : 'JobTitle');
-    const [message, setMessage] = React.useState("");
 
     React.useEffect(() => {
         if (mode === titles[0]) {
@@ -49,7 +48,7 @@ function CreateJobPosting(props) {
         // update value as user input
         // input validation checking
         let newJobPosting = {
-            // "jobNumber": jobNumber,
+            "jobNumber": jobPosting.jobNumber,
             "jobTitle": jobPosting.jobTitle,
             "salary": jobPosting.salary,
             "department": jobPosting.department,
@@ -68,7 +67,8 @@ function CreateJobPosting(props) {
 
         // call api
         axios.post("http://localhost:8080/jobpostings", newJobPosting).then(response => {
-            setMessage("Successful to create a job posting!");
+            setMode(titles[0]);
+            alert("Successful to create a new job posting!");
         }).catch(error => {
 
         });
@@ -76,13 +76,13 @@ function CreateJobPosting(props) {
 
     return (
         <Container fluid>
-            {message && message !== "" ?
+            {/* {message && message !== "" ?
                 <div className="alert alert-success" role="alert">
                     {message}
                 </div>
                 :
                 undefined
-            }
+            } */}
             <Row style={{ marginTop: '5%' }}>
                 {
                     titles.map((item, index) => {
@@ -139,37 +139,81 @@ function CreateJobPosting(props) {
 }
 
 // job title
-const JobTitle = (props) => {
+export const JobTitle = (props) => {
 
     const [jobPostingData, setJobPostingData] = React.useState(props.jobPosting);
+    const [jobNumber, setJobNumber] = React.useState(props.jobPosting.jobNumber ? props.jobPosting.jobNumber : "");
     const [jobTitle, setjobTitle] = React.useState(props.jobPosting.jobTitle ? props.jobPosting.jobTitle : "");
     const [applyLink, setApplyLink] = React.useState(props.jobPosting.applyLink ? props.jobPosting.applyLink : "");
     const [jobDescription, setJobDescription] = React.useState(props.jobPosting.jobDescription ? props.jobPosting.jobDescription : "");
     const [department, setDepartment] = React.useState(props.jobPosting.department ? props.jobPosting.department : "");
     const [salary, setSalary] = React.useState(props.jobPosting.salary ? props.jobPosting.salary : "");
+    // get jobPostings list
+    const [jobPostings, setJobPostings] = React.useState([]);
+
+    //Loading the job postings from the database
+    const loadCurrentData = () => {
+        axios.get("http://localhost:8080/jobpostings").then(result => {
+            setJobPostings(result.data);
+        })
+    };
+
+    React.useEffect(() => {
+        loadCurrentData(); // action
+    }, []);
 
     const isValidUrl = urlString => {
         var a = document.createElement('a');
         a.href = urlString;
-        return (a.host && a.host != window.location.host);
+        return (a.host && a.host !== window.location.host);
     }
 
-    function handleSaveClick() {
+    function handleSaveClick(flag) {
 
-        if (jobTitle !== "" && jobDescription !== '' && department !== '' && salary !== '') {
-            jobPostingData.jobTitle = jobTitle;
-            if (applyLink !== "") {
-                jobPostingData.applyLink = applyLink;
+        // if (jobNumber !== "") {
+        //     // TODO: check duplicate jobNumber
+        //     const result = jobPostings.filter(item => jobNumber === item.jobNumber);
+        //     console.log('checking result', result);
+        //     if (result && result.length > 0) {
+        //         alert("JobNumber has been existed!");
+        //     } else {
+        //         jobPostingData.jobNumber = jobNumber;
+        //     }
+        // } else {
+        //     alert("JobNumber cannot be empty!");
+        // }
+
+        if (jobNumber !== "" && jobTitle !== "" && jobDescription !== '' && department !== '' && salary !== '') {
+            const result = jobPostings.filter(item => jobNumber === item.jobNumber);
+            if (result && result.length > 0) {
+                alert("Duplicate JobNumber!");
             } else {
-                jobPostingData.applyLink = "";
+                jobPostingData.jobNumber = jobNumber;
+                jobPostingData.jobTitle = jobTitle;
+                if (applyLink !== "") {
+                    jobPostingData.applyLink = applyLink;
+                } else {
+                    jobPostingData.applyLink = "";
+                }
+                jobPostingData.jobDescription = jobDescription;
+                jobPostingData.department = department;
+                jobPostingData.salary = salary;
+
+                // save data
+                props.setJobPosting(jobPostingData);
+                if (props.saveMode !== undefined && props.saveMode === false) {
+                    // api call
+                    axios.put("http://localhost:8080/jobpostings", jobPostingData).then(response => {
+                        console.log("save", jobPostingData);
+                        alert("Save Successfully!!");
+                    }).catch(error => {
+                        alert("Unsuccessful to update the Job Title!")
+                    });
+                } else {
+                    // switch to next
+                    props.handleContinueClick();
+                }
             }
-            jobPostingData.jobDescription = jobDescription;
-            jobPostingData.department = department;
-            jobPostingData.salary = salary;
-            // save data
-            props.setJobPosting(jobPostingData);
-            // switch to next
-            props.handleContinueClick();
         } else {
             alert('Missing input! Please enter N/A instead.');
         }
@@ -177,9 +221,22 @@ const JobTitle = (props) => {
 
     return (
         <Container>
+            {props.saveMode !== undefined && props.saveMode === false ?
+                <Row className="justify-content-start">
+                    <Button size="sm" onClick={handleSaveClick} style={{ backgroundColor: "green", borderColor: "green", width: '70px', marginTop: '1%' }} >
+                        Save
+                    </Button>
+                </Row>
+                :
+                <></>
+            }
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Official Position Title </Form.Label>
                 <Col sm={9}> <Form.Control rows={1} placeholder="Type here..." value={jobTitle} onChange={e => setjobTitle(e.target.value)} /></Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}> Job Number </Form.Label>
+                <Col sm={9}> <Form.Control rows={1} placeholder="Type here..." value={jobNumber} onChange={e => setJobNumber(e.target.value)} /></Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Job Description </Form.Label>
@@ -201,15 +258,19 @@ const JobTitle = (props) => {
                 <Form.Label column sm={2}> Median Salary (varies based on location)</Form.Label>
                 <Col sm={9}> <Form.Control placeholder="Type here..." value={salary} onChange={e => setSalary(e.target.value)} /> </Col>
             </Form.Group>
-            <Row className="justify-content-end">
-                <Button variant={'warning'} style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Save & Continue</Button>
-            </Row>
+            {props.saveMode !== undefined && props.saveMode === false ?
+                <></>
+                :
+                <Row className="justify-content-end">
+                    <Button variant={'warning'} style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Save & Continue</Button>
+                </Row>
+            }
         </Container>
     );
 }
 
 // requirements
-const Requirements = (props) => {
+export const Requirements = (props) => {
     const [jobPostingData, setJobPostingData] = React.useState(props.jobPosting);
 
     const [sType, setSType] = React.useState("");
@@ -225,28 +286,15 @@ const Requirements = (props) => {
     const [certificationRequirements, setCertificationRequirements] = React.useState(props.jobPosting.certificationRequirements ? props.jobPosting.certificationRequirements : []); // Certification []
     const [otherRequirements, setOtherRequirements] = React.useState(props.jobPosting.otherRequirements ? props.jobPosting.otherRequirements : ''); // String
 
-    // React.useEffect(() => {
-    //     // update list values
-    //     if (props.jobPosting.skillRequirements && props.jobPosting.skillRequirements.length > 0) {
-    //         setSkillRequirements(props.jobPosting.skillRequirements);
-    //     }
-
-    //     if (props.jobPosting.certificationRequirements && props.jobPosting.certificationRequirements.length > 0) {
-    //         setCertificationRequirements(props.jobPosting.certificationRequirements);
-    //     }
-
-    // }, [props.jobPosting.skillRequirements, props.jobPosting.certificationRequirements]);
-
     // TODO: The list is not Update
     function addSkill() {
         let exists = false;
 
         if (skillRequirements === undefined) {
-            skillRequirements = [];
+            setSkillRequirements([]);
         }
 
         if (comment1 !== "" && sType !== "" && yearExperience !== undefined && yearExperience !== "") {
-            console.log(comment1, sType, yearExperience);
             if (isNaN(yearExperience)) {
                 alert("Year Experience should be Integer!");
             } else {
@@ -284,12 +332,27 @@ const Requirements = (props) => {
 
     }
 
+    function removeSkill(index) {
+        if (skillRequirements && skillRequirements.length > 0) {
+            skillRequirements.splice(index, 1);
+            handleSkillRequirementsChange();
+            alert("Sucessfully to remove skill.");
+        } else {
+            alert("No Skills data.");
+        }
+    }
+
+    const handleSkillRequirementsChange = () => {
+        const newSK = [...skillRequirements];
+        setSkillRequirements(newSK);
+    };
+
     function addCertification() {
 
         let exists = false;
 
         if (certificationRequirements === undefined) {
-            certificationRequirements = [];
+            setCertificationRequirements([]);
         }
 
         if (comment2 !== "" && cType !== "" && cName !== "") {
@@ -326,16 +389,42 @@ const Requirements = (props) => {
         }
     }
 
+    function removeCertification(index) {
+        if (certificationRequirements && certificationRequirements.length > 0) {
+            certificationRequirements.splice(index, 1);
+            handleCertificationRequirementsChange();
+            alert("Sucessfully to remove certification.");
+        } else {
+            alert("No Certifications data.");
+        }
+    }
+
+    const handleCertificationRequirementsChange = () => {
+        const newC = [...certificationRequirements];
+        setCertificationRequirements(newC);
+    };
+
     function handleSaveClick() {
 
         if (skillRequirements.length > 0 || certificationRequirements.length > 0 || otherRequirements !== "") {
             jobPostingData.skillRequirements = skillRequirements;
             jobPostingData.certificationRequirements = certificationRequirements;
             jobPostingData.otherRequirements = otherRequirements;
+
             // save data
             props.setJobPosting(jobPostingData);
-            // switch to next
-            props.handleContinueClick();
+            if (props.saveMode !== undefined && props.saveMode === false) {
+                // api call
+                axios.put("http://localhost:8080/jobpostings", jobPostingData).then(response => {
+                    alert("Save Successfully!!");
+                }).catch(error => {
+                    alert("Unsuccessful to update the Requirements!")
+                });
+            } else {
+                // switch to next
+                props.handleContinueClick();
+            }
+
         } else {
             alert("Missing inputs of skillRequirements, certificiationRequirements and otherRequirements, Please enter N/A instead!");
         }
@@ -343,6 +432,15 @@ const Requirements = (props) => {
 
     return (
         <Container>
+            {props.saveMode !== undefined && props.saveMode === false ?
+                <Row className="justify-content-start">
+                    <Button size="sm" onClick={handleSaveClick} style={{ backgroundColor: "green", borderColor: "green", width: '70px', marginTop: '1%' }} >
+                        Save
+                    </Button>
+                </Row>
+                :
+                <></>
+            }
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> SKILL REQUIREMENETS </Form.Label>
                 <Col sm={9}>
@@ -352,6 +450,7 @@ const Requirements = (props) => {
                                 <tr>
                                     <th>Skill #</th>
                                     <th>Comment</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -362,6 +461,11 @@ const Requirements = (props) => {
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td key={index}>{combine}</td>
+                                            <td>
+                                                <Button onClick={() => { removeSkill(index); }} size="sm" style={{ backgroundColor: "#990033", borderColor: "#990033", width: '30px', marginTop: '1%' }} >
+                                                    X
+                                                </Button>
+                                            </td>
                                         </tr>
                                     );
                                 })}
@@ -373,7 +477,7 @@ const Requirements = (props) => {
                 </Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Col sm={2}><Button variant="outline-primary" onClick={addSkill}>Add Skill</Button></Col>
+                <Col sm={2}><Button variant="outline-primary" onClick={() => { addSkill(); }}>Add Skill</Button></Col>
                 <Col sm={2}><FloatingLabel label="Name" id="name" value={sName} onChange={e => setSName(e.target.value)} /></Col>
                 <Col sm={2}><FloatingLabel label="Year Experience" id="YearExperience" value={yearExperience} onChange={(e) => { setYearExperience(e.target.value) }} style={{ marginRight: '10px' }} /></Col>
                 <Col sm={5}><FloatingLabel as="textarea" rows={3} label="Comments" id="comments1" value={comment1} onChange={(e) => { setComment1(e.target.value) }} style={{ marginRight: '10px' }} /></Col>
@@ -398,6 +502,7 @@ const Requirements = (props) => {
                                 <tr>
                                     <th>Certification #</th>
                                     <th>Comment</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -407,6 +512,11 @@ const Requirements = (props) => {
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td key={index}>{combine}</td>
+                                            <td>
+                                                <Button onClick={() => { removeCertification(index); }} size="sm" style={{ backgroundColor: "#990033", borderColor: "#990033", width: '30px', marginTop: '1%' }} >
+                                                    X
+                                                </Button>
+                                            </td>
                                         </tr>
                                     );
                                 })}
@@ -418,7 +528,7 @@ const Requirements = (props) => {
                 </Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Col sm={2}><Button variant="outline-primary" onClick={addCertification}>Add Certification</Button></Col>
+                <Col sm={2}><Button variant="outline-primary" onClick={() => { addCertification(); }}>Add Certification</Button></Col>
                 <Col sm={3}><FloatingLabel label="Name" id="name" value={sName} onChange={e => setCName(e.target.value)} /></Col>
                 <Col sm={6}><FloatingLabel as="textarea" rows={3} label="Comments" id="comment2" value={comment2} onChange={(e) => { setComment2(e.target.value) }} style={{ marginRight: '10px' }} /></Col>
             </Form.Group>
@@ -437,15 +547,23 @@ const Requirements = (props) => {
                 <Form.Label column sm={2}> OTHER REQUIREMENETS</Form.Label>
                 <Col sm={9}> <Form.Control as="textarea" rows={3} placeholder="Type here..." value={otherRequirements} onChange={e => setOtherRequirements(e.target.value)} /> </Col>
             </Form.Group>
-            <Row className="justify-content-end">
+            {/* <Row className="justify-content-end">
                 <Button variant={'warning'} style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Save & Continue</Button>
-            </Row>
+            </Row> */}
+            {props.saveMode !== undefined && props.saveMode === false ?
+                <></>
+                :
+                <Row className="justify-content-end">
+                    <Button variant={'warning'} style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Save & Continue</Button>
+                </Row>
+
+            }
         </Container>
     );
 }
 
 // availability
-const Availability = (props) => {
+export const Availability = (props) => {
 
     const [jobPostingData, setJobPostingData] = React.useState(props.jobPosting);
     const [state, setState] = React.useState("");
@@ -457,13 +575,6 @@ const Availability = (props) => {
     const [locations, setLocations] = React.useState(props.jobPosting.location ? props.jobPosting.location : []); // String []
     const [meetingType, setMeetingType] = React.useState(props.jobPosting.meetingType ? props.jobPosting.meetingType : '');
     const [meetingNotes, setMeetingNotes] = React.useState(props.jobPosting.meetingNotes ? props.jobPosting.meetingNotes : '');
-
-    // React.useEffect(() => {
-    //     // update list values
-    //     if (props.jobPosting.location && props.jobPosting.location.length > 0) {
-    //         setLocations(props.jobPosting.location);
-    //     }
-    // }, [props.jobPosting]);
 
     function addLocation() {
         // input checking
@@ -479,6 +590,7 @@ const Availability = (props) => {
             setCity();
             setCountry();
             setZipcode();
+            handlechange();
             alert("Successfully to add new location.");
 
         } else {
@@ -486,8 +598,23 @@ const Availability = (props) => {
         }
     }
 
+    function removeLocation(index) {
+        if (locations && locations.length > 0) {
+            locations.splice(index, 1);
+            handlechange();
+            alert("Sucessfully to remove location.");
+        } else {
+            alert("No Loactions data.");
+        }
+    }
+
+    const handlechange = () => {
+        const newLocations = [...locations];
+        setLocations(newLocations);
+    };
+
     function handleSaveClick() {
-        if (availablePositions || locations.length > 0 || meetingType !== "" && meetingNotes !== "") {
+        if (availablePositions || locations.length > 0 || meetingType !== "" ||  meetingNotes !== "") {
             if (isNaN(availablePositions)) {
                 alert("availablePositions should be integer.");
             } else {
@@ -495,11 +622,20 @@ const Availability = (props) => {
                 jobPostingData.location = locations;
                 jobPostingData.meetingType = meetingType;
                 jobPostingData.meetingNotes = meetingNotes;
-                console.log(jobPostingData);
+
                 // save data
                 props.setJobPosting(jobPostingData);
-                // switch to next
-                props.handleContinueClick();
+                if (props.saveMode !== undefined && props.saveMode === false) {
+                    // api call
+                    axios.put("http://localhost:8080/jobpostings", jobPostingData).then(response => {
+                        alert("Save Successfully!!");
+                    }).catch(error => {
+                        alert("Unsuccessful to update the Availability!")
+                    });
+                } else {
+                    // switch to next
+                    props.handleContinueClick();
+                }
             }
         } else {
             alert("Missing inputs of availablePositions/location/meetingType/meetingNotes! Please N/A instead.");
@@ -508,12 +644,21 @@ const Availability = (props) => {
 
     return (
         <Container>
+            {props.saveMode !== undefined && props.saveMode === false ?
+                <Row className="justify-content-start">
+                    <Button onClick={handleSaveClick} size="sm" style={{ backgroundColor: "green", borderColor: "green", width: '70px', marginTop: '1%' }} >
+                        Save
+                    </Button>
+                </Row>
+                :
+                <></>
+            }
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> # of Positions Available </Form.Label>
-                <Col sm={3}> <Form.Control rows={1} placeholder="Type Number..." onChange={e => setAvailablePositions(e.target.value)} /> </Col>
+                <Col sm={3}> <Form.Control rows={1} placeholder="Type Number..." value={availablePositions} onChange={e => setAvailablePositions(e.target.value)} /> </Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
-                <Col sm={2}><Button variant="outline-primary" onClick={addLocation}>Add Location</Button></Col>
+                <Col sm={2}><Button variant="outline-primary" onClick={() => { addLocation(); }}>Add Location</Button></Col>
                 <Col sm={2}><FloatingLabel label="Country" id="country" onChange={e => setCountry(e.target.value)} /></Col>
                 <Col sm={2}><FloatingLabel label="State" id="state" onChange={(e) => { setState(e.target.value) }} style={{ marginRight: '10px' }} /></Col>
                 <Col sm={2}><FloatingLabel label="City" id="city" onChange={e => setCity(e.target.value)} /></Col>
@@ -528,15 +673,20 @@ const Availability = (props) => {
                                 <tr>
                                     <th>Location #</th>
                                     <th>Comment</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {locations.map((item, index) => {
-                                    // TODO: generate String with missing value, the list is not updated
                                     return (
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td>{item}</td>
+                                            <td>
+                                                <Button onClick={() => { removeLocation(index) }} size="sm" style={{ backgroundColor: "#990033", borderColor: "#990033", width: '30px', marginTop: '1%' }} >
+                                                    X
+                                                </Button>
+                                            </td>
                                         </tr>
                                     );
                                 })}
@@ -559,71 +709,107 @@ const Availability = (props) => {
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Meeting Notes </Form.Label>
-                <Col sm={9}> <Form.Control as="textarea" rows={3} placeholder="Type here..." onChange={e => setMeetingNotes(e.target.value)} /> </Col>
+                <Col sm={9}> <Form.Control as="textarea" rows={3} placeholder="Type here..." value={meetingNotes} onChange={e => setMeetingNotes(e.target.value)} /> </Col>
             </Form.Group>
-            <Row className="justify-content-end">
-                <Button variant={'warning'} style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Save & Continue</Button>
-            </Row>
+            {props.saveMode !== undefined && props.saveMode === false ?
+                <></>
+                :
+                <Row className="justify-content-end">
+                    <Button variant={'warning'} style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Save & Continue</Button>
+                </Row>
+            }
         </Container>
     );
 }
 
 // processes
-const Processes = (props) => {
+export const Processes = (props) => {
+
     const [jobPostingData, setJobPostingData] = React.useState(props.jobPosting);
     const [process, setProcess] = React.useState(props.jobPosting.process ? props.jobPosting.process : ['', '', '', '', '']);
-
-    React.useEffect(() => {
-        if (props.jobPosting.process && props.jobPosting.process.length > 0) {
-            setProcess(props.jobPosting.process);
-        }
-    }, [props.jobPosting.process]);
-
-    function handleProcessChange(newP, index) {
-        let tmp = process;
-        tmp[index] = newP;
-        setProcess(tmp);
-    }
+    const [p1, setP1] = React.useState(props.jobPosting.process ? props.jobPosting.process[0] : "");
+    const [p2, setP2] = React.useState(props.jobPosting.process ? props.jobPosting.process[1] : "");
+    const [p3, setP3] = React.useState(props.jobPosting.process ? props.jobPosting.process[2] : "");
+    const [p4, setP4] = React.useState(props.jobPosting.process ? props.jobPosting.process[3] : "");
+    const [p5, setP5] = React.useState(props.jobPosting.process ? props.jobPosting.process[4] : "");
 
     function handleSaveClick() {
-        jobPostingData.process = process;
+        let p = [];
+        p.push(p1);
+        p.push(p2);
+        p.push(p3);
+        p.push(p4);
+        p.push(p5);
+        setProcess(p);
+        jobPostingData.process = p;
+        console.log(jobPostingData);
         // save data
         props.setJobPosting(jobPostingData);
-        // switch to next
-        props.handleContinueClick();
-        // reset
-        setProcess(['', '', '', '', '']);
-        props.handleSave();
+        if (props.saveMode !== undefined && props.saveMode === false) {
+            // api call
+            axios.put("http://localhost:8080/jobpostings", jobPostingData).then(response => {
+                console.log("save", jobPostingData);
+                alert("Save Successfully!!");
+            }).catch(error => {
+                alert("Unsuccessful to update the Processes!")
+            });
+        } else {
+            // switch to next
+            props.handleContinueClick();
+            // reset
+            // setProcess(['', '', '', '', '']);
+            props.handleSave();
+        }
     }
-
-    // function addProcess() {
-    //     let tmp = process;
-    //     tmp.push('Type here...');
-    //     setProcess(tmp);
-    // }
 
     return (
         <Container>
-            {
-                process.map((item, index) => {
-                    return (
-                        <Form.Group as={Row} key={index} className="mb-3" style={{ marginTop: '20px' }}>
-                            <Form.Label column sm={2}>Step {index + 1}</Form.Label>
-                            <Col sm={9}>
-                                <Form.Control as="textarea" rows={2} placeholder="Type here..." onChange={e => { handleProcessChange(e.target.value, index); }} />
-                            </Col>
-                        </Form.Group>
-                    );
-                })
+            {props.saveMode !== undefined && props.saveMode === false ?
+                <Row className="justify-content-start">
+                    <Button onClick={handleSaveClick} size="sm" style={{ backgroundColor: "green", borderColor: "green", width: '70px', marginTop: '1%' }} >
+                        Save
+                    </Button>
+                </Row>
+                :
+                <></>
             }
-            <Row className="justify-content-end">
-                {/* <Col className="justify-content-start">
-                    <Button variant="outline-primary" onClick={addProcess}>Add Process</Button>
-                </Col> */}
-                {/* <Col className="justify-content-end"> */}
-                <Button style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Saved Jobs</Button>
-                {/* </Col> */}
-            </Row>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}>Step 1</Form.Label>
+                <Col sm={9}>
+                    <Form.Control as="textarea" rows={2} value={p1} placeholder="Type here..." onChange={e => { setP1(e.target.value); }} />
+                </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}>Step 2</Form.Label>
+                <Col sm={9}>
+                    <Form.Control as="textarea" rows={2} value={p2} placeholder="Type here..." onChange={e => { setP2(e.target.value); }} />
+                </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}>Step 3</Form.Label>
+                <Col sm={9}>
+                    <Form.Control as="textarea" rows={2} value={p3} placeholder="Type here..." onChange={e => { setP3(e.target.value); }} />
+                </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}>Step 4</Form.Label>
+                <Col sm={9}>
+                    <Form.Control as="textarea" rows={2} value={p4} placeholder="Type here..." onChange={e => { setP4(e.target.value); }} />
+                </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
+                <Form.Label column sm={2}>Step 5</Form.Label>
+                <Col sm={9}>
+                    <Form.Control as="textarea" rows={2} value={p5} placeholder="Type here..." onChange={e => { setP5(e.target.value); }} />
+                </Col>
+            </Form.Group>
+            {props.saveMode !== undefined && props.saveMode === false ?
+                <></>
+                :
+                <Row className="justify-content-end">
+                    <Button style={{ width: '200px', marginRight: '5%' }} onClick={handleSaveClick}>Saved Jobs</Button>
+                </Row>
+            }
         </Container>
     );
 }
