@@ -14,7 +14,6 @@ import Skill from "../subViews/Skill";
 import Certification from "../subViews/Certification"
 import ProfileCard from "../components/ProfileCard";
 import Alert from 'react-bootstrap/Alert';
-import Education from "../subViews/Education"
 import JobHistory from "../subViews/JobHistory";
 
 /**
@@ -69,7 +68,7 @@ function EmployeeProfile(props) {
             }
         } else if (mode === 'Job & Education History') {
             if (tool === 'Education History') {
-                return (<Education employee={employee} />);
+                return (<h1>Hello!</h1>);
             } else {
                 return (<JobHistory employee={employee} />);
             }
