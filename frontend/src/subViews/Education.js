@@ -345,7 +345,25 @@ function Education(props) {
                         {/* // </Form.Select> */}
                     
                     <FloatingLabel label="Institution" id="inst" onChange={e => setInstitution(e.target.value)} style={{ margin: '2%' }} />
-                    <FloatingLabel label="Type" id="type" onChange={e => setType(e.target.value)} style={{ margin: '2%' }} />
+                    {/* <FloatingLabel label="Type" id="type" onChange={e => setType(e.target.value)} style={{ margin: '2%' }} /> */}
+                    <Form.Select aria-label="Default select example" id="sname" onChange={e => { setType(e.target.value); }} style={{ margin: '2%', width: '95%' }}>
+                            <option>Education type</option>
+                            {/* { 
+                                currskills ?
+                                    currskills.map((item, index) => {
+                                        return (
+                                            <option key={index} value={item.name}>{item.name}</option>
+                                        );
+                                    })
+                                    :
+                                    undefined
+                            } */}
+                            <option>Trade</option>
+                            <option>Vocational</option>
+                            <option>Apprenticeship</option>
+                            <option>Union</option>
+                            <option>College</option>
+                        </Form.Select>
                     <Form.Control
                             type="date"
                             name="issuedDate"
