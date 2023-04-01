@@ -14,7 +14,6 @@ import Skill from "../subViews/Skill";
 import Certification from "../subViews/Certification"
 import ProfileCard from "../components/ProfileCard";
 import Alert from 'react-bootstrap/Alert';
-import jobHistory from "../subViews/JobHistory";
 import Education from "../subViews/Education"
 import JobHistory from "../subViews/JobHistory";
 
