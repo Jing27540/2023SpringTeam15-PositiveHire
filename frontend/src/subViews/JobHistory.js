@@ -44,6 +44,29 @@ function JobHistory(props) {
     const [jobSkills, setJobSkills] = React.useState();
 
     const [responseMessage, setResponseMessage] = React.useState();
+    const [fields, setFields] = React.useState(true);
+
+    // React.useEffect = () => {
+    //     setJobTitle(jobTitle);
+    //     setJobLevel(jobLevel);
+    //     setOrganization(organization);
+    //     setLocation(location);
+    //     setStartDate(startDate);
+    //     setEndDate(endDate);
+    //     setJobSkills(jobSkills);
+    // }, [selectedJobRecord]
+
+    React.useEffect(() => {
+        // Update the document title using the browser API
+        setJobTitle(selectedJobRecord.jobTitle);
+        setJobLevel(selectedJobRecord.jobLevel);
+        setOrganization(selectedJobRecord.organization);
+        setLocation(selectedJobRecord.location);
+        setStartDate(selectedJobRecord.startDate);
+        setEndDate(selectedJobRecord.endDate);
+        setJobSkills(selectedJobRecord.jobSkills);
+        console.log("Fields changed");
+      }, [selectedJobRecord]);
 
     // React.useEffect(() => { console.log(edit) }, [edit]);
 
@@ -76,6 +99,7 @@ function JobHistory(props) {
     }
 
     function clearJR() {
+        
         setJobTitle(undefined);
         setJobLevel(undefined);
         setOrganization(undefined);
@@ -269,17 +293,17 @@ function JobHistory(props) {
                                     </Col>
 
                                     <Col>
-                                        <Button size="sm" onClick={() => { setSelectedJobRecord(employee.jobRecords[index]); handlesecShow(); setMode(false); setId(item.id); setName(item.jobTitle); }} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} >
+                                        <Button size="sm" onClick={() => { setSelectedJobRecord(employee.jobRecords[index]); handlesecShow(); setMode(false); setId(item.id); }} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} >
                                             Edit
                                         </Button>
                                     </Col>
                                     <Col>
-                                        <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} onClick={() => { handleShow(); setsecMode(true); setId(item.id); setJobSkills(item.jobSkills) }}>
+                                        <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} onClick={() => {  handleShow(); setsecMode(true); setId(item.id); setJobSkills(item.jobSkills) }}>
                                             Add Skill
                                         </Button>
                                     </Col>
                                     <Col>
-                                        <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} onClick={() => { handleShow(); setsecMode(false); setId(item.id); setName(item.name); setJobSkills(item.jobSkills); setSelectedJobRecord(employee.jobRecords[index]); }}>
+                                        <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} onClick={() => { handleShow(); setsecMode(false); setId(item.id); setName(item.name); setJobSkills(item.jobSkills); setSelectedJobRecord(employee.jobRecords[index]); setFields(); }}>
                                             Edit Skill
                                         </Button>
                                     </Col>
@@ -326,12 +350,12 @@ function JobHistory(props) {
                             Close
                         </Button>
 
-                        <Button variant="success" onClick={() => { saveSkill(); handleClose(); clear(); }}>
+                        <Button variant="success" onClick={() => { saveSkill(); handleClose(); clear(); clearJR(); }}>
                             Save
                         </Button>
                         {
                             !secmode ?
-                                <Button variant="secondary" onClick={() => { deleteSkill(sname); clear(); handleClose() }} >
+                                <Button variant="secondary" onClick={() => { deleteSkill(sname); clear(); handleClose(); clearJR(); }} >
                                     Remove
                                 </Button>
                                 :
@@ -362,7 +386,7 @@ function JobHistory(props) {
                             style={{ margin: '2%', width: '95%' }}
                             onChange={(e) => setStartDate(e.target.value)}
                         />
-                        <Form.Label>Start Date</Form.Label>
+                        <Form.Label>Finish Date</Form.Label>
                         <Form.Control
                             type="date"
                             name="finishDate"

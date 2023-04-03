@@ -186,7 +186,8 @@ export const JobTitle = (props) => {
 
         if (jobNumber !== "" && jobTitle !== "" && jobDescription !== '' && department !== '' && salary !== '') {
             const result = jobPostings.filter(item => jobNumber === item.jobNumber);
-            if (result && result.length > 0) {
+            let abc = props.saveMode !== undefined ? false : true
+            if (result && result.length > 0 && abc) {
                 alert("Duplicate JobNumber!");
             } else {
                 jobPostingData.jobNumber = jobNumber;
