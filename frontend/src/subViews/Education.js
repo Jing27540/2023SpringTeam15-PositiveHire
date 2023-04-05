@@ -43,14 +43,19 @@ function Education(props) {
             console.log(education);
         })
             .catch(err => console.log(err));
-    }, []);
+            clear();
+    }, [employee]);
 
     function clear() {
 
         setSName(undefined);
         setLevel(undefined);
         setScore(undefined);
-
+        setedName(undefined);
+        setInstitution(undefined);
+        setType(undefined);
+        setIssuedDate(undefined);
+        
     }
     function deleteSkill(sn) {
 
@@ -65,8 +70,9 @@ function Education(props) {
             axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                 setEmployee(res.data);
                 console.log(res.data);
-                alert("Sucessfully to delete")
+                
             })
+        //    alert("Sucessfully to delete")
         })
     }
 
@@ -85,15 +91,21 @@ function Education(props) {
                 score: s.score
             };
             if (!duplicate) {
+                let suc = false;
                 axios.post(`http://localhost:8080/employees/${props.employee.employeeNum}/education/${currid}/skills`, newSkill).then(response => {
                     axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                         setEmployee(res.data);
                         console.log(res.data);
-                        alert("Sucessfully to save")
+                        suc = true;
                     })
+                    
                 })
+                if(suc) {
+              //      alert("Sucessfully to save")
+                }
             }
         } else {
+          //  let suc = false;
             let skiId = 0;
             currskills.forEach(element => {
                 if (element.name == s.name) {
@@ -111,10 +123,13 @@ function Education(props) {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                     setEmployee(res.data);
                     console.log(res.data);
-                    alert("Sucessfully to update")
+                   // suc = true;
                 })
+                
             })
-
+            // if(suc) {
+            //     alert("Sucessfully to update")
+            // }
         }
     }
     //  console.log(employee.education);
@@ -122,7 +137,7 @@ function Education(props) {
         axios.delete(`http://localhost:8080/employees/${props.employee.employeeNum}/education/${thid}`).then(response => {
             axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                 setEmployee(res.data);
-                alert("Sucessfully to delete")
+           //     alert("Sucessfully to delete")
 
             })
         }).catch(error => {
@@ -156,15 +171,17 @@ function Education(props) {
             axios.post(`http://localhost:8080/employees/${props.employee.employeeNum}/education`, edToAdd).then(response => {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                     setEmployee(res.data);
-                    alert("Sucessfully to save")
+                    
                 })
+               // alert("Sucessfully to save")
             })
         } else {
             axios.put(`http://localhost:8080/employees/${props.employee.employeeNum}/education`, edToAdd).then(response => {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                     setEmployee(res.data);
-                    alert("Sucessfully to update")
+                   
                 })
+               // alert("Sucessfully to update")
             })
         }
     }
@@ -393,7 +410,7 @@ function Education(props) {
                     {/* <div style={{ justifyContent: 'left', alignItems: 'left', fontSize: '15px', margin: "10px", color: 'red' }}>{message}</div> */}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="primary" onClick={() => {handleClose(); clear();}}>
                         Close
                     </Button>
 
