@@ -67,8 +67,9 @@ function CreateJobPosting(props) {
 
         // call api
         axios.post("http://localhost:8080/jobpostings", newJobPosting).then(response => {
-            setMode(titles[0]);
+            // setMode(titles[0]);
             alert("Successful to create a new job posting!");
+            props.setMode("Edit");
         }).catch(error => {
 
         });
@@ -185,7 +186,8 @@ export const JobTitle = (props) => {
 
         if (jobNumber !== "" && jobTitle !== "" && jobDescription !== '' && department !== '' && salary !== '') {
             const result = jobPostings.filter(item => jobNumber === item.jobNumber);
-            if (result && result.length > 0) {
+            let abc = props.saveMode !== undefined ? false : true
+            if (result && result.length > 0 && abc) {
                 alert("Duplicate JobNumber!");
             } else {
                 jobPostingData.jobNumber = jobNumber;
@@ -236,7 +238,7 @@ export const JobTitle = (props) => {
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Job Number </Form.Label>
-                <Col sm={9}> <Form.Control rows={1} placeholder="Type here..." value={jobNumber} onChange={e => setJobNumber(e.target.value)} /></Col>
+                <Col sm={9}> <Form.Control rows={1} placeholder="Type here..." value={jobNumber} disabled = {props.saveMode !== undefined ? !props.saveMode : false} onChange={e => setJobNumber(e.target.value)} /></Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Job Description </Form.Label>

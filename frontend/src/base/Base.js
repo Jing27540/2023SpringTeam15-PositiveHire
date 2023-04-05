@@ -5,6 +5,7 @@ import { ProtectedRoute } from './ProtectedRoute';
 import Login from './Login';
 import Home from './Home';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ImportData from '../components/ImportData';
 
 /**
  * Base component to hold rou
