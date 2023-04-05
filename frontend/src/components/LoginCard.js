@@ -48,7 +48,7 @@ const LoginCard = (props) => {
 
         if (id === undefined) {
             auth.login(false);
-                setResponseMessage("Employee number or password incorrect");
+                setResponseMessage("Employee username or password incorrect");
                 // navigate('/');
                 return;
         }

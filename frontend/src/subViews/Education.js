@@ -65,8 +65,9 @@ function Education(props) {
             axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                 setEmployee(res.data);
                 console.log(res.data);
-                alert("Sucessfully to delete")
+                
             })
+        //    alert("Sucessfully to delete")
         })
     }
 
@@ -85,15 +86,21 @@ function Education(props) {
                 score: s.score
             };
             if (!duplicate) {
+                let suc = false;
                 axios.post(`http://localhost:8080/employees/${props.employee.employeeNum}/education/${currid}/skills`, newSkill).then(response => {
                     axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                         setEmployee(res.data);
                         console.log(res.data);
-                        alert("Sucessfully to save")
+                        suc = true;
                     })
+                    
                 })
+                if(suc) {
+              //      alert("Sucessfully to save")
+                }
             }
         } else {
+          //  let suc = false;
             let skiId = 0;
             currskills.forEach(element => {
                 if (element.name == s.name) {
@@ -111,10 +118,13 @@ function Education(props) {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                     setEmployee(res.data);
                     console.log(res.data);
-                    alert("Sucessfully to update")
+                   // suc = true;
                 })
+                
             })
-
+            // if(suc) {
+            //     alert("Sucessfully to update")
+            // }
         }
     }
     //  console.log(employee.education);
@@ -122,7 +132,7 @@ function Education(props) {
         axios.delete(`http://localhost:8080/employees/${props.employee.employeeNum}/education/${thid}`).then(response => {
             axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                 setEmployee(res.data);
-                alert("Sucessfully to delete")
+           //     alert("Sucessfully to delete")
 
             })
         }).catch(error => {
@@ -156,15 +166,17 @@ function Education(props) {
             axios.post(`http://localhost:8080/employees/${props.employee.employeeNum}/education`, edToAdd).then(response => {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                     setEmployee(res.data);
-                    alert("Sucessfully to save")
+                    
                 })
+               // alert("Sucessfully to save")
             })
         } else {
             axios.put(`http://localhost:8080/employees/${props.employee.employeeNum}/education`, edToAdd).then(response => {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                     setEmployee(res.data);
-                    alert("Sucessfully to update")
+                   
                 })
+               // alert("Sucessfully to update")
             })
         }
     }
