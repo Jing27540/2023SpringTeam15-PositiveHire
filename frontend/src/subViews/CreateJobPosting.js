@@ -149,6 +149,12 @@ export const JobTitle = (props) => {
     const [jobDescription, setJobDescription] = React.useState(props.jobPosting.jobDescription ? props.jobPosting.jobDescription : "");
     const [department, setDepartment] = React.useState(props.jobPosting.department ? props.jobPosting.department : "");
     const [salary, setSalary] = React.useState(props.jobPosting.salary ? props.jobPosting.salary : "");
+    const [index, setIndex] = React.useState(salary !== "" ? salary.indexOf("~") : undefined);
+    const [min, setMin] = React.useState(index ? salary.substr(0, index) : "");
+    const [max, setMax] = React.useState(index ? salary.substr(index + 1) : "");
+
+    console.log(min, max);
+
     // get jobPostings list
     const [jobPostings, setJobPostings] = React.useState([]);
 
@@ -171,23 +177,9 @@ export const JobTitle = (props) => {
 
     function handleSaveClick(flag) {
 
-        // if (jobNumber !== "") {
-        //     // TODO: check duplicate jobNumber
-        //     const result = jobPostings.filter(item => jobNumber === item.jobNumber);
-        //     console.log('checking result', result);
-        //     if (result && result.length > 0) {
-        //         alert("JobNumber has been existed!");
-        //     } else {
-        //         jobPostingData.jobNumber = jobNumber;
-        //     }
-        // } else {
-        //     alert("JobNumber cannot be empty!");
-        // }
-
-        if (jobNumber !== "" && jobTitle !== "" && jobDescription !== '' && department !== '' && salary !== '') {
+        if (jobNumber !== "" && jobTitle !== "" && jobDescription !== '' && department !== '' && min !== '' && max !== '') {
             const result = jobPostings.filter(item => jobNumber === item.jobNumber);
-            let abc = props.saveMode !== undefined ? false : true
-            if (result && result.length > 0 && abc) {
+            if (props.saveMode !== undefined && props.saveMode !== false && result && result.length > 0) {
                 alert("Duplicate JobNumber!");
             } else {
                 jobPostingData.jobNumber = jobNumber;
@@ -199,7 +191,7 @@ export const JobTitle = (props) => {
                 }
                 jobPostingData.jobDescription = jobDescription;
                 jobPostingData.department = department;
-                jobPostingData.salary = salary;
+                jobPostingData.salary = min + "~" + max;
 
                 // save data
                 props.setJobPosting(jobPostingData);
@@ -238,7 +230,7 @@ export const JobTitle = (props) => {
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Job Number </Form.Label>
-                <Col sm={9}> <Form.Control rows={1} placeholder="Type here..." value={jobNumber} disabled = {props.saveMode !== undefined ? !props.saveMode : false} onChange={e => setJobNumber(e.target.value)} /></Col>
+                <Col sm={9}> <Form.Control rows={1} placeholder="Type here..." value={jobNumber} disabled={props.saveMode !== undefined ? !props.saveMode : false} onChange={e => setJobNumber(e.target.value)} /></Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Job Description </Form.Label>
@@ -258,7 +250,22 @@ export const JobTitle = (props) => {
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Median Salary (varies based on location)</Form.Label>
-                <Col sm={9}> <Form.Control placeholder="Type here..." value={salary} onChange={e => setSalary(e.target.value)} /> </Col>
+                <Col sm={9} style={{ textAlign: "center", marginTop: '10px' }}>
+                    <Row style={{ itemAlign: "left" }}>
+                        <Col sm={6}>
+                            <Row>
+                                <Form.Label column sm={2}>MIN$</Form.Label>
+                                <Col sm={8}><Form.Control placeholder="Type here..." value={min} onChange={e => setMin(e.target.value)} /></Col>
+                            </Row>
+                        </Col>
+                        <Col sm={6}>
+                            <Row>
+                                <Form.Label column sm={2}>MAX$</Form.Label>
+                                <Col sm={8}><Form.Control placeholder="Type here..." value={max} onChange={e => setMax(e.target.value)} /></Col>
+                            </Row>
+                        </Col>
+                    </Row>
+                </Col>
             </Form.Group>
             {props.saveMode !== undefined && props.saveMode === false ?
                 <></>
@@ -616,7 +623,7 @@ export const Availability = (props) => {
     };
 
     function handleSaveClick() {
-        if (availablePositions || locations.length > 0 || meetingType !== "" ||  meetingNotes !== "") {
+        if (availablePositions || locations.length > 0 || meetingType !== "" || meetingNotes !== "") {
             if (isNaN(availablePositions)) {
                 alert("availablePositions should be integer.");
             } else {
