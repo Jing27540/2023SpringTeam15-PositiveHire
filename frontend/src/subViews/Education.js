@@ -43,14 +43,19 @@ function Education(props) {
             console.log(education);
         })
             .catch(err => console.log(err));
-    }, []);
+            clear();
+    }, [employee]);
 
     function clear() {
 
         setSName(undefined);
         setLevel(undefined);
         setScore(undefined);
-
+        setedName(undefined);
+        setInstitution(undefined);
+        setType(undefined);
+        setIssuedDate(undefined);
+        
     }
     function deleteSkill(sn) {
 
@@ -405,7 +410,7 @@ function Education(props) {
                     {/* <div style={{ justifyContent: 'left', alignItems: 'left', fontSize: '15px', margin: "10px", color: 'red' }}>{message}</div> */}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="primary" onClick={() => {handleClose(); clear();}}>
                         Close
                     </Button>
 
