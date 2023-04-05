@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -12,26 +11,6 @@ import EditJobPosting from "../subViews/EditJobPosting";
  * 
  * @author Jing Huang
  */
-
-const Box = styled.div`
-    display: flex;
-    margin: 10px;
-    height: ${({ height = '50%' }) => height};
-    width: 100%;
-    justify-content: center;
-    overflow: auto;
-`
-const LeftBox = styled.div`
-    width: 10%;
-    float: left;
-    margin-top: 10%;
-`;
-
-const RightBox = styled.div`
-    width: 90%;
-    float: left;
-`;
-
 function JobPosting(props) {
 
     const [mode, setMode] = React.useState('Welcome');

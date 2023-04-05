@@ -52,6 +52,9 @@ const ChildrenJP = (props) => {
     const [jobPosting, setJobPosting] = React.useState(props.jp);
     const [remove, setRemove] = React.useState(false);
     const [edit, setEdit] = React.useState(false);
+    const [index, setIndex] = React.useState(props.jp.salary && props.jp.salary !== "" ? props.jp.salary.indexOf("~") : undefined);
+    const [min, setMin] = React.useState(index ? props.jp.salary.substr(0, index) : "");
+    const [max, setMax] = React.useState(index ? props.jp.salary.substr(index + 1) : "");
 
     function getSCsData(r, flag) {
         let arr = undefined
@@ -93,7 +96,7 @@ const ChildrenJP = (props) => {
                         </Row>
                         <Row style={{ textAlign: "left" }}>
                             <Col style={{ fontWeight: 'bold' }}>Salary</Col>
-                            <Col>{props.jp.salary}</Col>
+                            <Col>{"$" + props.jp.salary}</Col>
                         </Row>
                         <Row style={{ textAlign: "left" }}>
                             <Col style={{ fontWeight: 'bold' }}>JobTitle</Col>
@@ -163,12 +166,12 @@ const ChildrenJP = (props) => {
                     </Col>
                     <Col className="border border-1" sm={1}>
                         <Row className="justify-content-center">
-                            <Button size="sm" onClick={removeJPFromList} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px', marginTop: '1%' }} >
+                            <Button size="sm" onClick={removeJPFromList} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px'}} >
                                 Remove
                             </Button>
                         </Row>
                         <Row className="justify-content-center">
-                            <Button size="sm" onClick={() => setEdit(true)} style={{ marginTop: "4%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} >
+                            <Button size="sm" onClick={() => setEdit(true)} style={{ marginTop: "4%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px'}} >
                                 Edit
                             </Button>
                         </Row>

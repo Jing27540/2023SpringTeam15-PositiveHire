@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+import ViewJobPosting from '../subViews/ViewJobPosting'; 
 import EditProfile from '../subViews/EditProfile';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -57,6 +58,9 @@ function EmployeeProfile(props) {
         if (mode === 'General') {
             return <General employee={employee} />
         }
+        else if (mode === 'Open Positions') {
+            return (<ViewJobPosting />);
+        }
         else if (mode === 'Skills & Certifications') {
             if (tool === 'Certifications') {
                 return (<Certification employee={employee} />);
@@ -75,8 +79,8 @@ function EmployeeProfile(props) {
                     <Col sm></Col>
                     <Col sm><ProfileCard employee={employee} /></Col>
                     <Col sm>
-                        <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%", float: 'right', width: '100px' }} onClick={handleShow}>
-                            Edit
+                        <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%", float: 'right', width: '150px' }} onClick={handleShow}>
+                            Upload Resume
                         </Button>
                     </Col>
                 </Row>
