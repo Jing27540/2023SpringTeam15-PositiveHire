@@ -46,6 +46,12 @@ const LoginCard = (props) => {
             id = result.data.employeeID
         }).catch(err => console.log(err));
 
+        if (id === undefined) {
+            auth.login(false);
+                setResponseMessage("Employee number or password incorrect");
+                // navigate('/');
+                return;
+        }
         return await axios.get(`http://localhost:8080/employees/${id}`).then(result => {
             role = result.data.accessRole;
             if (flag) {
@@ -56,11 +62,12 @@ const LoginCard = (props) => {
                     navigate("/Home");
                     auth.login(true, id, "Employee");
                 }
-            } else {
-                auth.login(false);
-                setResponseMessage("Employee number or password incorrect");
-                navigate('/');
-            }
+            } 
+            // else {
+            //     auth.login(false);
+            //     setResponseMessage("Employee number or password incorrect");
+            //     navigate('/');
+            // }
         }).catch(err => setResponseMessage(err))
     };
 
