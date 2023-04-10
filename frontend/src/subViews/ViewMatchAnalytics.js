@@ -18,55 +18,92 @@ const HorizontalLine = styled.div`
  * @author Zayda Cummings
  * @author Juan Franco Pinilla
  */
-function ViewMatchAnalytics() {
+function ViewMatchAnalytics(props) {
 
-    // variable to hold the list of job posting.
-    const [jobPostings, setJobPostings] = React.useState([]);
-    const [selected, setSelected] = React.useState();
+    // Get the job posting list
+    const [jobPostings, setJobPostings] = React.useState();
+    // Get the employee list
+    const [employees, setEmployees] = React.useState();
+    // A list holding employees who match positions
+    const [matchedEmployees, setMatchedEmployees] = React.useState([]);
 
+    // Call getAll api to load the data
+    React.useEffect(() => {
+        // load job postings
+        loadJobPostings();
+        // load employees
+        loadEmployees();
+    }, []);
+
+    // TODO: remove this api call, pass from NavBar
     //Loading the job postings from the database
-    const loadCurrentData = () => {
+    const loadJobPostings = () => {
         axios.get("http://localhost:8080/jobpostings").then(result => {
             setJobPostings(result.data);
-            setSelected(result.data[0]);
+        })
+    };
+    //Loading the employees from the database
+    const loadEmployees = () => {
+        axios.get("http://localhost:8080/employees").then(result => {
+            setEmployees(result.data)
         })
     };
 
-    React.useEffect(() => {
-        loadCurrentData(); // actio
-    }, []);
+    // TODO: skill, certification, other requirment. job history
+    function filter() {
 
-    // children component to hold the single job posting from the list
-    function getListData() {
+        // TODO: remove this null checking later
+        if (jobPostings && employees) {
+            let jp = jobPostings[0];
+            let e = employees[0];
+            console.log(e);
+            console.log(jp);
 
-        let arr = jobPostings.map((item) =>
-            <ChildrenJP jp={item} key={item.id} setSelected={setSelected} />
-        );
+            // TODO: checking skill
 
-        return arr;
+            // TODO: checking certification
+
+            // TODO: checking other requirments
+
+            if (e && jp) {
+                matchedEmployees.push(e);
+            }
+        }
+
+        console.log(matchedEmployees);
+
+    }
+
+    function getJPData() {
+        if (jobPostings) {
+            let arr = jobPostings.map((item) =>
+                <ChildrenJP jp={item} key={item.id} />
+            );
+            return arr;
+        }
+        return;
     }
 
     return (
-        <Container fluid>
+        <Container style={{ marginTop: "4%" }}>
             <Row>
-                <Col sm={4} className="border border" style={{ marginTop: '2%', height: '100%', marginLeft: '3%' }}>
-                    <Row style={{ height: '40px', backgroundColor: "#0f123F", color: 'white', fontWeight: 'bold', justifyContent: 'center', placeItems: 'center' }}>
+                <Col sm={5}>
+                    <Row style={{ height: '40px', backgroundColor: "#0f123F", color: 'white', fontWeight: 'bold', justifyContent: 'center', placeItems: 'center', marginRight: "2%" }}>
                         OPEN POSITIONS
                     </Row>
-                    {getListData()}
+                    {getJPData()}
                 </Col>
-                <Col sm={7} className="border border" style={{ marginTop: '2%', height: '100%' }}>
+                <Col sm={7}>
                     <Row style={{ height: '40px', backgroundColor: "#0f123F", color: 'white', fontWeight: 'bold', justifyContent: 'center', placeItems: 'center' }}>
-                        POSITION DETAILS
-                    </Row>
-                    <Row>
-                        <ChildrenJPContent jp={selected} />
+                        MATCHED EMPLOYEES
                     </Row>
                 </Col>
             </Row>
+            <Button onClick={() => filter()}>Testing</Button>
         </Container>
     );
 }
+
 
 const ChildrenJP = (props) => {
 
@@ -94,90 +131,4 @@ const ChildrenJP = (props) => {
     );
 }
 
-const ChildrenJPContent = (props) => {
-    const [jobPosting, setJobPosting] = React.useState(props.jp);
-
-    function getProcessData() {
-        if (props.jp.process) {
-            let arr = props.jp.process.map((item, index) =>
-                <Row key={index} style={{ marginLeft: '10px', fontSize: '15px' }}>{"* " + item}</Row>
-            );
-            return arr;
-        }
-        return;
-    }
-
-
-    function getSCsData(r, flag) {
-        let arr = undefined
-        if (flag) {
-            arr = r.map((item, index) =>
-                <Row key={index} style={{ marginLeft: '10px', fontSize: '15px' }}>{"* " + item.name}</Row>
-            );
-        } else {
-            arr = r.map((item, index) =>
-                <Row key={index} style={{ marginLeft: '10px', fontSize: '15px' }}>{"* " + item.name + " (" + item.level + ")"}</Row>
-            );
-        }
-        return arr;
-    }
-
-    return (
-        props.jp ?
-            <Container style={{ itemAlign: 'center', marginTop: '2%', marginLeft: '5%', height: '100%' }}>
-                <Row>
-                    <Col sm={9}>
-                        <Row style={{ fontWeight: 'bold', fontSize: '30px', textAlign: "left" }}>{props.jp.jobTitle}</Row>
-                        <Row>
-                            {'Department: ' + props.jp.department}
-                        </Row>
-                        <Row>{'Location: ' + props.jp.location}</Row>
-                        <Row>{'Position #: ' + props.jp.jobNumber}</Row>
-                        {props.jp.applyLink && props.jp.applyLink !== undefined ?
-                            <Row sytle={{ marginTop: '2%' }}>
-                                <a className="btn btn-primary" href={props.jp.applyLink} role="button" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", width: '110px', marginTop: "2%" }}>Apply Link</a>
-                            </Row>
-                            :
-                            undefined
-                        }
-                    </Col>
-                    {/* <Col sm={2}>
-                        <Button size="sm" style={{ marginTop: '10%', backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} >
-                            Edit
-                        </Button>
-                    </Col> */}
-                </Row >
-                <Row style={{ marginTop: '5%' }}>
-                    <Row style={{ fontWeight: 'bold', fontSize: '20px' }}>Job Description</Row>
-                    <Row style={{ textAlign: "left", width: "95%" }}>
-                        <p>{props.jp.jobDescription}</p>
-                    </Row>
-                </Row>
-                <Row style={{ marginTop: '5%' }}>
-                    <Row style={{ fontWeight: 'bold', fontSize: '20px' }}> Required Qualifications</Row>
-                    <Row>{props.jp.otherRequirements}</Row>
-                </Row>
-                <Row style={{ marginTop: '5%' }}>
-                    <Row style={{ fontWeight: 'bold', fontSize: '20px' }}>Preferred Qualifications and Skills</Row>
-                    {/* <Row>I am Preferred Qualifications and Skills</Row> */}
-                    <Row style={{ fontWeight: 'bold', fontSize: '15px', marginTop: '1%' }}>Certifications</Row>
-                    {getSCsData(props.jp.certificationRequirements, true)}
-                    <Row style={{ fontWeight: 'bold', fontSize: '15px', marginTop: '1%' }}>Skills</Row>
-                    {getSCsData(props.jp.skillRequirements, false)}
-                </Row>
-                <Row style={{ marginTop: '5%' }}>
-                    <Row style={{ fontWeight: 'bold', fontSize: '20px' }}>Base Pay/Salary</Row>
-                    <Row>{props.jp.salary}</Row>
-                </Row>
-                <Row style={{ marginTop: '5%' }}>
-                    <Row style={{ fontWeight: 'bold', fontSize: '20px' }}>Application Process</Row>
-                    {getProcessData()}
-                    <Row>I am Application Process</Row>
-                </Row>
-            </Container >
-            :
-            undefined
-    );
-}
-
-export default ViewJobPosting;
+export default ViewMatchAnalytics;

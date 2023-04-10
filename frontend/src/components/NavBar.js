@@ -8,6 +8,7 @@ import ImportData from './ImportData';
 import TabsBar from './TabsBar';
 import JobPosting from '../views/JobPosting';
 import { useAuth } from '../base/auth';
+import ViewMatchAnalytics from '../subViews/ViewMatchAnalytics';
 
 /**
  * NavBar class for the header of the application
@@ -30,6 +31,7 @@ export default function NavBar() {
   const [employee, setEmployee] = React.useState({});
   const [accessRole, setAccessRole] = React.useState('');
 
+  console.log('checking mode..........', mode); 
   // Get Employee Data
   React.useEffect(() => {
     axios.get(`http://localhost:8080/employees/${auth.user}`).then(res => {
@@ -90,6 +92,9 @@ export default function NavBar() {
                 <TabsBar titles={TITLE} setMode={setMode} setPView={setPView} accessRole={accessRole} />
                 {mode === "Positions" ?
                   <JobPosting accessRole={accessRole} pView={pView} setPView={setPView} />
+                  :
+                  mode === 'Talent Pipeline' ?
+                  <ViewMatchAnalytics />
                   :
                   undefined
                 }
