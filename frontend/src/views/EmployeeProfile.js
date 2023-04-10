@@ -95,7 +95,7 @@ function EmployeeProfile(props) {
                     </Col>
                 </Row>
                 <Modal size="lg" show={show} onHide={handleClose}>
-                    <EditProfile />
+                    <EditProfile employee={employee}/>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>
                             Close

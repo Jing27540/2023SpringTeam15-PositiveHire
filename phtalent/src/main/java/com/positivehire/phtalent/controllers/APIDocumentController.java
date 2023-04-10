@@ -1,7 +1,11 @@
 package com.positivehire.phtalent.controllers;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.positivehire.phtalent.models.Document;
 import com.positivehire.phtalent.services.DocumentService;
@@ -25,13 +30,24 @@ public class APIDocumentController extends APIController {
      * Create a document
      */
     @PostMapping("/documents")
-    public ResponseEntity<String> createDocument(@RequestBody Document doc) {
-        if (doc.getId() != null) {
+    public ResponseEntity<String> createDocument(@RequestBody MultipartFile doc, @RequestBody int employeeNum) {
+        Document newDoc = null;
+        Document exists = docService.findByEmployeeNum(employeeNum);
+        try{
+            newDoc = new Document(null, employeeNum, doc.getBytes());
+        } catch(Exception e) {
             return new ResponseEntity<String>(
-                    successResponse("Document already exists"),
-                    HttpStatus.CONFLICT);
+                successResponse("Error saving document"),
+                HttpStatus.BAD_REQUEST);
+        }
+
+        if (exists != null) {
+            docService.delete(exists);
+            docService.save(newDoc);
+            return new ResponseEntity<String>(successResponse("successfully created"),
+            HttpStatus.OK);
         } else {
-            docService.save(doc);
+            docService.save(newDoc);
             return new ResponseEntity<String>(successResponse("successfully created"),
                     HttpStatus.OK);
         }
@@ -53,6 +69,16 @@ public class APIDocumentController extends APIController {
         docService.delete(doc);
 
         return new ResponseEntity<String>(successResponse("Document was deleted successfully"), HttpStatus.OK);
+    }
+
+    @GetMapping("/documents/{employeeNum}")
+    public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable("employeeNum") final int employeeNum) {
+        Document toReturn = docService.findByEmployeeNum(0);
+
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(toReturn.getDocType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment:filename=" + toReturn.getEmployeeNum() + "_resume" + "")
+                .body(new ByteArrayResource(toReturn.getData()));
     }
 
 }

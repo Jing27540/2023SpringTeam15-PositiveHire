@@ -1,6 +1,7 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
+import axios from 'axios';
 import { GrDocumentCsv } from "react-icons/gr";
 /**
  * Create EditProfile Form for user to update their profile
@@ -11,8 +12,39 @@ import { GrDocumentCsv } from "react-icons/gr";
 const jobHistoryFields = ['Role', 'Select', 'StartDate', 'EndDate'];
 const EducationFields = ['Institution', 'Address', 'StartDate', 'EndDate'];
 
-function EditProfile() {
 
+
+
+function EditProfile(props) {
+
+    const [file, setFile] = new React.useState();
+
+    const [employee, setEmployee] = React.useState(props.employee);
+
+    React.useEffect(() => {
+        alert("Something");
+
+    }, [file]);
+
+    function handleFileChange(e) {
+
+        if (e.target.files) {
+            setFile(e.target.files[0]);
+        }
+        console.log(e.target.files);
+    }
+
+    function handleUploadClick() {
+
+        const formData = new FormData();
+
+        formData.append('File', file);
+
+        axios.post(`http://localhost:8080/documents`, formData, employee.employeeNum, { headers: { 'Content-Type': multipart/form-data, 'Content-Length': `${file.size}` } }).then(res => {
+            console.log(res.data);
+        });
+
+    }
     // TODO: hard code 
     const data = [{ name: "c#", level: "Expert", score: "5", }, { name: "Communication", level: "Advanced", score: "3", }];
     const [role, setRole] = React.useState('role');
@@ -23,12 +55,13 @@ function EditProfile() {
             <Container style={{ margin: "5%" }}>
                 <div style={{ margin: '10%', float: 'center' }}>
                     <Row className="justify-content-md-center">
-                        <Row>
-                            <h1><GrDocumentCsv /></h1>
-                        </Row>
-                        <Row>
-                            <p className="text-black">Drag and drop a CSV file here, or click here to select files</p>
-                        </Row>
+                        <div>
+                            <input type="file" onChange={handleFileChange} accept=".pdf" />
+
+                            <div>{file && `${file.name}` - `${file.type}`}</div>
+
+                            <button onClick={handleUploadClick}>Upload</button>
+                        </div>
                     </Row>
                 </div>
             </Container>

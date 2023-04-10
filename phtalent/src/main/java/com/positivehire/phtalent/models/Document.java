@@ -21,10 +21,15 @@ public class Document extends DomainObject {
     @Lob
     private byte[] data;
 
+    private String docType;
 
-
-    public Document() {
+    public Document(Long id, int employeeNum, byte[] data, String docType) {
+        this.id = id;
+        this.employeeNum = employeeNum;
+        this.data = data;
+        this.docType = docType;
     }
+
 
     public Document(Long id, int employeeNum, byte[] data) {
         this.id = id;
@@ -81,4 +86,11 @@ public class Document extends DomainObject {
         return id;
     }
     
+    public String getDocType() {
+        return this.docType;
+    }
+
+    public void setDocType(String docType) {
+        this.docType = docType;
+    }
 }
