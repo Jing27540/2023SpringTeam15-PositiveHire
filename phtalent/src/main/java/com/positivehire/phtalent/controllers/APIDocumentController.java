@@ -29,15 +29,24 @@ public class APIDocumentController extends APIController {
     /**
      * Create a document
      */
-    @PostMapping("/documents")
-    public ResponseEntity<String> createDocument(@RequestBody MultipartFile doc, @RequestBody int employeeNum) {
+    @PostMapping("/documents/{employeeNum}")
+    public ResponseEntity<String> createDocument(@RequestBody MultipartFile doc, @PathVariable("employeeNum") final int employeeNum) {
         Document newDoc = null;
         Document exists = docService.findByEmployeeNum(employeeNum);
+        
         try{
-            newDoc = new Document(null, employeeNum, doc.getBytes());
+            if(doc.getBytes().length > 0) {
+                newDoc = new Document(employeeNum, new byte[3]);
+            } else {
+                return new ResponseEntity<String>(
+                    successResponse("File size 0"),
+                    HttpStatus.BAD_REQUEST);
+            }
+            
         } catch(Exception e) {
+            e.getStackTrace();
             return new ResponseEntity<String>(
-                successResponse("Error saving document"),
+                successResponse(e.getStackTrace().toString()),
                 HttpStatus.BAD_REQUEST);
         }
 

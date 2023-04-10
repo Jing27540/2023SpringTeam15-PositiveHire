@@ -17,12 +17,12 @@ const EducationFields = ['Institution', 'Address', 'StartDate', 'EndDate'];
 
 function EditProfile(props) {
 
-    const [file, setFile] = new React.useState();
+    const [file, setFile] = React.useState();
 
     const [employee, setEmployee] = React.useState(props.employee);
 
     React.useEffect(() => {
-        alert("Something");
+      
 
     }, [file]);
 
@@ -30,6 +30,7 @@ function EditProfile(props) {
 
         if (e.target.files) {
             setFile(e.target.files[0]);
+         
         }
         console.log(e.target.files);
     }
@@ -38,10 +39,17 @@ function EditProfile(props) {
 
         const formData = new FormData();
 
-        formData.append('File', file);
+        formData.append(file.name, file, file.name);
+        console.log(formData);
+        let form = {
+            type: file.type,
+            bytes: file.file
+        };
 
-        axios.post(`http://localhost:8080/documents`, formData, employee.employeeNum, { headers: { 'Content-Type': multipart/form-data, 'Content-Length': `${file.size}` } }).then(res => {
+        // { headers: { 'Content-Type': `multipart/form-data`, 'Content-Length': `${file.size}` } }
+        axios.post(`http://localhost:8080/documents/${employee.employeeNum}`, formData, employee.employeeNum).then(res => {
             console.log(res.data);
+         
         });
 
     }

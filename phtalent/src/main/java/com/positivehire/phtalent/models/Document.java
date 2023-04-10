@@ -23,6 +23,10 @@ public class Document extends DomainObject {
 
     private String docType;
 
+    public Document() {
+
+    }
+
     public Document(Long id, int employeeNum, byte[] data, String docType) {
         this.id = id;
         this.employeeNum = employeeNum;
@@ -31,8 +35,8 @@ public class Document extends DomainObject {
     }
 
 
-    public Document(Long id, int employeeNum, byte[] data) {
-        this.id = id;
+    public Document(int employeeNum, byte[] data) {
+      
         this.employeeNum = employeeNum;
         this.data = data;
     }
@@ -54,21 +58,6 @@ public class Document extends DomainObject {
 
     public void setData(byte[] data) {
         this.data = data;
-    }
-
-    public Document id(Long id) {
-        setId(id);
-        return this;
-    }
-
-    public Document employeeNum(int employeeNum) {
-        setEmployeeNum(employeeNum);
-        return this;
-    }
-
-    public Document data(byte[] data) {
-        setData(data);
-        return this;
     }
     
     @Override
