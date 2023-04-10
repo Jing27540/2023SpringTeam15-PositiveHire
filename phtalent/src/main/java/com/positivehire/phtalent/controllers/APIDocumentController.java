@@ -34,6 +34,7 @@ public class APIDocumentController extends APIController {
         Document newDoc = null;
         Document exists = docService.findByEmployeeNum(employeeNum);
         
+        
         try{
             if(doc.getBytes().length > 0) {
                 newDoc = new Document(employeeNum, new byte[3]);
