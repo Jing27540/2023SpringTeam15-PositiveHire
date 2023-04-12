@@ -634,8 +634,8 @@ export const Availability = (props) => {
 
     function handleSaveClick() {
         if (availablePositions || locations.length > 0 || meetingType !== "" || meetingNotes !== "") {
-            if (isNaN(availablePositions)) {
-                alert("availablePositions should be integer.");
+            if (isNaN(availablePositions) || availablePositions < 1) {
+                alert("availablePositions should be integer and cannot be 0.");
             } else {
                 jobPostingData.availablePositions = availablePositions;
                 jobPostingData.location = locations;
