@@ -178,10 +178,14 @@ export const JobTitle = (props) => {
     function handleSaveClick(flag) {
 
         if (jobNumber !== "" && jobTitle !== "" && jobDescription !== '' && department !== '' && min !== '' && max !== '') {
+            // check applyLink
             // check jobNumber
             const result = jobPostings.filter(item => jobNumber === item.jobNumber);
+            if (!isValidUrl(applyLink)) {
+                alert("Invalid Link!");
+            }
             // check if duplicate jobNumber occurs in create mode [when props.saveMode === true]
-            if (props.saveMode !== false && result && result.length > 0) {
+            else if (props.saveMode !== false && result && result.length > 0) {
                 alert("Duplicate JobNumber!");
             } else {
                 jobPostingData.jobNumber = jobNumber;
@@ -242,9 +246,7 @@ export const JobTitle = (props) => {
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Apply Link </Form.Label>
                 <Col sm={9}> <Form.Control rows={1} placeholder="Type here..." value={applyLink} onChange={e => {
-                    if (!isValidUrl(e.target.value)) {
-                        alert("Invalid Link!");
-                    } else { setApplyLink(e.target.value); }
+                    setApplyLink(e.target.value);
                 }} /></Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
