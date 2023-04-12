@@ -179,12 +179,15 @@ export const JobTitle = (props) => {
 
         if (jobNumber !== "" && jobTitle !== "" && jobDescription !== '' && department !== '' && min !== '' && max !== '') {
             // check applyLink
-            // check jobNumber
             const result = jobPostings.filter(item => jobNumber === item.jobNumber);
             if (applyLink !== '' && !isValidUrl(applyLink)) {
                 alert("Invalid Link!");
             }
-            // check if duplicate jobNumber occurs in create mode [when props.saveMode === true]
+            // check min & max salary
+            else if (+min > +max) {
+                alert("Min Salary should not be larger than Max Salary!");
+            }
+            // check jobNumber, check if duplicate jobNumber occurs in create mode [when props.saveMode === true]
             else if (props.saveMode !== false && result && result.length > 0) {
                 alert("Duplicate JobNumber!");
             } else {
