@@ -212,14 +212,14 @@ public class APIAccountControllerTest {
                 accountServ.deleteAll();
         }
 
-        /**
-         * Test the PUT API call that updates an Account
-         */
-        @Test
-        @Transactional
-        public void testUpdateAccount() {
-                accountServ.deleteAll();
-        }
+        // /**
+        // * Test the PUT API call that updates an Account
+        // */
+        // @Test
+        // @Transactional
+        // public void testUpdateAccount() {
+        // accountServ.deleteAll();
+        // }
 
         /**
          * Test the DELETE API call that deletes an Account
