@@ -181,7 +181,7 @@ export const JobTitle = (props) => {
             // check applyLink
             // check jobNumber
             const result = jobPostings.filter(item => jobNumber === item.jobNumber);
-            if (!isValidUrl(applyLink)) {
+            if (applyLink !== '' && !isValidUrl(applyLink)) {
                 alert("Invalid Link!");
             }
             // check if duplicate jobNumber occurs in create mode [when props.saveMode === true]
@@ -300,6 +300,17 @@ export const Requirements = (props) => {
     const [certificationRequirements, setCertificationRequirements] = React.useState(props.jobPosting.certificationRequirements ? props.jobPosting.certificationRequirements : []); // Certification []
     const [otherRequirements, setOtherRequirements] = React.useState(props.jobPosting.otherRequirements ? props.jobPosting.otherRequirements : ''); // String
 
+    const [flag, setFlag] = React.useState(false);
+
+    React.useEffect(() => {
+        if (flag) {
+            setSName("");
+            setYearExperience("");
+            setComment1("");
+        }
+        setFlag(false);
+    }, [flag]);
+
     // TODO: The list is not Update
     function addSkill() {
         let exists = false;
@@ -327,16 +338,10 @@ export const Requirements = (props) => {
 
                 if (!exists) {
                     skillRequirements.push(newSkill);
-                    setSName("");
-                    setComment1("");
-                    setYearExperience("");
-                    setSType("");
+                    // TODO: this is not working!!
+                    setFlag(true);
                     alert("Successfully add new skill!");
                 } else {
-                    setSName("");
-                    setComment1("");
-                    setYearExperience("");
-                    setSType("");
                     alert("Skill is already existed!");
                 }
             }
@@ -352,7 +357,7 @@ export const Requirements = (props) => {
             handleSkillRequirementsChange();
             alert("Sucessfully to remove skill.");
         } else {
-            alert("No Skills data.");
+            alert("No Skill to Remove.");
         }
     }
 
