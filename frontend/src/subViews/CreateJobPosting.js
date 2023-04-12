@@ -178,7 +178,7 @@ export const JobTitle = (props) => {
     function handleSaveClick(flag) {
 
         if (jobNumber !== "" && jobTitle !== "" && jobDescription !== '' && department !== '' && min !== '' && max !== '') {
-            // check if the jobNumber exists
+            // check jobNumber
             const result = jobPostings.filter(item => jobNumber === item.jobNumber);
             // check if duplicate jobNumber occurs in create mode [when props.saveMode === true]
             if (props.saveMode !== false && result && result.length > 0) {
@@ -193,6 +193,7 @@ export const JobTitle = (props) => {
                 }
                 jobPostingData.jobDescription = jobDescription;
                 jobPostingData.department = department;
+                // isNaN(x)
                 jobPostingData.salary = min + "~" + max;
 
                 // save data
@@ -257,13 +258,13 @@ export const JobTitle = (props) => {
                         <Col sm={6}>
                             <Row>
                                 <Form.Label column sm={2}>MIN$</Form.Label>
-                                <Col sm={8}><Form.Control placeholder="Type here..." value={min} onChange={e => setMin(e.target.value)} /></Col>
+                                <Col sm={8}><Form.Control placeholder="Type here..." value={min} onChange={e => { if (isNaN(e.target.value)) { alert('Min Salary should be Integer!') } else { setMin(e.target.value); } }} /></Col>
                             </Row>
                         </Col>
                         <Col sm={6}>
                             <Row>
                                 <Form.Label column sm={2}>MAX$</Form.Label>
-                                <Col sm={8}><Form.Control placeholder="Type here..." value={max} onChange={e => setMax(e.target.value)} /></Col>
+                                <Col sm={8}><Form.Control placeholder="Type here..." value={max} onChange={e => { if (isNaN(e.target.value)) { alert('Max Salary should be Integer!') } else { setMax(e.target.value); } }} /></Col>
                             </Row>
                         </Col>
                     </Row>
