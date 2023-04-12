@@ -178,8 +178,10 @@ export const JobTitle = (props) => {
     function handleSaveClick(flag) {
 
         if (jobNumber !== "" && jobTitle !== "" && jobDescription !== '' && department !== '' && min !== '' && max !== '') {
+            // check if the jobNumber exists
             const result = jobPostings.filter(item => jobNumber === item.jobNumber);
-            if (props.saveMode !== undefined && props.saveMode !== false && result && result.length > 0) {
+            // check if duplicate jobNumber occurs in create mode [when props.saveMode === true]
+            if (props.saveMode !== false && result && result.length > 0) {
                 alert("Duplicate JobNumber!");
             } else {
                 jobPostingData.jobNumber = jobNumber;
