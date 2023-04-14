@@ -49,7 +49,7 @@ const LoginCard = (props) => {
 
         if (id === undefined) {
             auth.login(false);
-            setResponseMessage("Employee username or password incorrect");
+            setResponseMessage("Employee email or password incorrect");
             // navigate('/');
             return;
         }
@@ -59,9 +59,13 @@ const LoginCard = (props) => {
                 if ((props.title === "HR/DEI" && (role === "HR" || role === "DEI"))) {
                     navigate(props.destination);
                     auth.login(true, id, "HR");
-                } else if (props.title === "HR/DEI") {
-                    setResponseMessage("Employee email or password incorrect");
-                } else {
+                } else if (props.title === "HR/DEI" && (role !== "HR" || role !== "DEI")) {
+                    setResponseMessage("This is Not a HR/DEI Account!");
+                }
+                // else if (props.title === "HR/DEI") {
+                //     setResponseMessage("Employee email or password incorrect");
+                // } 
+                else {
                     navigate("/Home");
                     auth.login(true, id, "Employee");
                 }
