@@ -119,7 +119,7 @@ function JobHistory(props) {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                     setEmployee(res.data);
                     console.log('checking', res.data);
-                    if (response.data.message != undefined) {
+                    if (response.data.message !== undefined) {
                         setResponseMessage(response.data.message);
                     }
                 })
@@ -128,7 +128,7 @@ function JobHistory(props) {
             axios.put(`http://localhost:8080/employees/${props.employee.employeeNum}/jobrecords/${currid}`, jrToEdit).then(response => {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                     setEmployee(res.data);
-                    if (response.data.message != undefined) {
+                    if (response.data.message !== undefined) {
                         setResponseMessage(response.data.message);
                     }
                 })
@@ -150,9 +150,9 @@ function JobHistory(props) {
         if (secmode) {
             let duplicate = false;
 
-            if (jobSkills != undefined) {
+            if (jobSkills !== undefined) {
                 jobSkills.forEach(element => {
-                    if (element.name == sname) {
+                    if (element.name === sname) {
                         duplicate = true;
                     }
                 });
@@ -167,7 +167,7 @@ function JobHistory(props) {
                 axios.post(`http://localhost:8080/employees/${props.employee.employeeNum}/jobrecords/${currid}/skills`, newSkill).then(response => {
                     axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                         setEmployee(res.data);
-                        if (response.data.message != undefined) {
+                        if (response.data.message !== undefined) {
                             setResponseMessage(response.data.message);
                         }
                     })
@@ -176,7 +176,7 @@ function JobHistory(props) {
         } else {
             let skiId = 0;
             jobSkills.forEach(element => {
-                if (element.name == sname) {
+                if (element.name === sname) {
                     skiId = element.id;
                 }
             });
@@ -190,7 +190,7 @@ function JobHistory(props) {
             axios.put(`http://localhost:8080/employees/${props.employee.employeeNum}/jobrecords/${currid}/skills/${skiId}`, nSkill).then(response => {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                     setEmployee(res.data);
-                    if (response.data.message != undefined) {
+                    if (response.data.message !== undefined) {
                         setResponseMessage(response.data.message);
                     }
                 })
@@ -202,7 +202,7 @@ function JobHistory(props) {
     function deleteSkill() {
         let skiId = 0;
         jobSkills.forEach(element => {
-            if (element.name == sname) {
+            if (element.name === sname) {
                 skiId = element.id;
             }
         });
@@ -210,7 +210,7 @@ function JobHistory(props) {
         axios.delete(`http://localhost:8080/employees/${props.employee.employeeNum}/jobrecords/${currid}/skills/${skiId}`).then(response => {
             axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                 setEmployee(res.data);
-                if (response.data.message != undefined) {
+                if (response.data.message !== undefined) {
                     setResponseMessage(response.data.message);
                 }
             })
@@ -350,7 +350,6 @@ function JobHistory(props) {
                             undefined
                         }
                         <FloatingLabel label="Job Title" id="jname" onChange={e => setJobTitle(e.target.value)} style={{ margin: '2%' }} />
-
                         <FloatingLabel label="Job Level" id="jlev" onChange={e => setJobLevel(e.target.value)} style={{ margin: '2%' }} />
                         <FloatingLabel label="Organization" id="org" onChange={e => setOrganization(e.target.value)} style={{ margin: '2%' }} />
                         <FloatingLabel label="Location" id="loc" onChange={e => setLocation(e.target.value)} style={{ margin: '2%' }} />
@@ -375,7 +374,6 @@ function JobHistory(props) {
                         <Button variant="primary" onClick={() => { handleClose(); clearJR(); }}>
                             Close
                         </Button>
-
                         <Button variant="success" onClick={() => { addJobRecord(); handleClose(); clear(); clearJR(); }}>
                             Save
                         </Button>
