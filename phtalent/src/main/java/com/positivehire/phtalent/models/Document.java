@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Entity;
+
 /**
  * Document to save resume
  */
@@ -14,7 +15,7 @@ public class Document extends DomainObject {
     /** Education Id */
     @Id
     @GeneratedValue
-    private Long                id;
+    private Long id;
 
     private int employeeNum;
 
@@ -34,12 +35,13 @@ public class Document extends DomainObject {
         this.docType = docType;
     }
 
-
     public Document(int employeeNum, byte[] data) {
-      
+
         this.employeeNum = employeeNum;
+        this.docType = "application/pdf";
         this.data = data;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -59,22 +61,21 @@ public class Document extends DomainObject {
     public void setData(byte[] data) {
         this.data = data;
     }
-    
+
     @Override
     public String toString() {
         return "{" +
-            " id='" + getId() + "'" +
-            ", employeeNum='" + getEmployeeNum() + "'" +
-            ", data='" + getData() + "'" +
-            "}";
+                " id='" + getId() + "'" +
+                ", employeeNum='" + getEmployeeNum() + "'" +
+                ", data='" + getData() + "'" +
+                "}";
     }
-
 
     @Override
     public Serializable getId() {
         return id;
     }
-    
+
     public String getDocType() {
         return this.docType;
     }

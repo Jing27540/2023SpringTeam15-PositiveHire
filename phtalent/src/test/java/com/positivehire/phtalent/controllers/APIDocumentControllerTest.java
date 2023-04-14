@@ -25,44 +25,43 @@ import com.positivehire.phtalent.common.TestUtils;
 import com.positivehire.phtalent.models.Document;
 import com.positivehire.phtalent.services.DocumentService;
 
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class APIDocumentControllerTest {
-     /**
-         * Creates a mock web application beans for testing
-         */
-        private MockMvc mvc;
+    /**
+     * Creates a mock web application beans for testing
+     */
+    private MockMvc mvc;
 
-        /**
-         * Web application context
-         */
-        @Autowired
-        private WebApplicationContext context;
+    /**
+     * Web application context
+     */
+    @Autowired
+    private WebApplicationContext context;
 
-        @Autowired
-        private DocumentService docService; 
+    @Autowired
+    private DocumentService docService;
 
-        @Test
-        @Transactional
-        public void testDocumentController() throws Exception {
-            docService.deleteAll();
-            mvc = MockMvcBuilders.webAppContextSetup(context).build();
-            byte[] bytes = new byte[3];
-            Document doc = new Document( 7878787, bytes);
-            MultipartFile mpf = new MockMultipartFile("Name", bytes);
+    @Test
+    @Transactional
+    public void testDocumentController() throws Exception {
+        docService.deleteAll();
+        mvc = MockMvcBuilders.webAppContextSetup(context).build();
+        byte[] bytes = new byte[3];
+        Document doc = new Document(7878787, bytes);
+        MultipartFile mpf = new MockMultipartFile("Name", bytes);
 
-            String str = TestUtils.asJsonString(mpf);
-            mvc.perform(post("/documents/" + doc.getEmployeeNum()).contentType(MediaType.APPLICATION_JSON)
-            .content(str)).andExpect(status().isOk());
+        String str = TestUtils.asJsonString(mpf);
+        mvc.perform(post("/documents/" + doc.getEmployeeNum()).contentType(MediaType.APPLICATION_JSON)
+                .content(str)).andExpect(status().isOk());
 
-            assertEquals(1, docService.findAll().size());
-            
-            mvc.perform(delete("/documents/" + doc.getEmployeeNum()).contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(status().isOk());
+        assertEquals(1, docService.findAll().size());
 
-            assertEquals(0, docService.findAll().size());
+        mvc.perform(delete("/documents/" + doc.getEmployeeNum()).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
 
-        }
+        assertEquals(0, docService.findAll().size());
+
+    }
 }
