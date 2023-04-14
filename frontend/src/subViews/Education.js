@@ -61,7 +61,7 @@ function Education(props) {
 
         let skiId = 0;
         currskills.forEach(element => {
-            if (element.name == sn) {
+            if (element.name === sn) {
                 skiId = element.id;
             }
         });
@@ -81,7 +81,7 @@ function Education(props) {
             let duplicate = false;
 
             currskills.forEach(element => {
-                if (element.name == s.name) {
+                if (element.name === s.name) {
                     duplicate = true;
                 }
             });
@@ -108,7 +108,7 @@ function Education(props) {
           //  let suc = false;
             let skiId = 0;
             currskills.forEach(element => {
-                if (element.name == s.name) {
+                if (element.name === s.name) {
                     skiId = element.id;
                 }
             });
@@ -244,21 +244,21 @@ function Education(props) {
                             </td>
                             <td>
                                 <Col>
-                                    <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px', marginTop: '1%' }} onClick={() => { deleteEdu(item.id); }} >
+                                    <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px' }} onClick={() => { deleteEdu(item.id); }} >
                                         Remove
                                     </Button>
                                 </Col>
 
                                 <Col>
-                                    <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} onClick={() => { handlesecShow(); setMode(false); setId(item.id); setName(item.name) }}>
+                                    <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} onClick={() => { handlesecShow(); setMode(false); setId(item.id); setName(item.name) }}>
                                         Edit
                                     </Button>
                                 </Col>
                                 <Col>
-                                    <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} onClick={() => { handleShow(); setsecMode(true); setId(item.id); setCurrSkills(item.skills) }}>Add Skill</Button>
+                                    <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} onClick={() => { handleShow(); setsecMode(true); setId(item.id); setCurrSkills(item.skills) }}>Add Skill</Button>
                                 </Col>
                                 <Col>
-                                    <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} onClick={() => { handleShow(); setsecMode(false); setId(item.id); setName(item.name); setCurrSkills(item.skills) }}>
+                                    <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} onClick={() => { handleShow(); setsecMode(false); setId(item.id); setName(item.name); setCurrSkills(item.skills) }}>
                                         Edit Skill
                                     </Button>
                                 </Col>
