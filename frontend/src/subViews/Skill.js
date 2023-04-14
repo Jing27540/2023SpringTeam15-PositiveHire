@@ -69,6 +69,10 @@ function Skill(props) {
 
     const [options, setOptions] = React.useState();
 
+    const [TS, setTS] = React.useState(props.employee.technicalSkills ? props.employee.technicalSkills : []);
+    const [PS, setPS] = React.useState(props.employee.peopleSkills ? props.employee.peopleSkills : []);
+    const [WE, setWE] = React.useState(props.employee.workEthic ? props.employee.workEthic : []);
+
     let technicalSkills = props.employee.technicalSkills ? props.employee.technicalSkills : [];
     let peopleSkills = props.employee.peopleSkills ? props.employee.peopleSkills : [];
     let workEthic = props.employee.workEthic ? props.employee.workEthic : [];
@@ -77,10 +81,13 @@ function Skill(props) {
         if (mode === false) {
             axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(result => {
                 setEmployee(result.data);
+                setTS(employee.technicalSkills);
+                setPS(employee.peopleSkills);
+                setWE(employee.workEthic);
+                technicalSkills = employee.technicalSkills;
+                peopleSkills = employee.peopleSkills;
+                workEthic = employee.workEthic;
             });
-            technicalSkills = employee.technicalSkills;
-            peopleSkills = employee.peopleSkills;
-            workEthic = employee.workEthic;
         }
     }, [mode, options, employee]);
 
@@ -193,6 +200,9 @@ function Skill(props) {
                 axios.put("http://localhost:8080/employees", employee).then(response => {
                     axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                         setEmployee(res.data);
+                        setTS(employee.technicalSkills);
+                        setPS(employee.peopleSkills);
+                        setWE(employee.workEthic);
                         technicalSkills = employee.technicalSkills;
                         peopleSkills = employee.peopleSkills;
                         workEthic = employee.workEthic;
@@ -231,6 +241,9 @@ function Skill(props) {
             axios.put("http://localhost:8080/employees", employee).then(response => {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                     setEmployee(res.data);
+                    setTS(employee.technicalSkills);
+                    setPS(employee.peopleSkills);
+                    setWE(employee.workEthic);
                     technicalSkills = employee.technicalSkills;
                     peopleSkills = employee.peopleSkills;
                     workEthic = employee.workEthic;
@@ -267,7 +280,7 @@ function Skill(props) {
                 </Row>
                 <Row style={{ fontWeight: 'bold', fontSize: '18px', marginTop: '2%', marginLeft: '1%' }}>Technique Skills</Row>
                 <HorizontalLine></HorizontalLine>
-                {employee.technicalSkills.map((item, index) => {
+                {TS.map((item, index) => {
                     return (
                         <Row key={index} style={{ textAlign: 'center', marginTop: '2%' }}>
                             <Col>{item.name}</Col>
@@ -278,7 +291,7 @@ function Skill(props) {
                 })}
                 <Row style={{ fontWeight: 'bold', fontSize: '18px', marginTop: '2%', marginLeft: '1%' }}>People Skills</Row>
                 <HorizontalLine></HorizontalLine>
-                {employee.peopleSkills.map((item, index) => {
+                {PS.map((item, index) => {
                     return (
                         <Row key={index} style={{ textAlign: 'center', marginTop: '2%' }}>
                             <Col>{item.name}</Col>
@@ -289,7 +302,7 @@ function Skill(props) {
                 })}
                 <Row style={{ fontWeight: 'bold', fontSize: '18px', marginTop: '2%', marginLeft: '1%' }}>Work Ethics</Row>
                 <HorizontalLine></HorizontalLine>
-                {employee.workEthic.map((item, index) => {
+                {WE.map((item, index) => {
                     return (
                         <Row key={index} style={{ textAlign: 'center', marginTop: '2%' }}>
                             <Col>{item.name}</Col>
