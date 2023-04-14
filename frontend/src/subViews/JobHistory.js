@@ -227,7 +227,7 @@ function JobHistory(props) {
                         <th>Organization</th>
                         <th>Location</th>
                         <th>Start Date</th>
-                        <th>Finish Date</th>
+                        <th>End Date</th>
                         <th>Skills</th>
                         <th>Options</th>
                     </tr>
@@ -241,14 +241,14 @@ function JobHistory(props) {
                                 <td>{item.jobLevel}</td>
                                 <td>{item.organization}</td>
                                 <td>{item.location}</td>
-                                <td>{item.startDate}</td>
-                                <td>{item.endDate}</td>
+                                <td>{new Date(Date.parse(item.startDate)).toISOString().slice(0, 10)}</td>
+                                <td>{new Date(Date.parse(item.endDate)).toISOString().slice(0, 10)}</td>
                                 <td style={{ textAlign: 'center' }}>
                                     {item.jobSkills.map((skill, indx) => {
                                         return (
                                             <Row key={indx}>
                                                 <Col>
-                                                    {skill.name}
+                                                    {skill.name} 
                                                 </Col>
                                                 <Col>
                                                     {skill.level}
@@ -259,23 +259,23 @@ function JobHistory(props) {
                                 </td>
                                 <td>
                                     <Col>
-                                        <Button size="sm" onClick={() => { setSelectedJobRecord(item); deleteJobRecord(item); }} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px', marginTop: '1%' }} >
+                                        <Button size="sm" onClick={() => { setSelectedJobRecord(item); deleteJobRecord(item); }} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px'}} >
                                             Remove
                                         </Button>
                                     </Col>
 
                                     <Col>
-                                        <Button size="sm" onClick={() => { setSelectedJobRecord(item); handlesecShow(); setMode(false); setId(item.id); }} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} >
+                                        <Button size="sm" onClick={() => { setSelectedJobRecord(item); handlesecShow(); setMode(false); setId(item.id); }} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} >
                                             Edit
                                         </Button>
                                     </Col>
                                     <Col>
-                                        <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} onClick={() => { handleShow(); setsecMode(true); setId(item.id); setJobSkills(item.jobSkills) }}>
+                                        <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} onClick={() => { handleShow(); setsecMode(true); setId(item.id); setJobSkills(item.jobSkills) }}>
                                             Add Skill
                                         </Button>
                                     </Col>
                                     <Col>
-                                        <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} onClick={() => { handleShow(); setsecMode(false); setId(item.id); setName(item.name); setJobSkills(item.jobSkills); setSelectedJobRecord(employee.jobRecords[index]); setFields(); }}>
+                                        <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} onClick={() => { handleShow(); setsecMode(false); setId(item.id); setName(item.name); setJobSkills(item.jobSkills); setSelectedJobRecord(employee.jobRecords[index]); setFields(); }}>
                                             Edit Skill
                                         </Button>
                                     </Col>
