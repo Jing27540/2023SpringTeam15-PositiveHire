@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import ViewJobPosting from '../subViews/ViewJobPosting'; 
+import ViewJobPosting from '../subViews/ViewJobPosting';
 import EditProfile from '../subViews/EditProfile';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -32,7 +32,7 @@ const ContentBox = styled.div`
     min-height: 500px;
 `;
 
-const GTITLE = ['General', 'Skills & Certifications', 'Performance Review', 'Career Development Plans', 'Open Positions', 'Job & Education History'];
+const GTITLE = ['General', 'Skills & Certifications', 'Job & Education History', 'Performance Review', 'Career Development Plans', 'Open Positions'];
 const SKTITLE = ['Skills', 'Certifications'];
 const JRTITLE = ['Job History', 'Education History'];
 const PRTITLE = ['Reviews', 'Goals', 'Training Resources', 'Schedule'];
