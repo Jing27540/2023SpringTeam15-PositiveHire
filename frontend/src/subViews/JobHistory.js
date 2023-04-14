@@ -1,15 +1,10 @@
 import React from "react";
-import styled from "styled-components";
-
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
 import Button from 'react-bootstrap/Button';
-
 import Table from 'react-bootstrap/Table';
 import FloatingLabel from 'react-bootstrap-floating-label';
 import Modal from 'react-bootstrap/Modal';
-
 import Form from 'react-bootstrap/Form';
 import axios from "axios";
 
@@ -46,7 +41,7 @@ function JobHistory(props) {
     const [endDate, setEndDate] = React.useState();
     const [jobSkills, setJobSkills] = React.useState();
 
-    const [responseMessage, setResponseMessage] = React.useState();
+    const [responseMessage, setResponseMessage] = React.useState('');
     const [fields, setFields] = React.useState(true);
 
     React.useEffect(() => {
@@ -139,7 +134,7 @@ function JobHistory(props) {
     const deleteJobRecord = async (jr) => {
         // When this jobrecord have no skill error
         await axios.delete(`http://localhost:8080/employees/${employee.employeeNum}/jobrecords/${jr.id}`).then(response => {
-            // 
+            setResponseMessage(response.data.message);
             axios.get(`http://localhost:8080/employees/${employee.employeeNum}`).then(res => {
                 setEmployee(res.data);
             })
@@ -219,11 +214,11 @@ function JobHistory(props) {
 
     return (
         <>
-            <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'left', width: '100px' }} onClick={() => { handlesecShow(); setMode(true); }}>
-                New Job History
+            <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'left', width: '70px', marginTop: "2%" }} onClick={() => { handlesecShow(); setMode(true); }}>
+                Add
             </Button>
-            <label>{responseMessage}</label>
-            <Table striped bordered hover style={{ marginTop: '5%' }}>
+            <Form.Label style={{color: "green", marginTop: "2%"}}>{responseMessage}</Form.Label>
+            <Table striped bordered hover style={{ marginTop: '2%' }}>
                 <thead>
                     <tr>
                         <th>#</th>
