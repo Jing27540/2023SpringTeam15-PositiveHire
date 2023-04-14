@@ -136,15 +136,12 @@ function JobHistory(props) {
         }
     }
 
-    const deleteJobRecord = async () => {
-
-        await axios.delete(`http://localhost:8080/employees/${employee.employeeNum}/jobrecords/${selectedJobRecord.id}`).then(response => {
+    const deleteJobRecord = async (jr) => {
+        // When this jobrecord have no skill error
+        await axios.delete(`http://localhost:8080/employees/${employee.employeeNum}/jobrecords/${jr.id}`).then(response => {
+            // 
             axios.get(`http://localhost:8080/employees/${employee.employeeNum}`).then(res => {
                 setEmployee(res.data);
-                if (response.data.message != undefined) {
-                    setResponseMessage(response.data.message);
-                }
-                console.log('remove jobRecord', res.data);
             })
         });
     }
@@ -267,13 +264,13 @@ function JobHistory(props) {
                                 </td>
                                 <td>
                                     <Col>
-                                        <Button size="sm" onClick={() => { setSelectedJobRecord(employee.jobRecords[index]); deleteJobRecord(); }} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px', marginTop: '1%' }} >
+                                        <Button size="sm" onClick={() => { setSelectedJobRecord(item); deleteJobRecord(item); }} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px', marginTop: '1%' }} >
                                             Remove
                                         </Button>
                                     </Col>
 
                                     <Col>
-                                        <Button size="sm" onClick={() => { setSelectedJobRecord(employee.jobRecords[index]); handlesecShow(); setMode(false); setId(item.id); }} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} >
+                                        <Button size="sm" onClick={() => { setSelectedJobRecord(item); handlesecShow(); setMode(false); setId(item.id); }} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} >
                                             Edit
                                         </Button>
                                     </Col>
