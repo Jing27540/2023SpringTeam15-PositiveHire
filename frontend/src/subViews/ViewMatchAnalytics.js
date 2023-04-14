@@ -52,25 +52,106 @@ function ViewMatchAnalytics(props) {
     // TODO: skill, certification, other requirment. job history
     function filter() {
 
+        // matchEmployees = []; // employees list with matchScores data
         // TODO: remove this null checking later
         if (jobPostings && employees) {
             let jp = jobPostings[0];
             let e = employees[0];
             console.log(e);
             console.log(jp);
+        
+            // weight, accurancy, add weight 
+            // TODO: matchedScore = skill (#/Total # of JP.skill) * 40% + certificaiton (#/#) * 30% + jobRecord (#/#) * 30%
 
-            // TODO: checking skill
+            
 
-            // TODO: checking certification
+            // create variable to hold the skills
+            let jpSkills = []; // techniqueSkills, peopeSkills, workEthic
+            // create ..... certification
 
-            // TODO: checking other requirments
+
+            // This adds the skills for the job posting
+            for (let i = 0; i < jp.skillRequirements.length; i++) {
+                let skill = jp.skillRequirements[i];
+                jpSkills.push(skill.name);
+            }
+
+            console.log(jpSkills);
+
+
+            let skillCount = 0;
+            let certificationCount = 0; 
+
+
+            // loop each employees and their skill list
+            for (let i = 0; i < employees.length; i++) {
+                
+                let ee = employees[i];
+
+                // Checks if the technical skills array is greater than 0 
+                if(ee.technicalSkills.length > 0) {
+                    console.log(ee.technicalSkills.length);
+                    // compare employee's skill with the jp skill info
+                    for (let j = 0; j < ee.technicalSkills.length; j++) {
+                        let skill = ee.technicalSkills[j];
+                
+                        if(jpSkills.includes(skill.name)) {
+                            console.log("entered here");
+                            skillCount += 1;
+                            console.log(skillCount);
+                        }
+                    }
+                }
+
+                // Checks if the people skills array is greater than 0 
+                if(ee.peopleSkills.length > 0) {
+
+                    // Loops through the people skills and checks if it is in the jop posting skills
+                    for (let i = 0; i < ee.peopleSkills.length; i++) {
+                        if(jpSkills.includes(ee.peopleSkills[i].name)) {
+                            skillCount += 1;
+                        } 
+                    }
+                }
+
+                console.log(skillCount);
+
+                // TODO: checking certification
+                if(ee.certifications.length > 0) {
+                    for (let i = 0; i < ee.certifications.length; i++) {
+
+                        if(jpSkills.includes(ee.certifications[i])) {
+                            console.log("entered into certifications")
+                            certificationCount += 1;
+                        }
+                    }
+                }
+
+                // TODO: checking other requirments
+                
+
+            }
+
+
+
+            // Used for testing
+            for (let i = 0; i < e.technicalSkills.length; i++) {
+                let skill = e.technicalSkills[i];
+
+               // console.log(skill.name);
+            }
+
+            
 
             if (e && jp) {
+                e.matchScore = "get score";
                 matchedEmployees.push(e);
             }
         }
 
         console.log(matchedEmployees);
+
+        return matchedEmployees;
 
     }
 
