@@ -17,24 +17,27 @@ function JobHistory(props) {
 
     const [mode, setMode] = React.useState();
     const [employee, setEmployee] = React.useState(props.employee);
+
+    // skill
     const [sname, setSName] = React.useState();
     const [level, setLevel] = React.useState();
     const [score, setScore] = React.useState();
+
+
     const [show, setShow] = React.useState(false);
     const [secShow, setSecShow] = React.useState();
+
     const handleShow = () => setShow(true);
     const handlesecShow = () => setSecShow(true);
     const handleClose = () => { setShow(false); setSecShow(false) };
+
     const [secmode, setsecMode] = React.useState([]);
-    // const [disable, setDisable] = React.useState(false);
     const [selectedJobRecord, setSelectedJobRecord] = React.useState("N/A");
-    // const [selectedId, setSelectedid] = React.useState();
-    // const [newJobRecord, setNewJobRecord] = React.useState(false);
 
     const [currid, setId] = React.useState();
     const [currName, setName] = React.useState();
 
-    //Data fields for a Job Record
+    //Data fields for a new Job Record
     const [jobTitle, setJobTitle] = React.useState();
     const [jobLevel, setJobLevel] = React.useState();
     const [organization, setOrganization] = React.useState();
@@ -46,15 +49,14 @@ function JobHistory(props) {
     const [responseMessage, setResponseMessage] = React.useState();
     const [fields, setFields] = React.useState(true);
 
-    // React.useEffect = () => {
-    //     setJobTitle(jobTitle);
-    //     setJobLevel(jobLevel);
-    //     setOrganization(organization);
-    //     setLocation(location);
-    //     setStartDate(startDate);
-    //     setEndDate(endDate);
-    //     setJobSkills(jobSkills);
-    // }, [selectedJobRecord]
+    React.useEffect(() => {
+        // props.employee
+        axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
+            setEmployee(res.data);
+            console.log('checking', res.data);
+        });
+
+    }, []);
 
     React.useEffect(() => {
         // Update the document title using the browser API
@@ -66,40 +68,16 @@ function JobHistory(props) {
         setEndDate(selectedJobRecord.endDate);
         setJobSkills(selectedJobRecord.jobSkills);
         console.log("Fields changed");
-      }, [selectedJobRecord]);
-
-    // React.useEffect(() => { console.log(edit) }, [edit]);
-
-    // {
-    //     "id": 2,
-    //     "jobTitle": "firstEmp",
-    //     "jobLevel": "newlevel",
-    //     "organization": null,
-    //     "location": null,
-    //     "startDate": null,
-    //     "endDate": null,
-    //     "jobSkills": []
-    //   }
-
-    // {
-    //     "id": 161,
-    //     "name": "Jings Assistant",
-    //     "level": "High",
-    //     "score": 6
-    //   }
-
-    //const SKTITLE = ['SE', 'Certifications'];
+    }, [selectedJobRecord]);
 
     function clear() {
-
         setSName(undefined);
         setLevel(undefined);
         setScore(undefined);
-
     }
 
     function clearJR() {
-        
+
         setJobTitle(undefined);
         setJobLevel(undefined);
         setOrganization(undefined);
@@ -140,6 +118,7 @@ function JobHistory(props) {
             axios.post(`http://localhost:8080/employees/${props.employee.employeeNum}/jobrecords`, jrToAdd).then(response => {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                     setEmployee(res.data);
+                    console.log('checking', res.data);
                     if (response.data.message != undefined) {
                         setResponseMessage(response.data.message);
                     }
@@ -165,6 +144,7 @@ function JobHistory(props) {
                 if (response.data.message != undefined) {
                     setResponseMessage(response.data.message);
                 }
+                console.log('remove jobRecord', res.data);
             })
         });
     }
@@ -298,7 +278,7 @@ function JobHistory(props) {
                                         </Button>
                                     </Col>
                                     <Col>
-                                        <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} onClick={() => {  handleShow(); setsecMode(true); setId(item.id); setJobSkills(item.jobSkills) }}>
+                                        <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px', marginTop: '1%' }} onClick={() => { handleShow(); setsecMode(true); setId(item.id); setJobSkills(item.jobSkills) }}>
                                             Add Skill
                                         </Button>
                                     </Col>
@@ -307,7 +287,6 @@ function JobHistory(props) {
                                             Edit Skill
                                         </Button>
                                     </Col>
-
                                 </td>
                             </tr>
                         );
@@ -396,7 +375,7 @@ function JobHistory(props) {
                         />
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="primary" onClick={() => {handleClose(); clearJR(); }}>
+                        <Button variant="primary" onClick={() => { handleClose(); clearJR(); }}>
                             Close
                         </Button>
 
