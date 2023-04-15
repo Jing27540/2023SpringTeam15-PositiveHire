@@ -62,7 +62,7 @@ function JobHistory(props) {
         setStartDate(selectedJobRecord.startDate);
         setEndDate(selectedJobRecord.endDate);
         setJobSkills(selectedJobRecord.jobSkills);
-        console.log("Fields changed");
+        // console.log("Fields changed");
     }, [selectedJobRecord]);
 
     function clear() {
@@ -73,13 +73,23 @@ function JobHistory(props) {
 
     function clearJR() {
 
-        setJobTitle(undefined);
-        setJobLevel(undefined);
-        setOrganization(undefined);
-        setLocation(undefined);
-        setStartDate(undefined);
-        setEndDate(undefined);
-        setJobSkills(undefined);
+        // setJobTitle(undefined);
+        // setJobLevel(undefined);
+        // setOrganization(undefined);
+        // setLocation(undefined);
+        // setStartDate(undefined);
+        // setEndDate(undefined);
+        // setJobSkills(undefined);
+        let emptyRecord = {
+            jobTitle: "",
+                jobLevel: "",
+                organization: "",
+                location: "",
+                startDate: "",
+                endDate: "",
+                jobSkills: []
+        }
+        setSelectedJobRecord(emptyRecord);
     }
 
     function addJobRecord() {
@@ -118,13 +128,13 @@ function JobHistory(props) {
                         setResponseMessage(response.data.message);
                     }
                 })
-            })
+            }).catch(err => setResponseMessage(err.data.message));
         } else {
             axios.put(`http://localhost:8080/employees/${props.employee.employeeNum}/jobrecords/${currid}`, jrToEdit).then(response => {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                     setEmployee(res.data);
                     if (response.data.message !== undefined) {
-                        setResponseMessage(response.data.message);
+                        setResponseMessage(response.data);
                     }
                 })
             })
@@ -214,7 +224,7 @@ function JobHistory(props) {
 
     return (
         <>
-            <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'left', width: '70px', marginTop: "2%" }} onClick={() => { handlesecShow(); setMode(true); }}>
+            <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'left', width: '70px', marginTop: "2%" }} onClick={() => { clearJR(); handlesecShow(); setMode(true); }}>
                 Add
             </Button>
             <Form.Label style={{color: "green", marginTop: "2%"}}>{responseMessage}</Form.Label>

@@ -1,6 +1,7 @@
 package com.positivehire.phtalent.controllers;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,31 +154,38 @@ public class APIEmployeeController extends APIController {
     @PostMapping("/employees/{employeeNum}/jobrecords")
     public ResponseEntity<String> createJobRecord(@PathVariable("employeeNum") final int employeeNum,
             @RequestBody JobRecord rec) {
+
+        if (rec.getJobLevel().equals("") || rec.getJobTitle().equals("") || rec.getOrganization().equals("")) {
+            return new ResponseEntity<String>(
+                    errorResponse("Job title, level, and organization must be set"),
+                    HttpStatus.CONFLICT);
+        }
+
+        Date today = new Date();
+        Date sDate = rec.getStartDate();
+        Date eDate = rec.getEndDate();
+        // Check for valid dates
+        if (sDate == null) {
+            return new ResponseEntity<String>(
+                    errorResponse("Start date is not set"),
+                    HttpStatus.CONFLICT);
+        } else if (eDate != null && eDate.before(sDate)) {
+            return new ResponseEntity<String>(
+                    errorResponse("Start date cannot be after end date"),
+                    HttpStatus.CONFLICT);
+        } else if (sDate.after(today)) {
+            return new ResponseEntity<String>(
+                    errorResponse("End date cannot be after today"),
+                    HttpStatus.CONFLICT);
+
+        } else if (eDate != null && eDate.after(today)) {
+            return new ResponseEntity<String>(
+                    errorResponse("Start date cannot be after today"),
+                    HttpStatus.CONFLICT);
+        }
         final Employee emp = employeeServ.findByEmployeeNum(employeeNum);
 
-        // if (rec.getId().toString() != 0) {
-        // return new ResponseEntity<String>(
-        // successResponse("Job record with the name " + rec.getJobTitle() + " already
-        // exists"),
-        // HttpStatus.CONFLICT);
-        // } else
         if (emp != null) {
-
-            // boolean isDup = false;
-            // List<JobRecord> list = emp.getJobRecords();
-            // for (JobRecord x : list) {
-            // if (x.getJobTitle().equals(rec.getJobTitle())) {
-            // isDup = true;
-            // }
-            // }
-            // if (!isDup) {
-            // emp.getJobRecords().add(rec);
-            // employeeServ.save(emp);
-            // } else {
-            // return new ResponseEntity<String>(successResponse(rec.getJobTitle() + " is a
-            // duplicate"),
-            // HttpStatus.CONFLICT);
-            // }
             emp.getJobRecords().add(rec);
             employeeServ.save(emp);
             return new ResponseEntity<String>(
@@ -199,16 +207,43 @@ public class APIEmployeeController extends APIController {
         JobRecord jobRecordToUpdate = jrServ.findById(id);
 
         if (emp != null) {
-            // Get the job record
-            // for (JobRecord jr : emp.getJobRecords()) {
-            // if (jr.getJobTitle().equals(rec.getJobTitle())) {
-            // jobRecordToUpdate = jr;
-            // break;
-            // }
-            // }
 
             // check if JobRecord was found
             if (jobRecordToUpdate != null) {
+
+                Date today = new Date();
+                Date sDate = rec.getStartDate();
+                Date eDate = rec.getEndDate();
+                // Check for valid dates
+                if (sDate != null && eDate != null) {
+                    if (eDate.before(sDate)) {
+                        return new ResponseEntity<String>(
+                                errorResponse("Start date cannot be after end date"),
+                                HttpStatus.CONFLICT);
+                    } else if (sDate.after(today)) {
+                        return new ResponseEntity<String>(
+                                errorResponse("End date cannot be after today"),
+                                HttpStatus.CONFLICT);
+
+                    } else if (eDate.after(today)) {
+                        return new ResponseEntity<String>(
+                                errorResponse("Start date cannot be after today"),
+                                HttpStatus.CONFLICT);
+                    }
+                } else if (sDate == null || eDate == null) {
+                    if (sDate != null && (jobRecordToUpdate.getEndDate().before(sDate) || sDate.after(today))) {
+                        return new ResponseEntity<String>(
+                                errorResponse("New start date is invalid"),
+                                HttpStatus.CONFLICT);
+                    } else {
+                        if (jobRecordToUpdate.getStartDate().before(eDate) || eDate.after(today)) {
+                            return new ResponseEntity<String>(
+                                    errorResponse("New end date is invalid"),
+                                    HttpStatus.CONFLICT);
+                        }
+                    }
+                }
+
                 // Update base fields
                 jobRecordToUpdate.setJobTitle(rec.getJobTitle());
                 jobRecordToUpdate.setJobLevel(rec.getJobLevel());
@@ -216,32 +251,6 @@ public class APIEmployeeController extends APIController {
                 jobRecordToUpdate.setlocation(rec.getlocation());
                 jobRecordToUpdate.setStartDate(rec.getStartDate());
                 jobRecordToUpdate.setEndDate(rec.getEndDate());
-
-                // // Update skills
-                // boolean newSkill = true;
-
-                // List<Skill> jrSkills = jobRecordToUpdate.getJobSkills();
-                // if (rec.getJobSkills() != null) {
-
-                // for (Skill updated : rec.getJobSkills()) {
-                // for (Skill old : jrSkills) {
-                // if (updated.getName().equals(old.getName())) {
-                // newSkill = false;
-                // jrSkills.remove(old);
-                // jrSkills.add(updated);
-                // skillServ.delete(old);
-                // break;
-                // }
-                // }
-                // if (newSkill) {
-                // // skillServ.save(updated);
-                // jrSkills.add(updated);
-                // newSkill = false;
-                // } else {
-                // newSkill = true;
-                // }
-                // }
-                // }
 
                 // jobRecordToUpdate.setJobSkills(jrSkills);
                 jrServ.save(jobRecordToUpdate);
@@ -251,9 +260,6 @@ public class APIEmployeeController extends APIController {
                 return new ResponseEntity<String>(successResponse("Error: Job Record does not exist"),
                         HttpStatus.BAD_REQUEST);
             }
-            // Save employee to push changes
-            // emp.getJobRecords().remove(jobRecordToUpdate);
-            // employeeServ.save(emp);
         } else {
             return new ResponseEntity<String>(successResponse("Error: employee does not exist"),
                     HttpStatus.BAD_REQUEST);
@@ -313,6 +319,13 @@ public class APIEmployeeController extends APIController {
     @PostMapping("/employees/{employeeNum}/jobrecords/{id}/skills")
     public ResponseEntity<String> createJobRecordSkill(@PathVariable("employeeNum") final int employeeNum,
             @PathVariable("id") Long jrId, @RequestBody Skill newSkill) {
+
+        if (newSkill.getLevel().equals("") || newSkill.getName().equals("") || newSkill.getScore() == null
+                || newSkill.getScore().equals("")) {
+            return new ResponseEntity<String>(
+                    errorResponse("Missing skill fields"),
+                    HttpStatus.CONFLICT);
+        }
         if (employeeServ.findByEmployeeNum(employeeNum) != null) {
 
             JobRecord toAdd = jrServ.findById(jrId);
@@ -380,13 +393,6 @@ public class APIEmployeeController extends APIController {
                 toDelete = skillServ.findById(skillId);
                 skillServ.delete(toDelete);
 
-                // //Object will not be the same
-                // Skill id = null;
-                // for (Skill x : jr.getJobSkills()) {
-                // if (x.getName().equals(toDelete.getName())) {
-                // jr.getJobSkills().remove(x);
-                // }
-                // }
                 jr.getJobSkills().remove(toDelete);
 
                 jrServ.save(jr);
@@ -466,7 +472,7 @@ public class APIEmployeeController extends APIController {
             toEdit.setName(newEd.getName());
             toEdit.setDateAchieved(newEd.getDateAchieved());
             toEdit.setInstitution(newEd.getInstitution());
-            //toEdit.setSkills(newEd.getSkills());
+            // toEdit.setSkills(newEd.getSkills());
             toEdit.setType(newEd.getType());
             eduServ.save(toEdit);
         } else {

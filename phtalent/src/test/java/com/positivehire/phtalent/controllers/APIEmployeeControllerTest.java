@@ -284,7 +284,9 @@ public class APIEmployeeControllerTest {
 
                 // JobRecord functionality testing (CRUD)
 
-                JobRecord newJR1 = new JobRecord("firstEmp", "entry", null, null, null, null, null);
+                Date startDate = new Date(2000);
+
+                JobRecord newJR1 = new JobRecord("firstEmp", "entry", "UK", null, startDate, null, null);
 
                 List<Skill> moreskills = new ArrayList<Skill>();
                 Skill soccer = new Skill("Soccer", "pro", 5);
@@ -292,7 +294,7 @@ public class APIEmployeeControllerTest {
 
                 JobRecord newJR2 = new JobRecord("secJR", "junior", null, null, null, null, moreskills);
 
-                System.out.println(newJR2.getId());
+                System.out.println(TestUtils.asJsonString(newJR1));
                 mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(TestUtils.asJsonString(newJR1))).andExpect(status().isOk());
