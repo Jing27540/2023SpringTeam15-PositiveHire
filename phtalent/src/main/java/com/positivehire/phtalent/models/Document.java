@@ -4,6 +4,7 @@ import java.io.Serializable;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 
 /**
@@ -20,6 +21,7 @@ public class Document extends DomainObject {
     private int employeeNum;
 
     @Lob
+    @Column(length = 1000000)
     private byte[] data;
 
     private String docType;

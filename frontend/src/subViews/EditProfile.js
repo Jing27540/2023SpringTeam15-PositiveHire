@@ -15,51 +15,51 @@ const EducationFields = ['Institution', 'Address', 'StartDate', 'EndDate'];
 
 function EditProfile(props) {
 
-    function getExportFile () {
-    // helper function: generate a new file from base64 String
-    const base64ToBlob = (dataurl) => {
-      const arr = dataurl.split(',');
-      const mime = arr[0].match(/:(.*?);/)[1];
-      const sliceSize = 1024;
-      const byteChars = window.atob(arr[1]);
-      const byteArrays = [];
+    //     function getExportFile () {
+    //     // helper function: generate a new file from base64 String
+    //     const base64ToBlob = (dataurl) => {
+    //       const arr = dataurl.split(',');
+    //       const mime = arr[0].match(/:(.*?);/)[1];
+    //       const sliceSize = 1024;
+    //       const byteChars = window.atob(arr[1]);
+    //       const byteArrays = [];
 
-      for (let offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
-        let slice = byteChars.slice(offset, offset + sliceSize);
+    //       for (let offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
+    //         let slice = byteChars.slice(offset, offset + sliceSize);
 
-        const byteNumbers = new Array(slice.length);
-        for (let i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
-        }
+    //         const byteNumbers = new Array(slice.length);
+    //         for (let i = 0; i < slice.length; i++) {
+    //           byteNumbers[i] = slice.charCodeAt(i);
+    //         }
 
-        const byteArray = new Uint8Array(byteNumbers);
+    //         const byteArray = new Uint8Array(byteNumbers);
 
-        byteArrays.push(byteArray);
-      }
+    //         byteArrays.push(byteArray);
+    //       }
 
-      return new Blob(byteArrays, {type: mime});
-    }
+    //       return new Blob(byteArrays, {type: mime});
+    //     }
 
-    const getFilename = (dataUrl) => {
-      const arr = dataUrl.split(',');
-      const mime = arr[0].match(/:(.*?);/)[1];
+    //     const getFilename = (dataUrl) => {
+    //       const arr = dataUrl.split(',');
+    //       const mime = arr[0].match(/:(.*?);/)[1];
 
-      return Math.round(+new Date()/1000) + '.' + mime.split('/').pop();
-    }
+    //       return Math.round(+new Date()/1000) + '.' + mime.split('/').pop();
+    //     }
 
-    let reader = new FileReader();
+    //     let reader = new FileReader();
 
-        reader.readAsDataURL(file);
+    //         reader.readAsDataURL(file);
 
-    // const dataUrl = this.previewCanvas.toDataURL();
-    const dataUrl = reader.result;
-    const blob = base64ToBlob(dataUrl);
-    blob.name = getFilename(dataUrl);
+    //     // const dataUrl = this.previewCanvas.toDataURL();
+    //     const dataUrl = reader.result;
+    //     const blob = base64ToBlob(dataUrl);
+    //     blob.name = getFilename(dataUrl);
 
-    // generate file from base64 string
-    return blob;
+    //     // generate file from base64 string
+    //     return blob;
 
-  }
+    //   }
 
     const [file, setFile] = React.useState();
 
@@ -98,14 +98,14 @@ function EditProfile(props) {
             const size = 3 * (base64result.length / 4);
             console.log(size);
             let data = {
-                content:base64result
+                content: base64result
             }
             console.log(data);
-            
-            axios.post(`http://localhost:8080/documents/${employee.employeeNum}`, base64result, {headers:{'Content-Type':'application/json'}}).then(res => {
-            console.log(res.data);
 
-        });
+            axios.post(`http://localhost:8080/documents/${employee.employeeNum}`, base64result, { headers: { 'Content-Type': 'application/json' } }).then(res => {
+                console.log(res.data);
+
+            });
         };
 
         // let sendFile = getExportFile();
@@ -117,6 +117,12 @@ function EditProfile(props) {
 
         // });
 
+    }
+
+    function downloadResume() {
+        axios.get(`http://localhost:8080/documents/${employee.employeeNum}`).then(res => {
+
+            });
     }
     // TODO: hard code 
     const data = [{ name: "c#", level: "Expert", score: "5", }, { name: "Communication", level: "Advanced", score: "3", }];
@@ -134,6 +140,7 @@ function EditProfile(props) {
                             <div>{file && `${file.name}` - `${file.type}`}</div>
 
                             <button onClick={handleUploadClick}>Upload</button>
+                            <button onClick={downloadResume}>Download</button>
                         </div>
                     </Row>
                 </div>
