@@ -50,15 +50,13 @@ function ViewMatchAnalytics(props) {
     };
 
     // TODO: skill, certification, other requirment. job history
-    function filter() {
+    function filter(obj) {
 
-        // matchEmployees = []; // employees list with matchScores data
+        let matchEmployees = []; 
         // TODO: remove this null checking later
         if (jobPostings && employees) {
             let jp = jobPostings[0];
-            let e = employees[0];
-            console.log(e);
-            console.log(jp);
+            console.log('given jobPosting', jp);
         
             // weight, accurancy, add weight 
             // TODO: matchedScore = skill (#/Total # of JP.skill) * 40% + certificaiton (#/#) * 30% + jobRecord (#/#) * 30%
@@ -66,66 +64,69 @@ function ViewMatchAnalytics(props) {
             
 
             // create variable to hold the skills
-            let jpSkills = []; // techniqueSkills, peopeSkills, workEthic
-            // create ..... certification
+            let jpTS = []; // techniqueSkills, peopeSkills, workEthic
+            let jpPS = [];
+            let jpWE = [];
+            let jpCerts = [];
+            let jpJR = [];
 
 
             // This adds the skills for the job posting
-            for (let i = 0; i < jp.skillRequirements.length; i++) {
-                let skill = jp.skillRequirements[i];
-                jpSkills.push(skill.name);
-            }
+            // for (let i = 0; i < jp.skillRequirements.length; i++) {
+            //     let skill = jp.skillRequirements[i];
+            //     jpSkills.push(skill.name);
+            // }
 
-            console.log(jpSkills);
+            // console.log(jpSkills);
 
 
-            let skillCount = 0;
-            let certificationCount = 0; 
+            // let skillCount = 0;
+            // let certificationCount = 0; 
 
 
             // loop each employees and their skill list
-            for (let i = 0; i < employees.length; i++) {
+            // for (let i = 0; i < employees.length; i++) {
                 
-                let ee = employees[i];
+            //     let ee = employees[i];
 
-                // Checks if the technical skills array is greater than 0 
-                if(ee.technicalSkills.length > 0) {
-                    console.log(ee.technicalSkills.length);
-                    // compare employee's skill with the jp skill info
-                    for (let j = 0; j < ee.technicalSkills.length; j++) {
-                        let skill = ee.technicalSkills[j];
+            //     // Checks if the technical skills array is greater than 0 
+            //     if(ee.technicalSkills.length > 0) {
+            //         console.log(ee.technicalSkills.length);
+            //         // compare employee's skill with the jp skill info
+            //         for (let j = 0; j < ee.technicalSkills.length; j++) {
+            //             let skill = ee.technicalSkills[j];
                 
-                        if(jpSkills.includes(skill.name)) {
-                            console.log("entered here");
-                            skillCount += 1;
-                            console.log(skillCount);
-                        }
-                    }
-                }
+            //             if(jpSkills.includes(skill.name)) {
+            //                 console.log("entered here");
+            //                 skillCount += 1;
+            //                 console.log(skillCount);
+            //             }
+            //         }
+            //     }
 
                 // Checks if the people skills array is greater than 0 
-                if(ee.peopleSkills.length > 0) {
+                // if(ee.peopleSkills.length > 0) {
 
-                    // Loops through the people skills and checks if it is in the jop posting skills
-                    for (let i = 0; i < ee.peopleSkills.length; i++) {
-                        if(jpSkills.includes(ee.peopleSkills[i].name)) {
-                            skillCount += 1;
-                        } 
-                    }
-                }
+                //     // Loops through the people skills and checks if it is in the jop posting skills
+                //     for (let i = 0; i < ee.peopleSkills.length; i++) {
+                //         if(jpSkills.includes(ee.peopleSkills[i].name)) {
+                //             skillCount += 1;
+                //         } 
+                //     }
+                // }
 
-                console.log(skillCount);
+                // console.log(skillCount);
 
                 // TODO: checking certification
-                if(ee.certifications.length > 0) {
-                    for (let i = 0; i < ee.certifications.length; i++) {
+                // if(ee.certifications.length > 0) {
+                //     for (let i = 0; i < ee.certifications.length; i++) {
 
-                        if(jpSkills.includes(ee.certifications[i])) {
-                            console.log("entered into certifications")
-                            certificationCount += 1;
-                        }
-                    }
-                }
+                //         if(jpSkills.includes(ee.certifications[i])) {
+                //             console.log("entered into certifications")
+                //             certificationCount += 1;
+                //         }
+                //     }
+                // }
 
                 // TODO: checking other requirments
                 
@@ -135,19 +136,19 @@ function ViewMatchAnalytics(props) {
 
 
             // Used for testing
-            for (let i = 0; i < e.technicalSkills.length; i++) {
-                let skill = e.technicalSkills[i];
+            // for (let i = 0; i < e.technicalSkills.length; i++) {
+            //     let skill = e.technicalSkills[i];
 
-               // console.log(skill.name);
-            }
+            //    // console.log(skill.name);
+            // }
 
             
 
-            if (e && jp) {
-                e.matchScore = "get score";
-                matchedEmployees.push(e);
-            }
-        }
+            // if (e && jp) {
+            //     e.matchScore = "get score";
+            //     matchedEmployees.push(e);
+            // }
+        // }
 
         console.log(matchedEmployees);
 
@@ -166,9 +167,9 @@ function ViewMatchAnalytics(props) {
     }
 
     return (
-        <Container style={{ marginTop: "4%" }}>
+        <Container style={{ margin: "4%" }} fluid>
             <Row>
-                <Col sm={5}>
+                <Col sm={4}>
                     <Row style={{ height: '40px', backgroundColor: "#0f123F", color: 'white', fontWeight: 'bold', justifyContent: 'center', placeItems: 'center', marginRight: "2%" }}>
                         OPEN POSITIONS
                     </Row>
@@ -196,14 +197,14 @@ const ChildrenJP = (props) => {
     return (
         <Row style={{ itemAlign: 'center' }}>
             <Row>
-                <Col sm={9} style={{ textAlign: 'left', margin: '2%', fontSize: '13px' }}>
+                <Col sm={8} style={{ textAlign: 'left', margin: '2%', fontSize: '13px' }}>
                     <Row style={{ fontWeight: 'bold' }}>{jobTitle}</Row>
                     <Row> {department}</Row>
                     <Row>{location}</Row>
                 </Col>
-                <Col sm={2} style={{ itemAlign: 'right', marginTop: "2%" }}>
+                <Col sm={2} style={{ marginTop: "2%" }}>
                     <Button size="sm" onClick={() => props.setSelected(props.jp)} style={{ marginTop: '10%', backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} >
-                        Details
+                        Analyze
                     </Button>
                 </Col>
             </Row>
