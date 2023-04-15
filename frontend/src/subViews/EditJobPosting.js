@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import { Availability, JobTitle, Processes, Requirements } from "./CreateJobPosting";
 
 /**
@@ -71,11 +72,21 @@ const ChildrenJP = (props) => {
     }
 
     function removeJPFromList() {
-        const result = props.jobPostings.filter(item => item.id !== props.jp.id);
-        props.setJobPostings(result);
-        axios.delete(`http://localhost:8080/jobpostings/${props.jp.jobNumber}`).then(result => {
-            alert("Delete Successfully!");
-        }).catch(err => alert("Delete Unsuccessfully!"));
+        // pop out the message to ask user if they want to delete the jobposting
+        var text;
+        if (window.confirm("Are you sure want to delete this job posting?")) {
+            text = "Yes";
+        } else {
+            text = "No";
+        }
+
+        if (text === "Yes") {
+            const result = props.jobPostings.filter(item => item.id !== props.jp.id);
+            props.setJobPostings(result);
+            axios.delete(`http://localhost:8080/jobpostings/${props.jp.jobNumber}`).then(result => {
+                alert("Delete Successfully!");
+            }).catch(err => alert("Delete Unsuccessfully!"));
+        }
     }
 
     return (
@@ -166,12 +177,12 @@ const ChildrenJP = (props) => {
                     </Col>
                     <Col className="border border-1" sm={1}>
                         <Row className="justify-content-center">
-                            <Button size="sm" onClick={removeJPFromList} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px'}} >
+                            <Button size="sm" onClick={removeJPFromList} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px' }} >
                                 Remove
                             </Button>
                         </Row>
                         <Row className="justify-content-center">
-                            <Button size="sm" onClick={() => setEdit(true)} style={{ marginTop: "4%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px'}} >
+                            <Button size="sm" onClick={() => setEdit(true)} style={{ marginTop: "4%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} >
                                 Edit
                             </Button>
                         </Row>

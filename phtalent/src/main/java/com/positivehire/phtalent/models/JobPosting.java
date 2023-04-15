@@ -1,4 +1,5 @@
 package com.positivehire.phtalent.models;
+
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -28,7 +29,10 @@ public class JobPosting extends DomainObject {
     @GeneratedValue
     private Long id;
 
-    /** Job number associated with the job position (I set this as a String in case its not only 1-9 digits) */
+    /**
+     * Job number associated with the job position (I set this as a String in case
+     * its not only 1-9 digits)
+     */
 
     private String jobNumber;
 
@@ -51,8 +55,8 @@ public class JobPosting extends DomainObject {
 
     /** Non-metric job position requirements */
     private String otherRequirements;
-    
-    @Column( length = 100000 )
+
+    @Column(length = 100000)
     /** Main job description */
     private String jobDescription;
 
@@ -88,13 +92,16 @@ public class JobPosting extends DomainObject {
      * For Hibernate to use (Must be an empty constructor)
      */
     public JobPosting() {
-        
+
     }
 
-    /************************************ GETTERS & SETTERS ************************************/
+    /************************************
+     * GETTERS & SETTERS
+     ************************************/
 
     /**
-     * Sets the serializable id for the model 
+     * Sets the serializable id for the model
+     * 
      * @return the id
      */
     @Override
@@ -113,6 +120,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Get the job number
+     * 
      * @return job number
      */
     public String getJobNumber() {
@@ -121,6 +129,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Set the job number
+     * 
      * @param jobNumber
      */
     public void setJobNumber(String jobNumber) {
@@ -129,6 +138,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Get the job title
+     * 
      * @return job title
      */
     public String getJobTitle() {
@@ -137,6 +147,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Set job title
+     * 
      * @param jobTitle
      */
     public void setJobTitle(String jobTitle) {
@@ -145,6 +156,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Get salary for Job Posting
+     * 
      * @return salary
      */
     public String getSalary() {
@@ -153,6 +165,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Sets the salary for the Job Posting
+     * 
      * @param salary
      */
     public void setSalary(String salary) {
@@ -161,6 +174,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Returns the department name
+     * 
      * @return department name
      */
     public String getDepartment() {
@@ -169,6 +183,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Sets the department name
+     * 
      * @param department name
      */
     public void setDepartment(String department) {
@@ -177,6 +192,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Get the metric-skill requirements
+     * 
      * @return metric-skill requirements
      */
     public List<Skill> getSkillRequirements() {
@@ -185,6 +201,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Sets the metric-skill requirements
+     * 
      * @param skillRequirements
      */
     public void setSkillRequirements(List<Skill> skillRequirements) {
@@ -193,6 +210,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Get metric-tracked certification requirements
+     * 
      * @return metric-tracked certification requirements
      */
     public List<Certification> getCertificationRequirements() {
@@ -201,6 +219,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Set metric-tracked certification requirements
+     * 
      * @param certificationRequirements
      */
     public void setCertificationRequirements(List<Certification> certificationRequirements) {
@@ -209,6 +228,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Get the other non-metric tracked requirements for the job
+     * 
      * @return other job requirements
      */
     public String getOtherRequirements() {
@@ -217,6 +237,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Get the job description for the job Position
+     * 
      * @return the job description
      */
     public String getJobDescription() {
@@ -225,14 +246,16 @@ public class JobPosting extends DomainObject {
 
     /**
      * Sets other requirements
+     * 
      * @param otherRequirements other job requirements
      */
     public void setOtherRequirements(String otherRequirements) {
-        this.otherRequirements = otherRequirements;   
+        this.otherRequirements = otherRequirements;
     }
 
     /**
      * Sets job description for the Job Position
+     * 
      * @param jobDescription description of the job
      */
     public void setJobDescription(String jobDescription) {
@@ -241,6 +264,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Get number of available positions
+     * 
      * @return number of positions
      */
     public Integer getAvailablePositions() {
@@ -249,6 +273,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Set the number of positions
+     * 
      * @param availablePositions
      */
     public void setAvailablePositions(Integer availablePositions) {
@@ -257,6 +282,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Get the location(s)
+     * 
      * @return location
      */
     public List<String> getLocation() {
@@ -265,6 +291,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Set the location(s)
+     * 
      * @param location
      */
     public void setLocation(List<String> location) {
@@ -273,6 +300,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Get the meeting type
+     * 
      * @return meeting type
      */
     public String getMeetingType() {
@@ -281,6 +309,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Set the meeting type
+     * 
      * @param meetingType
      */
     public void setMeetingType(String meetingType) {
@@ -289,6 +318,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Get the additional meeting notes
+     * 
      * @return additional meeting notes
      */
     public String getMeetingNotes() {
@@ -297,6 +327,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Sets the meeting notes
+     * 
      * @param meetingNotes
      */
     public void setMeetingNotes(String meetingNotes) {
@@ -305,6 +336,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Get the list of processes for the hiring processes
+     * 
      * @return processes
      */
     public List<String> getProcess() {
@@ -313,14 +345,16 @@ public class JobPosting extends DomainObject {
 
     /**
      * Set the list of processes
+     * 
      * @param process
      */
     public void setProcess(List<String> process) {
         this.process = process;
     }
 
-    /** 
+    /**
      * Get the application link
+     * 
      * @return application link
      */
     public String getApplyLink() {
@@ -329,6 +363,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Set the application link
+     * 
      * @param applyLink
      */
     public void setApplyLink(String applyLink) {
@@ -337,6 +372,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Get the list of applicants
+     * 
      * @return list of applicants
      */
     public List<Employee> getListofApplicants() {
@@ -345,6 +381,7 @@ public class JobPosting extends DomainObject {
 
     /**
      * Set the list of applicants
+     * 
      * @param listofApplicants
      */
     public void setListofApplicants(List<Employee> listofApplicants) {

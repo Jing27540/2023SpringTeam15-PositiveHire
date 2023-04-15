@@ -23,8 +23,6 @@ export default function NavBar() {
 
   const auth = useAuth();
 
-  console.log(auth);
-
   const [key, setKey] = React.useState('home');
   const [mode, setMode] = React.useState('Positions');
   const [pView, setPView] = React.useState('Welcome');

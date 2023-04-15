@@ -15,6 +15,8 @@ import Skill from "../subViews/Skill";
 import Certification from "../subViews/Certification"
 import ProfileCard from "../components/ProfileCard";
 import Alert from 'react-bootstrap/Alert';
+import Education from "../subViews/Education"
+import JobHistory from "../subViews/JobHistory";
 
 /**
  * EmployeeProfile component is used to manage profile information.
@@ -30,8 +32,9 @@ const ContentBox = styled.div`
     min-height: 500px;
 `;
 
-const GTITLE = ['General', 'Skills & Certifications', 'Performance Review', 'Career Development Plans', 'Open Positions'];
+const GTITLE = ['General', 'Skills & Certifications',  'Job & Education History', 'Performance Review', 'Career Development Plans', 'Open Positions'];
 const SKTITLE = ['Skills', 'Certifications'];
+const JRTITLE = ['Job History', 'Education History'];
 const PRTITLE = ['Reviews', 'Goals', 'Training Resources', 'Schedule'];
 const CDPTITLE = ['Goals', 'Training Resources', 'Statistics'];
 
@@ -39,7 +42,7 @@ function EmployeeProfile(props) {
 
     const [employee, setEmployee] = React.useState(props.employee);
 
-    // TODO: it use to testing edit editprofile.
+    // it use to testing edit editprofile.
     const [show, setShow] = React.useState(false);
     const [mode, setMode] = React.useState('General');
     const [title, setTitle] = React.useState(SKTITLE);
@@ -49,8 +52,9 @@ function EmployeeProfile(props) {
 
     React.useEffect(() => {
         if (mode === GTITLE[1]) { setTitle(SKTITLE); }
-        else if (mode === GTITLE[2]) { setTitle(PRTITLE); }
+        else if (mode === GTITLE[2]) { setTitle(JRTITLE); }
         else if (mode === GTITLE[3]) { setTitle(CDPTITLE); }
+        else if (mode === GTITLE[5]) { setTitle(PRTITLE); }
         else { setTitle([]) }
     }, [mode]);
 
@@ -66,6 +70,12 @@ function EmployeeProfile(props) {
                 return (<Certification employee={employee} />);
             } else {
                 return (<Skill employee={employee} />);
+            }
+        } else if (mode === 'Job & Education History') {
+            if (tool === 'Education History') {
+                return (<Education employee={employee} />);
+            } else {
+                return (<JobHistory employee={employee} />);
             }
         } else {
             return (<Alert variant="danger"> Not Implement Yet!</Alert>);
