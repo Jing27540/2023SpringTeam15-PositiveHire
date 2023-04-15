@@ -141,9 +141,9 @@ const ChildrenJPContent = (props) => {
                             :
                             undefined
                         }
-                        <Row style={{ marginTop: '2%' }}>
+                        {/* <Row style={{ marginTop: '2%' }}>
                             <a className="btn btn-primary" href={ViewMatchAnalytics} role="button" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", width: '110px', marginTop: "2%" }}>View Matches</a>
-                        </Row>
+                        </Row> */}
                     </Col>
                     {/* <Col sm={2}>
                         <Button size="sm" style={{ marginTop: '10%', backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} >
