@@ -28,16 +28,30 @@ export default function NavBar() {
   const [pView, setPView] = React.useState('Welcome');
   const [employee, setEmployee] = React.useState({});
   const [accessRole, setAccessRole] = React.useState('');
+  // Get the job posting list
+  const [jobPostings, setJobPostings] = React.useState();
+  // Get the employee list
+  const [employees, setEmployees] = React.useState();
 
-  console.log('checking mode..........', mode); 
+  console.log('checking mode..........', mode);
   // Get Employee Data
   React.useEffect(() => {
+
     axios.get(`http://localhost:8080/employees/${auth.user}`).then(res => {
       setEmployee(res.data);
       // setAccessRole(res.data.accessRole);
       setAccessRole(auth.role);
     })
       .catch(err => console.log(err));
+
+    axios.get("http://localhost:8080/jobpostings").then(result => {
+      setJobPostings(result.data);
+    })
+
+    axios.get("http://localhost:8080/employees").then(result => {
+      setEmployees(result.data);
+    })
+
   }, []);
 
   return (
@@ -91,10 +105,10 @@ export default function NavBar() {
                 {mode === "Positions" ?
                   <JobPosting accessRole={accessRole} pView={pView} setPView={setPView} />
                   :
-                  mode === 'Talent Pipeline' ?
-                  <ViewMatchAnalytics />
-                  :
-                  undefined
+                  mode === 'Talent Pipeline'?
+                    <ViewMatchAnalytics employees={employees} jobPostings={jobPostings}/>
+                    :
+                    undefined
                 }
               </>
               :
