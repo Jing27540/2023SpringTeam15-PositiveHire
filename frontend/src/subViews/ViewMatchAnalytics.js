@@ -67,22 +67,12 @@ function ViewMatchAnalytics(props) {
         }
     }
 
-    console.log('checking', selected);
-
     function getMatchedList() {
         if (selected) {
             // console.log('checking matching score', matchedEmployees);
             let arr = selected.map((employee, index) =>
                 <>
-                    {/* <Row style={{ fontSize: '15px', backgroundColor: "white" }}>
-                        <Col sm={2} className="border border" style={{ textAlign: "center", fontWeight: 'bold' }}>
-                            Score
-                        </Col>
-                        <Col className="border border" style={{ textAlign: "center", height: "30px", fontWeight: 'bold' }}>
-                            Employees Details
-                        </Col>
-                    </Row> */}
-                    <Row style={{ fontSize: '15px', float: "center" }}>
+                    <Row style={{ fontSize: '15px', float: "center" }} key={index}>
                         <Col sm={2} className="border border" style={{ textAlign: "center" }}>
                             {employee.matchedScore.toFixed(1) + "%"}
                         </Col>
@@ -110,7 +100,7 @@ function ViewMatchAnalytics(props) {
     }
 
     return (
-        <Container style={{ margin: "4%" }} fluid>
+        <Container style={{ marginLeft: "3%", marginRight: "3%", marginTop: "2%" }} fluid>
             <Row>
                 <Col sm={4}>
                     <Row style={{ height: '40px', backgroundColor: "#0f123F", color: 'white', fontWeight: 'bold', justifyContent: 'center', placeItems: 'center', marginRight: "2%" }}>
@@ -147,9 +137,8 @@ const ChildrenJP = (props) => {
     const [matchedEmployees, setMatchedEmployees] = React.useState([]);
 
     async function filter(jp) {
-        // let matchedList = [];
 
-        // 1. Comparable requirement
+        // 1. Comparable requirements
         let jpSk = jp.skillRequirements.map(function (item) {
             return item.name;
         });
@@ -157,23 +146,20 @@ const ChildrenJP = (props) => {
             return item.name;
         });
 
-        // 2. Loop each employees
+        // 2. Loop each employees 
         for (let i = 0; i < props.employees.length; i++) {
 
             let e = props.employees[i];
-            let reqs = [];
-
-            // Get Comparable Requirements
             let skills = [];
-            let total = 0;
+            let certs = [];
 
-            e.peopleSkills.map((item) => {
+            e.peopleSkills.map(function (item) {
                 skills.push(item.name);
             });
-            e.technicalSkills.map((item) => {
+            e.technicalSkills.map(function (item) {
                 skills.push(item.name);
             });
-            e.workEthic.map((item) => {
+            e.workEthic.map(function (item) {
                 skills.push(item.name);
             });
 
@@ -188,8 +174,10 @@ const ChildrenJP = (props) => {
             // 3. calculate score 
             if (skills.length > 0 || certifications.length > 0 || jobRecords.length > 0) {
 
+                let reqs = [];
                 let skillScore = 0;
                 let certScore = 0;
+                let total = 0;
 
                 // loop skills, check skill
                 skills.map((item) => {
@@ -209,30 +197,27 @@ const ChildrenJP = (props) => {
                     }
                 });
 
-                // calculate the score
-                // console.log('checking skill score', skillScore);
-                if (skills.length > 0) {
-                    total += (skillScore / jpSk.length) * 70;
-                }
-
-                if (certifications.length > 0) {
-                    total += (certScore / certifications.length) * 20;
-                }
-
                 // check job title
                 if (jobRecords.includes(jp.jobTitle)) {
-                    total += 10;
+                    reqs.push(jp.jobTitle + " (Job Record)");
+                    total = total + 10;
                 }
 
-                e.matchedScore = total;
-                e.matchedReqs = reqs;
+                if (reqs.length > 0) {
+                    if (skillScore > 0) {
+                        total = total + (skillScore / jpSk.length) * 70;
+                    }
 
-                matchedEmployees.push(e);
-                // console.log(total, e, matchedEmployees);
+                    if (certScore > 0) {
+                        total = total + (certScore / certifications.length) * 20;
+                    }
+                    e.matchedScore = total;
+                    e.matchedReqs = reqs;
+                    matchedEmployees.push(e);
+                }
             }
 
         }
-
         props.setSelected(matchedEmployees);
         setMatchedEmployees([]);
     }
