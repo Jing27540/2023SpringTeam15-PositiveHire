@@ -7,8 +7,9 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
 const HorizontalLine = styled.div`
-    width: 100%;
+    width: 95%;
     height: 1;
+    justify-content: center;
     border-top: 0.5px solid #808080;
 `;
 
@@ -17,26 +18,13 @@ const HorizontalLine = styled.div`
  * 
  * @author Zayda Cummings
  * @author Juan Franco Pinilla
+ * @author Jing Huang
  */
 function ViewMatchAnalytics(props) {
-    // Get the job posting list
-    const [jobPostings, setJobPostings] = React.useState(props.jobPostings);
-    // Get the employee list
-    const [employees, setEmployees] = React.useState(props.employees);
-    // A list holding employees who match positions
-    const [matchedEmployees, setMatchedEmployees] = React.useState([]);
-    const [selected, setSelected] = React.useState(props.employees && props.employees[0] ? props.employees[0] : undefined);
 
-    // Call getAll api to load the data
-    React.useEffect(() => {
-        // load employees
-        loadEmployees();
-        // load job postings
-        loadJobPostings();
-        // if(selected && props.jobPostings) {
-        //     filter(props.jobPostings[0]);
-        // }
-    }, []);
+    const [jobPostings, setJobPostings] = React.useState(props.jobPostings);
+    const [employees, setEmployees] = React.useState(props.employees);
+    const [selected, setSelected] = React.useState([]);
 
     //Loading the job postings from the database
     const loadJobPostings = () => {
@@ -51,115 +39,69 @@ function ViewMatchAnalytics(props) {
         })
     };
 
-    // Filter to get the position matched employees. skill, certification, other requirment. job history
-    // matchedScore = skill (#/Total # of JP.skill) * 70% + certificaiton (#/#) * 20% + jobRecord (#/#) * 10%
-    function filter(jp) {
-        let matchedList = [];
-        if (employees) {
-            // 1. Comparable requirement
-            let jpSk = jp.skillRequirements.map((item) => {
-                return item.name;
-            });
-            let jpCerts = jp.certificationRequirements.map((item) => {
-                return item.name;
-            });
-
-            // 2. Loop each employees
-            for (let i = 0; i < employees.length; i++) {
-
-                let e = employees[i];
-                let reqs = [];
-
-                // Get Comparable Requirements
-                let skills = [];
-                let total = 0;
-
-                e.peopleSkills.map((item) => {
-                    skills.push(item.name);
-                });
-                e.technicalSkills.map((item) => {
-                    skills.push(item.name);
-                });
-                e.workEthic.map((item) => {
-                    skills.push(item.name);
-                });
-
-                let certifications = e.certifications.map((item) => {
-                    return item.name;
-                });
-
-                let jobRecords = e.jobRecords.map((item) => {
-                    return item.jobTitle;
-                });
-
-                // 3. calculate score 
-                if (skills.length > 0 || certifications.length > 0 || jobRecords.length > 0) {
-
-                    let skillScore = 0;
-                    let certScore = 0;
-
-                    // loop skills, check skill
-                    skills.map((item) => {
-                        if (jpSk.includes(item)) {
-                            skillScore += 1;
-                            reqs.push(item);
-                            // console.log('checking skill score', item, skillScore);
-                        }
-                    });
-
-                    // loop certifications, check certifiacation
-                    certifications.map((item) => {
-                        if (jpCerts.includes(item)) {
-                            certScore += 1;
-                            reqs.push(item);
-                            // console.log('checking certifiacation score', item, certScore);
-                        }
-                    });
-
-                    // calculate the score
-                    // console.log('checking skill score', skillScore);
-                    if (skills.length > 0) {
-                        total += (skillScore / jpSk.length) * 70;
-                    }
-
-                    if (certifications.length > 0) {
-                        total += (certScore / certifications.length) * 20;
-                    }
-
-                    // check job title
-                    if (jobRecords.includes(jp.jobTitle)) {
-                        total += 10;
-                    }
-
-                    e.matchedScore = total;
-                    e.matchedReqs = reqs;
-
-                    matchedList.push(e);
-                }
-
+    // display the matched requirement
+    function showMatchedReqs(employee) {
+        let str = "";
+        employee.matchedReqs.map(function (item) {
+            if (item === employee.matchedReqs[employee.matchedReqs.length - 1]) {
+                str += item;
+            } else {
+                str += item + ", ";
             }
-
-        }
-
-        setMatchedEmployees(matchedList);
+        });
+        return str;
     }
 
-    console.log(matchedEmployees);
-    function getJPData(jp) {
-        if (jobPostings) {
-            let arr = jobPostings.map((item) =>
-                <ChildrenJP jp={item} key={item.id} setMatchedEmployees={setMatchedEmployees} employees={employees} jobPostings={jobPostings} setSelected={setSelected} filter={filter} />
+    // Loading all jobPostings and employees from the database
+    React.useEffect(() => {
+        loadEmployees();
+        loadJobPostings();
+    }, []);
+
+    function getJPData() {
+        if (jobPostings && employees) {
+            let arr = jobPostings.map((item, index) =>
+                <ChildrenJP key={index} jp={item} setSelected={setSelected} employees={employees} jobPostings={jobPostings} />
             );
             return arr;
         }
-        return;
     }
 
+    console.log('checking', selected);
+
     function getMatchedList() {
-        if (matchedEmployees) {
+        if (selected) {
             // console.log('checking matching score', matchedEmployees);
-            let arr = matchedEmployees.map((employee, index) =>
-                <MatchedChild key={index} employee={employee} setMatchedEmployees={setMatchedEmployees}/>
+            let arr = selected.map((employee, index) =>
+                <>
+                    {/* <Row style={{ fontSize: '15px', backgroundColor: "white" }}>
+                        <Col sm={2} className="border border" style={{ textAlign: "center", fontWeight: 'bold' }}>
+                            Score
+                        </Col>
+                        <Col className="border border" style={{ textAlign: "center", height: "30px", fontWeight: 'bold' }}>
+                            Employees Details
+                        </Col>
+                    </Row> */}
+                    <Row style={{ fontSize: '15px', float: "center" }}>
+                        <Col sm={2} className="border border" style={{ textAlign: "center" }}>
+                            {employee.matchedScore.toFixed(1) + "%"}
+                        </Col>
+                        <Col className="border border">
+                            <Row style={{ textAlign: 'left', justifyContent: "space-between" }}>
+                                <Col sm={4}>EmployeeName:</Col>
+                                <Col>{employee.employeeName}</Col>
+                            </Row>
+                            <Row style={{ textAlign: 'left', justifyContent: "space-between" }}>
+                                <Col sm={4}>EmployeeNumber:</Col>
+                                <Col>{employee.employeeNum}</Col>
+                            </Row>
+                            <Row style={{ textAlign: 'left', justifyContent: "space-between" }}>
+                                <Col sm={4}>MatchedRequirements:</Col>
+                                <Col>{showMatchedReqs(employee)}</Col>
+                            </Row>
+                        </Col>
+                    </Row>
+                </>
             );
             return arr;
         } else {
@@ -180,62 +122,20 @@ function ViewMatchAnalytics(props) {
                     <Row style={{ height: '40px', backgroundColor: "#0f123F", color: 'white', fontWeight: 'bold', justifyContent: 'center', placeItems: 'center' }}>
                         MATCHED EMPLOYEES
                     </Row>
+                    <Row style={{ fontSize: '15px', backgroundColor: "white" }}>
+                        <Col sm={2} className="border border" style={{ textAlign: "center", fontWeight: 'bold' }}>
+                            Score
+                        </Col>
+                        <Col className="border border" style={{ textAlign: "center", height: "30px", fontWeight: 'bold' }}>
+                            Employees Details
+                        </Col>
+                    </Row>
                     {getMatchedList()}
                 </Col>
             </Row>
         </Container>
     );
 }
-
-const MatchedChild = (props) => {
-
-    const [employee, setEmployee] = React.useState(props.employee);
-
-    function showMatchedReqs() {
-        let str = "";
-        employee.matchedReqs.map((item) => {
-            if (item === employee.matchedReqs[employee.matchedReqs.length - 1]) {
-                str += item;
-            } else {
-                str += item + ", ";
-            }
-        });
-        return str;
-    }
-
-    return (
-        <>
-            <Row style={{ fontSize: '15px', backgroundColor: "white" }}>
-                <Col sm={2} className="border border" style={{ textAlign: "center", fontWeight: 'bold' }}>
-                    Score
-                </Col>
-                <Col className="border border" style={{ textAlign: "center", height: "30px", fontWeight: 'bold' }}>
-                    Employees Details
-                </Col>
-            </Row>
-            <Row style={{ fontSize: '15px', float: "center" }}>
-                <Col sm={2} className="border border" style={{ textAlign: "center" }}>
-                    {employee.matchedScore.toFixed(1) + "%"}
-                </Col>
-                <Col className="border border">
-                    <Row style={{ textAlign: 'left', justifyContent: "space-between" }}>
-                        <Col sm={4}>EmployeeName:</Col>
-                        <Col>{employee.employeeName}</Col>
-                    </Row>
-                    <Row style={{ textAlign: 'left', justifyContent: "space-between" }}>
-                        <Col sm={4}>EmployeeNumber:</Col>
-                        <Col>{employee.employeeNum}</Col>
-                    </Row>
-                    <Row style={{ textAlign: 'left', justifyContent: "space-between" }}>
-                        <Col sm={4}>MatchedRequirements:</Col>
-                        <Col>{showMatchedReqs()}</Col>
-                    </Row>
-                </Col>
-            </Row>
-        </>
-    );
-}
-
 
 const ChildrenJP = (props) => {
 
@@ -244,94 +144,97 @@ const ChildrenJP = (props) => {
     const [department, setDepartment] = React.useState('Department: ' + jobPosting.department);
     const [location, setLocation] = React.useState(jobPosting.location ? jobPosting.location.toString() : "");
 
-    function filter(jp) {
-        let matchedList = [];
-        if (props.employees) {
-            // 1. Comparable requirement
-            let jpSk = jp.skillRequirements.map((item) => {
+    const [matchedEmployees, setMatchedEmployees] = React.useState([]);
+
+    async function filter(jp) {
+        // let matchedList = [];
+
+        // 1. Comparable requirement
+        let jpSk = jp.skillRequirements.map(function (item) {
+            return item.name;
+        });
+        let jpCerts = jp.certificationRequirements.map(function (item) {
+            return item.name;
+        });
+
+        // 2. Loop each employees
+        for (let i = 0; i < props.employees.length; i++) {
+
+            let e = props.employees[i];
+            let reqs = [];
+
+            // Get Comparable Requirements
+            let skills = [];
+            let total = 0;
+
+            e.peopleSkills.map((item) => {
+                skills.push(item.name);
+            });
+            e.technicalSkills.map((item) => {
+                skills.push(item.name);
+            });
+            e.workEthic.map((item) => {
+                skills.push(item.name);
+            });
+
+            let certifications = e.certifications.map((item) => {
                 return item.name;
             });
-            let jpCerts = jp.certificationRequirements.map((item) => {
-                return item.name;
+
+            let jobRecords = e.jobRecords.map((item) => {
+                return item.jobTitle;
             });
 
-            // 2. Loop each employees
-            for (let i = 0; i < props.employees.length; i++) {
+            // 3. calculate score 
+            if (skills.length > 0 || certifications.length > 0 || jobRecords.length > 0) {
 
-                let e = props.employees[i];
-                let reqs = [];
+                let skillScore = 0;
+                let certScore = 0;
 
-                // Get Comparable Requirements
-                let skills = [];
-                let total = 0;
-
-                e.peopleSkills.map((item) => {
-                    skills.push(item.name);
-                });
-                e.technicalSkills.map((item) => {
-                    skills.push(item.name);
-                });
-                e.workEthic.map((item) => {
-                    skills.push(item.name);
-                });
-
-                let certifications = e.certifications.map((item) => {
-                    return item.name;
-                });
-
-                let jobRecords = e.jobRecords.map((item) => {
-                    return item.jobTitle;
-                });
-
-                // 3. calculate score 
-                if (skills.length > 0 || certifications.length > 0 || jobRecords.length > 0) {
-
-                    let skillScore = 0;
-                    let certScore = 0;
-
-                    // loop skills, check skill
-                    skills.map((item) => {
-                        if (jpSk.includes(item)) {
-                            reqs.push(item);
-                            skillScore += 1;
-                            // console.log('checking skill score', item, skillScore);
-                        }
-                    });
-
-                    // loop certifications, check certifiacation
-                    certifications.map((item) => {
-                        if (jpCerts.includes(item)) {
-                            reqs.push(item);
-                            certScore += 1;
-                            // console.log('checking certifiacation score', item, certScore);
-                        }
-                    });
-
-                    // calculate the score
-                    // console.log('checking skill score', skillScore);
-                    if (skills.length > 0) {
-                        total += (skillScore / jpSk.length) * 70;
+                // loop skills, check skill
+                skills.map((item) => {
+                    if (jpSk.includes(item)) {
+                        reqs.push(item);
+                        skillScore += 1;
+                        // console.log('checking skill score', item, skillScore);
                     }
+                });
 
-                    if (certifications.length > 0) {
-                        total += (certScore / certifications.length) * 20;
+                // loop certifications, check certifiacation
+                certifications.map((item) => {
+                    if (jpCerts.includes(item)) {
+                        reqs.push(item);
+                        certScore += 1;
+                        // console.log('checking certifiacation score', item, certScore);
                     }
+                });
 
-                    // check job title
-                    if (jobRecords.includes(jp.jobTitle)) {
-                        total += 10;
-                    }
-
-                    e.matchedScore = total;
-                    e.matchedReqs = reqs;
-
-                    matchedList.push(e);
+                // calculate the score
+                // console.log('checking skill score', skillScore);
+                if (skills.length > 0) {
+                    total += (skillScore / jpSk.length) * 70;
                 }
 
+                if (certifications.length > 0) {
+                    total += (certScore / certifications.length) * 20;
+                }
+
+                // check job title
+                if (jobRecords.includes(jp.jobTitle)) {
+                    total += 10;
+                }
+
+                e.matchedScore = total;
+                e.matchedReqs = reqs;
+
+                matchedEmployees.push(e);
+                // console.log(total, e, matchedEmployees);
             }
 
         }
-        props.setMatchedEmployees(matchedList);
+
+        props.setSelected(matchedEmployees);
+        setMatchedEmployees([]);
     }
 
     return (
@@ -343,7 +246,7 @@ const ChildrenJP = (props) => {
                     <Row>{location}</Row>
                 </Col>
                 <Col sm={2} style={{ marginTop: "2%" }}>
-                    <Button size="sm" onClick={() => { props.setMatchedEmployees([]); props.setSelected(jobPosting); filter(jobPosting) }} style={{ marginTop: '10%', backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} >
+                    <Button size="sm" onClick={() => { filter(props.jp); }} style={{ marginTop: '10%', backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} >
                         Analyze
                     </Button>
                 </Col>
