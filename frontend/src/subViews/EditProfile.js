@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from "react-dom";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import axios from 'axios';
@@ -121,6 +122,13 @@ function EditProfile(props) {
 
     function downloadResume() {
         axios.get(`http://localhost:8080/documents/${employee.employeeNum}`).then(res => {
+                    console.log(res);
+                    const link = document.createElement("a");
+                    link.download = `${""}.pdf`;
+
+                    const blob = new Blob([res] ,{type: "application/pdf"});
+                    const fileURL = URL.createObjectURL(blob);
+                    window.open(fileURL);
 
             });
     }
@@ -140,7 +148,7 @@ function EditProfile(props) {
                             <div>{file && `${file.name}` - `${file.type}`}</div>
 
                             <button onClick={handleUploadClick}>Upload</button>
-                            <button onClick={downloadResume}>Download</button>
+                            <button onClick={downloadResume} onLoadError={console.error}>Download</button>
                         </div>
                     </Row>
                 </div>
