@@ -1,6 +1,8 @@
 package com.positivehire.phtalent.models;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -27,9 +29,12 @@ public class JobRecord extends DomainObject {
 
     private String location;
 
-    private Date startDate;
+    private LocalDate startDate;
 
-    private Date endDate;
+    private LocalDate endDate;
+    // private Date startDate;
+
+    // private Date endDate;
 
     // private String employeeId;
 
@@ -47,8 +52,8 @@ public class JobRecord extends DomainObject {
 
     // }
 
-    public JobRecord(String jobTitle, String jobLevel, String organization, String location, Date startDate,
-            Date endDate, List<Skill> jobSkills) {
+    public JobRecord(String jobTitle, String jobLevel, String organization, String location, LocalDate startDate,
+            LocalDate endDate, List<Skill> jobSkills) {
         this.jobTitle = jobTitle;
         this.jobLevel = jobLevel;
         this.organization = organization;
@@ -58,6 +63,21 @@ public class JobRecord extends DomainObject {
         this.jobSkills = jobSkills;
         // this.employeeId = employeeId;
     }
+
+    // // Unused constructor for testing
+    // public JobRecord(String jobTitle, String jobLevel, String organization,
+    // String location, LocalDate startDate,
+    // LocalDate endDate, List<Skill> jobSkills) {
+    // this.jobTitle = jobTitle;
+    // this.jobLevel = jobLevel;
+    // this.organization = organization;
+    // this.location = location;
+    // this.startDate =
+    // Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    // this.endDate =
+    // Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    // this.jobSkills = jobSkills;
+    // }
 
     public Serializable getId() {
         return this.id;
@@ -99,19 +119,19 @@ public class JobRecord extends DomainObject {
         this.location = location;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return this.startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return this.endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

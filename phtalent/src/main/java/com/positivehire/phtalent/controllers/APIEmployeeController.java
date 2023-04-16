@@ -1,6 +1,8 @@
 package com.positivehire.phtalent.controllers;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -161,24 +163,33 @@ public class APIEmployeeController extends APIController {
                     HttpStatus.CONFLICT);
         }
 
-        Date today = new Date();
-        Date sDate = rec.getStartDate();
-        Date eDate = rec.getEndDate();
-        // Check for valid dates
-        if (sDate == null) {
+        Date input = new Date();
+        LocalDate today = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate sDate = null;
+        LocalDate eDate = null;
+        if (rec.getStartDate() != null) {
+            sDate = rec.getStartDate();
+        } else {
             return new ResponseEntity<String>(
                     errorResponse("Start date is not set"),
                     HttpStatus.CONFLICT);
-        } else if (eDate != null && eDate.before(sDate)) {
+        }
+
+        if (rec.getEndDate() != null) {
+            eDate = rec.getEndDate();
+        }
+
+        // Check for valid dates
+        if (eDate != null && eDate.isBefore(sDate)) {
             return new ResponseEntity<String>(
                     errorResponse("Start date cannot be after end date"),
                     HttpStatus.CONFLICT);
-        } else if (sDate.after(today)) {
+        } else if (sDate.isAfter(today)) {
             return new ResponseEntity<String>(
                     errorResponse("End date cannot be after today"),
                     HttpStatus.CONFLICT);
 
-        } else if (eDate != null && eDate.after(today)) {
+        } else if (eDate != null && eDate.isAfter(today)) {
             return new ResponseEntity<String>(
                     errorResponse("Start date cannot be after today"),
                     HttpStatus.CONFLICT);
@@ -211,32 +222,41 @@ public class APIEmployeeController extends APIController {
             // check if JobRecord was found
             if (jobRecordToUpdate != null) {
 
-                Date today = new Date();
-                Date sDate = rec.getStartDate();
-                Date eDate = rec.getEndDate();
+                Date input = new Date();
+                LocalDate today = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                LocalDate sDate = null;
+                LocalDate eDate = null;
+                if (rec.getStartDate() != null) {
+                    sDate = rec.getStartDate();
+                }
+
+                if (rec.getEndDate() != null) {
+                    eDate = rec.getEndDate();
+                }
+
                 // Check for valid dates
                 if (sDate != null && eDate != null) {
-                    if (eDate.before(sDate)) {
+                    if (eDate.isBefore(sDate)) {
                         return new ResponseEntity<String>(
                                 errorResponse("Start date cannot be after end date"),
                                 HttpStatus.CONFLICT);
-                    } else if (sDate.after(today)) {
+                    } else if (sDate.isAfter(today)) {
                         return new ResponseEntity<String>(
                                 errorResponse("End date cannot be after today"),
                                 HttpStatus.CONFLICT);
 
-                    } else if (eDate.after(today)) {
+                    } else if (eDate.isAfter(today)) {
                         return new ResponseEntity<String>(
                                 errorResponse("Start date cannot be after today"),
                                 HttpStatus.CONFLICT);
                     }
                 } else if (sDate == null || eDate == null) {
-                    if (sDate != null && (jobRecordToUpdate.getEndDate().before(sDate) || sDate.after(today))) {
+                    if (sDate != null && (jobRecordToUpdate.getEndDate().isBefore(sDate) || sDate.isAfter(today))) {
                         return new ResponseEntity<String>(
                                 errorResponse("New start date is invalid"),
                                 HttpStatus.CONFLICT);
                     } else {
-                        if (jobRecordToUpdate.getStartDate().before(eDate) || eDate.after(today)) {
+                        if (jobRecordToUpdate.getStartDate().isBefore(eDate) || eDate.isAfter(today)) {
                             return new ResponseEntity<String>(
                                     errorResponse("New end date is invalid"),
                                     HttpStatus.CONFLICT);

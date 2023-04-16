@@ -8,9 +8,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -141,7 +144,7 @@ public class APIEmployeeControllerTest {
                                 "employeeSource",
                                 "accessRole", "performanceScore", "annualBonus", 5.5, null, null, null, null, null,
                                 null);
-                final Date d = new Date();
+                final Date d = new Date(1000);
 
                 // Certifications
                 final Certification cert = new Certification("Leadership", "NC State", d, "2234",
@@ -166,17 +169,18 @@ public class APIEmployeeControllerTest {
                 List<Skill> jrSkills = new ArrayList<Skill>();
                 jrSkills.add(sx);
 
+                // LocalDate startDate = LocalDate.of(2016, 8, 19);
                 // JobRecords
-                final JobRecord jr1 = new JobRecord("CISO", "Senior", "RedHat", null, new Date(2013, 3, 20),
-                                new Date(2018, 3, 20),
+                final JobRecord jr1 = new JobRecord("CISO", "Senior", "RedHat", null, LocalDate.of(2016, 8, 19),
+                                LocalDate.of(2018, 8, 19),
                                 jrSkills);
 
                 jrSkills.remove(sx);
 
                 jrSkills.add(sy);
 
-                final JobRecord jr2 = new JobRecord("Server", "Noob", "Marcos", null, new Date(1884, 1, 1),
-                                new Date(1884, 1, 2),
+                final JobRecord jr2 = new JobRecord("Server", "Noob", "Marcos", null, LocalDate.of(2000, 1, 1),
+                                LocalDate.of(2010, 4, 4),
                                 jrSkills);
                 List<JobRecord> jrList = new ArrayList<JobRecord>();
                 jrList.add(jr1);
@@ -284,15 +288,18 @@ public class APIEmployeeControllerTest {
 
                 // JobRecord functionality testing (CRUD)
 
-                Date startDate = new Date(2000);
+                LocalDate startDate = LocalDate.of(2016, 8, 19);
 
-                JobRecord newJR1 = new JobRecord("firstEmp", "entry", "UK", null, startDate, null, null);
+                LocalDate endDate = LocalDate.of(2019, 8, 19);
+                System.out.println(endDate.toString());
+
+                JobRecord newJR1 = new JobRecord("firstEmp", "entry", "UK", null, startDate, endDate, null);
 
                 List<Skill> moreskills = new ArrayList<Skill>();
                 Skill soccer = new Skill("Soccer", "pro", 5);
                 moreskills.add(soccer);
 
-                JobRecord newJR2 = new JobRecord("secJR", "junior", null, null, null, null, moreskills);
+                JobRecord newJR2 = new JobRecord("secJR", "junior", null, null, startDate, endDate, moreskills);
 
                 System.out.println(TestUtils.asJsonString(newJR1));
                 mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
@@ -429,7 +436,7 @@ public class APIEmployeeControllerTest {
                 moreskills.add(refSkill);
                 moreskills.add(refSkill2);
 
-                JobRecord newJR3 = new JobRecord("Basketball", "junior", "NCSU", null, null, null, moreskills);
+                JobRecord newJR3 = new JobRecord("Basketball", "junior", "NCSU", null, startDate, endDate, moreskills);
 
                 mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
                                 .contentType(MediaType.APPLICATION_JSON)
