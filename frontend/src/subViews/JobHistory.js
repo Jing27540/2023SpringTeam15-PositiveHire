@@ -82,11 +82,95 @@ function JobHistory(props) {
         setJobSkills(undefined);
     }
 
+    function checkFieldsForPost() {
+        if (jobTitle === undefined) {
+            setResponseMessage("Job Title must be set");
+            return false;
+        } else if (jobLevel === undefined) {
+            setResponseMessage("Job Level must be set");
+            return false;
+        } else if (organization === undefined) {
+            setResponseMessage("Organization must be set");
+            return false;
+        } else if (startDate === undefined) {
+            setResponseMessage("Start Date must be set");
+            return false;
+        } else if (endDate === undefined) {
+            setResponseMessage("End Date must be set");
+            return false;
+        }
+
+        const today = new Date();
+        const sDate = new Date(startDate.valueOf());
+        const eDate = new Date(endDate.valueOf());
+
+        // console.log(startDate.valueOf());
+        if (sDate.valueOf() > today.valueOf()) {
+            setResponseMessage("Start Date cannot be after today");
+            return false;
+        }
+
+        if (sDate.valueOf() > eDate.valueOf()) {
+            setResponseMessage("Start Date cannot be after Finish Date");
+            return false;
+        }
+
+        return true;
+    }
+
+    function checkFieldsForPut() {
+
+        if (startDate !== undefined && endDate !== undefined) {
+            const today = new Date();
+            const sDate = new Date(startDate.valueOf());
+            const eDate = new Date(endDate.valueOf());
+
+            // console.log(startDate.valueOf());
+            if (sDate.valueOf() > today.valueOf()) {
+                setResponseMessage("Start Date cannot be after today");
+                return false;
+            }
+
+            if (sDate.valueOf() > eDate.valueOf()) {
+                setResponseMessage("Start Date cannot be after Finish Date");
+                return false;
+            }
+        } else if (endDate === undefined) {
+            const today = new Date();
+            const sDate = new Date(startDate.valueOf());
+
+            if (sDate.valueOf() > today.valueOf()) {
+                setResponseMessage("Start Date cannot be after today");
+                return false;
+            }
+
+            const eDate = new Date(Date.parse(selectedJobRecord.endDate)).toISOString().slice(0, 10);
+            if (sDate.valueOf() > eDate.valueOf()) {
+                setResponseMessage("Start Date cannot be after Finish Date");
+                return false;
+            }
+        } else if (startDate === undefined) {
+            const eDate = new Date(endDate.valueOf());
+            const sDate = new Date(Date.parse(selectedJobRecord.startDate)).toISOString().slice(0, 10);
+            if (sDate.valueOf() > eDate.valueOf()) {
+                setResponseMessage("Start Date cannot be after Finish Date");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     function addJobRecord() {
 
         let jrToAdd = null;
         let jrToEdit = null;
         if (mode) {
+            if (!checkFieldsForPost()) {
+                // console.log("Req was bad");
+                return;
+            }
+            // console.log("Req was OK");
             jrToAdd = {
                 jobTitle: jobTitle,
                 jobLevel: jobLevel,
@@ -97,6 +181,10 @@ function JobHistory(props) {
                 jobSkills: []
             };
         } else {
+            if (!checkFieldsForPut()) {
+                // console.log("Req was bad");
+                return;
+            }
             jrToEdit = {
                 id: currid,
                 jobTitle: jobTitle,
@@ -141,7 +229,26 @@ function JobHistory(props) {
         });
     }
 
+    function checkFieldsForSkills() {
+        if (sname === undefined) {
+            setResponseMessage("Skill Name must be set");
+            return false;
+        } else if (level === undefined) {
+            setResponseMessage("Skill Level must be set");
+            return false;
+        } else if (score === undefined) {
+            setResponseMessage("Skill Score must be set");
+            return false;
+        }
+        return true;
+    }
+
     function saveSkill() {
+        if (!checkFieldsForSkills()) {
+            // console.log("Skill was bad");
+            return;
+        }
+
         if (secmode) {
             let duplicate = false;
 
@@ -217,7 +324,7 @@ function JobHistory(props) {
             <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", float: 'left', width: '70px', marginTop: "2%" }} onClick={() => { handlesecShow(); setMode(true); }}>
                 Add
             </Button>
-            <Form.Label style={{color: "green", marginTop: "2%"}}>{responseMessage}</Form.Label>
+            <Form.Label style={{ color: "green", marginTop: "2%" }}>{responseMessage}</Form.Label>
             <Table striped bordered hover style={{ marginTop: '2%' }}>
                 <thead>
                     <tr>
@@ -248,7 +355,7 @@ function JobHistory(props) {
                                         return (
                                             <Row key={indx}>
                                                 <Col>
-                                                    {skill.name} 
+                                                    {skill.name}
                                                 </Col>
                                                 <Col>
                                                     {skill.level}
@@ -259,7 +366,7 @@ function JobHistory(props) {
                                 </td>
                                 <td>
                                     <Col>
-                                        <Button size="sm" onClick={() => { setSelectedJobRecord(item); deleteJobRecord(item); }} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px'}} >
+                                        <Button size="sm" onClick={() => { setSelectedJobRecord(item); deleteJobRecord(item); }} style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#990033", borderColor: "#990033", width: '70px' }} >
                                             Remove
                                         </Button>
                                     </Col>
@@ -275,7 +382,7 @@ function JobHistory(props) {
                                         </Button>
                                     </Col>
                                     <Col>
-                                        <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} onClick={() => { handleShow(); setsecMode(false); setId(item.id); setName(item.name); setJobSkills(item.jobSkills); setSelectedJobRecord(employee.jobRecords[index]); setFields(); }}>
+                                        <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} onClick={() => { handleShow(); setsecMode(false); setId(item.id); setName(item.name); setJobSkills(item.jobSkills); setSelectedJobRecord(employee.jobRecords[index]); }}>
                                             Edit Skill
                                         </Button>
                                     </Col>
