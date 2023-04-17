@@ -9,6 +9,7 @@ import TabsBar from './TabsBar';
 import JobPosting from '../views/JobPosting';
 import { useAuth } from '../base/auth';
 import ViewMatchAnalytics from '../subViews/ViewMatchAnalytics';
+import Alert from 'react-bootstrap/Alert';
 
 /**
  * NavBar class for the header of the application
@@ -105,10 +106,10 @@ export default function NavBar() {
                 {mode === "Positions" ?
                   <JobPosting accessRole={accessRole} pView={pView} setPView={setPView} />
                   :
-                  mode === 'Talent Pipeline'?
-                    <ViewMatchAnalytics employees={employees} jobPostings={jobPostings}/>
+                  mode === 'Talent Pipeline' ?
+                    <ViewMatchAnalytics employees={employees} jobPostings={jobPostings} />
                     :
-                    undefined
+                    <Alert variant="danger"> Not Implement Yet!</Alert>
                 }
               </>
               :
