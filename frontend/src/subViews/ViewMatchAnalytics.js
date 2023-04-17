@@ -25,6 +25,7 @@ function ViewMatchAnalytics(props) {
     const [jobPostings, setJobPostings] = React.useState(props.jobPostings);
     const [employees, setEmployees] = React.useState(props.employees);
     const [selected, setSelected] = React.useState([]);
+    const [color, setColor] = React.useState(['red', 'green', 'blue']);
 
     //Loading the job postings from the database
     const loadJobPostings = () => {
@@ -42,7 +43,7 @@ function ViewMatchAnalytics(props) {
     // display the matched requirement
     function showMatchedReqs(employee) {
         let str = "";
-        employee.matchedReqs.map(function (item) {
+        employee.matchedReqs.forEach(function (item) {
             if (item === employee.matchedReqs[employee.matchedReqs.length - 1]) {
                 str += item;
             } else {
@@ -68,35 +69,29 @@ function ViewMatchAnalytics(props) {
     }
 
     function getMatchedList() {
-        if (selected) {
-            // console.log('checking matching score', matchedEmployees);
-            let arr = selected.map((employee, index) =>
-                <>
-                    <Row style={{ fontSize: '15px', float: "center" }} key={index}>
-                        <Col sm={2} className="border border" style={{ textAlign: "center" }}>
-                            {employee.matchedScore.toFixed(1) + "%"}
-                        </Col>
-                        <Col className="border border">
-                            <Row style={{ textAlign: 'left', justifyContent: "space-between" }}>
-                                <Col sm={4}>EmployeeName:</Col>
-                                <Col>{employee.employeeName}</Col>
-                            </Row>
-                            <Row style={{ textAlign: 'left', justifyContent: "space-between" }}>
-                                <Col sm={4}>EmployeeNumber:</Col>
-                                <Col>{employee.employeeNum}</Col>
-                            </Row>
-                            <Row style={{ textAlign: 'left', justifyContent: "space-between" }}>
-                                <Col sm={4}>MatchedRequirements:</Col>
-                                <Col>{showMatchedReqs(employee)}</Col>
-                            </Row>
-                        </Col>
+        // console.log('checking matching score', matchedEmployees);
+        let arr = selected.map((employee, index) =>
+            <Row style={{ fontSize: '15px', float: "center" }} key={index}>
+                <Col sm={2} className="border border" style={{ textAlign: "center", fontWeight: 'bold', color: employee.matchedScore.toFixed(1) <= 33 ? "red" : employee.matchedScore.toFixed(1) <= 66 ? "blue" : "green" }}>
+                    {employee.matchedScore.toFixed(1) + "%"}
+                </Col>
+                <Col className="border border">
+                    <Row style={{ textAlign: 'left', justifyContent: "space-between", fontSize: '13px' }}>
+                        <Col sm={4}>EmployeeName:</Col>
+                        <Col>{employee.employeeName}</Col>
                     </Row>
-                </>
-            );
-            return arr;
-        } else {
-            return;
-        }
+                    <Row style={{ textAlign: 'left', justifyContent: "space-between", fontSize: '13px' }}>
+                        <Col sm={4}>EmployeeNumber:</Col>
+                        <Col>{employee.employeeNum}</Col>
+                    </Row>
+                    <Row style={{ textAlign: 'left', justifyContent: "space-between", fontSize: '13px' }}>
+                        <Col sm={4}>MatchedRequirements:</Col>
+                        <Col>{showMatchedReqs(employee)}</Col>
+                    </Row>
+                </Col>
+            </Row>
+        );
+        return arr;
     }
 
     return (
@@ -150,71 +145,58 @@ const ChildrenJP = (props) => {
         for (let i = 0; i < props.employees.length; i++) {
 
             let e = props.employees[i];
-            let skills = [];
-            let certs = [];
+            const reqs = [];
 
-            e.peopleSkills.map(function (item) {
-                skills.push(item.name);
+            let matchedSkills = [];
+            e.peopleSkills.forEach(function (item) {
+                if (jpSk.includes(item.name)) {
+                    matchedSkills.push(item.name);
+                    reqs.push(item.name);
+                }
+                return;
             });
-            e.technicalSkills.map(function (item) {
-                skills.push(item.name);
-            });
-            e.workEthic.map(function (item) {
-                skills.push(item.name);
+            e.technicalSkills.forEach(function (item) {
+                if (jpSk.includes(item.name)) {
+                    matchedSkills.push(item.name);
+                    reqs.push(item.name);
+                }
+                return;
             });
 
-            let certifications = e.certifications.map((item) => {
-                return item.name;
+            e.workEthic.forEach(function (item) {
+                if (jpSk.includes(item.name)) {
+                    matchedSkills.push(item.name);
+                    reqs.push(item.name);
+                }
+                return;
             });
 
+            let matchedCertifications = e.certifications.map(function (item) {
+                if (jpCerts.includes(item.name)) {
+                    reqs.push(item.name);
+                    return item.name;
+                }
+            });
+
+            // job title
             let jobRecords = e.jobRecords.map((item) => {
                 return item.jobTitle;
             });
 
+            if (jobRecords.includes(jp.jobTitle)) {
+                reqs.push(jp.jobTitle + " (Job Record)");
+            }
+
+            let skillScore = (matchedSkills.length / jpSk.length) * 70;
+            let certScore = (matchedCertifications.length / jpCerts.length) * 20;
+            let jrScore = jobRecords.includes(jp.jobTitle) ? 10 : 0;
+
             // 3. calculate score 
-            if (skills.length > 0 || certifications.length > 0 || jobRecords.length > 0) {
-
-                let reqs = [];
-                let skillScore = 0;
-                let certScore = 0;
-                let total = 0;
-
-                // loop skills, check skill
-                skills.map((item) => {
-                    if (jpSk.includes(item)) {
-                        reqs.push(item);
-                        skillScore += 1;
-                        // console.log('checking skill score', item, skillScore);
-                    }
-                });
-
-                // loop certifications, check certifiacation
-                certifications.map((item) => {
-                    if (jpCerts.includes(item)) {
-                        reqs.push(item);
-                        certScore += 1;
-                        // console.log('checking certifiacation score', item, certScore);
-                    }
-                });
-
-                // check job title
-                if (jobRecords.includes(jp.jobTitle)) {
-                    reqs.push(jp.jobTitle + " (Job Record)");
-                    total = total + 10;
-                }
-
-                if (reqs.length > 0) {
-                    if (skillScore > 0) {
-                        total = total + (skillScore / jpSk.length) * 70;
-                    }
-
-                    if (certScore > 0) {
-                        total = total + (certScore / certifications.length) * 20;
-                    }
-                    e.matchedScore = total;
-                    e.matchedReqs = reqs;
-                    matchedEmployees.push(e);
-                }
+            if (reqs.length > 0) {
+                e.matchedScore = skillScore + certScore + jrScore;
+                e.matchedReqs = reqs;
+                console.log('checking req', e.matchedReqs);
+                matchedEmployees.push(e);
             }
 
         }
