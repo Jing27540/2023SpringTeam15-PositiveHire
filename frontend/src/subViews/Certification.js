@@ -109,14 +109,12 @@ function Certification(props) {
                 });
             }
 
-            console.log('checking certification', employee);
-
             if (!exists) {
                 axios.put("http://localhost:8080/employees", employee).then(response => {
                     axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                         setEmployee(res.data);
                         setCertifications(employee.certifications);
-                        console.log("add / edit certification");
+                        alert.log("Successful to add/edit certification");
                         handleClose();
                     }).catch(err => console.log(err));
                 }).catch(error => {

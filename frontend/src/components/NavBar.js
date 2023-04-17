@@ -34,7 +34,6 @@ export default function NavBar() {
   // Get the employee list
   const [employees, setEmployees] = React.useState();
 
-  console.log('checking mode..........', mode);
   // Get Employee Data
   React.useEffect(() => {
 

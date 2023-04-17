@@ -153,8 +153,6 @@ export const JobTitle = (props) => {
     const [min, setMin] = React.useState(index ? salary.substr(0, index) : "");
     const [max, setMax] = React.useState(index ? salary.substr(index + 1) : "");
 
-    console.log(min, max);
-
     // get jobPostings list
     const [jobPostings, setJobPostings] = React.useState([]);
 
@@ -764,13 +762,11 @@ export const Processes = (props) => {
         p.push(p5);
         setProcess(p);
         jobPostingData.process = p;
-        console.log(jobPostingData);
         // save data
         props.setJobPosting(jobPostingData);
         if (props.saveMode !== undefined && props.saveMode === false) {
             // api call
             axios.put("http://localhost:8080/jobpostings", jobPostingData).then(response => {
-                console.log("save", jobPostingData);
                 alert("Save Successfully!!");
             }).catch(error => {
                 alert("Unsuccessful to update the Processes!")
