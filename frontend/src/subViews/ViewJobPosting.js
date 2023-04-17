@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import ViewMatchAnalytics from "../subViews/ViewMatchAnalytics";
 
 const HorizontalLine = styled.div`
     width: 100%;
@@ -134,12 +135,15 @@ const ChildrenJPContent = (props) => {
                         <Row>{'Location: ' + props.jp.location}</Row>
                         <Row>{'Position #: ' + props.jp.jobNumber}</Row>
                         {props.jp.applyLink && props.jp.applyLink !== undefined ?
-                            <Row sytle={{ marginTop: '2%' }}>
+                            <Row style={{ marginTop: '2%' }}>
                                 <a className="btn btn-primary" href={props.jp.applyLink} role="button" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", width: '110px', marginTop: "2%" }}>Apply Link</a>
                             </Row>
                             :
                             undefined
                         }
+                        {/* <Row style={{ marginTop: '2%' }}>
+                            <a className="btn btn-primary" href={ViewMatchAnalytics} role="button" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", width: '110px', marginTop: "2%" }}>View Matches</a>
+                        </Row> */}
                     </Col>
                     {/* <Col sm={2}>
                         <Button size="sm" style={{ marginTop: '10%', backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} >
