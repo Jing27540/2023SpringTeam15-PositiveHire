@@ -124,9 +124,10 @@ function Skill(props) {
             };
             console.log(newSkill);
 
-            if (s.type === 'technicalSkills') {
-                if (mode) {
+            console.log(mode);
 
+            if (s.type === 'technicalSkills') {
+                if (mode) { // add mode
                     employee.technicalSkills.forEach(element => {
                         if (element.name === newSkill.name) {
                             exists = true;
@@ -137,7 +138,7 @@ function Skill(props) {
                     } else {
                         employee.technicalSkills.push(newSkill);
                     }
-                } else {
+                } else { // edit mode
                     // employee.technicalSkills = [];
                     employee.technicalSkills = technicalSkills.map(obj => {
                         if (obj.name === newSkill.name) {
@@ -196,6 +197,7 @@ function Skill(props) {
 
             }
 
+            // add new skill
             if (!exists) {
                 axios.put("http://localhost:8080/employees", employee).then(response => {
                     axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
@@ -206,7 +208,7 @@ function Skill(props) {
                         technicalSkills = employee.technicalSkills;
                         peopleSkills = employee.peopleSkills;
                         workEthic = employee.workEthic;
-                        console.log("add / edit skill");
+                        alert.log("add / edit skill");
                         handleClose();
                     }).catch(err => console.log(err));
                 }).catch(error => {
