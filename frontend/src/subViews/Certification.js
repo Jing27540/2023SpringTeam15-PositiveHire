@@ -114,7 +114,7 @@ function Certification(props) {
                     axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                         setEmployee(res.data);
                         setCertifications(employee.certifications);
-                        alert.log("Successful to add/edit certification");
+                        alert("Successful to add/edit certification");
                         handleClose();
                     }).catch(err => console.log(err));
                 }).catch(error => {
