@@ -57,7 +57,7 @@ function CreateJobPosting(props) {
             "otherRequirements": jobPosting.otherRequirements,
             "jobDescription": jobPosting.jobDescription,
             "availablePositions": jobPosting.availablePositions,
-            "location": jobPosting.locations,
+            "location": jobPosting.location,
             "meetingType": jobPosting.meetingType,
             "meetingNotes": jobPosting.meetingNotes,
             "process": jobPosting.process,
@@ -645,6 +645,7 @@ export const Availability = (props) => {
 
                 // save data
                 props.setJobPosting(jobPostingData);
+                // edit mode
                 if (props.saveMode !== undefined && props.saveMode === false) {
                     // api call
                     axios.put("http://localhost:8080/jobpostings", jobPostingData).then(response => {
