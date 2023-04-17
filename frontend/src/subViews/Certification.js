@@ -14,7 +14,6 @@ import axios from 'axios';
  * @author Jing Huang
  * @author Biniyam
  */
-// TODO: Dummy Data
 const CF = [{ name: 'Certification Name', Institution: 'Institution', IssuedDate: 'IssuedDate', id: 'Cerdential ID abcde' },
 { name: 'Certification Name', Institution: 'Institution', IssuedDate: 'IssuedDate', id: 'Cerdential ID abcde' },
 { name: 'Certification Name', Institution: 'Institution', IssuedDate: 'IssuedDate', id: 'Cerdential ID abcde' }
@@ -109,6 +108,8 @@ function Certification(props) {
                     return obj;
                 });
             }
+
+            console.log('checking certification', employee);
 
             if (!exists) {
                 axios.put("http://localhost:8080/employees", employee).then(response => {

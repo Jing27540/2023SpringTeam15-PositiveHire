@@ -23,7 +23,8 @@ public class Certification {
     /** The institution of this created Certification object */
     private String institution;
     /** The issuedDate of this created Certification object */
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="MMM d, yyyy, hh:mm:ss a")
+    // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="MMM d, yyyy, hh:mm:ss a")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date   issuedDate;
     /** The credentialID of this created Certification object */
     private String credentialID;
