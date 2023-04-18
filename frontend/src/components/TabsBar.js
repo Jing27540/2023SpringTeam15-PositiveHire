@@ -24,6 +24,12 @@ function TabsBar({ titles, setMode, setPView, ...props }) {
                                 </Dropdown.Menu>
                             </Nav.Item>
                         );
+                    } else if (item === 'Talent Pipeline') {
+                        return (
+                            <Nav.Item key={item} variant="drak" >
+                                <Nav.Link eventKey={item} disabled={!(props.accessRole === "HR" || props.accessRole === "DEI")} onClick={() => { setMode(item); setShow(false); }} style={{ color: "black", fontWeight: 'bold' }}>{item}</Nav.Link>
+                            </Nav.Item>
+                        );
                     } else {
                         return (
                             <Nav.Item key={item} variant="drak" >
