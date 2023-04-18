@@ -14,8 +14,6 @@ import axios from 'axios';
  * @author Jing Huang
  * @author Biniyam
  */
-
-// TODO: Dummy Data
 const TS = [{ skill: 'C#', level: 'Expert', score: '4' },
 { skill: 'Docker', level: 'Expert', score: '4' },
 { skill: 'JavaScript', level: 'Advanced', score: '3' },
@@ -124,8 +122,6 @@ function Skill(props) {
             };
             console.log(newSkill);
 
-            console.log(mode);
-
             if (s.type === 'technicalSkills') {
                 if (mode) { // add mode
                     employee.technicalSkills.forEach(element => {
@@ -208,14 +204,16 @@ function Skill(props) {
                         technicalSkills = employee.technicalSkills;
                         peopleSkills = employee.peopleSkills;
                         workEthic = employee.workEthic;
-                        alert("add / edit skill");
+                        alert("Successful to Add/Edit Skill");
                         handleClose();
                     }).catch(err => console.log(err));
                 }).catch(error => {
                     setMessage("Error saving");
-                    console.log('unable to add / edit skill', employee);
+                    alert('unable to add / edit skill', employee);
                 });
             }
+        } else {
+            alert("Missing Inputs!");
         }
 
     }
@@ -250,7 +248,7 @@ function Skill(props) {
                     peopleSkills = employee.peopleSkills;
                     workEthic = employee.workEthic;
                     handleClose();
-                    console.log("remove the skill");
+                    alert("Successful to remove the skill");
                 }).catch(err => console.log(err));
             }).catch(error => {
                 setMessage("Unable to remove skill");
