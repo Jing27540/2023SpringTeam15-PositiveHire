@@ -42,13 +42,13 @@ function JobHistory(props) {
     const [jobSkills, setJobSkills] = React.useState();
 
     const [responseMessage, setResponseMessage] = React.useState('');
-    const [fields, setFields] = React.useState(true);
+    const [sDatEdited, setSDateEdited] = React.useState(false);
+    const [eDateEdited, setEDateEdited] = React.useState(false);
 
     React.useEffect(() => {
         // props.employee
         axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
             setEmployee(res.data);
-            console.log('checking', res.data);
         });
 
     }, []);
@@ -62,7 +62,6 @@ function JobHistory(props) {
         setStartDate(selectedJobRecord.startDate);
         setEndDate(selectedJobRecord.endDate);
         setJobSkills(selectedJobRecord.jobSkills);
-        console.log("Fields changed");
     }, [selectedJobRecord]);
 
     function clear() {
@@ -165,19 +164,38 @@ function JobHistory(props) {
 
         let jrToAdd = null;
         let jrToEdit = null;
+
+        //Add one day to compensate for Date Objects causing the day to be off by one. If the date was edited
+        let sd = new Date(Date.parse(startDate));
+        let ed = new Date(Date.parse(endDate));
+
+        if (sDatEdited) {
+            sd = new Date(Date.parse(startDate));
+            sd.setDate(sd.getDate() + 1);
+            setSDateEdited(false);
+        }
+
+        if (eDateEdited) {
+            ed = new Date(Date.parse(endDate));
+            ed.setDate(ed.getDate() + 1);
+            setEDateEdited(false);
+        }
+
         if (mode) {
             if (!checkFieldsForPost()) {
                 // console.log("Req was bad");
                 return;
             }
+
+            // date.setDate(date.getDate() + 1)
             // console.log("Req was OK");
             jrToAdd = {
                 jobTitle: jobTitle,
                 jobLevel: jobLevel,
                 organization: organization,
                 location: location,
-                startDate: startDate,
-                endDate: endDate,
+                startDate: sd,
+                endDate: ed,
                 jobSkills: []
             };
         } else {
@@ -191,8 +209,8 @@ function JobHistory(props) {
                 jobLevel: jobLevel,
                 organization: organization,
                 location: location,
-                startDate: startDate,
-                endDate: endDate,
+                startDate: sd,
+                endDate: ed,
                 jobSkills: []
             };
         }
@@ -201,12 +219,11 @@ function JobHistory(props) {
             axios.post(`http://localhost:8080/employees/${props.employee.employeeNum}/jobrecords`, jrToAdd).then(response => {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                     setEmployee(res.data);
-                    console.log('checking', res.data);
                     if (response.data.message !== undefined) {
                         setResponseMessage(response.data.message);
                     }
                 })
-            })
+            }).catch(err => setResponseMessage(err.response.data));
         } else {
             axios.put(`http://localhost:8080/employees/${props.employee.employeeNum}/jobrecords/${currid}`, jrToEdit).then(response => {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
@@ -215,7 +232,7 @@ function JobHistory(props) {
                         setResponseMessage(response.data.message);
                     }
                 })
-            })
+            }).catch(err => setResponseMessage(err.response.data));
         }
     }
 
@@ -226,7 +243,7 @@ function JobHistory(props) {
             axios.get(`http://localhost:8080/employees/${employee.employeeNum}`).then(res => {
                 setEmployee(res.data);
             })
-        });
+        }).catch(err => setResponseMessage(err.response.data));
     }
 
     function checkFieldsForSkills() {
@@ -273,7 +290,7 @@ function JobHistory(props) {
                             setResponseMessage(response.data.message);
                         }
                     })
-                })
+                }).catch(err => setResponseMessage(err.response.data));
             }
         } else {
             let skiId = 0;
@@ -296,7 +313,7 @@ function JobHistory(props) {
                         setResponseMessage(response.data.message);
                     }
                 })
-            })
+            }).catch(err => setResponseMessage(err.response.data));
 
         }
     }
@@ -316,7 +333,7 @@ function JobHistory(props) {
                     setResponseMessage(response.data.message);
                 }
             })
-        })
+        }).catch(err => setResponseMessage(err.response.data));
     }
 
     return (
@@ -461,7 +478,7 @@ function JobHistory(props) {
                             name="startDate"
                             placeholder="DateRange"
                             style={{ margin: '2%', width: '95%' }}
-                            onChange={(e) => setStartDate(e.target.value)}
+                            onChange={(e) => { setStartDate(e.target.value); setSDateEdited(true) }}
                         />
                         <Form.Label>Finish Date</Form.Label>
                         <Form.Control
@@ -469,7 +486,7 @@ function JobHistory(props) {
                             name="finishDate"
                             placeholder="DateRange"
                             style={{ margin: '2%', width: '95%' }}
-                            onChange={(e) => setEndDate(e.target.value)}
+                            onChange={(e) => { setEndDate(e.target.value); setEDateEdited(true) }}
                         />
                     </Modal.Body>
                     <Modal.Footer>
