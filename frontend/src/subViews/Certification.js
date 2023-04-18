@@ -176,7 +176,7 @@ function Certification(props) {
                                 </Row>
                                 <Row style={{ textAlign: 'left', margin: '2%' }}>
                                     <Col style={{ fontWeight: 'bold' }} sm={3}>IssuedDate</Col>
-                                    <Col>{item.issuedDate}</Col>
+                                    <Col>{new Date(Date.parse(item.issuedDate)).toISOString().slice(0, 10)}</Col>
                                 </Row>
                                 <Row style={{ textAlign: 'left', margin: '2%' }}>
                                     <Col style={{ fontWeight: 'bold' }} sm={3}>CredentialID</Col>
