@@ -118,7 +118,7 @@ function Certification(props) {
                         handleClose();
                     }).catch(err => console.log(err));
                 }).catch(error => {
-                    console.log('unable to add / edit certifications');
+                    alert('unable to add/edit certifications');
                 });
             }
         }
@@ -136,10 +136,10 @@ function Certification(props) {
             axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                 setEmployee(res.data);
                 setCertifications(employee.certifications);
-                console.log("remove the certifciation");
+                alert("successful to remove the certifciation");
             }).catch(err => console.log(err));
         }).catch(error => {
-            console.log('unable to remove certifciation')
+            alert('unable to remove certifciation')
         });
     }
 
