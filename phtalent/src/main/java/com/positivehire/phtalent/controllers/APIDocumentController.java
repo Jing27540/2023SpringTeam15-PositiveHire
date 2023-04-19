@@ -105,30 +105,23 @@ public class APIDocumentController extends APIController {
     }
 
     @GetMapping("/documents/{employeeNum}")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable("employeeNum") final int employeeNum) {
+    public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable("employeeNum") final int employeeNum) {
         Document toReturn = docService.findByEmployeeNum(employeeNum);
-        System.out.println("AAAAAA" + toReturn.getEmployeeNum());
-        System.out.println("AAAAAA" + toReturn.getDocType());
 
-        System.out.println("AAAAAA" + Base64.getEncoder().encodeToString(toReturn.getData()));
+        // HttpHeaders headers = new HttpHeaders();
+        // headers.setContentType(MediaType.APPLICATION_PDF);
+        // // Here you have to set the actual filename of your pdf
+        // String filename = "resume.pdf";
+        // headers.setContentDispositionFormData(filename, filename);
+        // headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+        // ResponseEntity<byte[]> response = new ResponseEntity<>(toReturn.getData(),
+        // headers, HttpStatus.OK);
+        // return response;
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        // Here you have to set the actual filename of your pdf
-        String filename = "resume.pdf";
-        headers.setContentDispositionFormData(filename, filename);
-        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-        ResponseEntity<byte[]> response = new ResponseEntity<>(toReturn.getData(), headers, HttpStatus.OK);
-        return response;
-
-        // return
-        // ResponseEntity.ok().contentType(MediaType.parseMediaType(MediaType.APPLICATION_PDF_VALUE))
-        // .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" +
-        // toReturn.getEmployeeNum() + "\"")
-        // .body(new ByteArrayResource(toReturn.getData()));
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(MediaType.APPLICATION_PDF_VALUE))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" +
+                        toReturn.getEmployeeNum() + "\"")
+                .body(new ByteArrayResource(toReturn.getData()));
     }
-
-    // "attachment:filename=" + toReturn.getEmployeeNum() + "_resume"
-    // "attachment; filename=\"" + fileName + "\"")
 
 }

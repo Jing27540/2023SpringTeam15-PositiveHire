@@ -87,7 +87,7 @@ function EditProfile(props) {
         // reader.readAsDataURL(file);
         reader.readAsDataURL(file);
 
-        let data = btoa(reader.result);
+        // let data = btoa(reader.result);
 
         reader.onload = function () {
             // console.log("result" + reader.result);
@@ -96,12 +96,7 @@ function EditProfile(props) {
             var base64result = reader.result.split(',')[1];
             // console.log(base64result);
             console.log(base64result.length);
-            const size = 3 * (base64result.length / 4);
-            console.log(size);
-            let data = {
-                content: base64result
-            }
-            console.log(data);
+
 
             axios.post(`http://localhost:8080/documents/${employee.employeeNum}`, base64result, { headers: { 'Content-Type': 'application/json' } }).then(res => {
                 console.log(res.data);
@@ -120,17 +115,39 @@ function EditProfile(props) {
 
     }
 
+    const downloadFile = (blob, fileName) => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.downlad = fileName;
+        document.body.append(link);
+        link.click();
+        link.remove();
+
+        setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+    }
+
     function downloadResume() {
-        axios.get(`http://localhost:8080/documents/${employee.employeeNum}`).then(res => {
-                    console.log(res);
-                    const link = document.createElement("a");
-                    link.download = `${""}.pdf`;
+        axios.get(`http://localhost:8080/documents/${employee.employeeNum}`, {responseType: 'blob'}).then(res => {
+            console.log(res);
+            // const link = document.createElement("a");
+            // link.download = `${""}.pdf`;
 
-                    const blob = new Blob([res] ,{type: "application/pdf"});
-                    const fileURL = URL.createObjectURL(blob);
-                    window.open(fileURL);
+            const blob = new Blob([res.data], { type: "application/pdf" });
+            // process to auto download it
+            const fileURL = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = fileURL;
+            link.download = "FileName:" + "testResume" + ".pdf";
+            link.click();
 
-            });
+            // const fileURL = URL.createObjectURL(blob);
+            // window.open(fileURL);
+            // downloadFile(blob, "WEEEE.pdf");
+
+            // Testing
+            // const file = new BeforeUnloadEvent([res.data], {type:})
+            console.log("Got here");
+        });
     }
     // TODO: hard code 
     const data = [{ name: "c#", level: "Expert", score: "5", }, { name: "Communication", level: "Advanced", score: "3", }];
