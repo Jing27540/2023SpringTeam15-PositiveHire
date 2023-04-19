@@ -3,8 +3,6 @@ package com.positivehire.phtalent.models;
 import java.util.Date;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -23,7 +21,6 @@ public class Certification {
     /** The institution of this created Certification object */
     private String institution;
     /** The issuedDate of this created Certification object */
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="MMM d, yyyy, hh:mm:ss a")
     private Date   issuedDate;
     /** The credentialID of this created Certification object */
     private String credentialID;
@@ -58,7 +55,6 @@ public class Certification {
         this.institution = institution;
     }
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="MMM d, yyyy, hh:mm:ss a")
     public Date getIssuedDate () {
         return this.issuedDate;
     }

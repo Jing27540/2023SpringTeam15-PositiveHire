@@ -57,7 +57,7 @@ function CreateJobPosting(props) {
             "otherRequirements": jobPosting.otherRequirements,
             "jobDescription": jobPosting.jobDescription,
             "availablePositions": jobPosting.availablePositions,
-            "location": jobPosting.locations,
+            "location": jobPosting.location,
             "meetingType": jobPosting.meetingType,
             "meetingNotes": jobPosting.meetingNotes,
             "process": jobPosting.process,
@@ -152,8 +152,6 @@ export const JobTitle = (props) => {
     const [index, setIndex] = React.useState(salary !== "" ? salary.indexOf("~") : undefined);
     const [min, setMin] = React.useState(index ? salary.substr(0, index) : "");
     const [max, setMax] = React.useState(index ? salary.substr(index + 1) : "");
-
-    console.log(min, max);
 
     // get jobPostings list
     const [jobPostings, setJobPostings] = React.useState([]);
@@ -647,6 +645,7 @@ export const Availability = (props) => {
 
                 // save data
                 props.setJobPosting(jobPostingData);
+                // edit mode
                 if (props.saveMode !== undefined && props.saveMode === false) {
                     // api call
                     axios.put("http://localhost:8080/jobpostings", jobPostingData).then(response => {
@@ -764,13 +763,11 @@ export const Processes = (props) => {
         p.push(p5);
         setProcess(p);
         jobPostingData.process = p;
-        console.log(jobPostingData);
         // save data
         props.setJobPosting(jobPostingData);
         if (props.saveMode !== undefined && props.saveMode === false) {
             // api call
             axios.put("http://localhost:8080/jobpostings", jobPostingData).then(response => {
-                console.log("save", jobPostingData);
                 alert("Save Successfully!!");
             }).catch(error => {
                 alert("Unsuccessful to update the Processes!")
