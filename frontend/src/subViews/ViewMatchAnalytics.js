@@ -187,15 +187,22 @@ const ChildrenJP = (props) => {
                 reqs.push(jp.jobTitle + " (Job Record)");
             }
 
-            let skillScore = (matchedSkills.length / jpSk.length) * 70;
-            let certScore = (matchedCertifications.length / jpCerts.length) * 20;
-            let jrScore = jobRecords.includes(jp.jobTitle) ? 10 : 0;
-
             // 3. calculate score 
             if (reqs.length > 0) {
-                e.matchedScore = skillScore + certScore + jrScore;
+
+                let skillScore = (matchedSkills.length / jpSk.length) * 70;
+                let certScore = (matchedCertifications.length / jpCerts.length) * 20;
+                let jrScore = jobRecords.includes(jp.jobTitle) ? 10 : 0;
+
+                let score = jrScore;
+                if (!isNaN(skillScore) && isFinite(skillScore)) {
+                    score = score + skillScore;
+                }
+                if (!isNaN(certScore) && isFinite(certScore)) {
+                    score = score + certScore;
+                }
+                e.matchedScore = score;
                 e.matchedReqs = reqs;
-                console.log('checking req', e.matchedReqs);
                 matchedEmployees.push(e);
             }
 

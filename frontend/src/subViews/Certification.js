@@ -14,7 +14,6 @@ import axios from 'axios';
  * @author Jing Huang
  * @author Biniyam
  */
-// TODO: Dummy Data
 const CF = [{ name: 'Certification Name', Institution: 'Institution', IssuedDate: 'IssuedDate', id: 'Cerdential ID abcde' },
 { name: 'Certification Name', Institution: 'Institution', IssuedDate: 'IssuedDate', id: 'Cerdential ID abcde' },
 { name: 'Certification Name', Institution: 'Institution', IssuedDate: 'IssuedDate', id: 'Cerdential ID abcde' }
@@ -115,11 +114,11 @@ function Certification(props) {
                     axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                         setEmployee(res.data);
                         setCertifications(employee.certifications);
-                        console.log("add / edit certification");
+                        alert("Successful to add/edit certification");
                         handleClose();
                     }).catch(err => console.log(err));
                 }).catch(error => {
-                    console.log('unable to add / edit certifications');
+                    alert('unable to add/edit certifications');
                 });
             }
         }
@@ -137,10 +136,10 @@ function Certification(props) {
             axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                 setEmployee(res.data);
                 setCertifications(employee.certifications);
-                console.log("remove the certifciation");
+                alert("successful to remove the certifciation");
             }).catch(err => console.log(err));
         }).catch(error => {
-            console.log('unable to remove certifciation')
+            alert('unable to remove certifciation')
         });
     }
 
@@ -177,7 +176,7 @@ function Certification(props) {
                                 </Row>
                                 <Row style={{ textAlign: 'left', margin: '2%' }}>
                                     <Col style={{ fontWeight: 'bold' }} sm={3}>IssuedDate</Col>
-                                    <Col>{item.issuedDate}</Col>
+                                    <Col>{new Date(Date.parse(item.issuedDate)).toISOString().slice(0, 10)}</Col>
                                 </Row>
                                 <Row style={{ textAlign: 'left', margin: '2%' }}>
                                     <Col style={{ fontWeight: 'bold' }} sm={3}>CredentialID</Col>

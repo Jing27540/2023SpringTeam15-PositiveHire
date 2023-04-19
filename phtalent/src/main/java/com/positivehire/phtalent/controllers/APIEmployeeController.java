@@ -1,6 +1,5 @@
 package com.positivehire.phtalent.controllers;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
