@@ -25,7 +25,7 @@ function Education(props) {
     const handlesecShow = () => setSecShow(true);
     const handleClose = () => { setShow(false); setSecShow(false) };
     const [edit, setEdit] = React.useState(false);
-
+    const [currEdu, setCurrEdu] = React.useState();
     const [edname, setedName] = React.useState();
     const [inst, setInstitution] = React.useState();
     const [type, setType] = React.useState();
@@ -34,18 +34,20 @@ function Education(props) {
     const [secmode, setsecMode] = React.useState([]);
     const [currskills, setCurrSkills] = React.useState();
     // const [remove, setRemove] = React.useState(false);
+    const [responseMessage, setResponseMessage] = React.useState('');
 
     React.useEffect(() => {
         axios.get(`http://localhost:8080/employees/${employee.employeeNum}`).then(res => {
             setEducation(res.data.education);
             // setAccessRole(res.data.accessRole);
             // setAccessRole(auth.role);
-            console.log(education);
+            //console.log(education);
         })
             .catch(err => console.log(err));
             clear();
     }, [employee]);
 
+  
     function clear() {
 
         setSName(undefined);
@@ -55,8 +57,11 @@ function Education(props) {
         setInstitution(undefined);
         setType(undefined);
         setIssuedDate(undefined);
-        
+       
     }
+
+
+
     function deleteSkill(sn) {
 
         let skiId = 0;
@@ -69,7 +74,7 @@ function Education(props) {
         axios.delete(`http://localhost:8080/employees/${props.employee.employeeNum}/education/${currid}/skills/${skiId}`).then(response => {
             axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                 setEmployee(res.data);
-                console.log(res.data);
+               
                 
             })
         //    alert("Sucessfully to delete")
@@ -107,11 +112,22 @@ function Education(props) {
         } else {
           //  let suc = false;
             let skiId = 0;
+            let lastSk = null;
             currskills.forEach(element => {
                 if (element.name === s.name) {
                     skiId = element.id;
+                    lastSk = element;
                 }
             });
+            if(s.name === undefined) {
+                s.name = lastSk.name;
+            }
+            if(s.level === undefined) {
+                s.level = lastSk.level;
+            }
+            if(s.score === undefined) {
+                s.score = lastSk.score;
+            }
             let nSkill = {
                 id: skiId,
                 name: s.name,
@@ -122,7 +138,7 @@ function Education(props) {
             axios.put(`http://localhost:8080/employees/${props.employee.employeeNum}/education/${currid}/skills/${skiId}`, nSkill).then(response => {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                     setEmployee(res.data);
-                    console.log(res.data);
+                    
                    // suc = true;
                 })
                 
@@ -134,19 +150,21 @@ function Education(props) {
     }
     //  console.log(employee.education);
     function deleteEdu(thid) {
+        setResponseMessage("");
         axios.delete(`http://localhost:8080/employees/${props.employee.employeeNum}/education/${thid}`).then(response => {
             axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                 setEmployee(res.data);
            //     alert("Sucessfully to delete")
-
+                setResponseMessage("Education deleted successfully");
             })
         }).catch(error => {
             console.log("Unable to remove education");
         })
+        setResponseMessage("");
     }
 
     function addEducation(ed) {
-
+        setResponseMessage("");
         let edToAdd = null;
         if (mode) {
             edToAdd = {
@@ -159,12 +177,28 @@ function Education(props) {
         } else {
             edToAdd = {
                 id: currid,
-                name: ed.name,
-                institution: ed.institution,
-                type: ed.type,
-                dateAchieved: ed.issuedDate,
+                name: currEdu.name,
+                institution: currEdu.institution,
+                type: currEdu.type,
+                dateAchieved: currEdu.dateAchieved,
                 skills: []
             };
+
+            if(ed.name !== undefined) {
+                edToAdd.name = ed.name;
+            }
+            if(ed.institution !== undefined) {
+                edToAdd.institution = ed.institution; 
+            }
+            if(ed.type !== undefined) {
+                edToAdd.type = ed.type;
+            }
+            if(ed.issuedDate !== undefined) {
+                console.log(ed.issuedDate);
+                edToAdd.dateAchieved = ed.issuedDate;
+            }
+            
+            
         }
 
         if (mode) {
@@ -174,6 +208,7 @@ function Education(props) {
                     
                 })
                // alert("Sucessfully to save")
+               setResponseMessage("Education Created Successfully");
             })
         } else {
             axios.put(`http://localhost:8080/employees/${props.employee.employeeNum}/education`, edToAdd).then(response => {
@@ -181,6 +216,7 @@ function Education(props) {
                     setEmployee(res.data);
                    
                 })
+                setResponseMessage("Education Updated Successfully");
                // alert("Sucessfully to update")
             })
         }
@@ -207,6 +243,9 @@ function Education(props) {
 
 
     return (
+        <>
+        <Form.Label style={{color: "green", marginTop: "2%"}}>{responseMessage}</Form.Label>
+       
         <Table striped bordered hover style={{ marginTop: '5%' }}>
             <thead>
                 <tr>
@@ -250,7 +289,7 @@ function Education(props) {
                                 </Col>
 
                                 <Col>
-                                    <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} onClick={() => { handlesecShow(); setMode(false); setId(item.id); setName(item.name) }}>
+                                    <Button size="sm" style={{ marginTop: "2%", marginRight: "2%", backgroundColor: "#0f123F", borderColor: "#0f123F", width: '70px' }} onClick={() => { handlesecShow(); setMode(false); setId(item.id); setName(item.name); setCurrEdu(item);}}>
                                         Edit
                                     </Button>
                                 </Col>
@@ -294,7 +333,7 @@ function Education(props) {
                         //         <Col>Skills</Col>
                         //         <Col>{item.jobTitle}</Col>
                         //     </Row>
-                        // </>
+                         //
                     );
                 })}
 
@@ -428,6 +467,7 @@ function Education(props) {
                 </Modal.Footer>
             </Modal>
         </Table>
+        </>
     );
 }
 
