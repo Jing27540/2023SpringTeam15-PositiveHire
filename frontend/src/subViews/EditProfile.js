@@ -3,7 +3,8 @@ import ReactDOM from "react-dom";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import axios from 'axios';
-import { GrDocumentCsv } from "react-icons/gr";
+import Button from 'react-bootstrap/Button';
+
 /**
  * Create EditProfile Form for user to update their profile
  * @author Jing Huang
@@ -15,52 +16,6 @@ const EducationFields = ['Institution', 'Address', 'StartDate', 'EndDate'];
 
 
 function EditProfile(props) {
-
-    //     function getExportFile () {
-    //     // helper function: generate a new file from base64 String
-    //     const base64ToBlob = (dataurl) => {
-    //       const arr = dataurl.split(',');
-    //       const mime = arr[0].match(/:(.*?);/)[1];
-    //       const sliceSize = 1024;
-    //       const byteChars = window.atob(arr[1]);
-    //       const byteArrays = [];
-
-    //       for (let offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
-    //         let slice = byteChars.slice(offset, offset + sliceSize);
-
-    //         const byteNumbers = new Array(slice.length);
-    //         for (let i = 0; i < slice.length; i++) {
-    //           byteNumbers[i] = slice.charCodeAt(i);
-    //         }
-
-    //         const byteArray = new Uint8Array(byteNumbers);
-
-    //         byteArrays.push(byteArray);
-    //       }
-
-    //       return new Blob(byteArrays, {type: mime});
-    //     }
-
-    //     const getFilename = (dataUrl) => {
-    //       const arr = dataUrl.split(',');
-    //       const mime = arr[0].match(/:(.*?);/)[1];
-
-    //       return Math.round(+new Date()/1000) + '.' + mime.split('/').pop();
-    //     }
-
-    //     let reader = new FileReader();
-
-    //         reader.readAsDataURL(file);
-
-    //     // const dataUrl = this.previewCanvas.toDataURL();
-    //     const dataUrl = reader.result;
-    //     const blob = base64ToBlob(dataUrl);
-    //     blob.name = getFilename(dataUrl);
-
-    //     // generate file from base64 string
-    //     return blob;
-
-    //   }
 
     const [file, setFile] = React.useState();
 
@@ -84,10 +39,7 @@ function EditProfile(props) {
 
         let reader = new FileReader();
 
-        // reader.readAsDataURL(file);
         reader.readAsDataURL(file);
-
-        // let data = btoa(reader.result);
 
         reader.onload = function () {
             // console.log("result" + reader.result);
@@ -104,15 +56,6 @@ function EditProfile(props) {
             });
         };
 
-        // let sendFile = getExportFile();
-
-        // { headers: { 'Content-Type': `multipart/form-data`, 'Content-Length': `${file.size}` } }
-        // , { headers: { 'Content-Type': 'application/json' } }
-        // axios.post(`http://localhost:8080/documents/${employee.employeeNum}`, oop).then(res => {
-        //     console.log(res.data);
-
-        // });
-
     }
 
     const downloadFile = (blob, fileName) => {
@@ -127,26 +70,18 @@ function EditProfile(props) {
     }
 
     function downloadResume() {
-        axios.get(`http://localhost:8080/documents/${employee.employeeNum}`, {responseType: 'blob'}).then(res => {
+        axios.get(`http://localhost:8080/documents/${employee.employeeNum}`, { responseType: 'blob' }).then(res => {
             console.log(res);
-            // const link = document.createElement("a");
-            // link.download = `${""}.pdf`;
 
             const blob = new Blob([res.data], { type: "application/pdf" });
+
             // process to auto download it
             const fileURL = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = fileURL;
-            link.download = "FileName:" + "testResume" + ".pdf";
+            link.download = "Resume_" + employee.employeeNum + ".pdf";
             link.click();
 
-            // const fileURL = URL.createObjectURL(blob);
-            // window.open(fileURL);
-            // downloadFile(blob, "WEEEE.pdf");
-
-            // Testing
-            // const file = new BeforeUnloadEvent([res.data], {type:})
-            console.log("Got here");
         });
     }
     // TODO: hard code 
@@ -161,8 +96,9 @@ function EditProfile(props) {
                     <Row className="justify-content-md-center">
                         <div>
                             <input type="file" onChange={handleFileChange} accept=".pdf" />
+                            {file !== undefined ? <div>{file[0] && `${file.name}` - `${file.type}`}</div>
+                                : <div>{file && `${file.name}` - `${file.type}`}</div>}
 
-                            <div>{file && `${file.name}` - `${file.type}`}</div>
 
                             <button onClick={handleUploadClick}>Upload</button>
                             <button onClick={downloadResume} onLoadError={console.error}>Download</button>
