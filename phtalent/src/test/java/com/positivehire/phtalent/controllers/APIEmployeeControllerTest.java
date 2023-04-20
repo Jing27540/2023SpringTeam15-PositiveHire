@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,11 +79,11 @@ public class APIEmployeeControllerTest {
         @Autowired
         private EducationService eduServ;
 
-        private static Employee employee1;
+        private Employee employee1;
 
-        private static Employee employee2;
+        private Employee employee2;
 
-        private static Employee employee3;
+        private Employee employee3;
 
         // @Before
         // public void setup() {
@@ -120,27 +122,14 @@ public class APIEmployeeControllerTest {
         // employeeServ.saveEmployee(employee3);
         // }
 
-        /**
-         * Tests GETing using the controller, and saving using the service class.
-         *
-         * @throws Exception
-         */
-        @Test
-        @Transactional
-        public void testEmployeeController() throws Exception {
+        @BeforeEach
+        public void setup() {
                 mvc = MockMvcBuilders.webAppContextSetup(context).build();
-                List<Employee> employees = new ArrayList();
-                // if(employees.size() != 0 ) {
                 employeeServ.deleteAll();
-                // }
+                jrServ.deleteAll();
+                skillServ.deleteAll();
+                employeeServ.deleteAll();
 
-                final Employee emp = new Employee((long) 2, "employeeName", 500, 1, 1, 1, 1, 1, 1, 39, 55.55, "NC",
-                                22222,
-                                "DOB", "Male", "married", "US", "Latino", "race", "dateOfHire", 5, "dateOfTermination",
-                                "reasonForTermination", "employementStatus", "department", "position", "managerName",
-                                "employeeSource",
-                                "accessRole", "performanceScore", "annualBonus", 5.5, null, null, null, null, null,
-                                null);
                 final Date d = new Date();
 
                 // Certifications
@@ -175,9 +164,10 @@ public class APIEmployeeControllerTest {
 
                 jrSkills.add(sy);
 
-                final JobRecord jr2 = new JobRecord("Server", "Noob", "Marcos", null, new Date(1884, 1, 1),
-                                new Date(1884, 1, 2),
-                                jrSkills);
+                // final JobRecord jr2 = new JobRecord("Server", "Noob", "Marcos", null, new
+                // Date(1884, 1, 1),
+                // new Date(1884, 1, 2),
+                // jrSkills);
                 List<JobRecord> jrList = new ArrayList<JobRecord>();
                 jrList.add(jr1);
 
@@ -205,6 +195,34 @@ public class APIEmployeeControllerTest {
                 employeeServ.save(employee1);
                 employeeServ.save(employee2);
                 employeeServ.save(employee3);
+        }
+
+        /**
+         * Tests GETing using the controller, and saving using the service class.
+         *
+         * @throws Exception
+         */
+        @Test
+        @Transactional
+        public void testEmployeeController() throws Exception {
+                // mvc = MockMvcBuilders.webAppContextSetup(context).build();
+                List<Employee> employees = new ArrayList();
+                // // if(employees.size() != 0 ) {
+                // employeeServ.deleteAll();
+                // // }
+
+                final Employee emp = new Employee((long) 2, "employeeName", 500, 1, 1, 1, 1,
+                                1, 1, 39, 55.55, "NC",
+                                22222,
+                                "DOB", "Male", "married", "US", "Latino", "race", "dateOfHire", 5,
+                                "dateOfTermination",
+                                "reasonForTermination", "employementStatus", "department", "position",
+                                "managerName",
+                                "employeeSource",
+                                "accessRole", "performanceScore", "annualBonus", 5.5, null, null, null, null,
+                                null,
+                                null);
+
                 // Get employees
                 mvc.perform(get("/employees")).andExpect(status().isOk());
                 System.out.println(employee1.getId());
@@ -280,158 +298,21 @@ public class APIEmployeeControllerTest {
                                 .andExpect(status().isOk());
                 employeeServ.save(emp);
 
-                // *************************** */
+                /* ******************************************* */
 
-                // JobRecord functionality testing (CRUD)
+                // // For database data to use on frontend
+                // Skill refSkill = new Skill("Jings Assistant", "High", 6);
+                // Skill refSkill2 = new Skill("Java", "Low", 3);
+                // moreskills = new ArrayList<Skill>();
+                // moreskills.add(refSkill);
+                // moreskills.add(refSkill2);
 
-                JobRecord newJR1 = new JobRecord("firstEmp", "entry", null, null, null, null, null);
+                // JobRecord newJR3 = new JobRecord("Basketball", "junior", "NCSU", null, null,
+                // null, moreskills);
 
-                List<Skill> moreskills = new ArrayList<Skill>();
-                Skill soccer = new Skill("Soccer", "pro", 5);
-                moreskills.add(soccer);
-
-                JobRecord newJR2 = new JobRecord("secJR", "junior", null, null, null, null, moreskills);
-
-                System.out.println(newJR2.getId());
-                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(TestUtils.asJsonString(newJR1))).andExpect(status().isOk());
-
-                // employees = employeeServ.findAll();
-
-                Employee check = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
-
-                assertEquals(check.getJobRecords().get(0).getJobTitle(), newJR1.getJobTitle());
-                assertEquals(check.getJobRecords().get(0).getJobLevel(), newJR1.getJobLevel());
-
-                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(TestUtils.asJsonString(newJR2))).andExpect(status().isOk());
-                Employee check2 = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
-
-                assertEquals(check2.getJobRecords().get(1).getJobTitle(), newJR2.getJobTitle());
-                assertEquals(check2.getJobRecords().get(1).getJobLevel(), newJR2.getJobLevel());
-
-                JobRecord updateMe1 = null;
-                JobRecord updateMe2 = null;
-                for (JobRecord x : jrServ.findAll()) {
-                        if (x.getJobTitle().equals(newJR2.getJobTitle())) {
-                                updateMe2 = x;
-                        } else if (x.getJobTitle().equals(newJR1.getJobTitle())) {
-                                updateMe1 = x;
-                        }
-                }
-
-                Long updateMeId1 = Long.parseLong(updateMe1.getId().toString());
-                Long updateMeId2 = Long.parseLong(updateMe2.getId().toString());
-
-                // Attempt to update a JobRecords level
-                newJR1.setJobLevel("newlevel");
-                mvc.perform(put("/employees/" + employee1.getEmployeeNum() + "/jobrecords/" + updateMeId1)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(TestUtils.asJsonString(newJR1))).andExpect(status().isOk());
-
-                Employee check4 = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
-                assertEquals(2, check4.getJobRecords().size());
-
-                assertEquals("newlevel", check4.getJobRecords().get(0).getJobLevel());
-
-                // Attempt to to add a new skill to the JobRecord
-                Skill emptySkill = new Skill("", "", 1);
-                // moreskills.add(emptySkill);
-                // newJR2.setJobSkills(moreskills);
-
-                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords/" + updateMeId2 + "/skills")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(TestUtils.asJsonString(emptySkill))).andExpect(status().isOk());
-
-                Employee check6 = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
-                assertEquals(2, check6.getJobRecords().size());
-                assertEquals(2, check6.getJobRecords().get(1).getJobSkills().size());
-                assertEquals(check6.getJobRecords().get(1).getJobSkills().get(1).getName(), emptySkill.getName());
-
-                // assertEquals("newlevel", check6.getJobRecords().get(0).getJobLevel());
-
-                // Attempt to update a JobRecords skill
-                // moreskills.get(0).setLevel("5");
-                // moreskills.get(0).setScore(1);
-                // newJR2.setJobSkills(moreskills);
-
-                Long skillId1 = null;
-                for (Skill x : skillServ.findAll()) {
-                        if (x.getName().equals("")) {
-                                skillId1 = Long.parseLong(x.getId().toString());
-                        }
-                }
-
-                emptySkill.setName("New Skill Name");
-
-                mvc.perform(put("/employees/" + employee1.getEmployeeNum() + "/jobrecords/" + updateMeId2 + "/skills/"
-                                + skillId1)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(TestUtils.asJsonString(emptySkill))).andExpect(status().isOk());
-
-                Employee check5 = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
-                assertEquals(2, check5.getJobRecords().size());
-                assertEquals(emptySkill.getLevel(), check5.getJobRecords().get(1).getJobSkills().get(1).getLevel());
-                assertEquals(emptySkill.getName(), check5.getJobRecords().get(1).getJobSkills().get(1).getName());
-                assertEquals(emptySkill.getScore(), check5.getJobRecords().get(1).getJobSkills().get(1).getScore());
-                assertEquals(1, check5.getJobRecords().get(1).getJobSkills().get(1).getScore());
-                assertEquals(2, check5.getJobRecords().get(1).getJobSkills().size());
-
-                assertEquals("newlevel", check5.getJobRecords().get(0).getJobLevel());
-
-                // Attempt to delete a skill
-
-                mvc.perform(delete(
-                                "/employees/" + employee1.getEmployeeNum() + "/jobrecords/" + updateMeId2 + "/skills/"
-                                                + skillId1)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(TestUtils.asJsonString(emptySkill))).andExpect(status().isOk());
-
-                Employee check7 = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
-                assertEquals(1, check7.getJobRecords().get(1).getJobSkills().size());
-                assertEquals("Soccer", check7.getJobRecords().get(1).getJobSkills().get(0).getName());
-
-                // // Attempt to use put to add a new skill to the JobRecord
-                // emptySkill = new Skill("", "", 1);
-                // moreskills.add(emptySkill);
-                // newJR2.setJobSkills(moreskills);
-
-                // mvc.perform(put("/employees/" + employee1.getEmployeeNum() + "/jobrecords/" +
-                // updateMeId2)
+                // mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
                 // .contentType(MediaType.APPLICATION_JSON)
-                // .content(TestUtils.asJsonString(newJR2))).andExpect(status().isOk());
-
-                // check6 = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
-                // assertEquals(2, check6.getJobRecords().size());
-                // assertEquals(2, check6.getJobRecords().get(1).getJobSkills().size());
-
-                // assertEquals("newlevel", check6.getJobRecords().get(0).getJobLevel());
-
-                // Attempt to delete a JobRecord from an Employee
-                mvc.perform(delete("/employees/" + employee1.getEmployeeNum() + "/jobrecords/" + updateMeId2)
-                                .contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(status().isOk());
-
-                Employee check3 = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
-                assertEquals(1, check3.getJobRecords().size());
-
-                assertEquals(check3.getJobRecords().get(0).getJobTitle(), newJR1.getJobTitle());
-                assertEquals(check3.getJobRecords().get(0).getJobLevel(), newJR1.getJobLevel());
-
-                // For database data to use on frontend
-                Skill refSkill = new Skill("Jings Assistant", "High", 6);
-                Skill refSkill2 = new Skill("Java", "Low", 3);
-                moreskills = new ArrayList<Skill>();
-                moreskills.add(refSkill);
-                moreskills.add(refSkill2);
-
-                JobRecord newJR3 = new JobRecord("Basketball", "junior", "NCSU", null, null, null, moreskills);
-
-                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(TestUtils.asJsonString(newJR3))).andExpect(status().isOk());
+                // .content(TestUtils.asJsonString(newJR3))).andExpect(status().isOk());
 
                 /* ******************************************* */
 
@@ -497,110 +378,263 @@ public class APIEmployeeControllerTest {
                 assertEquals(0, eduServ.findAll().size());
 
                 /* ********************************************** */
+        }
 
-                // List<JobRecord> x = jrServ.findAll();
-                // System.out.println(x);
+        /**
+         * Tests the JobRecord POST api call
+         */
+        @Test
+        @Transactional
+        public void testCreatJobRecord() throws Exception {
+                JobRecord newJR1 = new JobRecord("firstEmp", "entry", null, null, null, null, null);
 
-                // Skill newSkill = new Skill("hi", "boss", 20);
+                List<Skill> moreskills = new ArrayList<Skill>();
+                Skill soccer = new Skill("Soccer", "pro", 5);
+                moreskills.add(soccer);
 
-                // Skill spp = null;
-                // for (JobRecord inside : x) {
-                // if (inside.getJobTitle().equals("CISO")) {
-                // spp = inside.getJobSkills().get(0);
-                // spp.setName("foo");
-                // skillServ.save(spp);
+                JobRecord newJR2 = new JobRecord("secJR", "junior", null, null, null, null, moreskills);
 
-                // inside.getJobSkills().add(newSkill);
-                // jrServ.save(inside);
-                // }
-                // }
+                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(newJR1))).andExpect(status().isOk());
 
-                // JobRecord newJobRecord = new JobRecord("", "", null, null, null);
-                // employee2.getJobRecords().add(newJobRecord);
-                // employeeServ.save(employee2);
+                Employee check = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
 
-                // // Check Employee1 has no JobRecords
+                assertEquals(check.getJobRecords().get(0).getJobTitle(), newJR1.getJobTitle());
+                assertEquals(check.getJobRecords().get(0).getJobLevel(), newJR1.getJobLevel());
 
-                // final String c1 = mvc.perform(
-                // get("/employees/" + "54645394")
-                // .contentType(MediaType.APPLICATION_JSON))
-                // .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(newJR2))).andExpect(status().isOk());
+                Employee check2 = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
 
-                // assertTrue(c1.contains("\"jobRecords\":[]"));
+                assertEquals(check2.getJobRecords().get(1).getJobTitle(), newJR2.getJobTitle());
+                assertEquals(check2.getJobRecords().get(1).getJobLevel(), newJR2.getJobLevel());
 
-                // // Add JobRecords
-                // jrList.remove(0);
-                // jrList.add(jr2);
-                // employee1.addJobRecord(jrList);
-                // assertEquals(1, jrList.size());
+        }
 
-                // employeeServ.save(employee1);
+        @Test
+        @Transactional
+        public void testUpdateJobRecord() throws Exception {
+                JobRecord newJR1 = new JobRecord("firstEmp", "entry", null, null, null, null, null);
+                List<Skill> moreskills = new ArrayList<Skill>();
+                Skill soccer = new Skill("Soccer", "pro", 5);
+                moreskills.add(soccer);
+                JobRecord newJR2 = new JobRecord("secJR", "junior", null, null, null, null, moreskills);
 
-                // mvc.perform(put("/employees").contentType(MediaType.APPLICATION_JSON)
-                // .content(TestUtils.asJsonString(employee1))).andExpect(status().isOk());
+                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(newJR1))).andExpect(status().isOk());
 
-                // // Verify Job Records
+                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(newJR2))).andExpect(status().isOk());
 
-                // final String c2 = mvc.perform(
-                // get("/employees/" + "54645394")
-                // .contentType(MediaType.APPLICATION_JSON))
-                // .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+                JobRecord updateMe1 = null;
+                JobRecord updateMe2 = null;
+                for (JobRecord x : jrServ.findAll()) {
+                        if (x.getJobTitle().equals(newJR2.getJobTitle())) {
+                                updateMe2 = x;
+                        } else if (x.getJobTitle().equals(newJR1.getJobTitle())) {
+                                updateMe1 = x;
+                        }
+                }
 
-                // assertTrue(c2.contains("\"jobRecords\":[{"));
+                Long updateMeId1 = Long.parseLong(updateMe1.getId().toString());
 
-                // assertTrue(c2.contains("\"jobTitle\":\"Server\""));
+                // Attempt to update a JobRecords level
+                newJR1.setJobLevel("newlevel");
+                mvc.perform(put("/employees/" + employee1.getEmployeeNum() + "/jobrecords/" + updateMeId1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(newJR1))).andExpect(status().isOk());
 
-                // assertTrue(c2.contains("\"jobLevel\":\"Noob\""));
+                Employee check4 = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
+                assertEquals(2, check4.getJobRecords().size());
 
-                // assertTrue(c2.contains(
-                // "\"jobSkills\":[{\"name\":\"Presentations\",\"level\":\"Expert\",\"score\":5}]}]"));
+                assertEquals("newlevel", check4.getJobRecords().get(0).getJobLevel());
+        }
 
-                // // // Update Job Records
-                // jrList.get(0).setJobLevel("Advanced");
-                // employee1.setJobRecords(jrList);
-                // assertEquals(employee1.getJobRecords().size(), 1);
-                // assertEquals(employee1.getJobRecords().get(0).getJobTitle(), "Server");
-                // assertEquals(employee1.getJobRecords().get(0).getJobLevel(), "Advanced");
+        @Test
+        @Transactional
+        public void testCreateJobRecordSkill() throws Exception {
+                List<Skill> moreskills = new ArrayList<Skill>();
+                Skill soccer = new Skill("Soccer", "pro", 5);
+                moreskills.add(soccer);
+                JobRecord newJR2 = new JobRecord("secJR", "junior", null, null, null, null, moreskills);
 
-                // // assertEquals(jrService.findAll().size(), 1);
-                // // JobRecord jrRecord1InDB = jrService.findAll().get(0);
-                // // assertEquals(jrRecord1InDB.getJobTitle(), "CISO");
-                // // assertEquals(jrRecord1InDB.getJobLevel(), "Expert");
+                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(newJR2))).andExpect(status().isOk());
 
-                // // mvc.perform(put("/employees").contentType(MediaType.APPLICATION_JSON)
-                // // .content(TestUtils.asJsonString(employee1))).andExpect(status().isOk());
+                JobRecord updateMe2 = null;
+                for (JobRecord x : jrServ.findAll()) {
+                        if (x.getJobTitle().equals(newJR2.getJobTitle())) {
+                                updateMe2 = x;
+                        }
+                }
 
-                // // // Verify Job Records
+                Long updateMeId2 = Long.parseLong(updateMe2.getId().toString());
 
-                // // final String c3 = mvc.perform(
-                // // get("/employees/" + "54645394")
-                // // .contentType(MediaType.APPLICATION_JSON))
-                // //
-                // .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+                // Attempt to to add a new skill to the JobRecord
+                Skill emptySkill = new Skill("", "", 1);
 
-                // // assertTrue(c3.contains("\"jobRecords\":[{"));
+                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords/" + updateMeId2 + "/skills")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(emptySkill))).andExpect(status().isOk());
 
-                // // assertTrue(c3.contains("\"jobTitle\":\"CISO\""));
+                Employee check6 = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
+                assertEquals(1, check6.getJobRecords().size());
+                assertEquals(2, check6.getJobRecords().get(0).getJobSkills().size());
+                assertEquals(check6.getJobRecords().get(0).getJobSkills().get(1).getName(), emptySkill.getName());
+        }
 
-                // // assertTrue(c3.contains("\"jobLevel\":\"Advanced\""));
+        @Test
+        @Transactional
+        public void testUpdateJobRecordSkill() throws Exception {
+                List<Skill> moreskills = new ArrayList<Skill>();
+                Skill soccer = new Skill("Soccer", "pro", 5);
+                moreskills.add(soccer);
+                JobRecord newJR2 = new JobRecord("secJR", "junior", null, null, null, null, moreskills);
 
-                // // Delete Job Records
+                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(newJR2))).andExpect(status().isOk());
 
-                // jrList.remove(jr2);
-                // employee1.setJobRecords(jrList);
-                // assertEquals(employee1.getJobRecords().size(), 0);
+                JobRecord updateMe2 = null;
+                for (JobRecord x : jrServ.findAll()) {
+                        if (x.getJobTitle().equals(newJR2.getJobTitle())) {
+                                updateMe2 = x;
+                        }
+                }
 
-                // mvc.perform(put("/employees").contentType(MediaType.APPLICATION_JSON)
-                // .content(TestUtils.asJsonString(employee1)));
+                Long updateMeId2 = Long.parseLong(updateMe2.getId().toString());
 
-                // final String c4 = mvc.perform(
-                // get("/employees/" + "54645394")
-                // .contentType(MediaType.APPLICATION_JSON))
-                // .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+                Skill emptySkill = new Skill("", "", 1);
 
-                // assertTrue(c4.contains("\"jobRecords\":[]"));
+                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords/" + updateMeId2 + "/skills")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(emptySkill))).andExpect(status().isOk());
 
-                // *************************** */
+                // Locate the skill to update
+                Long skillId1 = null;
+                for (Skill x : skillServ.findAll()) {
+                        if (x.getName().equals("")) {
+                                skillId1 = Long.parseLong(x.getId().toString());
+                        }
+                }
+
+                // Change the name of the skill
+                emptySkill.setName("New Skill Name");
+
+                mvc.perform(put("/employees/" + employee1.getEmployeeNum() + "/jobrecords/" + updateMeId2 + "/skills/"
+                                + skillId1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(emptySkill))).andExpect(status().isOk());
+
+                Employee check5 = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
+                assertEquals(1, check5.getJobRecords().size());
+                assertEquals(emptySkill.getLevel(), check5.getJobRecords().get(0).getJobSkills().get(1).getLevel());
+                assertEquals(emptySkill.getName(), check5.getJobRecords().get(0).getJobSkills().get(1).getName());
+                assertEquals(emptySkill.getScore(), check5.getJobRecords().get(0).getJobSkills().get(1).getScore());
+                assertEquals(1, check5.getJobRecords().get(0).getJobSkills().get(1).getScore());
+                assertEquals(2, check5.getJobRecords().get(0).getJobSkills().size());
+                assertEquals("junior", check5.getJobRecords().get(0).getJobLevel());
+        }
+
+        @Test
+        @Transactional
+        public void testDeleteJobRecordSkill() throws Exception {
+                List<Skill> moreskills = new ArrayList<Skill>();
+                Skill soccer = new Skill("Soccer", "pro", 5);
+                moreskills.add(soccer);
+                JobRecord newJR2 = new JobRecord("secJR", "junior", null, null, null, null, moreskills);
+
+                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(newJR2))).andExpect(status().isOk());
+
+                JobRecord updateMe2 = null;
+                for (JobRecord x : jrServ.findAll()) {
+                        if (x.getJobTitle().equals(newJR2.getJobTitle())) {
+                                updateMe2 = x;
+                        }
+                }
+
+                Long updateMeId2 = Long.parseLong(updateMe2.getId().toString());
+
+                Skill emptySkill = new Skill("", "", 1);
+
+                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords/" + updateMeId2 + "/skills")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(emptySkill))).andExpect(status().isOk());
+
+                // Locate the skill to update
+                Long skillId1 = null;
+                for (Skill x : skillServ.findAll()) {
+                        if (x.getName().equals("")) {
+                                skillId1 = Long.parseLong(x.getId().toString());
+                        }
+                }
+
+                // Attempt to delete a skill
+                mvc.perform(delete(
+                                "/employees/" + employee1.getEmployeeNum() + "/jobrecords/" + updateMeId2 + "/skills/"
+                                                + skillId1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(emptySkill))).andExpect(status().isOk());
+
+                Employee check7 = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
+                assertEquals(1, check7.getJobRecords().get(0).getJobSkills().size());
+                assertEquals("Soccer", check7.getJobRecords().get(0).getJobSkills().get(0).getName());
+        }
+
+        @Test
+        @Transactional
+        public void testDeleteJobRecord() throws Exception {
+                JobRecord newJR1 = new JobRecord("firstEmp", "entry", null, null, null, null, null);
+
+                List<Skill> moreskills = new ArrayList<Skill>();
+                Skill soccer = new Skill("Soccer", "pro", 5);
+                moreskills.add(soccer);
+
+                JobRecord newJR2 = new JobRecord("secJR", "junior", null, null, null, null, moreskills);
+
+                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(newJR1))).andExpect(status().isOk());
+
+                Employee check = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
+
+                assertEquals(check.getJobRecords().get(0).getJobTitle(), newJR1.getJobTitle());
+                assertEquals(check.getJobRecords().get(0).getJobLevel(), newJR1.getJobLevel());
+
+                mvc.perform(post("/employees/" + employee1.getEmployeeNum() + "/jobrecords")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(TestUtils.asJsonString(newJR2))).andExpect(status().isOk());
+                Employee check2 = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
+
+                assertEquals(check2.getJobRecords().get(1).getJobTitle(), newJR2.getJobTitle());
+                assertEquals(check2.getJobRecords().get(1).getJobLevel(), newJR2.getJobLevel());
+
+                JobRecord updateMe2 = null;
+                for (JobRecord x : jrServ.findAll()) {
+                        if (x.getJobTitle().equals(newJR2.getJobTitle())) {
+                                updateMe2 = x;
+                        }
+                }
+
+                Long updateMeId2 = Long.parseLong(updateMe2.getId().toString());
+
+                // Attempt to delete a JobRecord from an Employee
+                mvc.perform(delete("/employees/" + employee1.getEmployeeNum() + "/jobrecords/" + updateMeId2)
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk());
+
+                Employee check3 = employeeServ.findByEmployeeNum(employee1.getEmployeeNum());
+                assertEquals(1, check3.getJobRecords().size());
+
+                assertEquals(check3.getJobRecords().get(0).getJobTitle(), newJR1.getJobTitle());
+                assertEquals(check3.getJobRecords().get(0).getJobLevel(), newJR1.getJobLevel());
         }
 
 }

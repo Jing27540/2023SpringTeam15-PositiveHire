@@ -111,42 +111,46 @@ public class APIAccountController extends APIController {
     // @RequestBody String currentPassword, @RequestBody String newPassword,
     // @RequestBody String repeateNewPassword) {
 
-    // Update password
-    @PutMapping("/accounts")
-    public ResponseEntity<String> updateEmployeePassword(@RequestBody Account replaceAccount) {
-        Account acc = accountServ.findByEmployeeId(replaceAccount.getEmployeeID());
-        // Account acc = accountServ.findById((long) replaceAcc.getId());
+    // // Update password
+    // @PutMapping("/accounts")
+    // public ResponseEntity<String> updateEmployeePassword(@RequestBody Account
+    // replaceAccount) {
+    // Account acc = accountServ.findByEmployeeId(replaceAccount.getEmployeeID());
+    // // Account acc = accountServ.findById((long) replaceAcc.getId());
 
-        if (acc == null) {
-            return new ResponseEntity<String>(
-                    errorResponse("No Account found for employee id " + replaceAccount.getEmployeeID()),
-                    HttpStatus.NOT_FOUND);
-        } else {
-            acc.updateAccount(replaceAccount);
-            accountServ.save(acc);
+    // if (acc == null) {
+    // return new ResponseEntity<String>(
+    // errorResponse("No Account found for employee id " +
+    // replaceAccount.getEmployeeID()),
+    // HttpStatus.NOT_FOUND);
+    // } else {
+    // acc.updateAccount(replaceAccount);
+    // accountServ.save(acc);
 
-            return new ResponseEntity<String>(
-                    successResponse(acc.getEmployeeID() + " was updated successfully"),
-                    HttpStatus.OK);
-        }
-        // try {
-        // if (acc.updatePassword(currentPassword, newPassword, repeateNewPassword)) {
-        // accountServ.save(acc);
-        // return new ResponseEntity<String>(
-        // successResponse(acc.getEmployeeID() + " password was updated successfully"),
-        // HttpStatus.OK);
-        // } else {
-        // return new ResponseEntity<String>(
-        // successResponse("Could not update password with provided values or error
-        // logging in."),
-        // HttpStatus.OK);
-        // }
-        // } catch (NoSuchAlgorithmException e) {
-        // return new ResponseEntity<String>(
-        // successResponse("Unable to update password."),
-        // HttpStatus.CONFLICT);
-        // }
-    }
+    // return new ResponseEntity<String>(
+    // successResponse(acc.getEmployeeID() + " was updated successfully"),
+    // HttpStatus.OK);
+    // }
+    // // try {
+    // // if (acc.updatePassword(currentPassword, newPassword, repeateNewPassword))
+    // {
+    // // accountServ.save(acc);
+    // // return new ResponseEntity<String>(
+    // // successResponse(acc.getEmployeeID() + " password was updated
+    // successfully"),
+    // // HttpStatus.OK);
+    // // } else {
+    // // return new ResponseEntity<String>(
+    // // successResponse("Could not update password with provided values or error
+    // // logging in."),
+    // // HttpStatus.OK);
+    // // }
+    // // } catch (NoSuchAlgorithmException e) {
+    // // return new ResponseEntity<String>(
+    // // successResponse("Unable to update password."),
+    // // HttpStatus.CONFLICT);
+    // // }
+    // }
 
     // Delete an Account
     @DeleteMapping("/accounts/{employeeId}")

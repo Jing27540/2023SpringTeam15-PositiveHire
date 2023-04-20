@@ -48,21 +48,27 @@ const LoginCard = (props) => {
 
         if (id === undefined) {
             auth.login(false);
-                setResponseMessage("Employee username or password incorrect");
-                // navigate('/');
-                return;
+            setResponseMessage("Employee email or password incorrect");
+            // navigate('/');
+            return;
         }
         return await axios.get(`http://localhost:8080/employees/${id}`).then(result => {
             role = result.data.accessRole;
             if (flag) {
-                if ((role === "HR" || role === "DEI") && props.title === "HR/DEI") {
+                if ((props.title === "HR/DEI" && (role === "HR" || role === "DEI"))) {
                     navigate(props.destination);
                     auth.login(true, id, "HR");
-                } else {
+                } else if (props.title === "HR/DEI" && (role !== "HR" || role !== "DEI")) {
+                    setResponseMessage("This is Not a HR/DEI Account!");
+                }
+                // else if (props.title === "HR/DEI") {
+                //     setResponseMessage("Employee email or password incorrect");
+                // } 
+                else {
                     navigate("/Home");
                     auth.login(true, id, "Employee");
                 }
-            } 
+            }
             // else {
             //     auth.login(false);
             //     setResponseMessage("Employee number or password incorrect");
@@ -79,6 +85,14 @@ const LoginCard = (props) => {
     // Sign up user
     const signUpUser = async () => {
         setResponseMessage("");
+
+        if (!verifyEmailFormat()) {
+            setResponseMessage("Email must have the format 'text@text.text'");
+            return (
+                <></>
+            );
+        }
+
         if (password != repeatedPassword) {
             setResponseMessage("Password and repeat password do not match");
             return (
@@ -94,28 +108,33 @@ const LoginCard = (props) => {
         }
 
         //Check if there is an employee with the employee number already. If not, do not create new Account
-        console.log(employeeNumber);
         try {
-            await axios.get(`http://localhost:8080/employees/${employeeNumber}`);
+            await axios.get(`http://localhost:8080/employees/${employeeNumber}`).then(res => {
+                //Check if the correct logincard is selected
+                if (props.title === "HR/DEI" && res.data.accessRole !== "HR") {
+                    setResponseMessage("Employee email or password incorrect");
+                    return (<></>);
+                } else {
+                    const account = { employeeID: employeeNumber, hashedPassword: password, employeeEmail: employeeEmail };
+                    axios.post(`http://localhost:8080/accounts`, account).then(result => {
+                        let flag = result.data;
+                        if (flag) {
+                            // auth.login(true);
+                            // navigate('/home');
+                            setResponseMessage("Account successfully created");
+                        } else {
+                            // auth.login(false);
+                            // navigate('/');
+                            setResponseMessage("Account with that employee number already exists");
+                        }
+                    });
+                }
+            }).then();
         } catch (err) {
             // console.log();
             setResponseMessage(err.response.data.message);
             return;
         }
-
-        const account = { employeeID: employeeNumber, hashedPassword: password, employeeEmail: employeeEmail };
-        return await axios.post(`http://localhost:8080/accounts`, account).then(result => {
-            let flag = result.data;
-            if (flag) {
-                // auth.login(true);
-                // navigate('/home');
-                setResponseMessage("Account successfully created");
-            } else {
-                // auth.login(false);
-                // navigate('/');
-                setResponseMessage("Account with that employee number already exists");
-            }
-        });
     };
 
     //Signup
@@ -129,17 +148,43 @@ const LoginCard = (props) => {
         // getAccountData();
     }
 
+    function verifyEmailFormat() {
+        var valid = false;
+        var atSymbol = false;
+        let str = employeeEmail;
+        for (let i = 0; i < str.length; i++) {
+            if (str[i] === "." && atSymbol === false) {
+                break;
+            } else if (atSymbol === false && str[i] === "@") {
+                if (str[i + 1] === ".") {
+                    break;
+                }
+                atSymbol = true;
+            } else {
+                if (str[i] === "." && atSymbol === true) {
+                    if ((i + 1) === str.length) {
+                        break;
+                    }
+                    valid = true;
+                    break;
+                }
+            }
+        }
+
+        return valid;
+    }
+
     return (
         <Form>
             <h1>{props.title}</h1>
             <Form.Group className="mb-3" controlId="formEmployeeEmail">
-                <FloatingLabel controlId="floatingInput" label="Employee Email" className="mb-3" onChange={e => { setEmployeeEmail(e.target.value); }}>
+                <FloatingLabel controlId="floatingInput" label="Employee@Email.com" className="mb-3" onChange={e => { setEmployeeEmail(e.target.value); }}>
                     <Form.Control placeholder="Enter Employee Email" />
                 </FloatingLabel>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formEmployeePassword">
                 <FloatingLabel controlId="floatingPassword" label="Employee Password" onChange={e => { setPassword(e.target.value); }}>
-                    <Form.Control size="lg" type="employee password" placeholder="Password" />
+                    <Form.Control size="lg" type="password" placeholder="Password" />
                 </FloatingLabel>
             </Form.Group>
             {
@@ -153,7 +198,7 @@ const LoginCard = (props) => {
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="formEmployeeNumber">
                                 <FloatingLabel controlId="floatingInput" label="Employee Number" className="mb-3" onChange={e => { setEmployeeNumber(e.target.value); }}>
-                                    <Form.Control placeholder="Enter Employee Number" />
+                                    <Form.Control type="password" placeholder="Enter Employee Number" />
                                 </FloatingLabel>
                             </Form.Group>
                             <Button variant="primary" onClick={handleSignUp} style={{ width: '200px', height: '50px' }}>
@@ -177,47 +222,6 @@ const LoginCard = (props) => {
             }
         </Form>
     );
-
-    // For testing
-    // function getAccountData() {
-    // axios.post(`http://localhost:8080/accounts/account`, { employeeID: employeeNumber, hashedPassword: password }).then(result => {
-    //     setAccountData(result.data);
-    //     console.log(accountData);
-    // });
-
-    // axios.get(`http://localhost:8080/accounts`,).then(result => {
-    //     setAccountData(result.data);
-    //     console.log(accountData);
-    // });
-
-    // axios.put(`http://localhost:8080/accounts`, { employeeID: employeeNumber, hashedPassword: password }).then(result => {
-    //     setAccountData(result.data);
-    //     console.log(accountData);
-    // });
-
-    // console.log(employeeNumber);
-    // try {
-    //     axios.get(`http://localhost:8080/employees/${employeeNumber}`).then(result => {
-    //         let resp = result.data;
-    //         console.log(resp);
-    //     });
-    // } catch (err) {
-    //     console.log("Recieved error");
-    //     setResponseMessage(err.response);
-    // }
-
-    // }
-
-    // console.log(props);
-
-    // getAccountData();
-
-    // useEffect(()=>{
-    //     axios.get(`http://localhost:8080/accounts/${employeeNumber}`).then(result => {
-    //                 setAccountData(result.data);
-    //                 console.log(accountData);
-    //             });
-    // }, []);
 }
 
 export default LoginCard;

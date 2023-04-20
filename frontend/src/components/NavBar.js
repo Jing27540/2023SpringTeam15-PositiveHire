@@ -8,6 +8,8 @@ import ImportData from './ImportData';
 import TabsBar from './TabsBar';
 import JobPosting from '../views/JobPosting';
 import { useAuth } from '../base/auth';
+import ViewMatchAnalytics from '../subViews/ViewMatchAnalytics';
+import Alert from 'react-bootstrap/Alert';
 
 /**
  * NavBar class for the header of the application
@@ -22,22 +24,34 @@ export default function NavBar() {
 
   const auth = useAuth();
 
-  console.log(auth);
-
   const [key, setKey] = React.useState('home');
   const [mode, setMode] = React.useState('Positions');
   const [pView, setPView] = React.useState('Welcome');
   const [employee, setEmployee] = React.useState({});
   const [accessRole, setAccessRole] = React.useState('');
+  // Get the job posting list
+  const [jobPostings, setJobPostings] = React.useState();
+  // Get the employee list
+  const [employees, setEmployees] = React.useState();
 
   // Get Employee Data
   React.useEffect(() => {
+
     axios.get(`http://localhost:8080/employees/${auth.user}`).then(res => {
       setEmployee(res.data);
       // setAccessRole(res.data.accessRole);
       setAccessRole(auth.role);
     })
       .catch(err => console.log(err));
+
+    axios.get("http://localhost:8080/jobpostings").then(result => {
+      setJobPostings(result.data);
+    })
+
+    axios.get("http://localhost:8080/employees").then(result => {
+      setEmployees(result.data);
+    })
+
   }, []);
 
   return (
@@ -91,7 +105,10 @@ export default function NavBar() {
                 {mode === "Positions" ?
                   <JobPosting accessRole={accessRole} pView={pView} setPView={setPView} />
                   :
-                  undefined
+                  mode === 'Talent Pipeline' ?
+                    <ViewMatchAnalytics employees={employees} jobPostings={jobPostings} />
+                    :
+                    <Alert variant="danger"> Not Implement Yet!</Alert>
                 }
               </>
               :

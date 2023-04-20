@@ -57,7 +57,7 @@ function CreateJobPosting(props) {
             "otherRequirements": jobPosting.otherRequirements,
             "jobDescription": jobPosting.jobDescription,
             "availablePositions": jobPosting.availablePositions,
-            "location": jobPosting.locations,
+            "location": jobPosting.location,
             "meetingType": jobPosting.meetingType,
             "meetingNotes": jobPosting.meetingNotes,
             "process": jobPosting.process,
@@ -153,8 +153,6 @@ export const JobTitle = (props) => {
     const [min, setMin] = React.useState(index ? salary.substr(0, index) : "");
     const [max, setMax] = React.useState(index ? salary.substr(index + 1) : "");
 
-    console.log(min, max);
-
     // get jobPostings list
     const [jobPostings, setJobPostings] = React.useState([]);
 
@@ -178,8 +176,17 @@ export const JobTitle = (props) => {
     function handleSaveClick(flag) {
 
         if (jobNumber !== "" && jobTitle !== "" && jobDescription !== '' && department !== '' && min !== '' && max !== '') {
+            // check applyLink
             const result = jobPostings.filter(item => jobNumber === item.jobNumber);
-            if (props.saveMode !== undefined && props.saveMode !== false && result && result.length > 0) {
+            if (applyLink !== '' && !isValidUrl(applyLink)) {
+                alert("Invalid Link!");
+            }
+            // check min & max salary
+            else if (+min > +max) {
+                alert("Min Salary should not be larger than Max Salary!");
+            }
+            // check jobNumber, check if duplicate jobNumber occurs in create mode [when props.saveMode === true]
+            else if (props.saveMode !== false && result && result.length > 0) {
                 alert("Duplicate JobNumber!");
             } else {
                 jobPostingData.jobNumber = jobNumber;
@@ -191,6 +198,7 @@ export const JobTitle = (props) => {
                 }
                 jobPostingData.jobDescription = jobDescription;
                 jobPostingData.department = department;
+                // isNaN(x)
                 jobPostingData.salary = min + "~" + max;
 
                 // save data
@@ -239,9 +247,7 @@ export const JobTitle = (props) => {
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
                 <Form.Label column sm={2}> Apply Link </Form.Label>
                 <Col sm={9}> <Form.Control rows={1} placeholder="Type here..." value={applyLink} onChange={e => {
-                    if (!isValidUrl(e.target.value)) {
-                        alert("Invalid Link!");
-                    } else { setApplyLink(e.target.value); }
+                    setApplyLink(e.target.value);
                 }} /></Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3" style={{ marginTop: '20px' }}>
@@ -255,13 +261,13 @@ export const JobTitle = (props) => {
                         <Col sm={6}>
                             <Row>
                                 <Form.Label column sm={2}>MIN$</Form.Label>
-                                <Col sm={8}><Form.Control placeholder="Type here..." value={min} onChange={e => setMin(e.target.value)} /></Col>
+                                <Col sm={8}><Form.Control placeholder="Type here..." value={min} onChange={e => { if (isNaN(e.target.value)) { alert('Min Salary should be Integer!') } else { setMin(e.target.value); } }} /></Col>
                             </Row>
                         </Col>
                         <Col sm={6}>
                             <Row>
                                 <Form.Label column sm={2}>MAX$</Form.Label>
-                                <Col sm={8}><Form.Control placeholder="Type here..." value={max} onChange={e => setMax(e.target.value)} /></Col>
+                                <Col sm={8}><Form.Control placeholder="Type here..." value={max} onChange={e => { if (isNaN(e.target.value)) { alert('Max Salary should be Integer!') } else { setMax(e.target.value); } }} /></Col>
                             </Row>
                         </Col>
                     </Row>
@@ -295,6 +301,17 @@ export const Requirements = (props) => {
     const [certificationRequirements, setCertificationRequirements] = React.useState(props.jobPosting.certificationRequirements ? props.jobPosting.certificationRequirements : []); // Certification []
     const [otherRequirements, setOtherRequirements] = React.useState(props.jobPosting.otherRequirements ? props.jobPosting.otherRequirements : ''); // String
 
+    const [flag, setFlag] = React.useState(false);
+
+    React.useEffect(() => {
+        if (flag) {
+            setSName("");
+            setYearExperience("");
+            setComment1("");
+        }
+        setFlag(false);
+    }, [flag]);
+
     // TODO: The list is not Update
     function addSkill() {
         let exists = false;
@@ -322,16 +339,10 @@ export const Requirements = (props) => {
 
                 if (!exists) {
                     skillRequirements.push(newSkill);
-                    setSName("");
-                    setComment1("");
-                    setYearExperience("");
-                    setSType("");
+                    // TODO: this is not working!!
+                    setFlag(true);
                     alert("Successfully add new skill!");
                 } else {
-                    setSName("");
-                    setComment1("");
-                    setYearExperience("");
-                    setSType("");
                     alert("Skill is already existed!");
                 }
             }
@@ -347,7 +358,7 @@ export const Requirements = (props) => {
             handleSkillRequirementsChange();
             alert("Sucessfully to remove skill.");
         } else {
-            alert("No Skills data.");
+            alert("No Skill to Remove.");
         }
     }
 
@@ -624,8 +635,8 @@ export const Availability = (props) => {
 
     function handleSaveClick() {
         if (availablePositions || locations.length > 0 || meetingType !== "" || meetingNotes !== "") {
-            if (isNaN(availablePositions)) {
-                alert("availablePositions should be integer.");
+            if (isNaN(availablePositions) || availablePositions < 1) {
+                alert("availablePositions should be integer and cannot be 0.");
             } else {
                 jobPostingData.availablePositions = availablePositions;
                 jobPostingData.location = locations;
@@ -634,6 +645,7 @@ export const Availability = (props) => {
 
                 // save data
                 props.setJobPosting(jobPostingData);
+                // edit mode
                 if (props.saveMode !== undefined && props.saveMode === false) {
                     // api call
                     axios.put("http://localhost:8080/jobpostings", jobPostingData).then(response => {
@@ -751,13 +763,11 @@ export const Processes = (props) => {
         p.push(p5);
         setProcess(p);
         jobPostingData.process = p;
-        console.log(jobPostingData);
         // save data
         props.setJobPosting(jobPostingData);
         if (props.saveMode !== undefined && props.saveMode === false) {
             // api call
             axios.put("http://localhost:8080/jobpostings", jobPostingData).then(response => {
-                console.log("save", jobPostingData);
                 alert("Save Successfully!!");
             }).catch(error => {
                 alert("Unsuccessful to update the Processes!")
