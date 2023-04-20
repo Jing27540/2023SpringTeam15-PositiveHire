@@ -92,6 +92,9 @@ function EmployeeProfile(props) {
                         <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%", float: 'right', width: '150px' }} onClick={handleShow}>
                             Upload Resume
                         </Button>
+                        <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%", float: 'left', width: '150px' }}>
+                            Download Resume
+                        </Button>
                     </Col>
                 </Row>
                 <Modal size="lg" show={show} onHide={handleClose}>

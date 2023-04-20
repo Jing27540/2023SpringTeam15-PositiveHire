@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import axios from 'axios';
+import styled from "styled-components";
 import Button from 'react-bootstrap/Button';
 
 /**
@@ -14,6 +15,15 @@ import Button from 'react-bootstrap/Button';
 const jobHistoryFields = ['Role', 'Select', 'StartDate', 'EndDate'];
 const EducationFields = ['Institution', 'Address', 'StartDate', 'EndDate'];
 
+// const Button = styled.button`
+//   background-color: #0f123F;
+//   color: white;
+//   font-size: 15px;
+//   padding: 5px 50px;
+//   border-radius: 5px;
+//   margin: 5px 0px;
+//   cursor: pointer;
+// `;
 
 function EditProfile(props) {
 
@@ -100,8 +110,10 @@ function EditProfile(props) {
                                 : <div>{file && `${file.name}` - `${file.type}`}</div>}
 
 
-                            <button onClick={handleUploadClick}>Upload</button>
-                            <button onClick={downloadResume} onLoadError={console.error}>Download</button>
+                            <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%",  position: 'absolute',
+    bottom:40, left:10, width: '150px' }} onClick={handleUploadClick}>Upload</Button>
+                            <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%",  position: 'absolute',
+    bottom:40, left:165, width: '150px' }} onClick={downloadResume} onLoadError={console.error}>Download</Button>
                         </div>
                     </Row>
                 </div>
