@@ -470,7 +470,7 @@ public class APIEmployeeController extends APIController {
             eduServ.save(toEdit);
         } else {
             return new ResponseEntity<String>(
-                    successResponse("Employee with the name does not exist"),
+                    successResponse("Employee does not exist"),
                     HttpStatus.CONFLICT);
         }
 
