@@ -17,6 +17,7 @@ import ProfileCard from "../components/ProfileCard";
 import Alert from 'react-bootstrap/Alert';
 import Education from "../subViews/Education"
 import JobHistory from "../subViews/JobHistory";
+import axios from 'axios';
 
 /**
  * EmployeeProfile component is used to manage profile information.
@@ -82,6 +83,22 @@ function EmployeeProfile(props) {
         }
     }
 
+    function downloadResume() {
+        axios.get(`http://localhost:8080/documents/${employee.employeeNum}`, { responseType: 'blob' }).then(res => {
+            console.log(res);
+
+            const blob = new Blob([res.data], { type: "application/pdf" });
+
+            // process to auto download it
+            const fileURL = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = fileURL;
+            link.download = "Resume_" + employee.employeeNum + ".pdf";
+            link.click();
+
+        });
+    }
+
     return (
         <>
             <Container>
@@ -92,7 +109,7 @@ function EmployeeProfile(props) {
                         <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%", float: 'right', width: '150px' }} onClick={handleShow}>
                             Upload Resume
                         </Button>
-                        <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%", float: 'left', width: '150px' }}>
+                        <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%", float: 'left', width: '150px' }} onClick={downloadResume}>
                             Download Resume
                         </Button>
                     </Col>
