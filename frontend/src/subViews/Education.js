@@ -166,15 +166,16 @@ function Education(props) {
     function addEducation(ed) {
         setResponseMessage("");
         let edToAdd = null;
-        if (mode) {
-            edToAdd = {
-                name: ed.name,
-                institution: ed.institution,
-                type: ed.type,
-                dateAchieved: ed.issuedDate,
-                skills: []
-            };
-        } else {
+        if(!parseInt(ed.name) && !parseInt(ed.institution)) {
+            if (mode) {
+                edToAdd = {
+                    name: ed.name,
+                    institution: ed.institution,
+                    type: ed.type,
+                    dateAchieved: ed.issuedDate,
+                    skills: []
+                };
+            } else {
             edToAdd = {
                 id: currid,
                 name: currEdu.name,
@@ -220,6 +221,9 @@ function Education(props) {
                // alert("Sucessfully to update")
             })
         }
+    } else {
+        alert("Cannot be a number");
+    }
     }
     // {
     //     "id": 2,
