@@ -77,75 +77,73 @@ function Education(props) {
                
                 
             })
-        //    alert("Sucessfully to delete")
+
         })
     }
 
     function saveSkill(s) {
-        if (secmode) {
-            let duplicate = false;
+        if(checkFieldsForSkills()) {
+            if (secmode) {
+                let duplicate = false;
 
-            currskills.forEach(element => {
-                if (element.name === s.name) {
-                    duplicate = true;
+                currskills.forEach(element => {
+                    if (element.name === s.name) {
+                        duplicate = true;
+                    }
+                });
+                let newSkill = {
+                    name: s.name,
+                    level: s.level,
+                    score: s.score
+                };
+                if (!duplicate) {
+                
+                    axios.post(`http://localhost:8080/employees/${props.employee.employeeNum}/education/${currid}/skills`, newSkill).then(response => {
+                        axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
+                            setEmployee(res.data);
+                            console.log(res.data);
+                            
+                        })
+                    
+                    })
+              
+            }
+            } else {
+         
+                let skiId = 0;
+                let lastSk = null;
+                currskills.forEach(element => {
+                    if (element.name === s.name) {
+                        skiId = element.id;
+                        lastSk = element;
+                    }
+                });
+                if(s.name === undefined) {
+                    s.name = lastSk.name;
                 }
-            });
-            let newSkill = {
-                name: s.name,
-                level: s.level,
-                score: s.score
-            };
-            if (!duplicate) {
-                let suc = false;
-                axios.post(`http://localhost:8080/employees/${props.employee.employeeNum}/education/${currid}/skills`, newSkill).then(response => {
+                if(s.level === undefined) {
+                    s.level = lastSk.level;
+                }
+                if(s.score === undefined) {
+                    s.score = lastSk.score;
+                }
+                let nSkill = {
+                    id: skiId,
+                    name: s.name,
+                    level: s.level,
+                    score: s.score
+                }
+
+                axios.put(`http://localhost:8080/employees/${props.employee.employeeNum}/education/${currid}/skills/${skiId}`, nSkill).then(response => {
                     axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                         setEmployee(res.data);
-                        console.log(res.data);
-                        suc = true;
+                    
+                   
                     })
-                    
-                })
-                if(suc) {
-              //      alert("Sucessfully to save")
-                }
-            }
-        } else {
-          //  let suc = false;
-            let skiId = 0;
-            let lastSk = null;
-            currskills.forEach(element => {
-                if (element.name === s.name) {
-                    skiId = element.id;
-                    lastSk = element;
-                }
-            });
-            if(s.name === undefined) {
-                s.name = lastSk.name;
-            }
-            if(s.level === undefined) {
-                s.level = lastSk.level;
-            }
-            if(s.score === undefined) {
-                s.score = lastSk.score;
-            }
-            let nSkill = {
-                id: skiId,
-                name: s.name,
-                level: s.level,
-                score: s.score
-            }
-
-            axios.put(`http://localhost:8080/employees/${props.employee.employeeNum}/education/${currid}/skills/${skiId}`, nSkill).then(response => {
-                axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
-                    setEmployee(res.data);
-                    
-                   // suc = true;
-                })
                 
-            })
-            // if(suc) {
-            //     alert("Sucessfully to update")
-            // }
+                })
+            
+            }
         }
     }
     //  console.log(employee.education);
@@ -154,7 +152,7 @@ function Education(props) {
         axios.delete(`http://localhost:8080/employees/${props.employee.employeeNum}/education/${thid}`).then(response => {
             axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                 setEmployee(res.data);
-           //     alert("Sucessfully to delete")
+       
                 setResponseMessage("Education deleted successfully");
             })
         }).catch(error => {
@@ -166,6 +164,7 @@ function Education(props) {
     function addEducation(ed) {
         setResponseMessage("");
         let edToAdd = null;
+        let curr = false
         if(!parseInt(ed.name) && !parseInt(ed.institution)) {
             if (mode) {
                 edToAdd = {
@@ -175,6 +174,9 @@ function Education(props) {
                     dateAchieved: ed.issuedDate,
                     skills: []
                 };
+                if(ed.name === undefined || ed.institution === undefined) {
+                    curr = true;
+                }
             } else {
             edToAdd = {
                 id: currid,
@@ -203,14 +205,19 @@ function Education(props) {
         }
 
         if (mode) {
-            axios.post(`http://localhost:8080/employees/${props.employee.employeeNum}/education`, edToAdd).then(response => {
-                axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
-                    setEmployee(res.data);
+            if(!curr) {
+                axios.post(`http://localhost:8080/employees/${props.employee.employeeNum}/education`, edToAdd).then(response => {
+                    axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
+                        setEmployee(res.data);
                     
+                    })
+             
+                    setResponseMessage("Education Created Successfully");
                 })
-               // alert("Sucessfully to save")
-               setResponseMessage("Education Created Successfully");
-            })
+
+            } else {
+                setResponseMessage("Name or Institution cannot be empty");
+            }
         } else {
             axios.put(`http://localhost:8080/employees/${props.employee.employeeNum}/education`, edToAdd).then(response => {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
@@ -218,33 +225,29 @@ function Education(props) {
                    
                 })
                 setResponseMessage("Education Updated Successfully");
-               // alert("Sucessfully to update")
+              
             })
         }
     } else {
         alert("Cannot be a number");
     }
     }
-    // {
-    //     "id": 2,
-    //     "jobTitle": "firstEmp",
-    //     "jobLevel": "newlevel",
-    //     "organization": null,
-    //     "location": null,
-    //     "startDate": null,
-    //     "endDate": null,
-    //     "jobSkills": []
-    //   }
 
-    // {
-    //     "id": 161,
-    //     "name": "Jings Assistant",
-    //     "level": "High",
-    //     "score": 6
-    //   }
 
-    //const SKTITLE = ['SE', 'Certifications'];
-
+    function checkFieldsForSkills() {
+        if (sname === undefined) {
+            setResponseMessage("Skill Name must be set");
+            return false;
+        } else if (level === undefined) {
+            setResponseMessage("Skill Level must be set");
+            return false;
+        } else if (score === undefined) {
+            setResponseMessage("Skill Score must be set");
+            return false;
+        }
+        return true;
+    }
+  
 
     return (
         <>
@@ -308,36 +311,7 @@ function Education(props) {
                             </td>
                         </tr>
 
-                        // <>
-                        //     <Row>
-                        //         <Col>Job Title</Col>
-                        //         <Col>{item.jobTitle}</Col>
-                        //     </Row>
-                        //     <Row>
-                        //         <Col>Job Level</Col>
-                        //         <Col>{item.jobLevel}</Col>
-                        //     </Row>
-                        //     <Row>
-                        //         <Col>Organization</Col>
-                        //         <Col>{item.organization}</Col>
-                        //     </Row>
-                        //     <Row>
-                        //         <Col>location</Col>
-                        //         <Col>{item.location}</Col>
-                        //     </Row>
-                        //     <Row>
-                        //         <Col>Start Date</Col>
-                        //         <Col>{item.startDate}</Col>
-                        //     </Row>
-                        //     <Row>
-                        //         <Col>Finish Date</Col>
-                        //         <Col>{item.endDate}</Col>
-                        //     </Row>
-                        //     <Row>
-                        //         <Col>Skills</Col>
-                        //         <Col>{item.jobTitle}</Col>
-                        //     </Row>
-                         //
+                       
                     );
                 })}
 
@@ -352,7 +326,7 @@ function Education(props) {
                     <Modal.Title>Skill</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {/* <EditForm addMode={mode} employee={props.employee} mode={true} /> */}
+                    
 
                     {(secmode) ?
                         <FloatingLabel label="Name" id="sname" onChange={e => setSName(e.target.value)} style={{ margin: '2%' }} />
@@ -373,14 +347,14 @@ function Education(props) {
                     }
                     <FloatingLabel label="Level" id="level" onChange={e => setLevel(e.target.value)} style={{ margin: '2%' }} />
                     <FloatingLabel label="Score" id="score" onChange={e => setScore(e.target.value)} style={{ margin: '2%' }} />
-                    {/* <div style={{ justifyContent: 'left', alignItems: 'left', fontSize: '15px', margin: "10px", color: 'red' }}>{message}</div> */}
+                   
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={handleClose}>
                         Close
                     </Button>
 
-                    <Button variant="success" onClick={() => { saveSkill({ name: sname, level: level, score: score }); handleClose(); clear(); }}>
+                    <Button variant="success" onClick={() => {saveSkill({ name: sname, level: level, score: score }); handleClose(); clear(); }}>
                         Save
                     </Button>
                     {
@@ -398,7 +372,7 @@ function Education(props) {
                     <Modal.Title>Education</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {/* <EditForm addMode={mode} employee={props.employee} mode={true} /> */}
+                    
 
                     {(!mode) ?
                         <Modal.Title>Editing Education{" " + currName}</Modal.Title>
@@ -406,35 +380,13 @@ function Education(props) {
                         undefined
                     }
                     <FloatingLabel label="Name" id="sname" onChange={e => setedName(e.target.value)} style={{ margin: '2%' }} />
-                    {/* // :
-                        // <Form.Select aria-label="Default select example" id="sname" onChange={e => { setedName(e.target.value); }} style={{ margin: '2%', width: '95%' }}>
-                        //     <option>Select</option>
-                        //     { 
-                                 */}
-                    {/* //         employee.education.map((item, index) => { */}
-                    {/* //                 return (
-                        //                     <option key={index} value={item.name}>{item.name}</option>
-                        //                 ); */}
-                    {/* //             })
-                                    
-                        //             //undefined
-                        //     } */}
-                    {/* // </Form.Select> */}
+                    
+                   
 
                     <FloatingLabel label="Institution" id="inst" onChange={e => setInstitution(e.target.value)} style={{ margin: '2%' }} />
-                    {/* <FloatingLabel label="Type" id="type" onChange={e => setType(e.target.value)} style={{ margin: '2%' }} /> */}
+                   
                     <Form.Select aria-label="Default select example" id="sname" onChange={e => { setType(e.target.value); }} style={{ margin: '2%', width: '95%' }}>
                         <option>Education type</option>
-                        {/* { 
-                                currskills ?
-                                    currskills.map((item, index) => {
-                                        return (
-                                            <option key={index} value={item.name}>{item.name}</option>
-                                        );
-                                    })
-                                    :
-                                    undefined
-                            } */}
                         <option>Trade</option>
                         <option>Vocational</option>
                         <option>Apprenticeship</option>
@@ -450,7 +402,7 @@ function Education(props) {
                     />
 
 
-                    {/* <div style={{ justifyContent: 'left', alignItems: 'left', fontSize: '15px', margin: "10px", color: 'red' }}>{message}</div> */}
+                    
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={() => {handleClose(); clear();}}>
@@ -460,14 +412,7 @@ function Education(props) {
                     <Button variant="success" onClick={() => { addEducation({ name: edname, institution: inst, type: type, issuedDate: issuedDate }); handleClose(); clear(); }}>
                         Save
                     </Button>
-                    {/* {
-                        !mode ?
-                            <Button variant="secondary" onClick={() => { deleteSkill(type, sname); clear(); }} >
-                                Remove
-                            </Button>
-                            :
-                            undefined
-                    } */}
+                   
                 </Modal.Footer>
             </Modal>
         </Table>
