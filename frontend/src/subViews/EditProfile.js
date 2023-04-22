@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row'
 import axios from 'axios';
 import styled from "styled-components";
 import Button from 'react-bootstrap/Button';
-
+import Form from 'react-bootstrap/Form';
 /**
  * Create EditProfile Form for user to update their profile
  * @author Jing Huang
@@ -30,6 +30,8 @@ function EditProfile(props) {
     const [file, setFile] = React.useState();
 
     const [employee, setEmployee] = React.useState(props.employee);
+
+    const [responseMessage, setResponseMessage] = React.useState('');
 
     React.useEffect(() => {
 
@@ -65,7 +67,7 @@ function EditProfile(props) {
 
             });
         };
-
+            setResponseMessage("Upload successful");
     }
 
     const downloadFile = (blob, fileName) => {
@@ -109,7 +111,7 @@ function EditProfile(props) {
                             {file !== undefined ? <div>{file[0] && `${file.name}` - `${file.type}`}</div>
                                 : <div>{file && `${file.name}` - `${file.type}`}</div>}
 
-
+                        <Form.Label style={{color: "green", marginTop: "2%"}}>{responseMessage}</Form.Label>
                             <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%",  position: 'absolute',
     bottom:40, left:10, width: '150px' }} onClick={handleUploadClick}>Upload</Button>
                             <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%",  position: 'absolute',

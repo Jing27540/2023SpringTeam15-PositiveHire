@@ -242,7 +242,7 @@ function ImportData() {
       })
     }
     setShowConfirmation(true)
-    await delay(2500);
+  //  await delay(2500);
     setShowDeleteAll(false)
     setLoadingDeleteAll(false)
     setShowConfirmation(false)
@@ -461,7 +461,7 @@ function ImportData() {
                         }
                     </div>
                   </h3>
-                  <h6>To begin generating metrics, please upload your data via a CSV import</h6>
+                  <h6>To begin with the web application, please upload your data via a CSV import</h6>
                 </div>
                 <div style={{paddingTop: "1em"}}>
                 <Row className="justify-content-md-center">
