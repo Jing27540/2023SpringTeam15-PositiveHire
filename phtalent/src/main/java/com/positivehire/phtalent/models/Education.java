@@ -92,16 +92,6 @@ public class Education extends DomainObject {
         return this.dateAchieved;
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-            " name='" + getName() + "'" +
-            ", institution='" + getInstitution() + "'" +
-            ", type='" + getType() + "'" +
-            ", skills='" + getSkills() + "'" +
-            "}";
-    }
-
     /**
      * Returns Id of the education
      * @return education Id
