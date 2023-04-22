@@ -83,21 +83,21 @@ function EmployeeProfile(props) {
         }
     }
 
-    function downloadResume() {
-        axios.get(`http://localhost:8080/documents/${employee.employeeNum}`, { responseType: 'blob' }).then(res => {
-            console.log(res);
+    // function downloadResume() {
+    //     axios.get(`http://localhost:8080/documents/${employee.employeeNum}`, { responseType: 'blob' }).then(res => {
+    //         console.log(res);
 
-            const blob = new Blob([res.data], { type: "application/pdf" });
+    //         const blob = new Blob([res.data], { type: "application/pdf" });
 
-            // process to auto download it
-            const fileURL = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = fileURL;
-            link.download = "Resume_" + employee.employeeNum + ".pdf";
-            link.click();
+    //         // process to auto download it
+    //         const fileURL = URL.createObjectURL(blob);
+    //         const link = document.createElement('a');
+    //         link.href = fileURL;
+    //         link.download = "Resume_" + employee.employeeNum + ".pdf";
+    //         link.click();
 
-        });
-    }
+    //     });
+    // }
 
     return (
         <>
@@ -107,11 +107,11 @@ function EmployeeProfile(props) {
                     <Col sm><ProfileCard employee={employee} /></Col>
                     <Col sm>
                         <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%", float: 'right', width: '150px' }} onClick={handleShow}>
-                            Upload Resume
+                            Manage Resume
                         </Button>
-                        <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%", float: 'left', width: '150px' }} onClick={downloadResume}>
+                        {/* <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%", float: 'left', width: '150px' }} onClick={downloadResume}>
                             Download Resume
-                        </Button>
+                        </Button> */}
                     </Col>
                 </Row>
                 <Modal size="lg" show={show} onHide={handleClose}>
