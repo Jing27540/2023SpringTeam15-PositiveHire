@@ -1,7 +1,11 @@
 import React from 'react';
+import ReactDOM from "react-dom";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
-import { GrDocumentCsv } from "react-icons/gr";
+import axios from 'axios';
+import styled from "styled-components";
+import Button from 'react-bootstrap/Button';
+
 /**
  * Create EditProfile Form for user to update their profile
  * @author Jing Huang
@@ -11,8 +15,85 @@ import { GrDocumentCsv } from "react-icons/gr";
 const jobHistoryFields = ['Role', 'Select', 'StartDate', 'EndDate'];
 const EducationFields = ['Institution', 'Address', 'StartDate', 'EndDate'];
 
-function EditProfile() {
+// const Button = styled.button`
+//   background-color: #0f123F;
+//   color: white;
+//   font-size: 15px;
+//   padding: 5px 50px;
+//   border-radius: 5px;
+//   margin: 5px 0px;
+//   cursor: pointer;
+// `;
 
+function EditProfile(props) {
+
+    const [file, setFile] = React.useState();
+
+    const [employee, setEmployee] = React.useState(props.employee);
+
+    React.useEffect(() => {
+
+
+    }, [file]);
+
+    function handleFileChange(e) {
+
+        if (e.target.files) {
+            setFile(e.target.files[0]);
+
+        }
+        console.log(e.target.files);
+    }
+
+    function handleUploadClick() {
+
+        let reader = new FileReader();
+
+        reader.readAsDataURL(file);
+
+        reader.onload = function () {
+            // console.log("result" + reader.result);
+
+            //Remove the beginning portion of the result that is NOT a part of the base64 encoded string
+            var base64result = reader.result.split(',')[1];
+            // console.log(base64result);
+            console.log(base64result.length);
+
+
+            axios.post(`http://localhost:8080/documents/${employee.employeeNum}`, base64result, { headers: { 'Content-Type': 'application/json' } }).then(res => {
+                console.log(res.data);
+
+            });
+        };
+
+    }
+
+    const downloadFile = (blob, fileName) => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.downlad = fileName;
+        document.body.append(link);
+        link.click();
+        link.remove();
+
+        setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+    }
+
+    function downloadResume() {
+        axios.get(`http://localhost:8080/documents/${employee.employeeNum}`, { responseType: 'blob' }).then(res => {
+            console.log(res);
+
+            const blob = new Blob([res.data], { type: "application/pdf" });
+
+            // process to auto download it
+            const fileURL = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = fileURL;
+            link.download = "Resume_" + employee.employeeNum + ".pdf";
+            link.click();
+
+        });
+    }
     // TODO: hard code 
     const data = [{ name: "c#", level: "Expert", score: "5", }, { name: "Communication", level: "Advanced", score: "3", }];
     const [role, setRole] = React.useState('role');
@@ -23,12 +104,17 @@ function EditProfile() {
             <Container style={{ margin: "5%" }}>
                 <div style={{ margin: '10%', float: 'center' }}>
                     <Row className="justify-content-md-center">
-                        <Row>
-                            <h1><GrDocumentCsv /></h1>
-                        </Row>
-                        <Row>
-                            <p className="text-black">Drag and drop a CSV file here, or click here to select files</p>
-                        </Row>
+                        <div>
+                            <input type="file" onChange={handleFileChange} accept=".pdf" />
+                            {file !== undefined ? <div>{file[0] && `${file.name}` - `${file.type}`}</div>
+                                : <div>{file && `${file.name}` - `${file.type}`}</div>}
+
+
+                            <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%",  position: 'absolute',
+    bottom:40, left:10, width: '150px' }} onClick={handleUploadClick}>Upload</Button>
+                            <Button size="sm" style={{ backgroundColor: "#0f123F", borderColor: "#0f123F", marginTop: "5%", marginRight: "10%",  position: 'absolute',
+    bottom:40, left:165, width: '150px' }} onClick={downloadResume} onLoadError={console.error}>Download</Button>
+                        </div>
                     </Row>
                 </div>
             </Container>
