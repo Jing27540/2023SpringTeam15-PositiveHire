@@ -76,18 +76,13 @@ function Skill(props) {
     let workEthic = props.employee.workEthic ? props.employee.workEthic : [];
 
     React.useEffect(() => {
-        if (mode === false) {
-            axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(result => {
-                setEmployee(result.data);
-                setTS(employee.technicalSkills);
-                setPS(employee.peopleSkills);
-                setWE(employee.workEthic);
-                technicalSkills = employee.technicalSkills;
-                peopleSkills = employee.peopleSkills;
-                workEthic = employee.workEthic;
-            });
-        }
-    }, [mode, options, employee]);
+        axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(result => {
+            setEmployee(result.data);
+            setTS(result.data.technicalSkills);
+            setPS(result.data.peopleSkills);
+            setWE(result.data.workEthic);
+        });
+    }, [TS, PS, WE]);
 
     React.useEffect(() => {
         if (type === 'technicalSkills' && !mode) {
@@ -133,6 +128,7 @@ function Skill(props) {
                         setMessage("Skill Already Exists");
                     } else {
                         employee.technicalSkills.push(newSkill);
+                        setTS(employee.technicalSkills);
                     }
                 } else { // edit mode
                     // employee.technicalSkills = [];
@@ -142,6 +138,7 @@ function Skill(props) {
                         }
                         return obj;
                     });
+                    setTS(employee.technicalSkills);
                 }
             } else if (s.type === 'peopleSkills') {
                 if (mode) {
@@ -156,6 +153,7 @@ function Skill(props) {
                         setMessage("Skill Already Exists");
                     } else {
                         employee.peopleSkills.push(newSkill);
+                        setPS(employee.peopleSkills);
                     }
                 } else {
                     // employee.peopleSkills = [];
@@ -165,6 +163,7 @@ function Skill(props) {
                         }
                         return obj;
                     });
+                    setPS(employee.peopleSkills);
                 }
             } else { //workEthic
                 if (mode) {
@@ -179,6 +178,7 @@ function Skill(props) {
                         setMessage("Skill Already Exists");
                     } else {
                         employee.workEthic.push(newSkill);
+                        setWE(employee.workEthic);
                     }
                 } else {
                     // employee.workEthic = [];
@@ -188,6 +188,7 @@ function Skill(props) {
                         }
                         return obj;
                     });
+                    setWE(employee.workEthic);
                 }
 
 
@@ -198,12 +199,12 @@ function Skill(props) {
                 axios.put("http://localhost:8080/employees", employee).then(response => {
                     axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                         setEmployee(res.data);
-                        setTS(employee.technicalSkills);
-                        setPS(employee.peopleSkills);
-                        setWE(employee.workEthic);
-                        technicalSkills = employee.technicalSkills;
-                        peopleSkills = employee.peopleSkills;
-                        workEthic = employee.workEthic;
+                        setTS(res.data.technicalSkills);
+                        setPS(res.data.peopleSkills);
+                        setWE(res.data.workEthic);
+                        technicalSkills = res.data.technicalSkills;
+                        peopleSkills = res.data.peopleSkills;
+                        workEthic = res.data.workEthic;
                         alert("Successful to Add/Edit Skill");
                         handleClose();
                     }).catch(err => console.log(err));
@@ -241,12 +242,12 @@ function Skill(props) {
             axios.put("http://localhost:8080/employees", employee).then(response => {
                 axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                     setEmployee(res.data);
-                    setTS(employee.technicalSkills);
-                    setPS(employee.peopleSkills);
-                    setWE(employee.workEthic);
-                    technicalSkills = employee.technicalSkills;
-                    peopleSkills = employee.peopleSkills;
-                    workEthic = employee.workEthic;
+                    setTS(res.data.technicalSkills);
+                    setPS(res.data.peopleSkills);
+                    setWE(res.data.workEthic);
+                    technicalSkills = res.data.technicalSkills;
+                    peopleSkills = res.data.peopleSkills;
+                    workEthic = res.data.workEthic;
                     handleClose();
                     alert("Successful to remove the skill");
                 }).catch(err => console.log(err));
