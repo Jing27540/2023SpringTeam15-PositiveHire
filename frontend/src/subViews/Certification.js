@@ -44,10 +44,11 @@ function Certification(props) {
     const [employee, setEmployee] = React.useState(props.employee);
 
     const [message, setMessage] = React.useState('');
+    const [color, setColor] = React.useState('green')
 
-    const [mode, setMode] = React.useState();
+    const [mode, setMode] = React.useState(true);
     const [show, setShow] = React.useState(false);
-    const handleClose = () => { setShow(false); setMessage('') }
+    const handleClose = () => { setShow(false); setMessage(''); setColor('green'); }
     const handleShow = () => setShow(true);
 
     const [cname, setCName] = React.useState();
@@ -60,13 +61,11 @@ function Certification(props) {
     const [certifications, setCertifications] = React.useState(props.employee.certifications ? props.employee.certifications : []);
 
     React.useEffect(() => {
-        if (mode === false) {
-            axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(result => {
-                setEmployee(result.data);
-            });
+        axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(result => {
+            setEmployee(result.data);
             setCertifications(employee.certifications);
-        }
-    }, [mode, employee]);
+        });
+    }, [certifications]);
 
     function clear() {
         setCName(undefined);
@@ -79,6 +78,7 @@ function Certification(props) {
     function saveCertification(c) {
         if (cname !== undefined && institution !== undefined && issuedDate !== undefined && credentialID !== undefined && skills !== undefined) {
 
+            let tmp = employee;
             let newCertification = {
                 name: c.name,
                 institution: c.institution,
@@ -88,37 +88,50 @@ function Certification(props) {
             };
             let exists = false;
 
-            if (mode) {
-
-                employee.certifications.forEach(element => {
+            if (mode === true) {
+                tmp.certifications.forEach(element => {
                     if (element.name === newCertification.name) {
                         exists = true;
                     }
                 });
                 if (exists) {
                     setMessage("Certificate Already Exists");
+                    setColor('red');
                 } else {
-                    employee.certifications.push(newCertification);
+                    tmp.certifications.push(newCertification);
+                    setCertifications(tmp.certifications);
+                    axios.put("http://localhost:8080/employees", tmp).then(response => {
+                        axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
+                            setEmployee(res.data);
+                            setMessage("Successful to add/edit certification");
+                            setColor('green');
+                            // handleClose();
+                        }).catch(err => console.log(err));
+                    }).catch(error => {
+                        setMessage('unable to add/edit certifications');
+                        setColor('red');
+                    });
                 }
-            } else {
-                employee.certifications = certifications.map(obj => {
+            }
+
+            if (mode === false) {
+                tmp.certifications = certifications.map(obj => {
                     if (obj.name === newCertification.name) {
                         obj = newCertification;
                     }
                     return obj;
                 });
-            }
-
-            if (!exists) {
-                axios.put("http://localhost:8080/employees", employee).then(response => {
+                setCertifications(tmp.certifications);
+                axios.put("http://localhost:8080/employees", tmp).then(response => {
                     axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                         setEmployee(res.data);
-                        setCertifications(employee.certifications);
-                        alert("Successful to add/edit certification");
-                        handleClose();
+                        setMessage("Successful to add/edit certification");
+                        setColor('green');
+                        // handleClose();
                     }).catch(err => console.log(err));
                 }).catch(error => {
-                    alert('unable to add/edit certifications');
+                    setMessage('unable to add/edit certifications');
+                    setColor('red');
                 });
             }
         }
@@ -131,15 +144,15 @@ function Certification(props) {
         let temp = certifications.filter(certification => certification.name !== cn);
         setCertifications(temp);
         employee.certifications = temp;
-
         axios.put("http://localhost:8080/employees", employee).then(response => {
             axios.get(`http://localhost:8080/employees/${props.employee.employeeNum}`).then(res => {
                 setEmployee(res.data);
-                setCertifications(employee.certifications);
-                alert("successful to remove the certifciation");
+                setMessage("successful to remove the certifciation");
+                setColor('green');
             }).catch(err => console.log(err));
         }).catch(error => {
-            alert('unable to remove certifciation')
+            setMessage('unable to remove certifciation');
+            setColor('red');
         });
     }
 
@@ -163,7 +176,7 @@ function Certification(props) {
                     <Row style={{ textAlign: 'center', marginTop: '2%', backgroundColor: "#0F123F", color: "white", height: "40px", borderRadius: 5, fontWeight: 'bold', alignItems: 'center' }}>
                         <Col>Certifications</Col>
                     </Row>
-                    {certifications.map((item, index) => {
+                    {employee.certifications.map((item, index) => {
                         return (
                             <div key={index}>
                                 <Row style={{ textAlign: 'left', margin: '2%' }}>
@@ -199,8 +212,8 @@ function Certification(props) {
                             <Form.Select aria-label="Default select example" id="cname" onChange={e => setCName(e.target.value)} style={{ margin: '2%', width: '95%' }}>
                                 <option>Certification Name</option>
                                 {
-                                    certifications ?
-                                        certifications.map((item, index) => {
+                                    employee.certifications ?
+                                        employee.certifications.map((item, index) => {
                                             return (
                                                 <option key={index} value={item.name}>{item.name}</option>
                                             );
@@ -220,7 +233,7 @@ function Certification(props) {
                         />
                         <FloatingLabel label="CredentialID" id="credentialID" onChange={e => setCredentialID(e.target.value)} style={{ margin: '2%' }} />
                         <FloatingLabel label="Skils" id="skils" onChange={e => setSkils(e.target.value)} style={{ margin: '2%' }} />
-                        <div style={{ justifyContent: 'left', alignItems: 'left', fontSize: '15px', margin: "10px", color: 'red' }}>{message}</div>
+                        <div style={{ justifyContent: 'left', alignItems: 'left', fontSize: '15px', margin: "10px", color: color }}>{message}</div>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary" onClick={handleClose}>

@@ -543,43 +543,48 @@ public class Employee extends DomainObject {
         this.setAccessRole(e.accessRole);
         this.setPerformanceScore(e.performanceScore);
 
-        if (e.getTechnicalSkills().size() <= this.getTechnicalSkills().size()) {
-            this.setTechnicalSkills(e.getTechnicalSkills());
+        // if (e.getTechnicalSkills().size() <= this.getTechnicalSkills().size()) {
+        // this.setTechnicalSkills(e.getTechnicalSkills());
 
-        }
+        // }
 
-        if (e.getPeopleSkills().size() <= this.getPeopleSkills().size()) {
-            this.setPeopleSkills(e.getPeopleSkills());
-        }
+        // if (e.getPeopleSkills().size() <= this.getPeopleSkills().size()) {
+        // this.setPeopleSkills(e.getPeopleSkills());
+        // }
 
-        if (e.getWorkEthic().size() <= this.getWorkEthic().size()) {
-            this.setWorkEthic(e.getWorkEthic());
-        }
+        // if (e.getWorkEthic().size() <= this.getWorkEthic().size()) {
+        // this.setWorkEthic(e.getWorkEthic());
+        // }
 
-        if (e.getCertifications().size() <= this.getCertifications().size()) {
-            this.setCertifications(e.getCertifications());
-        }
+        // if (e.getCertifications().size() <= this.getCertifications().size()) {
+        // this.setCertifications(e.getCertifications());
+        // }
+
+        this.setTechnicalSkills(e.getTechnicalSkills());
+        this.setPeopleSkills(e.getPeopleSkills());
+        this.setWorkEthic(e.getWorkEthic());
+        this.setCertifications(e.getCertifications());
 
         // if (e.getJobRecords().size() <= this.getJobRecords().size()) {
         // this.setJobRecords(e.getJobRecords());
         // }
         // this.setJobRecords(e.getJobRecords());
 
-        if (e.getTechnicalSkills().size() > this.getTechnicalSkills().size()) {
-            this.addTechSkills(e.getTechnicalSkills());
-        }
+        // if (e.getTechnicalSkills().size() > this.getTechnicalSkills().size()) {
+        // this.addTechSkills(e.getTechnicalSkills());
+        // }
 
-        if (e.getPeopleSkills().size() > this.getPeopleSkills().size()) {
-            this.addPeopleSkills(e.getPeopleSkills());
-        }
+        // if (e.getPeopleSkills().size() > this.getPeopleSkills().size()) {
+        // this.addPeopleSkills(e.getPeopleSkills());
+        // }
 
-        if (e.getWorkEthic().size() > this.getWorkEthic().size()) {
-            this.addWorkEthic(e.getWorkEthic());
-        }
+        // if (e.getWorkEthic().size() > this.getWorkEthic().size()) {
+        // this.addWorkEthic(e.getWorkEthic());
+        // }
 
-        if (e.getCertifications().size() > this.getCertifications().size()) {
-            this.addCertifications(e.getCertifications());
-        }
+        // if (e.getCertifications().size() > this.getCertifications().size()) {
+        // this.addCertifications(e.getCertifications());
+        // }
 
         // if (e.getJobRecords().size() > this.getJobRecords().size()) {
         // this.addJobRecord((e.getJobRecords()));
