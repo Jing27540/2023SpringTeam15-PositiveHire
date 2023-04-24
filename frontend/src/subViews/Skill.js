@@ -86,17 +86,17 @@ function Skill(props) {
 
     React.useEffect(() => {
         if (type === 'technicalSkills' && !mode) {
-            setOptions(technicalSkills);
+            setOptions(TS);
         }
 
         if (type === 'peopleSkills' && !mode) {
-            setOptions(peopleSkills);
+            setOptions(PS);
         }
 
         if (type === 'workEthic' && !mode) { //workEthic
-            setOptions(workEthic);
+            setOptions(WE);
         }
-    }, [type, employee]);
+    }, [type, employee, TS, PS, WE, mode]);
 
     function clear() {
         setType(undefined);
