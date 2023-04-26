@@ -7,18 +7,6 @@ import Col from 'react-bootstrap/Col';
  * General component to hold General Profile information
  * @author Jing Huang
  */
-
-const TITLES = ['First Name', 'Last Name', 'Employee #',
-    'Access Role', 'User Status', 'Employee Type',
-    'Job Tier', 'Job Title', 'Job History',
-    'Company Start Date', 'Departments'];
-
-const DummyData = ['Sharon', 'Owens', '90782846',
-    'Administrator', 'Active Employee', 'Full Time',
-    'Engineering Department', 'Java Software Engineer, Engineering Department, 02/01/2022 - Present', 'Software Engineer, Engineering Department, 01/10//2021 - 02/01/2022',
-    '09/16/2019', 'Engineering'];
-
-// TODO: hard code
 function General(props) {
 
     const [employee, setEmployee] = React.useState(props.employee);

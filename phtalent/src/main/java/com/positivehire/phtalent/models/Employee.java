@@ -63,7 +63,7 @@ public class Employee extends DomainObject {
 
     private String reasonForTermination;
 
-    private String employementStatus;
+    private String employmentStatus;
 
     private String department;
 
@@ -108,7 +108,7 @@ public class Employee extends DomainObject {
             final int performanceScoreId, final int age, final double payRate, final String state, final int zip,
             final String DOB, final String sex, final String maritalDesc, final String citizenDesc,
             final String hispanicLatino, final String raceDesc, final String dateOfHire, final int daysEmployeed,
-            final String dateOfTermination, final String reasonForTermination, final String employementStatus,
+            final String dateOfTermination, final String reasonForTermination, final String employmentStatus,
             final String department, final String position, final String managerName, final String employeeSource,
             final String accessRole, final String performanceScore, final String annualBonus, final double ptoHours,
             final List<Skill> technicalSkills, final List<Skill> peopleSkills, final List<Skill> workEthic,
@@ -137,7 +137,7 @@ public class Employee extends DomainObject {
         setDaysEmployed(daysEmployeed);
         setDateOfTermination(dateOfTermination);
         setReasonForTermination(reasonForTermination);
-        setEmployementStatus(employementStatus);
+        setEmploymentStatus(employmentStatus);
         setDepartment(department);
         setPosition(position);
         setManagerName(managerName);
@@ -272,12 +272,12 @@ public class Employee extends DomainObject {
         this.reasonForTermination = reasonForTermination;
     }
 
-    public String getEmployementStatus() {
-        return employementStatus;
+    public String getEmploymentStatus() {
+        return employmentStatus;
     }
 
-    public void setEmployementStatus(final String employementStatus) {
-        this.employementStatus = employementStatus;
+    public void setEmploymentStatus(final String employmentStatus) {
+        this.employmentStatus = employmentStatus;
     }
 
     public String getDepartment() {
@@ -535,7 +535,7 @@ public class Employee extends DomainObject {
         this.setDaysEmployed(e.daysEmployed);
         this.setDateOfTermination(e.dateOfTermination);
         this.setReasonForTermination(e.reasonForTermination);
-        this.setEmployementStatus(e.employementStatus);
+        this.setEmploymentStatus(e.employmentStatus);
         this.setDepartment(e.department);
         this.setPosition(e.position);
         this.setManagerName(e.managerName);
@@ -602,7 +602,7 @@ public class Employee extends DomainObject {
                 + getPayRate() + "'" + ", state='" + getState() + "'" + ", zip='" + getZip() + "'" + ", dateOfHire='"
                 + getDateOfHire() + "'" + ", daysEmployeed='" + getDaysEmployed() + "'" + ", dateOfTermination='"
                 + getDateOfTermination() + "'" + ", reasonForTermination='" + getReasonForTermination() + "'"
-                + ", employementStatus='" + getEmployementStatus() + "'" + ", department='" + getDepartment() + "'"
+                + ", employmentStatus='" + getEmploymentStatus() + "'" + ", department='" + getDepartment() + "'"
                 + ", position='" + getPosition() + "'" + ", managerName='" + getManagerName() + "'"
                 + ", employeeSource='" + getEmployeeSource() + "'" + ", accessRole='" + getAccessRole() + "'"
                 + ", performanceScore='" + getPerformanceScore() + "'" + ", technicalSkills='" + getTechnicalSkills()
