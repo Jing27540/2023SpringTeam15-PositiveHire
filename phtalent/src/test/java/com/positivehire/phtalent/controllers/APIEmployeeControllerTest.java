@@ -1,7 +1,6 @@
 package com.positivehire.phtalent.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -206,7 +204,7 @@ public class APIEmployeeControllerTest {
         @Transactional
         public void testEmployeeController() throws Exception {
                 // mvc = MockMvcBuilders.webAppContextSetup(context).build();
-                List<Employee> employees = new ArrayList();
+                List<Employee> employees = new ArrayList<Employee>();
                 // // if(employees.size() != 0 ) {
                 // employeeServ.deleteAll();
                 // // }
@@ -351,7 +349,7 @@ public class APIEmployeeControllerTest {
                                 .content(TestUtils.asJsonString(benTen))).andExpect(status().isOk());
 
                 Long skId = null;
-                int size = skillServ.findAll().size();
+                // int size = skillServ.findAll().size();
                 for (Skill sk : skillServ.findAll()) {
                         if (sk.getName().equals("benten")) {
                                 skId = (Long) sk.getId();

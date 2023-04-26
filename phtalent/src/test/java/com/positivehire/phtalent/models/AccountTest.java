@@ -2,14 +2,9 @@ package com.positivehire.phtalent.models;
 
 import org.junit.Test;
 
-import jakarta.xml.bind.PrintConversionEvent;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -53,7 +48,7 @@ public class AccountTest {
         // Create an account with password less than 8 characters
 
         try {
-            Account badAcc = new Account("9876", "pass", "pass", "hel@email.com");
+            new Account("9876", "pass", "pass", "hel@email.com");
         } catch (IllegalArgumentException e) {
             assertEquals("Passwords must be 8 or more characters.", e.getMessage());
         } catch (NoSuchAlgorithmException e1) {
@@ -63,7 +58,7 @@ public class AccountTest {
         // Create an account with mismatched passwords
 
         try {
-            Account badAcc = new Account("9876", "password", "password1", "hel@email.com");
+            new Account("9876", "password", "password1", "hel@email.com");
         } catch (IllegalArgumentException e) {
             assertEquals("Password values do not match. Please retype password and repeat password.", e.getMessage());
         } catch (NoSuchAlgorithmException e1) {

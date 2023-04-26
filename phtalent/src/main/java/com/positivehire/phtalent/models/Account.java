@@ -4,10 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
 
 /**
  * This class represents a "user" account. An account stores username and

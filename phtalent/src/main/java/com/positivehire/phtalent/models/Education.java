@@ -1,8 +1,7 @@
 package com.positivehire.phtalent.models;
+
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -19,18 +18,18 @@ public class Education extends DomainObject {
     /** Education Id */
     @Id
     @GeneratedValue
-    private Long                id;
+    private Long id;
     /** Name of education */
     private String name;
     /** Institution education was recieved from */
     private String institution;
     /** Type of education */
     private String type;
-    /** date achieved*/
+    /** date achieved */
     private String dateAchieved;
 
-     /** Skills associated with education */
-    @OneToMany ( cascade = CascadeType.ALL )
+    /** Skills associated with education */
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Skill> skills;
 
     public Education() {
@@ -39,10 +38,11 @@ public class Education extends DomainObject {
 
     /**
      * Construct an education
-     * @param name of education
+     * 
+     * @param name        of education
      * @param institution of education
-     * @param type of education
-     * @param skills of education
+     * @param type        of education
+     * @param skills      of education
      */
     public Education(String name, String institution, String type, String datAchieved, List<Skill> skills) {
         setName(name);
@@ -94,11 +94,12 @@ public class Education extends DomainObject {
 
     /**
      * Returns Id of the education
+     * 
      * @return education Id
      */
     @Override
     public Serializable getId() {
-      
+
         return id;
     }
 
